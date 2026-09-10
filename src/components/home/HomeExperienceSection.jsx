@@ -1568,66 +1568,56 @@ const HomeExperienceSection = () => {
                   role="button"
                   tabIndex={0}
                   aria-label={`${t("destination.viewGuide", "View destination guide")} ${dest.name}`}
-                  className="group relative flex flex-col items-center cursor-pointer focus:outline-none transition-all duration-500"
+                  className="group relative h-[380px] sm:h-[420px] w-full rounded-[32px] overflow-hidden shadow-2xl border border-white/20 hover:border-gold-400/90 transition-all duration-500 cursor-pointer focus:outline-none"
                 >
-                  {/* Top Image Card */}
-                  <div className="relative h-[270px] sm:h-[300px] w-full rounded-t-[36px] sm:rounded-t-[42px] rounded-b-3xl overflow-hidden shadow-2xl border border-white/20 group-hover:border-gold-400/80 transition-all duration-500 z-10">
-                    <img
-                      src={dest.image}
-                      srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
-                        ${dest.image.replace(/w=\d+&h=\d+/, 'w=480&h=360')} 480w
-                      ` : undefined}
-                      sizes="(max-width: 768px) 480px, 480px"
-                      alt={dest.name}
-                      width="480"
-                      height="360"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                  {/* Background Image */}
+                  <img
+                    src={dest.image}
+                    srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
+                      ${dest.image.replace(/w=\d+&h=\d+/, 'w=600&h=800')} 600w
+                    ` : undefined}
+                    sizes="(max-width: 768px) 480px, 600px"
+                    alt={dest.name}
+                    width="600"
+                    height="800"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                  />
 
-                    {/* Soft Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#030a1c]/85 via-[#030a1c]/20 to-transparent group-hover:opacity-75 transition-opacity duration-500"></div>
+                  {/* Dynamic Dark Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#030a1c] via-[#030a1c]/40 to-transparent opacity-85 group-hover:opacity-95 group-hover:from-[#030a1c] group-hover:via-[#030a1c]/60 transition-all duration-500" />
 
-                    {/* Top Tour Count Badge (Black text inside rectangle/pill) */}
-                    <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-amber-300/60 text-black font-extrabold text-xs flex items-center gap-1.5 shadow-lg group-hover:bg-gold-400 group-hover:scale-105 transition-all duration-300">
-                      <svg className="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                      </svg>
-                      <span className="text-black font-extrabold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
-                    </div>
-
-                    {/* Destination Title on Image (Visible before hover) */}
-                    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-full text-center px-4 transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
-                      <h3 className="text-2xl font-bold text-white drop-shadow-md font-serif">
-                        {dest.name}
-                      </h3>
-                      <div className="w-8 h-1 bg-gold-400 mx-auto mt-1.5 rounded-full shadow-md"></div>
-                    </div>
+                  {/* Top Tour Count Badge */}
+                  <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-amber-300/60 text-black font-extrabold text-xs flex items-center gap-1.5 shadow-lg group-hover:bg-gold-400 group-hover:scale-105 transition-all duration-300">
+                    <svg className="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    <span className="text-black font-extrabold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
                   </div>
 
-                  {/* Semi-Circle (نصف دائرة) Attached BELOW the Image Card - Appears on Hover */}
-                  <div className="w-[94%] sm:w-[92%] bg-gradient-to-b from-[#0a2552] via-[#06183e] to-[#030a1c] border-b-2 border-x-2 border-gold-400/80 rounded-b-[180px] sm:rounded-b-[220px] rounded-t-xl p-5 pt-3 pb-7 text-center shadow-2xl -mt-6 z-20 transition-all duration-500 ease-out opacity-0 translate-y-[-10px] scale-95 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto">
-                    
-                    {/* Floating Action Button at Top Center of Semi-Circle */}
-                    <div className="w-12 h-12 rounded-full mx-auto -mt-9 mb-2 bg-gradient-to-r from-gold-400 via-amber-400 to-yellow-500 text-obsidian-950 flex items-center justify-center shadow-xl border-2 border-white group-hover:rotate-45 group-hover:scale-110 transition-all duration-500">
-                      <FaArrowRight className="w-4 h-4 rtl:rotate-180" />
-                    </div>
-
-                    {/* Destination Name in White */}
-                    <h3 className="text-2xl font-extrabold text-white font-serif mt-1">
+                  {/* Bottom Content Overlay (Text & Description appear smoothly on hover) */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 z-20 flex flex-col justify-end transition-all duration-500">
+                    {/* Destination Title */}
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-serif drop-shadow-md group-hover:text-amber-300 transition-colors duration-300">
                       {dest.name}
                     </h3>
 
-                    {/* Description Text in White */}
+                    {/* Gold Accent Line */}
+                    <div className="w-12 h-1 bg-gold-400 rounded-full my-2.5 transition-all duration-500 group-hover:w-20" />
+
+                    {/* Description Text (Appears smoothly on hover) */}
                     {dest.description && (
-                      <p className="text-xs text-white/95 line-clamp-2 mt-2 px-4 leading-relaxed font-medium">
+                      <p className="text-xs sm:text-sm text-white/90 font-medium line-clamp-3 opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-28 transition-all duration-500 ease-out leading-relaxed mb-3">
                         {dest.description}
                       </p>
                     )}
 
-                    {/* White/Gold Accent Line */}
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto mt-3 rounded-full"></div>
+                    {/* Action Link / Arrow */}
+                    <div className="flex items-center gap-2 text-gold-400 font-bold text-xs uppercase tracking-wider opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-75">
+                      <span>{t("destination.explore", "استكشف الوجهة")}</span>
+                      <FaArrowRight className="w-3.5 h-3.5 rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1.5 rtl:group-hover:-translate-x-1.5" />
+                    </div>
                   </div>
                 </motion.div>
               );
