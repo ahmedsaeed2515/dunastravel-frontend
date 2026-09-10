@@ -1464,87 +1464,135 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Destinations & Their Tours */}
-      <section className="py-10" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}>
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <span className="text-gold-500 uppercase tracking-widest text-caption block mb-4">
-              {t("home.discoverMagic")}
-            </span>
-            <h2 className="text-display-lg text-ivory-50">
-              {t("home.destTitle")}
+      {/* Destinations & Their Tours - Travelik Inspiration Style */}
+      <section className="py-16 sm:py-20 relative overflow-hidden" style={{ background: 'radial-gradient(ellipse at 50% 10%, #0c2b64 0%, #06183e 50%, #030a1c 100%)' }}>
+        {/* Decorative Ambient Background Elements */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#0a2540]/60 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          {/* Header Section */}
+          <div className="text-center mb-12 sm:mb-16 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0a2540]/90 border border-white/40 text-white text-xs sm:text-sm uppercase tracking-widest font-bold shadow-[0_0_20px_rgba(255,255,255,0.15)] mb-4">
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+              <span className="text-white">{t("home.discoverMagic", "اكتشف السحر")}</span>
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+            </div>
+            
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md font-serif">
+              <span className="text-white">{t("home.destTitle", "الوجهات وجولاتها")}</span>
             </h2>
-            <div className="w-24 h-1 bg-gold-500 mx-auto mt-6"></div>
+
+            {/* Subtitle Accent Line */}
+            <div className="flex items-center justify-center gap-3 my-5">
+              <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent"></div>
+              <div className="w-2.5 h-2.5 rotate-45 border border-white bg-white/40"></div>
+              <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent"></div>
+            </div>
+
+            <p className="text-white text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium">
+              {t("home.destSectionDesc", "استكشف أكثر الوجهات الفاخرة سحراً وجمالاً، مع باقات وجولات سياحية صممت بعناية لتمنحك تجربة سفر استثنائية.")}
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {(destinationsLoading || toursLoading) && (
-              <div className="md:col-span-3 rounded-2xl border border-white/10 bg-obsidian-950/30 px-6 py-10 text-center text-ivory-200">
-                {t('common.loading', 'Loading destinations and tours...')}
+              <div className="lg:col-span-4 rounded-3xl border border-white/20 bg-[#06183e]/50 px-6 py-12 text-center text-white backdrop-blur-md">
+                <div className="inline-block w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin mb-3"></div>
+                <p className="font-semibold text-white">{t('common.loading', 'Loading destinations and tours...')}</p>
               </div>
             )}
             {(destinationsError || toursError) && liveDestinationCards.length === 0 && !destinationsLoading && !toursLoading && (
-              <div className="md:col-span-3 rounded-2xl border border-red-300/30 bg-red-950/20 px-6 py-10 text-center text-red-100">
+              <div className="lg:col-span-4 rounded-3xl border border-red-400/30 bg-red-950/20 px-6 py-12 text-center text-white backdrop-blur-md">
                 {t('common.loadError', 'Unable to load live catalog data. Please try again later.')}
               </div>
             )}
             {!destinationsLoading && !toursLoading && liveDestinationCards.length === 0 && !destinationsError && !toursError && (
-              <div className="md:col-span-3 rounded-2xl border border-white/10 bg-obsidian-950/30 px-6 py-10 text-center text-ivory-200">
+              <div className="lg:col-span-4 rounded-3xl border border-white/20 bg-[#06183e]/50 px-6 py-12 text-center text-white backdrop-blur-md">
                 {t('destination.empty', 'No destinations are currently available.')}
               </div>
             )}
-            {!destinationsLoading && !toursLoading && liveDestinationCards.length > 0 && liveDestinationCards.map((dest) => {
+            {!destinationsLoading && !toursLoading && liveDestinationCards.length > 0 && liveDestinationCards.map((dest, index) => {
               const tourCount = dest.toursCount;
 
               return (
                 <motion.div
                   key={dest.id}
-                  onClick={() => handleDestinationClick(dest.id)}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  onClick={() => navigate(dest.link)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      handleDestinationClick(dest.id);
+                      navigate(dest.link);
                     }
                   }}
                   role="button"
                   tabIndex={0}
                   aria-label={`${t("destination.viewGuide", "View destination guide")} ${dest.name}`}
-                  whileHover={{
-                    y: -6,
-                    boxShadow: "0 0 32px rgba(245,166,35,0.22)",
-                    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-                  }}
-                  className="relative h-[320px] rounded-2xl overflow-hidden cursor-pointer group transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-gold-500 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(245,166,35,0.2)]"
+                  className="group relative flex flex-col items-center cursor-pointer focus:outline-none transition-all duration-500"
                 >
-                  <img
-                    src={dest.image}
-                    srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
-                      ${dest.image.replace(/w=\d+&h=\d+/, 'w=480&h=320')} 480w
-                    ` : undefined}
-                    sizes="(max-width: 768px) 480px, 480px"
-                    alt={dest.name}
-                    width="480"
-                    height="320"
-                    className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.08] transition-transform duration-700"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div
-                    className="absolute inset-0 bg-gradient-to-t from-obsidian-950/85 via-obsidian-900/60 to-obsidian-900/40 group-hover:from-obsidian-950/75 transition-colors duration-500"
-                  ></div>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10">
-                    <h3 className="text-display-lg text-white font-bold mb-2 drop-shadow-md">
+                  {/* Top Image Card */}
+                  <div className="relative h-[270px] sm:h-[300px] w-full rounded-t-[36px] sm:rounded-t-[42px] rounded-b-3xl overflow-hidden shadow-2xl border border-white/20 group-hover:border-gold-400/80 transition-all duration-500 z-10">
+                    <img
+                      src={dest.image}
+                      srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
+                        ${dest.image.replace(/w=\d+&h=\d+/, 'w=480&h=360')} 480w
+                      ` : undefined}
+                      sizes="(max-width: 768px) 480px, 480px"
+                      alt={dest.name}
+                      width="480"
+                      height="360"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                      decoding="async"
+                    />
+
+                    {/* Soft Dark Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#030a1c]/85 via-[#030a1c]/20 to-transparent group-hover:opacity-75 transition-opacity duration-500"></div>
+
+                    {/* Top Tour Count Badge (Black text inside rectangle/pill) */}
+                    <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-amber-300/60 text-black font-extrabold text-xs flex items-center gap-1.5 shadow-lg group-hover:bg-gold-400 group-hover:scale-105 transition-all duration-300">
+                      <svg className="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      </svg>
+                      <span className="text-black font-extrabold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
+                    </div>
+
+                    {/* Destination Title on Image (Visible before hover) */}
+                    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-full text-center px-4 transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
+                      <h3 className="text-2xl font-bold text-white drop-shadow-md font-serif">
+                        {dest.name}
+                      </h3>
+                      <div className="w-8 h-1 bg-gold-400 mx-auto mt-1.5 rounded-full shadow-md"></div>
+                    </div>
+                  </div>
+
+                  {/* Semi-Circle (نصف دائرة) Attached BELOW the Image Card - Appears on Hover */}
+                  <div className="w-[94%] sm:w-[92%] bg-gradient-to-b from-[#0a2552] via-[#06183e] to-[#030a1c] border-b-2 border-x-2 border-gold-400/80 rounded-b-[180px] sm:rounded-b-[220px] rounded-t-xl p-5 pt-3 pb-7 text-center shadow-2xl -mt-6 z-20 transition-all duration-500 ease-out opacity-0 translate-y-[-10px] scale-95 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto">
+                    
+                    {/* Floating Action Button at Top Center of Semi-Circle */}
+                    <div className="w-12 h-12 rounded-full mx-auto -mt-9 mb-2 bg-gradient-to-r from-gold-400 via-amber-400 to-yellow-500 text-obsidian-950 flex items-center justify-center shadow-xl border-2 border-white group-hover:rotate-45 group-hover:scale-110 transition-all duration-500">
+                      <FaArrowRight className="w-4 h-4 rtl:rotate-180" />
+                    </div>
+
+                    {/* Destination Name in White */}
+                    <h3 className="text-2xl font-extrabold text-white font-serif mt-1">
                       {dest.name}
                     </h3>
-                    <p className="text-body-lg text-white font-medium mb-4 leading-relaxed line-clamp-2 max-w-xs drop-shadow">{dest.description}</p>
-                    
-                    {/* Tour Count Badge */}
-                    <span className="inline-flex items-center gap-2 text-caption font-semibold uppercase tracking-wider bg-black/65 backdrop-blur-md px-4 py-2 rounded-full border border-gold-500/40 shadow-lg group-hover:border-gold-400 group-hover:bg-gold-500/20 transition-all">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V8.5M12 12a3 3 0 100-6 3 3 0 000 6z" />
-                      </svg>
-                      <span className="text-white font-bold">{tourCount} {t("home.toursAvailable", "رحلات متوفرة")}</span>
-                    </span>
+
+                    {/* Description Text in White */}
+                    {dest.description && (
+                      <p className="text-xs text-white/95 line-clamp-2 mt-2 px-4 leading-relaxed font-medium">
+                        {dest.description}
+                      </p>
+                    )}
+
+                    {/* White/Gold Accent Line */}
+                    <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto mt-3 rounded-full"></div>
                   </div>
                 </motion.div>
               );
