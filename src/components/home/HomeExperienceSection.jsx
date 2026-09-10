@@ -1613,9 +1613,6 @@ const HomeExperienceSection = () => {
                       <div className="populer-price border-b border-white/15 pb-3.5 mb-3.5">
                         <h4 className="text-white text-base sm:text-lg font-bold flex items-center justify-between">
                           <span className="text-white font-bold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
-                          <span className="text-[#F5A623] text-xs font-semibold px-2.5 py-1 rounded-full bg-[#F5A623]/20 border border-[#F5A623]/30">
-                            DUNAS EXCLUSIVE
-                          </span>
                         </h4>
                       </div>
                     </div>
