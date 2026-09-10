@@ -124,25 +124,25 @@ const TourCard = ({
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-grow">
-        <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest mb-1 block">
+        <span className="text-caption text-gold-700 dark:text-gold-400 font-bold uppercase tracking-widest mb-1 block">
           {codeText || resolveLocalizedText(tour.subtitle || tour.destination, t, lang)}
         </span>
 
         {tour.transportOptions && (
           <div className="mb-2">
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-obsidian-700 dark:text-ivory-200 bg-gold-100 dark:bg-gold-900/40 border border-gold-300 dark:border-gold-700 px-2.5 py-1 rounded-full">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-obsidian-900 dark:text-ivory-100 bg-gold-100 dark:bg-gold-900/40 border border-gold-300 dark:border-gold-700 px-2.5 py-1 rounded-full">
               {tour.transportOptions}
             </span>
           </div>
         )}
 
         <Link to={detailUrl}>
-          <h3 className="text-display-md text-obsidian-900 dark:text-ivory-50 mb-3 line-clamp-2 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h3 className="text-display-md text-obsidian-950 dark:text-ivory-50 font-bold mb-3 line-clamp-2 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>
             {title}
           </h3>
         </Link>
 
-        <p className="text-body-sm text-obsidian-600 dark:text-ivory-300 line-clamp-3 mb-4 flex-grow">
+        <p className="text-body-sm text-obsidian-800 dark:text-ivory-200 font-medium line-clamp-3 mb-4 flex-grow">
           {overview}
         </p>
 
@@ -150,7 +150,7 @@ const TourCard = ({
         <div className="flex items-center justify-between pt-4 border-t border-gold-500/10 dark:border-gray-700 mt-auto">
           {tourPrice !== null && tourPrice > 0 ? (
             <div>
-              <span className="block text-caption text-obsidian-400 dark:text-ivory-400 mb-1">
+              <span className="block text-caption text-obsidian-700 dark:text-ivory-300 font-semibold mb-1">
                 {t('tourCard.from', 'from')}
               </span>
               <span className="text-display-md text-gold-700 dark:text-gold-400 font-bold">
@@ -159,7 +159,7 @@ const TourCard = ({
             </div>
           ) : (
             <div>
-              <span className="inline-block text-[11px] font-semibold text-gold-600 dark:text-gold-400 uppercase tracking-wider bg-gold-50 dark:bg-gold-950/40 px-2.5 py-1 rounded-md border border-gold-500/20">
+              <span className="inline-block text-[11px] font-semibold text-gold-700 dark:text-gold-400 uppercase tracking-wider bg-gold-50 dark:bg-gold-950/40 px-2.5 py-1 rounded-md border border-gold-500/20">
                 {t('tourCard.onQuote', 'On Request')}
               </span>
             </div>
