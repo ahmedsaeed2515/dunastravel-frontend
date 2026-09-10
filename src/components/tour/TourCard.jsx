@@ -90,7 +90,7 @@ const TourCard = ({
   const durationStr = typeof duration === 'string' ? duration : String(duration || '');
   const durationLabel = durationStr.includes('/') ? durationStr.split('/')[0].trim() : durationStr;
 
-  const parsedPrice = Number(tour.price ?? tour.basePriceUsd ?? tour.raw?.price);
+  const tourPrice = Number(tour.price ?? tour.basePriceUsd ?? tour.raw?.price);
   const tourImage =
     resolveTourHeroImage(tour) ||
     (typeof tour.heroImageUrl === 'string' ? tour.heroImageUrl.trim() : null) ||
@@ -167,9 +167,9 @@ const TourCard = ({
 
         {/* Duration Badge */}
         {durationLabel && (
-          <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-primary-950/85 backdrop-blur-md text-gold-400 text-[12px] font-bold px-3.5 py-1.5 rounded-full border border-gold-500/40 shadow-md flex items-center gap-1.5 transition-transform group-hover:scale-105">
+          <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-primary-950/90 backdrop-blur-md text-white text-[12px] font-extrabold px-3.5 py-1.5 rounded-full border border-gold-500/50 shadow-md flex items-center gap-1.5 transition-transform group-hover:scale-105">
             <FaClock className="text-gold-400 text-xs" />
-            <span>{durationLabel}</span>
+            <span className="text-white font-extrabold">{durationLabel}</span>
           </div>
         )}
 

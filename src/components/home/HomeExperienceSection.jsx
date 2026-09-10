@@ -337,24 +337,58 @@ const HomeExperienceSection = () => {
   const pkgHoveredRef = useRef(false);
   const destHoveredRef = useRef(false);
 
-  // Step-by-step auto-scroll for Destination Tours marquee (every 2.5s)
+  // Continuous smooth auto-scroll for Destination Tours marquee (slow & seamless)
   useEffect(() => {
-    const interval = setInterval(() => {
+    let animId;
+    let lastTime = performance.now();
+    const speed = 25; // 25px/sec for slow elegant continuous movement
+
+    const animate = (now) => {
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
       if (destMarqueeRef.current && !destHoveredRef.current) {
-        handleMarqueeScroll(destMarqueeRef, 'right');
+        const el = destMarqueeRef.current;
+        const halfWidth = el.scrollWidth / 2;
+        if (halfWidth > 0) {
+          el.scrollLeft += speed * delta;
+          if (el.scrollLeft >= halfWidth) {
+            el.scrollLeft -= halfWidth;
+          }
+        }
       }
-    }, 2500);
-    return () => clearInterval(interval);
+      animId = requestAnimationFrame(animate);
+    };
+
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
   }, []);
 
-  // Step-by-step auto-scroll for Package Trips marquee (every 2.5s)
+  // Continuous smooth auto-scroll for Package Trips marquee (slow & seamless)
   useEffect(() => {
-    const interval = setInterval(() => {
+    let animId;
+    let lastTime = performance.now();
+    const speed = 25; // 25px/sec for slow elegant continuous movement
+
+    const animate = (now) => {
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
       if (pkgMarqueeRef.current && !pkgHoveredRef.current) {
-        handleMarqueeScroll(pkgMarqueeRef, 'right');
+        const el = pkgMarqueeRef.current;
+        const halfWidth = el.scrollWidth / 2;
+        if (halfWidth > 0) {
+          el.scrollLeft += speed * delta;
+          if (el.scrollLeft >= halfWidth) {
+            el.scrollLeft -= halfWidth;
+          }
+        }
       }
-    }, 2500);
-    return () => clearInterval(interval);
+      animId = requestAnimationFrame(animate);
+    };
+
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
   }, []);
 
   const handleMarqueeScroll = (ref, direction) => {
@@ -802,32 +836,27 @@ const HomeExperienceSection = () => {
   }, [allLiveTours, defaultPackageTours, lang, t]);
 
   const destinationToursForMarquee = useMemo(() => {
-    if (allLiveTours && allLiveTours.length > 0) {
-      return allLiveTours.map((tourItem) => ({
-        ...tourItem,
-        id: tourItem.id || tourItem.slug,
-        title: resolveTourTitle(tourItem, t, lang),
-        duration: resolveTourDuration(tourItem, t, lang),
-        overview: resolveTourOverview(tourItem, t, lang),
-        destination: tourItem.destination || String(tourItem.country || '').toLowerCase() || 'egypt',
-        heroImage: tourItem.heroImage || (Array.isArray(tourItem.images) && tourItem.images.length > 0 ? (typeof tourItem.images[0] === 'string' ? tourItem.images[0] : tourItem.images[0]?.imageUrl) : null) || '/imgs/egyothero.webp',
-        images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : [tourItem.heroImage || '/imgs/egyothero.webp'],
-        link: `/tours/${tourItem.slug || tourItem.id}`,
-      }));
-    }
-    const egyptTours = (allLiveTours || [])
-      .filter((tourItem) => tourItem && (tourItem.destination === 'egypt' || String(tourItem.country || '').toLowerCase() === 'egypt'))
-      .slice(0, 3)
-      .map((tourItem) => ({
-        ...tourItem,
-        id: tourItem.id || tourItem.slug,
-        title: resolveTourTitle(tourItem, t, lang),
-        duration: resolveTourDuration(tourItem, t, lang),
-        destination: 'egypt',
-        images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : [tourItem.heroImage || tourItem.image || '/imgs/egyothero.webp'],
-        link: `/tours/${tourItem.slug || tourItem.id}`,
-      }));
+    const isSingleDestTour = (tItem) => {
+      if (!tItem) return false;
+      const d = String(tItem.destination || tItem.country || '').toLowerCase().trim();
+      if (d === 'multi-country' || d.includes('multi')) return false;
+      return true;
+    };
 
+    // 1. Format live tours
+    const liveFormatted = (allLiveTours || []).filter(isSingleDestTour).map((tourItem) => ({
+      ...tourItem,
+      id: tourItem.id || tourItem.slug,
+      title: resolveTourTitle(tourItem, t, lang),
+      duration: resolveTourDuration(tourItem, t, lang),
+      overview: resolveTourOverview(tourItem, t, lang),
+      destination: tourItem.destination || String(tourItem.country || '').toLowerCase() || 'egypt',
+      heroImage: tourItem.heroImage || (Array.isArray(tourItem.images) && tourItem.images.length > 0 ? (typeof tourItem.images[0] === 'string' ? tourItem.images[0] : tourItem.images[0]?.imageUrl) : null) || '/imgs/egyothero.webp',
+      images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : [tourItem.heroImage || '/imgs/egyothero.webp'],
+      link: `/tours/${tourItem.slug || tourItem.id}`,
+    }));
+
+    // 2. Format Turkey preview tours
     const turkeyFormatted = (homeTurkeyPreviewTours || []).map((tourItem) => ({
       id: tourItem.id,
       slug: tourItem.slug || tourItem.id,
@@ -842,6 +871,7 @@ const HomeExperienceSection = () => {
       link: `/programs/turkey/${tourItem.slug || tourItem.id}`,
     }));
 
+    // 3. Format Jordan preview tours
     const jordanFormatted = (homeJordanPreviewTours || []).map((tourItem) => ({
       id: tourItem.id,
       slug: tourItem.slug || tourItem.id,
@@ -856,6 +886,7 @@ const HomeExperienceSection = () => {
       link: `/programs/jordan/${tourItem.slug || tourItem.id}`,
     }));
 
+    // 4. Format Dubai preview tours
     const dubaiFormatted = (homeDubaiPreviewTours || []).map((tourItem) => ({
       id: tourItem.id,
       slug: tourItem.slug || tourItem.id,
@@ -870,32 +901,36 @@ const HomeExperienceSection = () => {
       link: `/programs/dubai/${tourItem.slug || tourItem.id}`,
     }));
 
-    const otherDestTours = (allLiveTours || [])
-      .filter((tourItem) => tourItem && ['morocco', 'greece', 'tunisia'].includes(tourItem.destination))
-      .map((tourItem) => ({
-        ...tourItem,
-        id: tourItem.id || tourItem.slug,
-        title: resolveTourTitle(tourItem, t, lang),
-        duration: resolveTourDuration(tourItem, t, lang),
-        destination: tourItem.destination,
-        images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : [tourItem.heroImage || tourItem.image || '/imgs/egyothero.webp'],
-        link: `/tours/${tourItem.slug || tourItem.id}`,
-      }));
+    // Group tours by destination
+    const egyptTours = liveFormatted.filter(tItem => tItem.destination === 'egypt');
+    const moroccoTours = liveFormatted.filter(tItem => tItem.destination === 'morocco');
+    const tunisiaTours = liveFormatted.filter(tItem => tItem.destination === 'tunisia');
+    const greeceTours = liveFormatted.filter(tItem => tItem.destination === 'greece');
+    const holyLandTours = liveFormatted.filter(tItem => tItem.destination === 'holy-land' || tItem.destination === 'holyland');
+    const otherLive = liveFormatted.filter(tItem => !['egypt', 'morocco', 'tunisia', 'greece', 'holy-land', 'holyland'].includes(tItem.destination));
 
-    const combined = [
-      ...jordanFormatted.slice(0, 1),
-      ...dubaiFormatted.slice(0, 1),
-      ...egyptTours.slice(0, 2),
-      ...turkeyFormatted.slice(0, 2),
-      ...jordanFormatted.slice(1),
-      ...dubaiFormatted.slice(1),
-      ...otherDestTours,
-      ...egyptTours.slice(2),
-      ...turkeyFormatted.slice(2),
-    ].filter(Boolean);
+    // Interleave tours across ALL destinations for rich variety!
+    const interleaved = [];
+    const maxLen = Math.max(
+      egyptTours.length, turkeyFormatted.length, jordanFormatted.length,
+      dubaiFormatted.length, moroccoTours.length, tunisiaTours.length,
+      greeceTours.length, holyLandTours.length, otherLive.length, 1
+    );
 
-    return combined.length > 0 ? combined : allToursForMarquee;
-  }, [allLiveTours, allToursForMarquee, homeTurkeyPreviewTours, homeJordanPreviewTours, homeDubaiPreviewTours, lang, t]);
+    for (let i = 0; i < maxLen; i++) {
+      if (egyptTours[i]) interleaved.push(egyptTours[i]);
+      if (turkeyFormatted[i]) interleaved.push(turkeyFormatted[i]);
+      if (jordanFormatted[i]) interleaved.push(jordanFormatted[i]);
+      if (dubaiFormatted[i]) interleaved.push(dubaiFormatted[i]);
+      if (moroccoTours[i]) interleaved.push(moroccoTours[i]);
+      if (tunisiaTours[i]) interleaved.push(tunisiaTours[i]);
+      if (greeceTours[i]) interleaved.push(greeceTours[i]);
+      if (holyLandTours[i]) interleaved.push(holyLandTours[i]);
+      if (otherLive[i]) interleaved.push(otherLive[i]);
+    }
+
+    return interleaved.length > 0 ? interleaved : liveFormatted;
+  }, [allLiveTours, homeTurkeyPreviewTours, homeJordanPreviewTours, homeDubaiPreviewTours, lang, t]);
 
 
   // Hero Video State
@@ -1602,15 +1637,15 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Destination Tours Marquee Section */}
+{/* Destination Tours Marquee Section */}
       <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 500px' }}>
         <div className="container mx-auto px-6">
           <div className="text-center mb-10 max-w-3xl mx-auto">
             <span className="text-gold-600 dark:text-gold-400 uppercase tracking-widest text-caption block mb-2 font-semibold">
-              {t("home.destToursBadge", "Meticulously crafted experiences across all our destinations")}
+              {t("home.destToursBadge", isAr ? "تجارب مصممة بعناية فائقة عبر جميع وجهاتنا الساحرة" : "Meticulously crafted experiences across all our destinations")}
             </span>
             <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
-              {t("home.destToursTitle", "جولات الوجهات المميزة")}
+              {t("home.destToursTitle", isAr ? "جولات الوجهات المميزة" : "Featured Destination Tours")}
             </h2>
             <div className="w-24 h-1 bg-gold-500 rounded-full mt-3 mx-auto"></div>
           </div>
@@ -1639,11 +1674,9 @@ const HomeExperienceSection = () => {
           <div 
             dir="ltr" 
             ref={destMarqueeRef} 
-            className="overflow-x-auto no-scrollbar scroll-smooth w-full relative py-4"
-            onMouseEnter={() => destHoveredRef.current = true}
-            onMouseLeave={() => destHoveredRef.current = false}
+            className="overflow-hidden w-full relative py-4"
           >
-            <div className="flex w-max gap-5 px-5">
+            <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left">
             {(() => {
               const infiniteList = buildInfiniteMarqueeList(destinationToursForMarquee, 'dest');
               return infiniteList.map((tData, idx) => {
@@ -1659,10 +1692,10 @@ const HomeExperienceSection = () => {
                     to={tData.link || `/tours/${tData.slug || tData.id}`}
                     tabIndex={tData.isDuplicate ? -1 : undefined}
                     aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className="min-w-[240px] sm:min-w-[270px] md:min-w-[290px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-all duration-500 h-[310px] sm:h-[330px] block focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] block border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
                   >
                     <img
-                      src={getOptimizedImageUrl(imageUrl, 300, 330)}
+                      src={getOptimizedImageUrl(imageUrl, 300, 355)}
                       alt={resolvedTitle}
                       width="300"
                       height="330"
@@ -1682,8 +1715,11 @@ const HomeExperienceSection = () => {
                           {resolvedTitle}
                         </h3>
 
-                        <div className="flex items-center justify-between text-xs text-ivory-300 mb-2 pt-2 border-t border-white/15">
-                          <span className="text-[11px]">{resolvedDuration}</span>
+                        <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
+                          <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
+                            <FaClock className="text-gold-400 text-xs" />
+                            <span>{resolvedDuration}</span>
+                          </span>
                           {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
                             <span className="text-gold-400 font-bold text-xs">
                               {formatPrice(tData.price)}
@@ -1758,7 +1794,7 @@ const HomeExperienceSection = () => {
                   className="text-3xl md:text-5xl lg:text-6xl text-white font-serif tracking-tight mb-4 font-bold"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  {t("home.packagesTitle", "Curated Programs & Experiences")}
+                  {t("home.packagesTitle", "برامج وتجارب مصر المميزة")}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -1767,7 +1803,7 @@ const HomeExperienceSection = () => {
                   transition={{ delay: 0.2 }}
                   className="text-base sm:text-lg text-slate-100 font-medium leading-relaxed max-w-2xl mx-auto drop-shadow-sm"
                 >
-                  {t("home.packagesSubtitle", "Selection of premium itineraries designed to experience the magic of Egypt & the Middle East")}
+                  {t("home.packagesSubtitle", isAr ? "مجموعة نادرة من أرقى البرامج السياحية المصممة لاستكشاف سحر مصر والشرق الأوسط" : "Selection of premium itineraries designed to experience the magic of Egypt & the Middle East")}
                 </motion.p>
                 <div className="w-28 h-1 bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto mt-6 rounded-full shadow-[0_0_12px_rgba(245,166,35,0.6)]"></div>
               </div>
@@ -1907,6 +1943,7 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
+
       {/* Packages Tours Marquee */}
       <section className="py-16 md:py-20 relative overflow-hidden bg-ivory-100 dark:bg-obsidian-950 content-auto">
         <div className="container mx-auto px-6 mb-10">
@@ -1956,11 +1993,9 @@ const HomeExperienceSection = () => {
           <div 
             dir="ltr" 
             ref={pkgMarqueeRef} 
-            className="overflow-x-auto no-scrollbar scroll-smooth w-full relative py-4"
-            onMouseEnter={() => pkgHoveredRef.current = true}
-            onMouseLeave={() => pkgHoveredRef.current = false}
+            className="overflow-hidden w-full relative py-4"
           >
-            <div className="flex w-max gap-5 px-5">
+            <div className="flex w-max gap-5 px-5 animate-continuous-marquee-right">
             {(() => {
               const infiniteList = buildInfiniteMarqueeList(packagesToursForMarquee, 'pkg');
               return infiniteList.map((tData, idx) => {
@@ -1970,48 +2005,59 @@ const HomeExperienceSection = () => {
                   (Array.isArray(tData.images) && tData.images[0]) ||
                   tData.image ||
                   '/imgs/egyothero.webp';
+                const rawPkgDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
+                const pkgDestName = t(`nav.${rawPkgDest}`, tData.badge || rawPkgDest.charAt(0).toUpperCase() + rawPkgDest.slice(1));
+
                 return (
                   <Link
                     key={tData.uKey || `pkg-tour-${idx}`}
                     to={tData.link || "/tours"}
                     tabIndex={tData.isDuplicate ? -1 : undefined}
                     aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className="min-w-[200px] sm:min-w-[220px] md:min-w-[240px] shrink-0 group relative rounded-xl overflow-hidden shadow-[0_6px_18px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_28px_rgba(245,166,35,0.25)] transition-all duration-500 h-[250px] sm:h-[265px] block border border-obsidian-700/50 hover:border-gold-500 bg-obsidian-900 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] block border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
                   >
                     <img
-                      src={getOptimizedImageUrl(tourImg, 250, 270)}
+                      src={getOptimizedImageUrl(tourImg, 300, 355)}
                       alt={tData.title}
-                      width="250"
-                      height="270"
+                      width="300"
+                      height="355"
                       className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.08] opacity-90 group-hover:opacity-100"
                       loading="lazy"
                       decoding="async"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/50 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent"></div>
 
-                    {tData.badge && (
-                      <div className="absolute top-2.5 left-2.5 z-20 bg-gold-500 text-obsidian-950 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md uppercase backdrop-blur-md">
-                        ★ {tData.badge}
-                      </div>
-                    )}
+                    {/* Destination Badge (الوجهة) */}
+                    <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-obsidian-950 text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
+                      <FaMapMarkerAlt className="text-xs text-obsidian-950" />
+                      <span>{pkgDestName}</span>
+                    </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-3.5 flex flex-col justify-end h-full z-10">
+                    {/* Bottom Content Container */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full z-10">
                       <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                        <h3 className="text-sm sm:text-base text-white font-serif font-bold mb-1 leading-tight drop-shadow-md line-clamp-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                        {/* Tour Title (اسم الرحلة) */}
+                        <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
                           {tData.title}
                         </h3>
 
-                        {tData.overview && (
-                          <p className="text-[11px] text-ivory-200 line-clamp-1 mb-1.5 font-medium drop-shadow">
-                            {tData.overview}
-                          </p>
-                        )}
-
-                        <div className="flex items-center justify-between text-[10px] text-gold-400 font-semibold pt-1 border-t border-white/15">
-                          <span>{tData.duration}</span>
-                          <span className="text-[11px] font-bold text-white group-hover:text-gold-400 transition-colors">
-                            {t("home.viewTourShort", isAr ? "التفاصيل ←" : "Details →")}
+                        {/* Duration & Price */}
+                        <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
+                          <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
+                            <FaClock className="text-gold-400 text-xs" />
+                            <span>{tData.duration}</span>
                           </span>
+                          {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
+                            <span className="text-gold-400 font-bold text-xs">
+                              {formatPrice(tData.price)}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Button: عرض التفاصيل */}
+                        <div className="w-full bg-gradient-to-r from-gold-500 via-amber-400 to-yellow-500 text-obsidian-950 font-extrabold text-xs py-2.5 px-4 rounded-xl text-center shadow-lg flex items-center justify-center gap-2 group-hover:brightness-110 transition-all duration-300">
+                          <span>{t("common.viewDetails", isAr ? "عرض التفاصيل" : "View Details")}</span>
+                          <FaArrowRight className="text-xs rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                         </div>
                       </div>
                     </div>

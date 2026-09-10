@@ -1037,4 +1037,39 @@ html[dir="rtl"] .dropdown-item:hover {
   contain-intrinsic-size: 1px 600px;
 }
 
+/* ── Continuous GPU Marquee Animations ────────────────────────────── */
+@keyframes continuousMarqueeLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes continuousMarqueeRight {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-continuous-marquee-left {
+  animation: continuousMarqueeLeft 65s linear infinite;
+  will-change: transform;
+}
+
+.animate-continuous-marquee-right {
+  animation: continuousMarqueeRight 65s linear infinite;
+  will-change: transform;
+}
+
+.animate-continuous-marquee-left:hover,
+.animate-continuous-marquee-right:hover {
+  animation-play-state: paused;
+}
+
+
 
