@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { FaStar, FaTimes, FaChevronLeft, FaChevronRight, FaVolumeMute, FaVolumeUp, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaHeadset, FaWhatsapp, FaArrowRight, FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaClock, FaCompass, FaLandmark } from "react-icons/fa";
+import { FaStar, FaTimes, FaChevronLeft, FaChevronRight, FaVolumeMute, FaVolumeUp, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaHeadset, FaWhatsapp, FaArrowRight, FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaClock, FaCompass, FaLandmark, FaBookOpen } from "react-icons/fa";
 import Button from "../ui/Button";
 import TourCard from "../tour/TourCard";
 import { useTours } from "../../hooks/useTours";
@@ -1620,7 +1620,7 @@ const HomeExperienceSection = () => {
                   <div className="populer-btn-and-days relative h-9 px-2 flex items-center justify-between overflow-hidden">
                     {/* Default Days / Info (Fades on hover) */}
                     <div className="populer-days flex items-center gap-2 text-white font-bold text-xs sm:text-sm transition-all duration-500 group-hover:opacity-0 group-hover:-translate-y-4">
-                      <FaClock className="text-[#F5A623]" size={14} />
+                      <FaBookOpen className="text-[#F5A623]" size={14} />
                       <span>{t("destination.viewGuide", "دليل الوجهة")}</span>
                     </div>
 
