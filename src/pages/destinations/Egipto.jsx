@@ -29,13 +29,73 @@ const itemVariants = {
 export default function Egipto() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = React.useState('all');
   const { tours: liveTours = [] } = useTours({ destination: 'egypt', limit: 50 });
+
   const egyptTours = useMemo(() => {
     if (Array.isArray(liveTours) && liveTours.length > 0) {
       return liveTours;
     }
     return tours.filter((tour) => tour && tour.destination === 'egypt');
   }, [liveTours]);
+
+  // Categorize Egypt tours into distinct types
+  const categories = useMemo(() => [
+    {
+      id: 'all',
+      label: t('dest.egypt.catAll', '✨ جميع رحلات مصر'),
+      count: egyptTours.length,
+    },
+    {
+      id: 'classic',
+      label: t('dest.egypt.catClassic', '🚢 الرحلات الكلاسيكية والنيلية'),
+      count: egyptTours.filter(t => 
+        (t.slug && (t.slug.includes('classico') || t.slug === 'cairo-express-4d')) ||
+        (t.type && (t.type.includes('City') || t.type.includes('Cruzeiro + City')))
+      ).length,
+    },
+    {
+      id: 'redsea',
+      label: t('dest.egypt.catRedSea', '🏖️ رحلات النيل والبحر الأحمر'),
+      count: egyptTours.filter(t => 
+        (t.slug && (t.slug.includes('sharm') || t.slug.includes('historico'))) ||
+        (t.type && t.type.includes('Mar Vermelho')) ||
+        (t.highlights && t.highlights.some(h => typeof h === 'string' && (h.includes('Hurghada') || h.includes('Sharm'))))
+      ).length,
+    },
+    {
+      id: 'special',
+      label: t('dest.egypt.catSpecial', '🏛️ رحلات الإسكندرية وأبو سمبل'),
+      count: egyptTours.filter(t => 
+        (t.slug && (t.slug.includes('alexandria') || t.slug.includes('ramses') || t.slug.includes('tesouros'))) ||
+        (t.type && (t.type.includes('Abu Simbel') || t.type.includes('Alexandria')))
+      ).length,
+    },
+  ], [egyptTours, t]);
+
+  const filteredTours = useMemo(() => {
+    if (activeTab === 'all') return egyptTours;
+    if (activeTab === 'classic') {
+      return egyptTours.filter(t => 
+        (t.slug && (t.slug.includes('classico') || t.slug === 'cairo-express-4d')) ||
+        (t.type && (t.type.includes('City') || t.type.includes('Cruzeiro + City')))
+      );
+    }
+    if (activeTab === 'redsea') {
+      return egyptTours.filter(t => 
+        (t.slug && (t.slug.includes('sharm') || t.slug.includes('historico'))) ||
+        (t.type && t.type.includes('Mar Vermelho')) ||
+        (t.highlights && t.highlights.some(h => typeof h === 'string' && (h.includes('Hurghada') || h.includes('Sharm'))))
+      );
+    }
+    if (activeTab === 'special') {
+      return egyptTours.filter(t => 
+        (t.slug && (t.slug.includes('alexandria') || t.slug.includes('ramses') || t.slug.includes('tesouros'))) ||
+        (t.type && (t.type.includes('Abu Simbel') || t.type.includes('Alexandria')))
+      );
+    }
+    return egyptTours;
+  }, [egyptTours, activeTab]);
 
   return (
     <div className="w-full min-h-screen bg-obsidian-50 dark:bg-[#0c0d19] pb-24 text-start">
@@ -76,9 +136,9 @@ export default function Egipto() {
         zoomDuration={12}
       />
 
-      {/* Brief Overview & 9 Egypt Tours Grid */}
+      {/* Brief Overview & Categorized Egypt Tours Grid */}
       <section className="container mx-auto px-6 mt-16" id="tours-grid">
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-body-lg text-obsidian-600 dark:text-ivory-200 leading-relaxed">
             {t(
               'dest.egypt.brief',
@@ -87,14 +147,44 @@ export default function Egipto() {
           </p>
         </div>
 
+        {/* Category Filter Tabs Bar */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
+          {categories.map((cat) => {
+            const isActive = activeTab === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveTab(cat.id)}
+                className={`relative px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2 ${
+                  isActive
+                    ? 'bg-gold-500 text-obsidian-950 shadow-[0_4px_16px_rgba(245,166,35,0.4)] scale-105'
+                    : 'bg-white dark:bg-[#151728] text-obsidian-700 dark:text-ivory-200 border border-gold-500/20 hover:border-gold-500/60 hover:text-gold-600 dark:hover:text-gold-400'
+                }`}
+              >
+                <span>{cat.label}</span>
+                <span
+                  className={`text-xs px-2 py-0.5 rounded-full font-extrabold ${
+                    isActive
+                      ? 'bg-obsidian-950 text-gold-400'
+                      : 'bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300'
+                  }`}
+                >
+                  {cat.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Tours Grid */}
         <motion.div
+          key={activeTab}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
+          animate="visible"
         >
-          {egyptTours.map((tour) => (
+          {filteredTours.map((tour) => (
             <TourCard key={tour.id} tour={tour} />
           ))}
         </motion.div>
