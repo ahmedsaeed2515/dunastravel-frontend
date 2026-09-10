@@ -136,7 +136,7 @@ export default function Egipto() {
           {/* Card 1: Classic Program */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-obsidian-200 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
           >
             <Link to="/programs/classic/classic-program" className="block relative h-[240px] overflow-hidden">
               <img
@@ -147,25 +147,25 @@ export default function Egipto() {
               />
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-700 dark:text-gold-400 uppercase tracking-widest font-bold mb-1">
+              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
                 {t('nav.classic', 'Classic')}
               </span>
               <Link to="/programs/classic/classic-program">
                 <h3
-                  className="text-display-md text-obsidian-950 dark:text-ivory-50 font-bold mt-1 mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors line-clamp-2 font-display"
+                  className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {t('classic.title', 'Classic Egypt Programme')}
                 </h3>
               </Link>
-              <p className="text-body-sm text-obsidian-900 dark:text-ivory-100 font-medium line-clamp-3 mb-4 flex-grow leading-relaxed">
+              <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
                 {t(
                   'classic.shortDesc',
                   'Experience the timeless beauty of Egypt with our signature classic itinerary covering all the iconic landmarks.'
                 )}
               </p>
-              <div className="flex items-center justify-between pt-4 border-t border-gold-500/10 mt-auto">
-                <span className="text-xs font-bold text-obsidian-900 dark:text-gold-400">8 {t('common.days', 'Days')}</span>
+              <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 mt-auto">
+                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">8 {t('common.days', 'Days')}</span>
                 <Link to="/programs/classic/classic-program">
                   <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
                     {t('tourCard.viewDetails', 'View Details')}{' '}
@@ -179,7 +179,7 @@ export default function Egipto() {
           {/* Card 2: Honeymooners Package */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-obsidian-200 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
           >
             <Link to="/programs/honeymooners" className="block relative h-[240px] overflow-hidden">
               <img
@@ -190,25 +190,25 @@ export default function Egipto() {
               />
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-700 dark:text-gold-400 uppercase tracking-widest font-bold mb-1">
+              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
                 {t('nav.honeymooners', 'Honeymooners Package')}
               </span>
               <Link to="/programs/honeymooners">
                 <h3
-                  className="text-display-md text-obsidian-950 dark:text-ivory-50 font-bold mt-1 mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors line-clamp-2 font-display"
+                  className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {t('honeymooners.egyptTitle', 'Honeymoon in Egypt')}
                 </h3>
               </Link>
-              <p className="text-body-sm text-obsidian-900 dark:text-ivory-100 font-medium line-clamp-3 mb-4 flex-grow leading-relaxed">
+              <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
                 {t(
                   'dest.egypt.honeymoonersDesc',
                   'Celebrate your love with intimate candlelit dinners, private yacht cruises, and unmatched romantic luxury.'
                 )}
               </p>
-              <div className="flex items-center justify-between pt-4 border-t border-gold-500/10 mt-auto">
-                <span className="text-xs font-bold text-obsidian-900 dark:text-gold-400">10 {t('common.days', 'Days')}</span>
+              <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 mt-auto">
+                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">10 {t('common.days', 'Days')}</span>
                 <Link to="/programs/honeymooners">
                   <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
                     {t('tourCard.viewDetails', 'View Details')}{' '}
@@ -222,7 +222,7 @@ export default function Egipto() {
           {/* Card 3: Religious Programs */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-obsidian-200 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
           >
             <Link to="/programs/religious" className="block relative h-[240px] overflow-hidden">
               <img
@@ -233,18 +233,18 @@ export default function Egipto() {
               />
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-700 dark:text-gold-400 uppercase tracking-widest font-bold mb-1">
+              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
                 {t('nav.religious', 'Religious Programs')}
               </span>
               <Link to="/programs/religious">
                 <h3
-                  className="text-display-md text-obsidian-950 dark:text-ivory-50 font-bold mt-1 mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors line-clamp-2 font-display"
+                  className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {t('tour_jordan_title', 'Journey of the Holy Family')}
                 </h3>
               </Link>
-              <p className="text-body-sm text-obsidian-900 dark:text-ivory-100 font-medium line-clamp-3 mb-4 flex-grow leading-relaxed">
+              <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
                 {t(
                   'dest.egypt.religiousDesc',
                   'A spiritual journey through Egypt tracing ancient Coptic monasteries and sacred sites.'
@@ -253,16 +253,16 @@ export default function Egipto() {
               
               {/* Religious options chips */}
               <div className="flex flex-wrap gap-1.5 mb-4">
-                <Link to="/programs/religious" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2.5 py-1 rounded-md font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/programs/religious" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('programs.holyFamily10d', 'Holy Family (10D)')}
                 </Link>
-                <Link to="/programs/religious" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2.5 py-1 rounded-md font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/programs/religious" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('programs.egyptJordan14d', 'Egypt & Jordan (14D)')}
                 </Link>
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-gold-500/10 mt-auto">
-                <span className="text-xs font-bold text-obsidian-900 dark:text-gold-400">10-14 {t('common.days', 'Days')}</span>
+              <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 mt-auto">
+                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">10-14 {t('common.days', 'Days')}</span>
                 <Link to="/programs/religious">
                   <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
                     {t('tourCard.viewDetails', 'View Details')}{' '}
@@ -276,7 +276,7 @@ export default function Egipto() {
           {/* Card 4: Multi-Country Tours */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-obsidian-200 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
           >
             <Link to="/programs/multi-country" className="block relative h-[240px] overflow-hidden">
               <img
@@ -287,18 +287,18 @@ export default function Egipto() {
               />
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-700 dark:text-gold-400 uppercase tracking-widest font-bold mb-1">
+              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
                 {t('nav.multiCountry', 'Multi-Country Tours')}
               </span>
               <Link to="/programs/multi-country">
                 <h3
-                  className="text-display-md text-obsidian-950 dark:text-ivory-50 font-bold mt-1 mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors line-clamp-2 font-display"
+                  className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {t('nav.multiCountry', 'Multi-Country Tours')}
                 </h3>
               </Link>
-              <p className="text-body-sm text-obsidian-900 dark:text-ivory-100 font-medium line-clamp-3 mb-4 flex-grow leading-relaxed">
+              <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
                 {t(
                   'dest.egypt.multiCountryDesc',
                   'Explore combined itineraries spanning Egypt, Jordan, Turkey and beyond for a truly grand adventure.'
@@ -307,19 +307,19 @@ export default function Egipto() {
 
               {/* Multi-country destination chips */}
               <div className="flex flex-wrap gap-1.5 mb-4">
-                <Link to="/tours/estrellas-medio-oriente-19d" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2 py-0.5 rounded font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/tours/estrellas-medio-oriente-19d" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('dest.starsMiddleEast', 'Middle East (19D)')}
                 </Link>
-                <Link to="/tours/cairo-and-athens-11-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2 py-0.5 rounded font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/tours/cairo-and-athens-11-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('dest.egyptGreece', 'Egypt & Greece (11D)')}
                 </Link>
-                <Link to="/tours/essences-of-egypt-and-turkey-15-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2 py-0.5 rounded font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/tours/essences-of-egypt-and-turkey-15-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('dest.egyptTurkey', 'Egypt & Turkey (15D)')}
                 </Link>
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-gold-500/10 mt-auto">
-                <span className="text-xs font-bold text-obsidian-900 dark:text-gold-400">8 {t('programs.journeysCount', 'Egypt Journeys')}</span>
+              <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 mt-auto">
+                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">8 {t('programs.journeysCount', 'Egypt Journeys')}</span>
                 <Link to="/programs/multi-country">
                   <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
                     {t('tourCard.viewDetails', 'View Details')}{' '}
@@ -333,7 +333,7 @@ export default function Egipto() {
           {/* Card 5: Egypt Extensions */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-obsidian-200 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
           >
             <Link to="/programs/extension" className="block relative h-[240px] overflow-hidden">
               <img
@@ -342,23 +342,23 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
-              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-bold text-xs uppercase px-3 py-1 rounded-full shadow-md">
+              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
                 3 {t('extensions.tripsAvailable', 'Trips Available')}
               </div>
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-700 dark:text-gold-400 uppercase tracking-widest font-bold mb-1">
+              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
                 EXTENSION
               </span>
               <Link to="/programs/extension">
                 <h3
-                  className="text-display-md text-obsidian-950 dark:text-ivory-50 font-bold mt-1 mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors line-clamp-2 font-display"
+                  className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {t('dest.egypt.extensionTitle', 'Egypt Extensions')}
                 </h3>
               </Link>
-              <p className="text-body-sm text-obsidian-900 dark:text-ivory-100 font-medium line-clamp-3 mb-4 flex-grow leading-relaxed">
+              <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
                 {t(
                   'dest.egypt.extensionDesc',
                   'Extend your Egypt journey with added destinations like Hurghada, Sharm El Sheikh, or Siwa Oasis.'
@@ -367,19 +367,19 @@ export default function Egipto() {
               
               {/* Trip Tags Preview */}
               <div className="flex flex-wrap gap-1.5 mb-4">
-                <Link to="/tours/hurghada-4d3n" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2.5 py-1 rounded-md font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/tours/hurghada-4d3n" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('trip.hurghada.title', 'Hurghada')} (4D)
                 </Link>
-                <Link to="/tours/sharm-4d3n" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2.5 py-1 rounded-md font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/tours/sharm-4d3n" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('trip.sharm.title', 'Sharm El Sheikh')} (4D)
                 </Link>
-                <Link to="/tours/siwa-oasis-alexandria" className="text-[11px] bg-gold-100 dark:bg-gold-900/30 text-obsidian-900 dark:text-gold-300 px-2.5 py-1 rounded-md font-semibold border border-gold-300 dark:border-gold-700 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                <Link to="/tours/siwa-oasis-alexandria" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
                   {t('tour_siwa_title', 'Siwa & Alexandria')} (5D)
                 </Link>
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-gold-500/10 mt-auto">
-                <span className="text-xs font-bold text-obsidian-900 dark:text-gold-400">4-5 {t('common.days', 'Days')}</span>
+              <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 mt-auto">
+                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">4-5 {t('common.days', 'Days')}</span>
                 <Link to="/programs/extension">
                   <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
                     {t('tourCard.viewDetails', 'View Details')}{' '}
