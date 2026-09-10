@@ -44,13 +44,13 @@ export function formatTurkeyProgram(program, locale = 'en') {
       }))
     : [];
 
+  const heroImage = program.heroImage || program.heroImageUrl || (Array.isArray(program.images) && program.images.length > 0 ? (typeof program.images[0] === 'string' ? program.images[0] : program.images[0]?.imageUrl || program.images[0]?.url) : null) || null;
   let images = [];
   if (Array.isArray(program.images) && program.images.length > 0) {
-    images = program.images.map((img) => (typeof img === 'string' ? img : img.url || img.heroImageUrl)).filter(Boolean);
-  } else if (program.heroImage) {
-    images = [program.heroImage];
-  } else if (program.heroImageUrl) {
-    images = [program.heroImageUrl];
+    images = program.images.map((img) => (typeof img === 'string' ? img : img?.imageUrl || img?.url || img?.heroImageUrl)).filter(Boolean);
+  }
+  if (images.length === 0 && heroImage) {
+    images = [heroImage];
   }
 
   // Missing media remains missing and is rendered as an explicit UI state.
@@ -62,6 +62,7 @@ export function formatTurkeyProgram(program, locale = 'en') {
     id: program.id || slug,
     title: title || enTitle || '',
     slug,
+    heroImage,
     images,
     price: Number.isFinite(basePriceUsd) ? basePriceUsd : null,
     basePriceUsd,

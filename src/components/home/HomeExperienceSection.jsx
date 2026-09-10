@@ -298,7 +298,12 @@ const getThumbnailUrl = (url, size = 48) => {
 
 const tourImageUrl = (tour) => {
   if (!tour) return '/imgs/egyothero.webp';
-  return resolveTourHeroImage(tour) || '/imgs/egyothero.webp';
+  return (
+    resolveTourHeroImage(tour) ||
+    (typeof tour?.heroImage === 'string' && tour.heroImage.trim() ? tour.heroImage.trim() : null) ||
+    (typeof tour?.heroImageUrl === 'string' && tour.heroImageUrl.trim() ? tour.heroImageUrl.trim() : null) ||
+    '/imgs/egyothero.webp'
+  );
 };
 
 const buildInfiniteMarqueeList = (items, prefix = 'tour', maxVisible = 8) => {
@@ -775,10 +780,41 @@ const HomeExperienceSection = () => {
   }, [allLiveTours, defaultPackageTours]);
 
   const packagesToursForMarquee = useMemo(() => {
+    if (allLiveTours && allLiveTours.length > 0) {
+      return allLiveTours.slice(0, 10).map((tour) => {
+        const hero = (typeof tour.heroImage === 'string' && tour.heroImage.trim() ? tour.heroImage.trim() : null)
+          || (typeof tour.heroImageUrl === 'string' && tour.heroImageUrl.trim() ? tour.heroImageUrl.trim() : null)
+          || (Array.isArray(tour.images) && tour.images.length > 0 ? (typeof tour.images[0] === 'string' ? tour.images[0] : tour.images[0]?.imageUrl) : null)
+          || '/imgs/egyothero.webp';
+        return {
+          ...tour,
+          id: tour.id || tour.slug,
+          title: resolveTourTitle(tour, t, lang),
+          overview: resolveTourOverview(tour, t, lang),
+          duration: resolveTourDuration(tour, t, lang),
+          heroImage: hero,
+          images: [hero],
+          link: `/tours/${tour.slug || tour.id}`,
+        };
+      });
+    }
     return (defaultPackageTours || []).slice(0, 8);
-  }, [defaultPackageTours]);
+  }, [allLiveTours, defaultPackageTours, lang, t]);
 
   const destinationToursForMarquee = useMemo(() => {
+    if (allLiveTours && allLiveTours.length > 0) {
+      return allLiveTours.map((tourItem) => ({
+        ...tourItem,
+        id: tourItem.id || tourItem.slug,
+        title: resolveTourTitle(tourItem, t, lang),
+        duration: resolveTourDuration(tourItem, t, lang),
+        overview: resolveTourOverview(tourItem, t, lang),
+        destination: tourItem.destination || String(tourItem.country || '').toLowerCase() || 'egypt',
+        heroImage: tourItem.heroImage || (Array.isArray(tourItem.images) && tourItem.images.length > 0 ? (typeof tourItem.images[0] === 'string' ? tourItem.images[0] : tourItem.images[0]?.imageUrl) : null) || '/imgs/egyothero.webp',
+        images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : [tourItem.heroImage || '/imgs/egyothero.webp'],
+        link: `/tours/${tourItem.slug || tourItem.id}`,
+      }));
+    }
     const egyptTours = (allLiveTours || [])
       .filter((tourItem) => tourItem && (tourItem.destination === 'egypt' || String(tourItem.country || '').toLowerCase() === 'egypt'))
       .slice(0, 3)
@@ -1880,7 +1916,12 @@ const HomeExperienceSection = () => {
             {(() => {
               const infiniteList = buildInfiniteMarqueeList(packagesToursForMarquee, 'pkg');
               return infiniteList.map((tData, idx) => {
-                const tourImg = resolveTourHeroImage(tData) || '/imgs/egyothero.webp';
+                const tourImg =
+                  resolveTourHeroImage(tData) ||
+                  tData.heroImage ||
+                  (Array.isArray(tData.images) && tData.images[0]) ||
+                  tData.image ||
+                  '/imgs/egyothero.webp';
                 return (
                   <Link
                     key={tData.uKey || `pkg-tour-${idx}`}

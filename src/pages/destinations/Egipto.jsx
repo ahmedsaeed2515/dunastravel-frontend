@@ -13,7 +13,8 @@ import {
 } from 'react-icons/fa';
 import Button from '../../components/ui/Button';
 import TourCard from '../../components/tour/TourCard';
-import tours from '../../data/tours.js';
+import { useTours } from '../../hooks/useTours';
+import staticTours from '../../data/tours.js';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 const containerVariants = {
@@ -38,7 +39,9 @@ export default function Egipto() {
   const lang = i18n.language || 'en';
   const isRtl = lang.startsWith('ar');
   const navigate = useNavigate();
-  const egyptTours = tours.filter((tour) => tour && tour.destination === 'egypt');
+  const { tours: liveEgyptTours } = useTours({ destination: 'egypt', limit: 50 });
+  const staticEgyptTours = staticTours.filter((tour) => tour && tour.destination === 'egypt');
+  const egyptTours = (liveEgyptTours && liveEgyptTours.length > 0) ? liveEgyptTours : staticEgyptTours;
 
   const viewDetailsLabels = {
     ar: 'عرض التفاصيل',

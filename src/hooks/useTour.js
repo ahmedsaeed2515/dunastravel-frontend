@@ -126,9 +126,19 @@ function normalizeTour(data, lang = 'en') {
 
   const fallback = getFallbackTour(data.slug, lang);
 
-  const images = Array.isArray(data.images) && data.images.length > 0
-    ? data.images.map((image) => (typeof image === 'string' ? image : image?.imageUrl || ''))
-    : (fallback?.images || []);
+  const backendImages = Array.isArray(data.images) && data.images.length > 0
+    ? data.images.map((image) => (typeof image === 'string' ? image : image?.imageUrl || image?.url || '')).filter(Boolean)
+    : [];
+  if (backendImages.length === 0 && data.heroImage) {
+    backendImages.push(data.heroImage);
+  } else if (backendImages.length === 0 && data.heroImageUrl) {
+    backendImages.push(data.heroImageUrl);
+  }
+  const images = backendImages.length > 0 ? backendImages : (fallback?.images || []);
+  const heroImage = (typeof data.heroImage === 'string' && data.heroImage.trim() ? data.heroImage.trim() : null)
+    || (typeof data.heroImageUrl === 'string' && data.heroImageUrl.trim() ? data.heroImageUrl.trim() : null)
+    || images[0]
+    || null;
 
   const rawItineraryList = (Array.isArray(data.itinerary) && data.itinerary.length > 0)
     ? data.itinerary
@@ -174,6 +184,7 @@ function normalizeTour(data, lang = 'en') {
   return {
     ...data,
     images,
+    heroImage,
     included,
     excluded,
     highlights,

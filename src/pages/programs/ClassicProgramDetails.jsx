@@ -11,7 +11,8 @@ import AdvancedBooking from '../../components/booking/AdvancedBooking';
 import RouteMap from '../../components/tour/RouteMap';
 import ReviewsMap from '../../components/tour/ReviewsMap';
 import SuggestedTours from '../../components/tour/SuggestedTours';
-import tours from '../../data/tours';
+import { useTours } from '../../hooks/useTours';
+import staticTours from '../../data/tours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 const fadeInUp = {
@@ -221,7 +222,9 @@ export default function ClassicProgramDetails() {
 
   const { title, duration, type: tourType, groupSize, overview, highlights, included, excluded, itinerary } = currentLangData;
 
-  const shuffledTours = useMemo(() => [...tours].reverse(), []);
+  const { tours: liveTours } = useTours({ category: 'classic', limit: 12 });
+  const pool = (liveTours && liveTours.length > 0) ? liveTours : staticTours;
+  const shuffledTours = useMemo(() => [...pool].reverse(), [pool]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const carouselRef = useRef(null);
 

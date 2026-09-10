@@ -91,8 +91,10 @@ const TourCard = ({
   const durationLabel = durationStr.includes('/') ? durationStr.split('/')[0].trim() : durationStr;
 
   const parsedPrice = Number(tour.price ?? tour.basePriceUsd ?? tour.raw?.price);
-  const tourPrice = Number.isFinite(parsedPrice) ? parsedPrice : null;
-  const tourImage = resolveTourHeroImage(tour);
+  const tourImage =
+    resolveTourHeroImage(tour) ||
+    (typeof tour.heroImageUrl === 'string' ? tour.heroImageUrl.trim() : null) ||
+    (Array.isArray(tour.images) && tour.images.length > 0 ? (typeof tour.images[0] === 'string' ? tour.images[0] : tour.images[0]?.imageUrl) : null);
 
   const codeText = resolveLocalizedText(tour.code, t, lang);
   const minPaxText = resolveLocalizedText(tour.minPax, t, lang);
@@ -196,6 +198,10 @@ const TourCard = ({
               decoding="async"
               width="400"
               height="255"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/imgs/egyothero.webp';
+              }}
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-primary-900 px-6 text-center text-sm text-gold-200">

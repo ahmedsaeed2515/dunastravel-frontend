@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaChevronRight } from 'react-icons/fa';
 import TourCard from '../../components/tour/TourCard';
-import multiCountryTours from '../../data/multiCountryTours';
+import { useTours } from '../../hooks/useTours';
+import staticMultiCountryTours from '../../data/multiCountryTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 export default function MultiCountryTours() {
   const { t } = useTranslation();
+  const { tours: liveTours } = useTours({ destination: 'multi-country', limit: 50 });
+  const displayTours = (liveTours && liveTours.length > 0) ? liveTours : staticMultiCountryTours;
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
@@ -74,7 +77,7 @@ export default function MultiCountryTours() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {multiCountryTours.map((tour) => (
+            {displayTours.map((tour) => (
               <TourCard key={tour.id} tour={tour} linkBase="/programs/multi-country" />
             ))}
           </div>

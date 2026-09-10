@@ -374,6 +374,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
                   ...tour,
                   price: Number(tour.basePriceUsd),
                   images: Array.isArray(tour.images) ? tour.images : (tour.heroImage ? [tour.heroImage] : []),
+                  heroImage: tour.heroImage || (Array.isArray(tour.images) && tour.images.length > 0 ? (typeof tour.images[0] === 'string' ? tour.images[0] : tour.images[0]?.imageUrl) : null),
                   destination: tour.country,
                   badge: tour.customBadge,
                 }}

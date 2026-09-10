@@ -38,10 +38,13 @@ function normalizeLandingPage(value) {
         : null;
       const heroImage = (heroImgObj ? (heroImgObj.imageUrl || heroImgObj.url) : null)
         || (typeof tour?.heroImage === 'string' && tour.heroImage.trim() ? tour.heroImage.trim() : (tour?.heroImage?.imageUrl || tour?.heroImage?.url || null))
+        || (typeof tour?.heroImageUrl === 'string' && tour.heroImageUrl.trim() ? tour.heroImageUrl.trim() : null)
         || (Array.isArray(tour?.images) && tour.images.length > 0
             ? (typeof tour.images[0] === 'string' ? tour.images[0] : (tour.images[0]?.imageUrl || tour.images[0]?.url))
             : null);
-      const images = Array.isArray(tour?.images) ? tour.images : (heroImage ? [heroImage] : []);
+      const images = Array.isArray(tour?.images) && tour.images.length > 0
+        ? tour.images.map(img => typeof img === 'string' ? img : img?.imageUrl || img?.url || '').filter(Boolean)
+        : (heroImage ? [heroImage] : []);
 
       return {
         ...tour,

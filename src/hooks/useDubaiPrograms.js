@@ -42,7 +42,10 @@ export function useDubaiPrograms() {
           }))
         : [];
 
-      const images = Array.isArray(program.images) ? program.images : [];
+      const heroImage = program.heroImage || program.heroImageUrl || (Array.isArray(program.images) && program.images.length > 0 ? (typeof program.images[0] === 'string' ? program.images[0] : program.images[0]?.imageUrl) : null) || null;
+      const images = Array.isArray(program.images) && program.images.length > 0
+        ? program.images.map(img => typeof img === 'string' ? img : img?.imageUrl || img?.url || '').filter(Boolean)
+        : (heroImage ? [heroImage] : []);
 
       const pricing = program.pricing
         ? {
@@ -86,6 +89,7 @@ export function useDubaiPrograms() {
         id: program.id,
         title,
         slug,
+        heroImage,
         images,
         duration,
         highlights: Array.isArray(highlights) ? highlights : [],

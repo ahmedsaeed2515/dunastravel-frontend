@@ -95,9 +95,21 @@ function mapTour(tour, lang = 'en') {
   let images = [];
   if (Array.isArray(tour.images) && tour.images.length > 0) {
     images = tour.images.map(img => typeof img === 'string' ? img : (img?.imageUrl || img?.url || '')).filter(Boolean);
-  } else if (resolvedHeroImage) {
-    images = [resolvedHeroImage];
   }
+  if (images.length === 0 && resolvedHeroImage) {
+    images = [resolvedHeroImage];
+  } else if (images.length === 0 && tour.heroImage) {
+    images = [typeof tour.heroImage === 'string' ? tour.heroImage : (tour.heroImage?.imageUrl || tour.heroImage?.url || '')].filter(Boolean);
+  } else if (images.length === 0 && tour.heroImageUrl) {
+    images = [tour.heroImageUrl];
+  }
+
+  const primaryHeroImage =
+    resolvedHeroImage ||
+    (typeof tour.heroImage === 'string' && tour.heroImage.trim() ? tour.heroImage.trim() : null) ||
+    (typeof tour.heroImageUrl === 'string' && tour.heroImageUrl.trim() ? tour.heroImageUrl.trim() : null) ||
+    images[0] ||
+    '';
 
   const resolveList = (val) => {
     if (!val) return [];
@@ -123,7 +135,7 @@ function mapTour(tour, lang = 'en') {
     country: tour.country || tour.destination || 'Egypt',
     category: tour.category || tour.type || tour.destination || '',
     images,
-    heroImage: resolvedHeroImage || images[0] || '',
+    heroImage: primaryHeroImage || resolvedHeroImage || images[0] || '',
     raw: { price, type: tour.category || tour.type || '' },
     price,
     basePriceUsd: price,
