@@ -6160,5 +6160,7 @@
   "auth.authenticating": "Authenticating...",
   "auth.resendCode": "Resend Code",
   "auth.accountCreatedVerification": "Account created! Please check your email to verify.",
-  "auth.signInShort": "Sign In"
+  "auth.signInShort": "Sign In",
+  "home.destSectionDesc": "Discover the most enchanting and beautiful luxury destinations, with packages and tours meticulously crafted to give you an extraordinary travel experience.",
+  "destination.explore": "Explore Destination"
 }

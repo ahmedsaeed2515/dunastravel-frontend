@@ -6151,5 +6151,7 @@
   "auth.iAgreeTo": "Acepto los",
   "auth.authenticating": "Autenticando...",
   "auth.resendCode": "Reenviar Código",
-  "auth.accountCreatedVerification": "¡Cuenta creada! Revisa tu correo para verificar."
+  "auth.accountCreatedVerification": "¡Cuenta creada! Revisa tu correo para verificar.",
+  "home.destSectionDesc": "Descubra los destinos de lujo más deslumbrantes y encantadores, con paquetes y excursiones diseñados minuciosamente para ofrecerle una experiencia de viaje extraordinaria.",
+  "destination.explore": "Explorar Destino"
 }

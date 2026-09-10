@@ -6160,5 +6160,7 @@
   "auth.authenticating": "جاري التحقق...",
   "auth.resendCode": "إعادة إرسال الرمز",
   "auth.accountCreatedVerification": "تم إنشاء الحساب! يرجى فحص بريدك الإلكتروني للتفعيل.",
-  "auth.signInShort": "تسجيل الدخول"
+  "auth.signInShort": "تسجيل الدخول",
+  "home.destSectionDesc": "استكشف أكثر الوجهات الفاخرة سحراً وجمالاً، مع باقات وجولات سياحية صممت بعناية لتمنحك تجربة سفر استثنائية.",
+  "destination.explore": "استكشف الوجهة"
 }
