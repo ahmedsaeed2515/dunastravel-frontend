@@ -1585,8 +1585,8 @@ const HomeExperienceSection = () => {
                     decoding="async"
                   />
 
-                  {/* Dynamic Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030a1c] via-[#030a1c]/40 to-transparent opacity-85 group-hover:opacity-95 group-hover:from-[#030a1c] group-hover:via-[#030a1c]/60 transition-all duration-500" />
+                  {/* Dynamic Dark Gradient Overlay - Deeper contrast on hover for maximum text legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020817] via-[#020817]/50 to-transparent opacity-85 group-hover:opacity-95 group-hover:from-[#020817] group-hover:via-[#020817]/80 transition-all duration-500" />
 
                   {/* Top Tour Count Badge */}
                   <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-amber-300/60 text-black font-extrabold text-xs flex items-center gap-1.5 shadow-lg group-hover:bg-gold-400 group-hover:scale-105 transition-all duration-300">
@@ -1596,27 +1596,27 @@ const HomeExperienceSection = () => {
                     <span className="text-black font-extrabold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
                   </div>
 
-                  {/* Bottom Content Overlay (Text & Description appear smoothly on hover) */}
+                  {/* Bottom Content Overlay (Text & Description appear smoothly in bold white) */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 z-20 flex flex-col justify-end transition-all duration-500">
                     {/* Destination Title */}
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-serif drop-shadow-md group-hover:text-amber-300 transition-colors duration-300">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-serif drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition-colors duration-300">
                       {dest.name}
                     </h3>
 
                     {/* Gold Accent Line */}
-                    <div className="w-12 h-1 bg-gold-400 rounded-full my-2.5 transition-all duration-500 group-hover:w-20" />
+                    <div className="w-12 h-1 bg-gold-400 rounded-full my-2.5 transition-all duration-500 group-hover:w-24 shadow-lg" />
 
-                    {/* Description Text (Appears smoothly on hover) */}
+                    {/* Description Text (Strong bold pure white text with shadow) */}
                     {dest.description && (
-                      <p className="text-xs sm:text-sm text-white/90 font-medium line-clamp-3 opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-28 transition-all duration-500 ease-out leading-relaxed mb-3">
+                      <p className="text-sm sm:text-base text-white font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] line-clamp-3 opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-32 transition-all duration-500 ease-out leading-relaxed mb-3">
                         {dest.description}
                       </p>
                     )}
 
-                    {/* Action Link / Arrow */}
-                    <div className="flex items-center gap-2 text-gold-400 font-bold text-xs uppercase tracking-wider opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-75">
+                    {/* Action Link / Arrow (Bright Amber Gold with bold text) */}
+                    <div className="flex items-center gap-2 text-amber-300 font-extrabold text-xs sm:text-sm uppercase tracking-wider opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-75 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                       <span>{t("destination.explore", "استكشف الوجهة")}</span>
-                      <FaArrowRight className="w-3.5 h-3.5 rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1.5 rtl:group-hover:-translate-x-1.5" />
+                      <FaArrowRight className="w-4 h-4 rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1.5 rtl:group-hover:-translate-x-1.5" />
                     </div>
                   </div>
                 </motion.div>
