@@ -1130,11 +1130,7 @@ const HomeExperienceSection = () => {
   };
 
   const handleHomeReserveClick = (vehicleId) => {
-    setResForm((prev) => ({ ...prev, vehicle: vehicleId }));
-    const element = document.getElementById("home-reservation-form");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    navigate('/transportation');
   };
 
   const filteredVehicles = useMemo(() => {
@@ -1652,26 +1648,8 @@ const HomeExperienceSection = () => {
           </div>
         </div>
 
-        {/* Marquee Strip with Side Arrow Controls */}
+        {/* Marquee Strip */}
         <div className="relative group/marquee w-full">
-          {/* Left Floating Side Arrow */}
-          <button
-            onClick={() => handleMarqueeScroll(destMarqueeRef, 'left')}
-            aria-label="Scroll left"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/60 dark:bg-obsidian-900/80 border border-gold-500/50 text-gold-400 hover:text-white hover:bg-gold-500 backdrop-blur-md flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
-          >
-            <FaChevronLeft className="w-4 h-4" />
-          </button>
-
-          {/* Right Floating Side Arrow */}
-          <button
-            onClick={() => handleMarqueeScroll(destMarqueeRef, 'right')}
-            aria-label="Scroll right"
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/60 dark:bg-obsidian-900/80 border border-gold-500/50 text-gold-400 hover:text-white hover:bg-gold-500 backdrop-blur-md flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
-          >
-            <FaChevronRight className="w-4 h-4" />
-          </button>
-
           <div 
             dir="ltr" 
             ref={destMarqueeRef} 
@@ -1969,26 +1947,8 @@ const HomeExperienceSection = () => {
           </div>
         </div>
 
-        {/* Marquee Strip with Side Arrow Controls */}
+        {/* Marquee Strip */}
         <div className="relative group/marquee w-full">
-          {/* Left Floating Side Arrow */}
-          <button
-            onClick={() => handleMarqueeScroll(pkgMarqueeRef, 'left')}
-            aria-label="Scroll left"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/60 dark:bg-obsidian-900/80 border border-gold-500/50 text-gold-400 hover:text-white hover:bg-gold-500 backdrop-blur-md flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
-          >
-            <FaChevronLeft className="w-4 h-4" />
-          </button>
-
-          {/* Right Floating Side Arrow */}
-          <button
-            onClick={() => handleMarqueeScroll(pkgMarqueeRef, 'right')}
-            aria-label="Scroll right"
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/60 dark:bg-obsidian-900/80 border border-gold-500/50 text-gold-400 hover:text-white hover:bg-gold-500 backdrop-blur-md flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
-          >
-            <FaChevronRight className="w-4 h-4" />
-          </button>
-
           <div 
             dir="ltr" 
             ref={pkgMarqueeRef} 
@@ -2077,7 +2037,7 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Transportation & Transfers */}
+      {/* Transportation & Transfers (Vehicles Marquee Slider Only) */}
       <section className="py-12 bg-ivory-50 relative overflow-hidden content-auto">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
@@ -2141,7 +2101,7 @@ const HomeExperienceSection = () => {
           </div>
 
           {/* Vehicles Strip: Infinite Marquee */}
-          <div dir="ltr" className="w-full relative overflow-hidden mb-12 py-4">
+          <div dir="ltr" className="w-full relative overflow-hidden py-4">
             <div
               className="flex w-max"
               style={{
@@ -2221,298 +2181,35 @@ const HomeExperienceSection = () => {
               })()}
             </div>
           </div>
-
-          {/* Reservation Form */}
-          <motion.div
-            id="home-reservation-form"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-5xl mx-auto rounded-3xl p-8 md:p-12 relative overflow-hidden border border-[rgba(245,166,35,0.2)]"
-            style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)', boxShadow: '0 0 40px rgba(10,25,105, 0.8)' }}
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-gold-500/10 rounded-full blur-[80px] -ml-32 -mb-32"></div>
-
-            <div className="relative z-10">
-              <div className="text-center mb-10">
-                <h3 className="text-display-md text-ivory-50 mb-2">
-                  {t("home.bookTransfer", "Book Your Transfer")}
-                </h3>
-                <p className="text-body-md text-ivory-300">
-                  {t(
-                    "home.bookTransferDesc",
-                    "Fill out the details below and our concierge will confirm your reservation.",
-                  )}
-                </p>
-              </div>
-
-              {resSuccess ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-16"
-                >
-                  <div className="w-20 h-20 bg-sage-500/20 text-sage-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg
-                      className="w-10 h-10"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <h4 className="text-2xl font-display text-ivory-50 mb-2">
-                    {t("home.resSuccess", "Reservation Received")}
-                  </h4>
-                  <p className="text-ivory-300">
-                    {t(
-                      "home.resSuccessDesc",
-                      "We will contact you shortly to confirm the details.",
-                    )}
-                  </p>
-                </motion.div>
-              ) : (
-                <form
-                  onSubmit={handleResSubmit}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                >
-                  {/* Select Vehicle */}
-                  <div className="md:col-span-2">
-                    <label htmlFor="book-vehicle-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                      {t("home.selectVehicle", "Select Vehicle *")}
-                    </label>
-                    <select
-                      id="book-vehicle-input"
-                      required
-                      value={resForm.vehicle}
-                      onChange={(e) =>
-                        setResForm({ ...resForm, vehicle: e.target.value })
-                      }
-                      className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                    >
-                      <option value="">
-                        {t("home.chooseVehicle", "Choose a vehicle")}
-                      </option>
-                      {transportationList.map((v) => (
-                        <option key={v.id} value={v.id}>
-                          {v.name} ({v.capacity || v.seats || 4}{" "}
-                          {t("transportation.seatsCount", "Seats")}) - {formatPrice(v.pricePerDay || v.pricePerTrip || v.basePriceUsd || 0)}/{t("transportation.day", "day")}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Date & Time */}
-                  <div>
-                    <label htmlFor="book-date-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                      {t("home.tripDate", "Trip Date *")}
-                    </label>
-                    <input
-                      id="book-date-input"
-                      type="date"
-                      required
-                      value={resForm.date}
-                      min={todayStr}
-                      onChange={(e) =>
-                        setResForm({ ...resForm, date: e.target.value })
-                      }
-                      className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all [color-scheme:dark]"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="book-time-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                      {t("home.pickupTime", "Pick Up Time *")}
-                    </label>
-                    <input
-                      id="book-time-input"
-                      type="time"
-                      required
-                      value={resForm.time}
-                      onChange={(e) =>
-                        setResForm({ ...resForm, time: e.target.value })
-                      }
-                      className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all [color-scheme:dark]"
-                    />
-                  </div>
-
-                  {/* Passengers */}
-                  <div>
-                    <label htmlFor="book-adults-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                      {t("home.adultsCount", "Adults *")}
-                    </label>
-                    <input
-                      id="book-adults-input"
-                      type="number"
-                      min="1"
-                      max="20"
-                      required
-                      value={resForm.adults}
-                      onChange={(e) =>
-                        setResForm({ ...resForm, adults: e.target.value })
-                      }
-                      className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="book-children-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                      {t("home.childrenCount", "Children (0-20)")}
-                    </label>
-                    <input
-                      id="book-children-input"
-                      type="number"
-                      min="0"
-                      max="20"
-                      value={resForm.children}
-                      onChange={(e) =>
-                        setResForm({ ...resForm, children: e.target.value })
-                      }
-                      className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                    />
-                  </div>
-
-                  {/* Locations */}
-                  <div>
-                    <label htmlFor="book-pickup-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                      {t("home.pickupLocation", "Pick Up Location *")}
-                    </label>
-                    <input
-                      id="book-pickup-input"
-                      type="text"
-                      required
-                      placeholder={t(
-                        "home.pickupPlaceholder",
-                        "Hotel, Airport, etc.",
-                      )}
-                      value={resForm.pickup}
-                      onChange={(e) =>
-                        setResForm({ ...resForm, pickup: e.target.value })
-                      }
-                      className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 placeholder-ivory-300/30 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="book-dropoff-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                      {t("home.dropoffLocation", "Drop Off Location *")}
-                    </label>
-                    <input
-                      id="book-dropoff-input"
-                      type="text"
-                      required
-                      placeholder={t(
-                        "home.dropoffPlaceholder",
-                        "Hotel, Airport, etc.",
-                      )}
-                      value={resForm.dropoff}
-                      onChange={(e) =>
-                        setResForm({ ...resForm, dropoff: e.target.value })
-                      }
-                      className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 placeholder-ivory-300/30 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                    />
-                  </div>
-
-                  {/* Contact Info */}
-                  <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                      <label htmlFor="book-name-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                        {t("contact.fullName", "Full Name *")}
-                      </label>
-                      <input
-                        id="book-name-input"
-                        type="text"
-                        required
-                        placeholder="John Doe"
-                        value={resForm.name}
-                        onChange={(e) =>
-                          setResForm({ ...resForm, name: e.target.value })
-                        }
-                        className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 placeholder-ivory-300/30 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="book-phone-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                        {t("contact.phoneNumber", "Phone Number *")}
-                      </label>
-                      <input
-                        id="book-phone-input"
-                        type="text"
-                        required
-                        placeholder="+1 234 567 890"
-                        value={resForm.phone}
-                        onChange={(e) =>
-                          setResForm({ ...resForm, phone: e.target.value })
-                        }
-                        className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 placeholder-ivory-300/30 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="book-email-input" className="block text-caption text-ivory-300 uppercase tracking-widest mb-2">
-                        {t("contact.email", "Email *")}
-                      </label>
-                      <input
-                        id="book-email-input"
-                        type="email"
-                        required
-                        placeholder="john@example.com"
-                        value={resForm.email}
-                        onChange={(e) =>
-                          setResForm({ ...resForm, email: e.target.value })
-                        }
-                        className="w-full bg-obsidian-900/50 border border-ivory-50/10 rounded-lg p-3 text-ivory-50 placeholder-ivory-300/30 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2 flex justify-center mt-6 pt-6 border-t border-ivory-50/10">
-                    <Button
-                      type="submit"
-                      className="w-full md:w-auto px-12 py-4 text-lg rounded-full text-white hover:scale-105 transition-transform"
-                      style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)', boxShadow: '0 0 20px rgba(10,25,105, 0.6)', border: '1px solid rgba(255,255,255,0.1)' }}
-                    >
-                      {t("home.reserveNow", "Reserve Now")}
-                    </Button>
-                  </div>
-                </form>
-              )}
-            </div>
-          </motion.div>
         </div>
       </section>
 
-      {/* Photo Gallery - Seamless Theme Background with Travelik Curved Arch Overlays */}
+      {/* Photo Gallery - Travelik Replica Style */}
       <section className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
         {/* Section Header */}
-        <div className="container mx-auto px-6 mb-10 relative z-10">
+        <div className="container mx-auto px-6 mb-10 relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="max-w-4xl text-start"
+            className="max-w-3xl mx-auto text-center"
           >
-            <div className="flex items-center gap-3 mb-3">
-              <span className="px-4 py-1 text-xs font-black uppercase tracking-widest text-[#0CB2DB] border border-[#0CB2DB]/60 rounded-full bg-[#0CB2DB]/10 shadow-[0_0_15px_rgba(12,178,219,0.2)]">
-                {t("home.galleryLabel", "CAPTURED MOMENTS")}
-              </span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#0CB2DB] border border-[#0CB2DB]/60 rounded-full bg-[#0CB2DB]/10 shadow-[0_0_15px_rgba(12,178,219,0.2)] mb-4">
+              {t("home.galleryLabel", "CAPTURED MOMENTS")}
             </div>
             <h2
-              className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase leading-none"
+              className="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-tight mb-4"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {t("home.galleryHeading", "A Glimpse Into Your Journey")}
             </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#0CB2DB] to-transparent mx-auto mt-2" />
           </motion.div>
         </div>
 
         {/* Gallery Marquee Container with Seamless Top & Bottom Arch Overlays */}
-        <div className="relative w-full overflow-hidden my-2">
+        <div className="relative w-full overflow-hidden my-4">
           {/* Top Shape Overlay SVG */}
           <div className="absolute top-0 left-0 right-0 w-full z-20 pointer-events-none -mt-1 select-none">
             <svg className="w-full h-12 md:h-20 text-[#1E3A8A] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
@@ -2525,7 +2222,7 @@ const HomeExperienceSection = () => {
             <div
               className="flex w-max"
               style={{
-                animation: "tourMarquee 150s linear infinite",
+                animation: "tourMarquee 75s linear infinite",
                 gap: "20px",
                 paddingLeft: "20px",
               }}
@@ -2533,13 +2230,13 @@ const HomeExperienceSection = () => {
               onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
             >
               {(() => {
-                const infiniteImages = buildInfiniteMarqueeList(generalGalleryImages, 'gal');
+                const infiniteImages = buildInfiniteMarqueeList(generalGalleryImages, 'gal', 8);
                 return infiniteImages.map((img, idx) => {
                   const originalIndex = typeof img.origIdx === 'number' ? img.origIdx : (idx % Math.max(1, generalGalleryImages.length));
                   return (
                     <div
                       key={img.uKey || `gal-${idx}`}
-                      className="flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.03] hover:z-30 border border-white/15 hover:border-[#0CB2DB] bg-slate-900/40 shadow-xl"
+                      className="flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.04] hover:z-30 border border-white/20 hover:border-[#0CB2DB] bg-slate-900/50 shadow-2xl"
                       onClick={() => openLightbox(originalIndex)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -2551,22 +2248,30 @@ const HomeExperienceSection = () => {
                       role="button"
                       aria-label={`${t("home.viewLarger", "View larger image of")} ${img.label || 'image'}`}
                     >
-                      <div className="w-[240px] sm:w-[280px] md:w-[320px] h-[340px] sm:h-[400px] md:h-[440px] overflow-hidden rounded-xl">
+                      <div className="w-[260px] sm:w-[300px] md:w-[340px] h-[350px] sm:h-[400px] md:h-[440px] overflow-hidden rounded-xl">
                         <img
                           src={getOptimizedImageUrl(img.url, 500, 650)}
                           alt={img.label || 'Luxury moment'}
                           loading="lazy"
                           decoding="async"
-                          width="320"
+                          width="340"
                           height="440"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                       </div>
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 rounded-xl">
-                        <span className="text-white text-xs font-bold tracking-wider uppercase bg-[#0CB2DB]/30 backdrop-blur-md px-4 py-2 rounded-full border border-[#0CB2DB]/50 shadow-lg">
-                          {t("home.viewPhoto", "View Photo")}
+                      {/* Travelik Dark Gradient Hover Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 rounded-xl">
+                        <span className="text-[#0CB2DB] text-xs font-black tracking-widest uppercase mb-1">
+                          {img.category || t("home.galleryLabel", "Captured Moment")}
                         </span>
+                        <span className="text-white text-sm font-bold truncate">
+                          {img.label || t("home.luxuryExperience", "Luxury Experience")}
+                        </span>
+                        <div className="mt-3">
+                          <span className="inline-flex items-center gap-1.5 text-white text-[11px] font-bold tracking-wider uppercase bg-[#0CB2DB]/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-lg">
+                            {t("home.viewPhoto", "View Photo")}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -2584,13 +2289,13 @@ const HomeExperienceSection = () => {
         </div>
 
         {/* View All Button */}
-        <div className="flex justify-center mt-10 mb-4 relative z-10">
+        <div className="flex justify-center mt-8 mb-4 relative z-10">
           <button
             onClick={() => navigate('/media-gallery?tab=photos')}
-            className="group relative px-10 py-4 text-white text-sm md:text-base font-bold rounded-full uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[#0CB2DB]/25 hover:scale-105 active:scale-95"
+            className="group relative px-10 py-4 text-white text-sm md:text-base font-bold rounded-full uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[#0CB2DB]/35 hover:scale-105 active:scale-95 cursor-pointer outline-none"
             style={{
               background: 'linear-gradient(135deg, #0CB2DB 0%, #1E3A8A 100%)',
-              border: '1px solid rgba(255,255,255,0.2)'
+              border: '1px solid rgba(255,255,255,0.3)'
             }}
           >
             <span className="relative z-10 flex items-center gap-2">
@@ -2735,10 +2440,10 @@ const HomeExperienceSection = () => {
                   backgroundImage: "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80')"
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-95" />
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
               
               {/* Golden Overlay Light Leak */}
-              <div className="absolute inset-0 bg-gold-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              <div className="absolute inset-0 bg-gold-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
               {/* Background Motif: Arched Dome Outlines */}
               <svg className="absolute -right-12 -bottom-12 w-64 h-64 text-gold-500/10 pointer-events-none transform group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-1000" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
@@ -2763,14 +2468,14 @@ const HomeExperienceSection = () => {
                 </div>
 
                 <div className="space-y-3 flex-grow">
-                  <span className="text-[10px] text-gold-400 font-bold uppercase tracking-[0.2em]">01 / Sanctuary Stay</span>
-                  <h3 className="text-2xl font-bold text-ivory-50 font-display tracking-wide">{t('nav.hotelsTab', 'Hotels')}</h3>
-                  <p className="text-ivory-300 text-sm leading-relaxed font-body max-w-sm md:opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="text-[11px] text-white group-hover:text-gold-400 font-extrabold uppercase tracking-[0.2em] transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">01 / Sanctuary Stay</span>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-white group-hover:text-gold-400 font-display tracking-wide transition-colors duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">{t('nav.hotelsTab', 'Hotels')}</h3>
+                  <p className="text-white group-hover:text-gold-300 text-sm leading-relaxed font-body font-semibold max-w-sm transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] opacity-95">
                     {t('home.servicesHotelsDesc', 'Luxury 5-star accommodations and handpicked boutique hotels across all destinations')}
                   </p>
                   
                   {/* Action Link */}
-                  <div className="inline-flex items-center gap-2 text-xs font-bold text-gold-400 group-hover:text-gold-300 transition-colors pt-2 uppercase tracking-widest">
+                  <div className="inline-flex items-center gap-2 text-xs font-extrabold text-white group-hover:text-gold-400 transition-colors pt-2 uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
                     <span>{t('services.explore', 'Explore')}</span>
                     <FaArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
@@ -2794,10 +2499,10 @@ const HomeExperienceSection = () => {
                   backgroundImage: "url('https://res.cloudinary.com/degbrq3ck/image/upload/w_800,q_auto,f_auto/v1783071610/bus1_lprkiy.jpg')"
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-95" />
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
               
               {/* Golden Overlay Light Leak */}
-              <div className="absolute inset-0 bg-gold-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              <div className="absolute inset-0 bg-gold-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
               {/* Background Motif: Navigational Lines */}
               <svg className="absolute -right-12 -bottom-12 w-64 h-64 text-gold-500/10 pointer-events-none transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-1000" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
@@ -2825,14 +2530,14 @@ const HomeExperienceSection = () => {
                 </div>
 
                 <div className="space-y-3 flex-grow">
-                  <span className="text-[10px] text-gold-400 font-bold uppercase tracking-[0.2em]">02 / Premium Voyage</span>
-                  <h3 className="text-2xl font-bold text-ivory-50 font-display tracking-wide">{t('nav.transportation', 'Transportation')}</h3>
-                  <p className="text-ivory-300 text-sm leading-relaxed font-body max-w-sm md:opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="text-[11px] text-white group-hover:text-gold-400 font-extrabold uppercase tracking-[0.2em] transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">02 / Premium Voyage</span>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-white group-hover:text-gold-400 font-display tracking-wide transition-colors duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">{t('nav.transportation', 'Transportation')}</h3>
+                  <p className="text-white group-hover:text-gold-300 text-sm leading-relaxed font-body font-semibold max-w-sm transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] opacity-95">
                     {t('home.servicesTransportDesc', 'Private luxury vehicles, airport transfers, and chauffeur-driven tours with expert drivers')}
                   </p>
                   
                   {/* Action Link */}
-                  <div className="inline-flex items-center gap-2 text-xs font-bold text-gold-400 group-hover:text-gold-300 transition-colors pt-2 uppercase tracking-widest">
+                  <div className="inline-flex items-center gap-2 text-xs font-extrabold text-white group-hover:text-gold-400 transition-colors pt-2 uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
                     <span>{t('services.explore', 'Explore')}</span>
                     <FaArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
@@ -2863,8 +2568,8 @@ const HomeExperienceSection = () => {
                 transition={{ duration: 0.6 }}
                 className="space-y-4"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-400 text-caption uppercase tracking-[0.2em] font-semibold text-xs mx-auto lg:mx-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-ping" />
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-caption uppercase tracking-[0.2em] font-bold text-xs mx-auto lg:mx-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
                   {t('home.contactSub', 'Get In Touch')}
                 </div>
                 
@@ -3034,133 +2739,7 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Destinations Section */}
-      <section className="py-28 lg:py-36 bg-[#FEFCF7] relative overflow-hidden content-auto" dir={isRtl ? "rtl" : "ltr"}>
-        {/* Soft Background Gradients */}
-        <div className="absolute inset-0 opacity-[0.05] pointer-events-none" 
-          style={{ 
-            background: 'radial-gradient(circle at 80% 20%, rgb(30,58,138) 0%, transparent 60%), radial-gradient(circle at 20% 80%, #F5A623 0%, transparent 60%)' 
-          }} 
-        />
-        {/* Decorative Grid Lines */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
-        
-        {/* Slow-spinning background compass motif */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] opacity-[0.02] pointer-events-none z-0">
-          <svg className="w-full h-full animate-spin-slow" viewBox="0 0 100 100" fill="none" stroke="#d4af37" strokeWidth="0.25">
-            <circle cx="50" cy="50" r="45" />
-            <circle cx="50" cy="50" r="40" strokeDasharray="1 3" />
-            <circle cx="50" cy="50" r="2" fill="#d4af37" />
-            <path d="M50 5v90M5 50h90" />
-            <path d="M50 5L52 45L50 50L48 45Z" fill="#d4af37" />
-            <path d="M50 95L48 55L50 50L52 55Z" fill="#d4af37" />
-            <path d="M5 50L45 48L50 50L45 52Z" fill="#d4af37" />
-            <path d="M95 50L55 52L50 50L55 48Z" fill="#d4af37" />
-          </svg>
-        </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          
-          {/* Section Header with Layered Watermark */}
-          <div className="relative mb-24 text-center">
-            {/* Huge watermarked text behind */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[70px] sm:text-[110px] md:text-[150px] font-display font-bold uppercase tracking-[0.15em] text-gold-500/[0.04] select-none pointer-events-none whitespace-nowrap z-0">
-              {isRtl ? "اكتشف العالم" : "EXPLORE"}
-            </div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              className="relative z-10 space-y-4"
-            >
-              <span className="inline-block text-gold-600 uppercase tracking-[0.25em] text-[10px] md:text-xs font-bold px-5 py-2 rounded-full bg-gold-500/5 border border-gold-500/10 backdrop-blur-sm shadow-[0_4px_20px_rgba(201,162,39,0.05)]">
-                {isRtl ? "الرحلات الحصرية لعام ٢٠٢٦" : "EXCLUSIVE VOYAGES 2026"}
-              </span>
-              <h2 className="text-display-lg text-black dark:text-ivory-100 font-display tracking-wide leading-tight mt-2">
-                {isRtl ? "الوجهات" : t('nav.destinations', 'Destinations')}
-              </h2>
-              <p className="text-black dark:text-ivory-100 text-body-md max-w-xl mx-auto font-body font-medium leading-relaxed">
-                {isRtl 
-                  ? "اكتشف عجائب الدنيا القديمة وعواصم الحداثة الفاخرة، رحلات منسقة خصيصًا لتلبي تطلعاتك."
-                  : "Discover the wonders of the ancient world and the capitals of modern luxury, curated bespoke for you."
-                }
-              </p>
-              <div className="w-24 h-[3px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mt-6 rounded-full" />
-            </motion.div>
-          </div>
-
-          {/* Destinations Cinematic Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto">
-            {liveDestinationCards.map((item, idx) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.75, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <Link
-                  to={item.link}
-                  className="group relative flex flex-col justify-end h-[460px] md:h-[500px] rounded-[32px] overflow-hidden bg-obsidian-950 border border-gold-300/10 shadow-[0_12px_32px_rgba(0,0,0,0.12)] hover:shadow-[0_24px_64px_rgba(245,166,35,0.22)] hover:border-gold-500/35 transition-all duration-[750ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer text-start dest-card-shimmer"
-                >
-                  {/* Floating Recommended Badge */}
-                  <div className={`absolute top-6 ${isRtl ? 'right-6' : 'left-6'} z-20`}>
-                    <div className="px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/10 text-[9px] font-bold text-gold-400 uppercase tracking-widest shadow-md">
-                      {isRtl ? "موصى به" : "RECOMMENDED"}
-                    </div>
-                  </div>
-
-                  {/* Background Image with Zoom on Hover */}
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-115"
-                    style={{ backgroundImage: `url('${item.image}')` }}
-                  />
-                  
-                  {/* Clear & Vivid Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950/85 via-obsidian-950/30 to-transparent transition-all duration-500" />
-                  
-                  {/* Golden Lighting Leak */}
-                  <div className="absolute inset-0 bg-gold-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
-                  {/* Card Content */}
-                  <div className={`relative z-10 p-8 flex flex-col justify-end h-full ${isRtl ? 'text-right' : 'text-left'}`}>
-                    <div className="space-y-3 transform translate-y-6 group-hover:translate-y-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
-                      {/* Subheading / Tagline */}
-                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] block transform group-hover:scale-105 origin-left transition-transform duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-gold-400">
-                        {item.subtitle}
-                      </span>
-                      
-                      {/* Destination Name */}
-                      <h3 className="text-2xl md:text-3xl font-bold font-display tracking-wide transition-colors duration-300 leading-tight drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] text-ivory-50 group-hover:text-gold-400">
-                        {item.name}
-                      </h3>
-                      
-                      {/* Divider line that expands from 0 to 100% on hover */}
-                      <div className="w-0 group-hover:w-full h-px bg-gradient-to-r from-transparent via-gold-500/40 to-transparent transition-all duration-[800ms] ease-out mt-2" />
-
-                      {/* Description text */}
-                      <p className="text-ivory-300 text-xs md:text-sm leading-relaxed font-body font-medium opacity-0 group-hover:opacity-100 transform translate-y-3 group-hover:translate-y-0 transition-all duration-[600ms] delay-75 ease-out max-w-[280px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                        {item.description}
-                      </p>
-                      
-                      {/* Action Explore Button */}
-                      <div className="flex items-center justify-between pt-2 mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-[600ms] delay-150 ease-out border-t border-white/5">
-                        <span className="text-[9px] font-bold uppercase tracking-widest text-gold-400">
-                          {isRtl ? "استكشف البرامج" : "Explore Programs"}
-                        </span>
-                        <FaArrowRight className={`w-3.5 h-3.5 text-gold-400 transform transition-transform duration-300 ${isRtl ? 'rotate-180 group-hover:-translate-x-1.5' : 'group-hover:translate-x-1.5'}`} />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section

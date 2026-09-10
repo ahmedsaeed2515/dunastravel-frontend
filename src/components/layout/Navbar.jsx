@@ -197,10 +197,9 @@ const Navbar = () => {
                     type="button"
                     onClick={() => setIsLoginModalOpen(true)}
                     aria-label="Sign in"
-                    className="h-7 sm:h-8 px-2.5 sm:px-3 rounded-full flex items-center gap-1.5 bg-[#F5A623]/20 hover:bg-[#F5A623] text-[#F5A623] hover:text-slate-950 border border-[#F5A623]/50 hover:border-[#F5A623] transition-all duration-300 font-bold text-[11px] sm:text-xs whitespace-nowrap shadow-sm hover:shadow-[0_0_12px_rgba(245,166,35,0.4)]"
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110"
                   >
-                    <FaUserCircle size={13} className="shrink-0" />
-                    <span>{t('auth.signIn', 'Sign In / Register')}</span>
+                    <FaUserCircle size={14} className="text-[#F5A623]" />
                   </button>
                 )}
               </div>
