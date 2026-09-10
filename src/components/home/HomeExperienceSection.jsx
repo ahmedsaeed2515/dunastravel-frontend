@@ -1966,7 +1966,6 @@ const HomeExperienceSection = () => {
             >
               {t("home.packageTripsTitle", "رحلات الباقات الخاصة بنا")}
             </motion.h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent rounded-full mx-auto"></div>
           </div>
         </div>
 
