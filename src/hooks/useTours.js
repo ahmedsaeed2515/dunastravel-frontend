@@ -81,13 +81,22 @@ function mapTour(tour, lang = 'en') {
 
   const destination = String(tour.destination || tour.country || '').toLowerCase();
 
+  const heroImageObj = Array.isArray(tour.images)
+    ? tour.images.find(img => img && typeof img === 'object' && (img.isHero === true || img.is_hero === true))
+    : null;
+  const resolvedHeroImage = (heroImageObj ? (heroImageObj.imageUrl || heroImageObj.url) : null)
+    || (typeof tour.heroImage === 'string' && tour.heroImage.trim() ? tour.heroImage.trim() : (tour.heroImage?.imageUrl || tour.heroImage?.url || null))
+    || (typeof tour.heroImageUrl === 'string' && tour.heroImageUrl.trim() ? tour.heroImageUrl.trim() : null)
+    || (Array.isArray(tour.images) && tour.images.length > 0
+        ? (typeof tour.images[0] === 'string' ? tour.images[0] : (tour.images[0]?.imageUrl || tour.images[0]?.url))
+        : null)
+    || '';
+
   let images = [];
   if (Array.isArray(tour.images) && tour.images.length > 0) {
     images = tour.images.map(img => typeof img === 'string' ? img : (img?.imageUrl || img?.url || '')).filter(Boolean);
-  } else if (tour.heroImage) {
-    images = [tour.heroImage];
-  } else if (tour.heroImageUrl) {
-    images = [tour.heroImageUrl];
+  } else if (resolvedHeroImage) {
+    images = [resolvedHeroImage];
   }
 
   const resolveList = (val) => {
@@ -114,7 +123,7 @@ function mapTour(tour, lang = 'en') {
     country: tour.country || tour.destination || 'Egypt',
     category: tour.category || tour.type || tour.destination || '',
     images,
-    heroImage: images[0] || '',
+    heroImage: resolvedHeroImage || images[0] || '',
     raw: { price, type: tour.category || tour.type || '' },
     price,
     basePriceUsd: price,
@@ -131,7 +140,21 @@ function mapStaticTour(t, lang) {
   const duration = typeof t.duration === 'object' ? (t.duration[lang] || t.duration.en || t.duration.ar || Object.values(t.duration)[0]) : (t.duration || '');
   const price = Number(t.price || t.basePriceUsd || 0);
   const destination = String(t.destination || t.country || '').toLowerCase();
-  const images = Array.isArray(t.images) && t.images.length > 0 ? t.images : (t.heroImage ? [t.heroImage] : []);
+
+  const heroImageObj = Array.isArray(t.images)
+    ? t.images.find(img => img && typeof img === 'object' && (img.isHero === true || img.is_hero === true))
+    : null;
+  const resolvedHeroImage = (heroImageObj ? (heroImageObj.imageUrl || heroImageObj.url) : null)
+    || (typeof t.heroImage === 'string' && t.heroImage.trim() ? t.heroImage.trim() : (t.heroImage?.imageUrl || t.heroImage?.url || null))
+    || (typeof t.heroImageUrl === 'string' && t.heroImageUrl.trim() ? t.heroImageUrl.trim() : null)
+    || (Array.isArray(t.images) && t.images.length > 0
+        ? (typeof t.images[0] === 'string' ? t.images[0] : (t.images[0]?.imageUrl || t.images[0]?.url))
+        : null)
+    || '';
+
+  const images = Array.isArray(t.images) && t.images.length > 0
+    ? t.images.map(img => typeof img === 'string' ? img : (img?.imageUrl || img?.url || '')).filter(Boolean)
+    : (resolvedHeroImage ? [resolvedHeroImage] : []);
 
   const resolveList = (val) => {
     if (!val) return [];
@@ -157,7 +180,7 @@ function mapStaticTour(t, lang) {
     country: t.country || t.destination || 'Egypt',
     category: t.category || t.destination || '',
     images,
-    heroImage: images[0] || '',
+    heroImage: resolvedHeroImage || images[0] || '',
     raw: { price, type: t.category || t.type || '' },
     price,
     basePriceUsd: price,

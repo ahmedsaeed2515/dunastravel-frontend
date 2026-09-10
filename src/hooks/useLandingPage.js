@@ -33,7 +33,15 @@ function normalizeLandingPage(value) {
         : (tour?.title?.en || tour?.title?.ar || tourSlug || 'Tour');
       const basePriceUsd = tour?.basePriceUsd != null ? String(tour.basePriceUsd) : '0';
       const currency = typeof tour?.currency === 'string' && tour.currency.trim() ? tour.currency : 'USD';
-      const images = Array.isArray(tour?.images) ? tour.images : (tour?.heroImage ? [tour.heroImage] : []);
+      const heroImgObj = Array.isArray(tour?.images)
+        ? tour.images.find(img => img && typeof img === 'object' && (img.isHero === true || img.is_hero === true))
+        : null;
+      const heroImage = (heroImgObj ? (heroImgObj.imageUrl || heroImgObj.url) : null)
+        || (typeof tour?.heroImage === 'string' && tour.heroImage.trim() ? tour.heroImage.trim() : (tour?.heroImage?.imageUrl || tour?.heroImage?.url || null))
+        || (Array.isArray(tour?.images) && tour.images.length > 0
+            ? (typeof tour.images[0] === 'string' ? tour.images[0] : (tour.images[0]?.imageUrl || tour.images[0]?.url))
+            : null);
+      const images = Array.isArray(tour?.images) ? tour.images : (heroImage ? [heroImage] : []);
 
       return {
         ...tour,
@@ -43,7 +51,7 @@ function normalizeLandingPage(value) {
         basePriceUsd,
         currency,
         images,
-        heroImage: tour?.heroImage || images[0] || null,
+        heroImage,
         country: tour?.country || '',
         city: tour?.city || '',
         customBadge: tour?.customBadge || null,
