@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { FaStar, FaTimes, FaChevronLeft, FaChevronRight, FaVolumeMute, FaVolumeUp, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaHeadset, FaWhatsapp, FaArrowRight, FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaClock } from "react-icons/fa";
+import { FaStar, FaTimes, FaChevronLeft, FaChevronRight, FaVolumeMute, FaVolumeUp, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaHeadset, FaWhatsapp, FaArrowRight, FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaClock, FaCompass, FaLandmark } from "react-icons/fa";
 import Button from "../ui/Button";
 import TourCard from "../tour/TourCard";
 import { useTours } from "../../hooks/useTours";
@@ -1596,21 +1596,33 @@ const HomeExperienceSection = () => {
                     </div>
 
                     {/* Travelik populer-content */}
-                    <div className="populer-contnet text-left rtl:text-right pt-5 px-2">
-                      <h3 className="popular-title text-xl sm:text-2xl font-serif font-bold text-white tracking-wide group-hover:text-[#F5A623] transition-colors drop-shadow-md">
-                        {dest.name}
-                      </h3>
+                    <div className="populer-contnet text-left rtl:text-right pt-4 px-2">
+                      {/* Travelik populer-list (Description with dynamic destination icon badge) */}
+                      {(() => {
+                        const str = ((dest.id || '') + ' ' + (dest.name || '')).toLowerCase();
+                        let DestIcon = FaMapMarkerAlt;
+                        if (str.includes('egypt') || str.includes('مصر')) DestIcon = FaLandmark;
+                        else if (str.includes('dubai') || str.includes('دبي')) DestIcon = FaStar;
+                        else if (str.includes('turkey') || str.includes('تركيا')) DestIcon = FaGlobe;
+                        else if (str.includes('jordan') || str.includes('الأردن')) DestIcon = FaCompass;
+                        else if (str.includes('morocco') || str.includes('المغرب')) DestIcon = FaSuitcase;
+                        else if (str.includes('greece') || str.includes('اليونان')) DestIcon = FaLandmark;
+                        else if (str.includes('holyland') || str.includes('المقدسة')) DestIcon = FaStar;
 
-                      {/* Travelik populer-list (Subtitle/Description) */}
-                      <div className="populer-list flex items-center gap-1.5 text-xs text-gold-400 font-semibold my-2.5">
-                        <FaMapMarkerAlt className="text-[#F5A623] shrink-0" size={13} />
-                        <span className="truncate text-white/90 font-medium">
-                          {dest.description || t("destination.luxuryGuide", "Luxury Tours & Packages")}
-                        </span>
-                      </div>
+                        return (
+                          <div className="populer-list flex items-start gap-2.5 my-3 min-h-[44px]">
+                            <div className="w-7 h-7 rounded-full bg-[#F5A623]/15 border border-[#F5A623]/35 flex items-center justify-center shrink-0 mt-0.5 shadow-sm group-hover:bg-[#F5A623] group-hover:text-slate-950 transition-colors">
+                              <DestIcon className="text-[#F5A623] group-hover:text-slate-950 transition-colors" size={13} />
+                            </div>
+                            <p className="text-xs sm:text-sm text-white font-medium leading-relaxed line-clamp-2">
+                              {dest.description || t("destination.luxuryGuide", "Luxury Tours & Packages")}
+                            </p>
+                          </div>
+                        );
+                      })()}
 
                       {/* Travelik populer-price (Tour Count Divider) */}
-                      <div className="populer-price border-b border-white/15 pb-3.5 mb-3.5">
+                      <div className="populer-price border-b border-white/15 pb-3.5 mb-3.5 mt-2">
                         <h4 className="text-white text-base sm:text-lg font-bold flex items-center justify-between">
                           <span className="text-white font-bold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
                         </h4>
