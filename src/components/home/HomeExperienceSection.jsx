@@ -1806,7 +1806,6 @@ const HomeExperienceSection = () => {
                 >
                   {t("home.packagesSubtitle", isAr ? "مجموعة نادرة من أرقى البرامج السياحية المصممة لاستكشاف سحر مصر والشرق الأوسط" : "Selection of premium itineraries designed to experience the magic of Egypt & the Middle East")}
                 </motion.p>
-                <div className="w-28 h-1 bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto mt-6 rounded-full shadow-[0_0_12px_rgba(245,166,35,0.6)]"></div>
               </div>
 
               {/* 5-Card Bento Layout Grid */}
