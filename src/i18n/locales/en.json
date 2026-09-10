@@ -117,7 +117,7 @@
   "accommodations.nights": "Nights",
   "accommodations.regime": "Board Basis",
   "auth.acceptTermsError": "You must accept the Terms and Conditions",
-  "auth.accountCreatedSuccess": "Account created successfully!",
+  "auth.accountCreatedSuccess": "Account created successfully! Redirecting...",
   "auth.agreeText": "I agree to the",
   "auth.allFieldsRequired": "All fields are required",
   "auth.and": "and",
@@ -139,7 +139,7 @@
   "auth.noAccount": "Don't have an account?",
   "auth.password": "Password",
   "auth.passwordLengthError": "Password must be at least 8 characters",
-  "auth.passwordPlaceholder": "Enter your password",
+  "auth.passwordPlaceholder": "Password",
   "auth.passwordsDoNotMatch": "Passwords do not match",
   "auth.phoneNumber": "Phone Number",
   "auth.phonePlaceholder": "Enter your phone number",
@@ -5380,7 +5380,7 @@
   "user.newPassword": "New Password",
   "user.passwordChanged": "Password changed successfully!",
   "user.updatePasswordBtn": "Update Password",
-  "auth.loginTitle": "Sign In to Your Account",
+  "auth.loginTitle": "Login | Dunas Travel",
   "auth.registerTitle": "Create a New Traveler Account",
   "auth.forgotPasswordTitle": "Forgot Password",
   "auth.forgotPasswordDesc": "Enter your email address and we will send you a secure link to reset your password.",
@@ -6159,5 +6159,6 @@
   "auth.iAgreeTo": "I agree to the",
   "auth.authenticating": "Authenticating...",
   "auth.resendCode": "Resend Code",
-  "auth.accountCreatedVerification": "Account created! Please check your email to verify."
+  "auth.accountCreatedVerification": "Account created! Please check your email to verify.",
+  "auth.signInShort": "Sign In"
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaGlobe, FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaPhone, FaWhatsapp } from 'react-icons/fa';
+import { FaBars, FaTimes, FaGlobe, FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -165,20 +165,6 @@ const Navbar = () => {
                 <span className="hidden sm:inline font-semibold tracking-wide">info@dunas-travel.com</span>
               </a>
               <span className="w-px h-4 bg-gradient-to-b from-transparent via-white/30 to-transparent hidden sm:block" />
-              <a href="tel:+20233746643" aria-label="Call us at +20 2 3374 6643" className="group flex items-center gap-1.5 hover:text-[#F5A623] transition-all duration-300 whitespace-nowrap">
-                <span className="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-[#F5A623]/25 group-hover:scale-110 transition-all duration-300">
-                  <FaPhone size={9} className="text-[#F5A623]" />
-                </span>
-                <span className="hidden sm:inline font-semibold tracking-wide">02 33746643</span>
-              </a>
-              <span className="w-px h-4 bg-gradient-to-b from-transparent via-white/30 to-transparent hidden sm:block" />
-              <a href="tel:+20233746654" aria-label="Call us at +20 2 3374 6654" className="group items-center gap-1.5 hover:text-[#F5A623] transition-all duration-300 whitespace-nowrap flex">
-                <span className="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-[#F5A623]/25 group-hover:scale-110 transition-all duration-300">
-                  <FaPhone size={9} className="text-[#F5A623]" />
-                </span>
-                <span className="hidden sm:inline font-semibold tracking-wide">02 33746654</span>
-              </a>
-              <span className="w-px h-4 bg-gradient-to-b from-transparent via-white/30 to-transparent hidden sm:block" />
               <a href="https://wa.me/201149401111" aria-label="Chat with us on WhatsApp" target="_blank" rel="noopener noreferrer" className="group items-center gap-1.5 hover:text-[#F5A623] transition-all duration-300 whitespace-nowrap flex">
                 <span className="w-6 h-6 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:bg-[#25D366]/35 group-hover:scale-110 transition-all duration-300">
                   <FaWhatsapp size={10} className="text-[#25D366]" />
@@ -211,9 +197,10 @@ const Navbar = () => {
                     type="button"
                     onClick={() => setIsLoginModalOpen(true)}
                     aria-label="Sign in"
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110"
+                    className="h-7 sm:h-8 px-2.5 sm:px-3 rounded-full flex items-center gap-1.5 bg-[#F5A623]/20 hover:bg-[#F5A623] text-[#F5A623] hover:text-slate-950 border border-[#F5A623]/50 hover:border-[#F5A623] transition-all duration-300 font-bold text-[11px] sm:text-xs whitespace-nowrap shadow-sm hover:shadow-[0_0_12px_rgba(245,166,35,0.4)]"
                   >
-                    <FaUserCircle size={14} className="text-[#F5A623]" />
+                    <FaUserCircle size={13} className="shrink-0" />
+                    <span>{t('auth.signIn', 'Sign In / Register')}</span>
                   </button>
                 )}
               </div>
@@ -373,7 +360,7 @@ const Navbar = () => {
             ))}
           </nav>
 
-          {/* Currency Selector + Tailor a Tour (Desktop) */}
+          {/* Tailor a Tour (Desktop) */}
           <div className="hidden lg:flex items-center gap-3 z-50">
             <Link
               to="/tailor-a-tour"
