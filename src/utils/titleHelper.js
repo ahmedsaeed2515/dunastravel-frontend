@@ -410,10 +410,48 @@ export function resolveItineraryDayTitle(day, t = (k) => k, lang = 'en') {
   return resolveLocalizedText(str, t, lang);
 }
 
+export function resolveTourHeroImage(tour) {
+  if (!tour) return null;
+
+  if (Array.isArray(tour.images) && tour.images.length > 0) {
+    const heroObj = tour.images.find(img => img && (img.isHero === true || img.is_hero === true));
+    if (heroObj) {
+      if (typeof heroObj === 'string') return heroObj.trim();
+      return heroObj.imageUrl || heroObj.url || heroObj.src || null;
+    }
+  }
+
+  if (tour.heroImage) {
+    if (typeof tour.heroImage === 'string') return tour.heroImage.trim();
+    if (typeof tour.heroImage === 'object') {
+      return tour.heroImage.imageUrl || tour.heroImage.url || tour.heroImage.src || null;
+    }
+  }
+
+  if (tour.image) {
+    if (typeof tour.image === 'string') return tour.image.trim();
+    if (typeof tour.image === 'object') {
+      return tour.image.imageUrl || tour.image.url || tour.image.src || null;
+    }
+  }
+
+  if (Array.isArray(tour.images) && tour.images.length > 0) {
+    const first = tour.images[0];
+    if (typeof first === 'string') return first.trim();
+    if (typeof first === 'object') {
+      return first?.imageUrl || first?.url || first?.src || null;
+    }
+  }
+
+  return null;
+}
+
 export default {
   resolveLocalizedText,
   resolveTourTitle,
   resolveTourOverview,
   resolveTourDuration,
   resolveItineraryDayTitle,
+  resolveTourHeroImage,
 };
+

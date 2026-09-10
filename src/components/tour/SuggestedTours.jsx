@@ -9,25 +9,13 @@ import {
   resolveTourTitle,
   resolveTourOverview,
   resolveTourDuration,
-  resolveLocalizedText
+  resolveLocalizedText,
+  resolveTourHeroImage
 } from '../../utils/titleHelper';
 import { getTourDestinationSlug } from '../../utils/destinationHelper';
 
 function resolveTourImage(tour) {
-  if (!tour) return null;
-  if (typeof tour.heroImage === 'string' && tour.heroImage.trim()) {
-    return tour.heroImage.trim();
-  }
-  if (Array.isArray(tour.images) && tour.images.length > 0) {
-    const first = tour.images[0];
-    if (typeof first === 'string' && first.trim()) return first.trim();
-    if (first?.imageUrl) return first.imageUrl;
-    if (first?.url) return first.url;
-  }
-  if (typeof tour.image === 'string' && tour.image.trim()) {
-    return tour.image.trim();
-  }
-  return null;
+  return resolveTourHeroImage(tour);
 }
 
 export default function SuggestedTours({ currentDestination = 'egypt', currentSlug = '' }) {

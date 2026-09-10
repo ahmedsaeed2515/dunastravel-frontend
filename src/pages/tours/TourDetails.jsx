@@ -15,7 +15,7 @@ import { useTour } from '../../hooks/useTour';
 import { trackEvent } from '../../utils/analytics';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
-import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText } from '../../utils/titleHelper';
+import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage } from '../../utils/titleHelper';
 import { getTourDestinationSlug, getDestinationName, getDestinationUrl } from '../../utils/destinationHelper';
 
 import SEOHead from '../../components/seo/SEOHead';
@@ -71,8 +71,8 @@ const TourDetails = () => {
   const title = resolveTourTitle(tour, t, lang);
   const overview = resolveTourOverview(tour, t, lang);
   const duration = resolveTourDuration(tour, t, lang);
-  const tourImages = Array.isArray(tour?.images) ? tour.images : [];
-  const heroImg = tourImages[0] || tour?.heroImage || null;
+  const heroImg = resolveTourHeroImage(tour);
+
 
   const tourSchema = {
     '@context': 'https://schema.org',

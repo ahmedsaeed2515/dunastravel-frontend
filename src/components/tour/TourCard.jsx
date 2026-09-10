@@ -8,7 +8,7 @@ import Button from '../ui/Button';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useWishlist } from '../../hooks/useWishlist';
 import { trackEvent } from '../../utils/analytics';
-import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText } from '../../utils/titleHelper';
+import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage } from '../../utils/titleHelper';
 
 const marketFlag = (market) => {
   const flags = { Brasil: '🇧🇷', Italia: '🇮🇹', Spain: '🇪🇸' };
@@ -35,10 +35,8 @@ const TourCard = ({
 
   const parsedPrice = Number(tour.price ?? tour.basePriceUsd ?? tour.raw?.price);
   const tourPrice = Number.isFinite(parsedPrice) ? parsedPrice : null;
-  const firstImage = Array.isArray(tour.images) && tour.images.length > 0 ? tour.images[0] : null;
-  const tourImage = typeof firstImage === 'string'
-    ? firstImage
-    : firstImage?.imageUrl || firstImage?.url || tour.heroImage || null;
+  const tourImage = resolveTourHeroImage(tour);
+
 
   const codeText = resolveLocalizedText(tour.code, t, lang);
   const minPaxText = resolveLocalizedText(tour.minPax, t, lang);

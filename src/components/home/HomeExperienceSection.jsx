@@ -24,7 +24,8 @@ import {
   resolveTourTitle,
   resolveTourDuration,
   resolveTourOverview,
-  resolveLocalizedText
+  resolveLocalizedText,
+  resolveTourHeroImage
 } from "../../utils/titleHelper";
 
 
@@ -297,15 +298,7 @@ const getThumbnailUrl = (url, size = 48) => {
 
 const tourImageUrl = (tour) => {
   if (!tour) return '/imgs/egyothero.webp';
-  const firstImage = Array.isArray(tour?.images) ? tour.images[0] : null;
-  if (typeof firstImage === 'string' && firstImage.trim()) return firstImage;
-  if (firstImage && typeof firstImage.imageUrl === 'string' && firstImage.imageUrl.trim()) {
-    return firstImage.imageUrl;
-  }
-  if (typeof tour?.heroImage === 'string' && tour.heroImage.trim()) return tour.heroImage;
-  if (typeof tour?.image === 'string' && tour.image.trim()) return tour.image;
-  if (typeof tour?.heroImageUrl === 'string' && tour.heroImageUrl.trim()) return tour.heroImageUrl;
-  return '/imgs/egyothero.webp';
+  return resolveTourHeroImage(tour) || '/imgs/egyothero.webp';
 };
 
 const buildInfiniteMarqueeList = (items, prefix = 'tour', maxVisible = 8) => {
@@ -1887,7 +1880,7 @@ const HomeExperienceSection = () => {
             {(() => {
               const infiniteList = buildInfiniteMarqueeList(packagesToursForMarquee, 'pkg');
               return infiniteList.map((tData, idx) => {
-                const tourImg = (Array.isArray(tData.images) && tData.images[0]) || tData.heroImage || tData.image || '/imgs/egyothero.webp';
+                const tourImg = resolveTourHeroImage(tData) || '/imgs/egyothero.webp';
                 return (
                   <Link
                     key={tData.uKey || `pkg-tour-${idx}`}
