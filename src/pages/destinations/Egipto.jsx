@@ -231,10 +231,7 @@ export default function Egipto() {
                 </div>
               </div>
 
-              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between">
-                <span className="text-[11px] font-extrabold text-black dark:text-gold-400 uppercase tracking-wider">
-                  ID: EG-CLASSIC
-                </span>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-end">
                 <div className="populer-btn defult-btn">
                   <Link to="/programs/classic/classic-program" className="group/btn">
                     <span>{viewDetailsText}</span>
@@ -321,10 +318,7 @@ export default function Egipto() {
                 </div>
               </div>
 
-              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between">
-                <span className="text-[11px] font-extrabold text-black dark:text-gold-400 uppercase tracking-wider">
-                  ID: EG-ROMANCE
-                </span>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-end">
                 <div className="populer-btn defult-btn">
                   <Link to="/programs/honeymooners" className="group/btn">
                     <span>{viewDetailsText}</span>
@@ -411,10 +405,7 @@ export default function Egipto() {
                 </div>
               </div>
 
-              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between">
-                <span className="text-[11px] font-extrabold text-black dark:text-gold-400 uppercase tracking-wider">
-                  ID: EG-FAITH
-                </span>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-end">
                 <div className="populer-btn defult-btn">
                   <Link to="/programs/religious" className="group/btn">
                     <span>{viewDetailsText}</span>
@@ -501,10 +492,7 @@ export default function Egipto() {
                 </div>
               </div>
 
-              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between">
-                <span className="text-[11px] font-extrabold text-black dark:text-gold-400 uppercase tracking-wider">
-                  ID: EG-MULTI
-                </span>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-end">
                 <div className="populer-btn defult-btn">
                   <Link to="/programs/multi-country" className="group/btn">
                     <span>{viewDetailsText}</span>
@@ -591,10 +579,7 @@ export default function Egipto() {
                 </div>
               </div>
 
-              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between">
-                <span className="text-[11px] font-extrabold text-black dark:text-gold-400 uppercase tracking-wider">
-                  ID: EG-EXT
-                </span>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-end">
                 <div className="populer-btn defult-btn">
                   <Link to="/programs/extension" className="group/btn">
                     <span>{viewDetailsText}</span>

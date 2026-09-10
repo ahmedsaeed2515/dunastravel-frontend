@@ -283,15 +283,7 @@ const TourCard = ({
         </div>
 
         {/* Footer CTA Button (.populer-btn-and-days / .populer-btn .defult-btn) */}
-        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between">
-          {codeText ? (
-            <span className="text-[11px] font-extrabold text-black dark:text-gold-400 uppercase tracking-wider">
-              ID: {codeText}
-            </span>
-          ) : (
-            <span />
-          )}
-
+        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-end">
           <div className="populer-btn defult-btn">
             <Link 
               to={detailUrl} 
