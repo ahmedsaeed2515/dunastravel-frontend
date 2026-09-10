@@ -143,24 +143,24 @@ const Transportation = () => {
           />
         </div>
 
-        <div className="container mx-auto px-6 md:px-12 relative z-10 mt-12">
+        <div className="container mx-auto px-6 md:px-12 relative z-10 mt-16">
           <motion.div 
-            className="max-w-xl text-start ltr:text-left rtl:text-right bg-obsidian-950/75 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/20 shadow-[0_16px_48px_rgba(0,0,0,0.7)]" 
+            className="max-w-xl text-start ltr:text-left rtl:text-right space-y-3" 
             variants={staggerContainer} 
             initial="hidden" 
             animate="visible"
           >
-            <motion.span variants={fadeInUp} className="inline-block text-gold-400 uppercase tracking-widest text-caption font-extrabold px-3.5 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 mb-4 shadow-sm">
+            <motion.span variants={fadeInUp} className="text-white uppercase tracking-widest text-caption font-extrabold block drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
               {t('services.subtitle', 'Tailored Experiences')}
             </motion.span>
             <motion.h1
               variants={fadeInUp}
-              className="text-display-lg md:text-display-xl text-white font-black font-display leading-tight"
+              className="text-display-lg md:text-display-xl text-white font-black font-display leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {t('nav.transportation', 'Transportation')}
             </motion.h1>
-            <motion.p variants={fadeInUp} className="text-body-md md:text-body-lg text-white font-semibold mt-3 leading-relaxed opacity-95">
+            <motion.p variants={fadeInUp} className="text-body-md md:text-body-lg text-white font-bold leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
               {t('transportation.heroDesc', 'Travel in Comfort & Style')}
             </motion.p>
           </motion.div>
