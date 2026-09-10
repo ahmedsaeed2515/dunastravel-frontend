@@ -28,6 +28,28 @@ const marketFlag = (market) => {
   return flags[market] ?? '🌍';
 };
 
+/* Multilingual destination name lookup — slug → { ar, en, es, pt, it } */
+const DESTINATION_NAMES = {
+  egypt:        { ar: 'مصر',        en: 'Egypt',    es: 'Egipto',  pt: 'Egito',    it: 'Egitto'  },
+  turkey:       { ar: 'تركيا',      en: 'Turkey',   es: 'Turquía', pt: 'Turquia',  it: 'Turchia' },
+  dubai:        { ar: 'دبي',        en: 'Dubai',    es: 'Dubái',   pt: 'Dubai',    it: 'Dubai'   },
+  jordan:       { ar: 'الأردن',     en: 'Jordan',   es: 'Jordania',pt: 'Jordânia', it: 'Giordania'},
+  tunisia:      { ar: 'تونس',       en: 'Tunisia',  es: 'Túnez',   pt: 'Tunísia',  it: 'Tunisia' },
+  greece:       { ar: 'اليونان',    en: 'Greece',   es: 'Grecia',  pt: 'Grécia',   it: 'Grecia'  },
+  morocco:      { ar: 'المغرب',     en: 'Morocco',  es: 'Marruecos',pt:'Marrocos', it: 'Marocco' },
+  spain:        { ar: 'إسبانيا',    en: 'Spain',    es: 'España',  pt: 'Espanha',  it: 'Spagna'  },
+  brazil:       { ar: 'البرازيل',   en: 'Brazil',   es: 'Brasil',  pt: 'Brasil',   it: 'Brasile' },
+  italy:        { ar: 'إيطاليا',    en: 'Italy',    es: 'Italia',  pt: 'Itália',   it: 'Italia'  },
+};
+
+const resolveDestinationName = (dest, lang) => {
+  if (!dest) return '';
+  const slug = String(dest).toLowerCase().trim();
+  const entry = DESTINATION_NAMES[slug];
+  if (entry) return entry[lang] || entry.en || dest;
+  return dest;
+};
+
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
   visible: { 
@@ -74,7 +96,13 @@ const TourCard = ({
 
   const codeText = resolveLocalizedText(tour.code, t, lang);
   const minPaxText = resolveLocalizedText(tour.minPax, t, lang);
-  const destinationText = resolveLocalizedText(tour.destination, t, lang) || resolveLocalizedText(tour.subtitle, t, lang) || (isRtl ? 'مصر' : 'Egypt');
+
+  // Destination name: try slug-based translation first, then fall back to generic resolve
+  const rawDest = tour.destination || tour.subtitle || '';
+  const destinationText =
+    resolveDestinationName(rawDest, lang) ||
+    resolveLocalizedText(rawDest, t, lang) ||
+    (isRtl ? 'مصر' : 'Egypt');
 
   const ratingValue = tour.rating || 5.0;
 
