@@ -1597,29 +1597,15 @@ const HomeExperienceSection = () => {
 
                     {/* Travelik populer-content */}
                     <div className="populer-contnet text-left rtl:text-right pt-4 px-2">
-                      {/* Travelik populer-list (Description with dynamic destination icon badge) */}
-                      {(() => {
-                        const str = ((dest.id || '') + ' ' + (dest.name || '')).toLowerCase();
-                        let DestIcon = FaMapMarkerAlt;
-                        if (str.includes('egypt') || str.includes('مصر')) DestIcon = FaLandmark;
-                        else if (str.includes('dubai') || str.includes('دبي')) DestIcon = FaStar;
-                        else if (str.includes('turkey') || str.includes('تركيا')) DestIcon = FaGlobe;
-                        else if (str.includes('jordan') || str.includes('الأردن')) DestIcon = FaCompass;
-                        else if (str.includes('morocco') || str.includes('المغرب')) DestIcon = FaSuitcase;
-                        else if (str.includes('greece') || str.includes('اليونان')) DestIcon = FaLandmark;
-                        else if (str.includes('holyland') || str.includes('المقدسة')) DestIcon = FaStar;
-
-                        return (
-                          <div className="populer-list flex items-start gap-2.5 my-3 min-h-[44px]">
-                            <div className="w-7 h-7 rounded-full bg-[#F5A623]/15 border border-[#F5A623]/35 flex items-center justify-center shrink-0 mt-0.5 shadow-sm group-hover:bg-[#F5A623] group-hover:text-slate-950 transition-colors">
-                              <DestIcon className="text-[#F5A623] group-hover:text-slate-950 transition-colors" size={13} />
-                            </div>
-                            <p className="text-xs sm:text-sm text-white font-medium leading-relaxed line-clamp-2">
-                              {dest.description || t("destination.luxuryGuide", "Luxury Tours & Packages")}
-                            </p>
-                          </div>
-                        );
-                      })()}
+                      {/* Travelik populer-list (Description with unified Compass icon badge) */}
+                      <div className="populer-list flex items-start gap-2.5 my-3 min-h-[44px]">
+                        <div className="w-7 h-7 rounded-full bg-[#F5A623]/15 border border-[#F5A623]/35 flex items-center justify-center shrink-0 mt-0.5 shadow-sm group-hover:bg-[#F5A623] group-hover:text-slate-950 transition-all duration-300">
+                          <FaCompass className="text-[#F5A623] group-hover:text-slate-950 transition-colors" size={14} />
+                        </div>
+                        <p className="text-xs sm:text-sm text-white font-medium leading-relaxed line-clamp-2">
+                          {dest.description || t("destination.luxuryGuide", "Luxury Tours & Packages")}
+                        </p>
+                      </div>
 
                       {/* Travelik populer-price (Tour Count Divider) */}
                       <div className="populer-price border-b border-white/15 pb-3.5 mb-3.5 mt-2">
