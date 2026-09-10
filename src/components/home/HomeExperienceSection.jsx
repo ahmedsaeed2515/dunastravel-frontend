@@ -308,10 +308,10 @@ const buildInfiniteMarqueeList = (items, prefix = 'tour', maxVisible = 8) => {
     base = [...base, ...items].slice(0, maxVisible);
   }
   return [
-    ...base.map((tItem, i) => ({ ...tItem, isDuplicate: false, uKey: `${prefix}-set1-${tItem.id || tItem.slug || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, isDuplicate: true, uKey: `${prefix}-set2-${tItem.id || tItem.slug || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, isDuplicate: true, uKey: `${prefix}-set3-${tItem.id || tItem.slug || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, isDuplicate: true, uKey: `${prefix}-set4-${tItem.id || tItem.slug || i}-${i}` })),
+    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: false, uKey: `${prefix}-set1-${tItem.id || tItem.slug || i}-${i}` })),
+    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set2-${tItem.id || tItem.slug || i}-${i}` })),
+    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set3-${tItem.id || tItem.slug || i}-${i}` })),
+    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set4-${tItem.id || tItem.slug || i}-${i}` })),
   ];
 };
 
@@ -2352,91 +2352,119 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Photo Gallery */}
-      <section className="py-10 bg-[#1E3A8A] overflow-hidden content-auto">
-        <div className="container mx-auto px-6 mb-8 text-center">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-gold-500 uppercase tracking-widest text-caption block mb-4"
-          >
-            {t("home.galleryLabel", "CAPTURED MOMENTS")}
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-display-lg text-ivory-50"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            {t("home.galleryHeading", "A Glimpse Into Your Journey")}
-          </motion.h2>
+      {/* Photo Gallery - Seamless Theme Background with Travelik Curved Arch Overlays */}
+      <section className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
+        {/* Section Header */}
+        <div className="container mx-auto px-6 mb-10 relative z-10">
           <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: 96 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="h-1 bg-gold-500 mx-auto mt-6"
-          ></motion.div>
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl text-start"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <span className="px-4 py-1 text-xs font-black uppercase tracking-widest text-[#0CB2DB] border border-[#0CB2DB]/60 rounded-full bg-[#0CB2DB]/10 shadow-[0_0_15px_rgba(12,178,219,0.2)]">
+                {t("home.galleryLabel", "CAPTURED MOMENTS")}
+              </span>
+            </div>
+            <h2
+              className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase leading-none"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              {t("home.galleryHeading", "A Glimpse Into Your Journey")}
+            </h2>
+          </motion.div>
         </div>
 
-        <div dir="ltr" className="w-full mt-10 relative overflow-hidden py-4">
-          <div
-            className="flex w-max"
-            style={{
-              animation: "tourMarquee 180s linear infinite",
-              gap: "16px",
-              paddingLeft: "16px",
-            }}
-            onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
-            onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
-          >
-            {(() => {
-              const infiniteImages = buildInfiniteMarqueeList(generalGalleryImages, 'gal');
-              return infiniteImages.map((img, idx) => {
-                const originalIndex = generalGalleryImages.indexOf(img);
-                return (
-                  <div
-                    key={img.uKey || `gal-${idx}`}
-                    className="flex-shrink-0 cursor-pointer overflow-hidden rounded-[16px] group relative transition-all duration-500 ease-out hover:scale-[1.06] hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(245,166,35,0.35)] hover:z-10 focus:outline-none focus:ring-2 focus:ring-gold-500 border border-obsidian-700/40 hover:border-gold-500"
-                    onClick={img.isDuplicate ? undefined : () => openLightbox(originalIndex)}
-                    onKeyDown={img.isDuplicate ? undefined : (e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openLightbox(originalIndex);
-                      }
-                    }}
-                    tabIndex={img.isDuplicate ? -1 : 0}
-                    role={img.isDuplicate ? undefined : "button"}
-                    aria-label={img.isDuplicate ? undefined : `${t("home.viewLarger", "View larger image of")} ${img.label || 'image'}`}
-                    aria-hidden={img.isDuplicate ? "true" : undefined}
-                  >
-                    <img
-                      src={getOptimizedImageUrl(img.url, 400, 380)}
-                      alt={img.label || 'Luxury moment'}
-                      loading="lazy"
-                      decoding="async"
-                      width="280"
-                      height="380"
-                      className="h-[220px] md:h-[380px] w-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                  </div>
-                );
-              });
-            })()}
+        {/* Gallery Marquee Container with Seamless Top & Bottom Arch Overlays */}
+        <div className="relative w-full overflow-hidden my-2">
+          {/* Top Shape Overlay SVG */}
+          <div className="absolute top-0 left-0 right-0 w-full z-20 pointer-events-none -mt-1 select-none">
+            <svg className="w-full h-12 md:h-20 text-[#1E3A8A] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
+              <path d="M0,0 L1440,0 L1440,20 Q720,80 0,20 Z" />
+            </svg>
+          </div>
+
+          {/* Marquee Track */}
+          <div dir="ltr" className="w-full relative overflow-hidden py-8 z-10">
+            <div
+              className="flex w-max"
+              style={{
+                animation: "tourMarquee 150s linear infinite",
+                gap: "20px",
+                paddingLeft: "20px",
+              }}
+              onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
+              onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
+            >
+              {(() => {
+                const infiniteImages = buildInfiniteMarqueeList(generalGalleryImages, 'gal');
+                return infiniteImages.map((img, idx) => {
+                  const originalIndex = typeof img.origIdx === 'number' ? img.origIdx : (idx % Math.max(1, generalGalleryImages.length));
+                  return (
+                    <div
+                      key={img.uKey || `gal-${idx}`}
+                      className="flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.03] hover:z-30 border border-white/15 hover:border-[#0CB2DB] bg-slate-900/40 shadow-xl"
+                      onClick={() => openLightbox(originalIndex)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          openLightbox(originalIndex);
+                        }
+                      }}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`${t("home.viewLarger", "View larger image of")} ${img.label || 'image'}`}
+                    >
+                      <div className="w-[240px] sm:w-[280px] md:w-[320px] h-[340px] sm:h-[400px] md:h-[440px] overflow-hidden rounded-xl">
+                        <img
+                          src={getOptimizedImageUrl(img.url, 500, 650)}
+                          alt={img.label || 'Luxury moment'}
+                          loading="lazy"
+                          decoding="async"
+                          width="320"
+                          height="440"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 rounded-xl">
+                        <span className="text-white text-xs font-bold tracking-wider uppercase bg-[#0CB2DB]/30 backdrop-blur-md px-4 py-2 rounded-full border border-[#0CB2DB]/50 shadow-lg">
+                          {t("home.viewPhoto", "View Photo")}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          </div>
+
+          {/* Bottom Shape Overlay SVG */}
+          <div className="absolute bottom-0 left-0 right-0 w-full z-20 pointer-events-none -mb-1 select-none">
+            <svg className="w-full h-12 md:h-20 text-[#1E3A8A] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
+              <path d="M0,80 L1440,80 L1440,60 Q720,0 0,60 Z" />
+            </svg>
           </div>
         </div>
-        <div className="flex justify-center mt-12 mb-6">
+
+        {/* View All Button */}
+        <div className="flex justify-center mt-10 mb-4 relative z-10">
           <button
             onClick={() => navigate('/media-gallery?tab=photos')}
-            className="animated-media-btn btn-images-glow px-10 py-4 text-white text-base font-bold rounded-full uppercase tracking-wider transition-all duration-300"
+            className="group relative px-10 py-4 text-white text-sm md:text-base font-bold rounded-full uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[#0CB2DB]/25 hover:scale-105 active:scale-95"
             style={{
-              background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
+              background: 'linear-gradient(135deg, #0CB2DB 0%, #1E3A8A 100%)',
+              border: '1px solid rgba(255,255,255,0.2)'
             }}
           >
-            {t("home.viewAllImages", "View All Images")}
+            <span className="relative z-10 flex items-center gap-2">
+              {t("home.viewAllImages", "View All Images")}
+              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </span>
           </button>
         </div>
       </section>
