@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaChevronRight } from 'react-icons/fa';
 import { staggerContainer, fadeInUp } from '../../animations/variants';
+import TourCard from '../../components/tour/TourCard';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 export const HONEYMOON_PACKAGES = [
@@ -103,68 +104,30 @@ export default function Honeymooners() {
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >
-          {HONEYMOON_PACKAGES.map((pkg) => (
-            <motion.div
-              key={pkg.id}
-              variants={fadeInUp}
-              className="bg-ivory-50 dark:bg-[#1a1a30] rounded-2xl overflow-hidden shadow-card group h-full flex flex-col transition-all md:col-span-2 lg:col-span-3 max-w-2xl mx-auto"
-            >
-              <div className="relative h-72 overflow-hidden">
-                <div className="absolute top-4 left-4 z-10 bg-gold-500 text-obsidian-900 text-sm uppercase px-4 py-1.5 rounded-full shadow-md font-bold">
-                  {t('honeymooners.featured', 'Featured')}
-                </div>
-                <img
-                  src={pkg.img}
-                  alt={t(pkg.titleKey, pkg.titleDefault)}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
+          {HONEYMOON_PACKAGES.map((pkg) => {
+            const adaptedTour = {
+              id: pkg.id,
+              slug: pkg.id,
+              title: t(pkg.titleKey, pkg.titleDefault),
+              overview: t(pkg.taglineKey, pkg.taglineDefault),
+              destination: pkg.destinations,
+              duration: pkg.duration,
+              price: null,
+              rating: 5.0,
+              minPax: '2+',
+              badge: t('honeymooners.featured', 'Featured'),
+              heroImage: pkg.img,
+              images: [pkg.img],
+            };
+            return (
+              <motion.div key={pkg.id} variants={fadeInUp}>
+                <TourCard
+                  tour={adaptedTour}
+                  linkBase="/programs/honeymooners"
                 />
-              </div>
-
-              <div className="p-8 flex flex-col flex-grow">
-                <div className="mb-3">
-                  <span className="text-sm text-gold-500 uppercase tracking-widest font-semibold">
-                    {pkg.duration}
-                  </span>
-                </div>
-                <h3
-                  className="text-2xl text-obsidian-900 dark:text-white mb-2 font-display"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
-                >
-                  {t(pkg.titleKey, pkg.titleDefault)}
-                </h3>
-                <p className="text-sm text-obsidian-400 dark:text-gray-300 mb-3 font-medium">
-                  {pkg.destinations}
-                </p>
-                <p className="text-body-sm text-obsidian-500 dark:text-gray-300 mb-6 leading-relaxed">
-                  {t(pkg.taglineKey, pkg.taglineDefault)}
-                </p>
-
-                <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
-                  <Link
-                    to={`/programs/honeymooners/${pkg.id}`}
-                    className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-obsidian-900 gold-btn-text font-bold px-6 py-3 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 shadow-md border-2 border-gold-400"
-                  >
-                    {t('honeymooners.viewDetails', 'View Details')}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </motion.div>
       </section>
     </div>

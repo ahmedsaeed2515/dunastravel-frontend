@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaChevronRight } from 'react-icons/fa';
 import { staggerContainer, fadeInUp } from '../../animations/variants';
+import TourCard from '../../components/tour/TourCard';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 export const EXTENSION_PACKAGES = [
@@ -135,61 +136,30 @@ export default function ExtensionTours() {
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >
-          {EXTENSION_PACKAGES.map((pkg) => (
-            <motion.div
-              key={pkg.id}
-              variants={fadeInUp}
-              className="bg-ivory-50 dark:bg-[#1a1a30] rounded-2xl overflow-hidden shadow-card group h-full flex flex-col transition-all border border-gold-500/10 hover:border-gold-500/40 hover:shadow-2xl cursor-pointer"
-            >
-              <Link to={`/programs/extension/${pkg.id}`} className="flex flex-col h-full">
-                <div className="relative h-64 overflow-hidden">
-                  <div className="absolute top-4 left-4 z-10 bg-gold-500 text-obsidian-900 text-xs uppercase px-3 py-1 rounded-full shadow-md font-bold">
-                    {t('extensions.addOnAvailable', 'Add-on Available')}
-                  </div>
-                  <img
-                    src={pkg.img}
-                    alt={t(pkg.titleKey, pkg.titleDefault)}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="mb-2">
-                    <span className="text-xs text-gold-500 uppercase tracking-widest font-semibold">
-                      {t(pkg.durationKey, pkg.durationDefault)}
-                    </span>
-                  </div>
-                  <h3
-                    className="text-xl text-obsidian-900 dark:text-white mb-2 font-display line-clamp-2 group-hover:text-gold-500 transition-colors"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    {t(pkg.titleKey, pkg.titleDefault)}
-                  </h3>
-                  <p className="text-xs text-gold-600 dark:text-gold-400 mb-3 font-medium">
-                    {t(pkg.destinationsKey, pkg.destinationsDefault)}
-                  </p>
-                  <p className="text-body-sm text-obsidian-500 dark:text-gray-300 mb-6 leading-relaxed flex-grow">
-                    {t(pkg.descKey, pkg.descDefault)}
-                  </p>
-
-                  <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-                    <div>
-                      <span className="text-[11px] text-obsidian-400 block uppercase">
-                        {t('extensions.startingFrom', 'Starting From')}
-                      </span>
-                      <span className="text-xl font-bold text-gold-600">${pkg.price}</span>
-                    </div>
-
-                    <span className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-obsidian-900 font-bold px-5 py-2.5 rounded-full shadow-md text-xs border border-gold-400 group-hover:scale-105 transition-all duration-300">
-                      {t('extensions.viewDetails', 'View Details')}
-                      <FaChevronRight className="rtl-flip text-[10px]" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+          {EXTENSION_PACKAGES.map((pkg) => {
+            const adaptedTour = {
+              id: pkg.id,
+              slug: pkg.id,
+              title: t(pkg.titleKey, pkg.titleDefault),
+              overview: t(pkg.descKey, pkg.descDefault),
+              destination: t(pkg.destinationsKey, pkg.destinationsDefault),
+              duration: t(pkg.durationKey, pkg.durationDefault),
+              price: pkg.price || null,
+              rating: 5.0,
+              minPax: '2+',
+              badge: t('extensions.addOnAvailable', 'Add-on'),
+              heroImage: pkg.img,
+              images: [pkg.img],
+            };
+            return (
+              <motion.div key={pkg.id} variants={fadeInUp}>
+                <TourCard
+                  tour={adaptedTour}
+                  linkBase="/programs/extension"
+                />
+              </motion.div>
+            );
+          })}
         </motion.div>
       </section>
     </div>

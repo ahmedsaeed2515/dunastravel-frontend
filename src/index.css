@@ -791,6 +791,221 @@ html[dir="rtl"] .dropdown-item:hover {
   left: 130%;
 }
 
+/* ── Travelik Signature Animations & Micro-Interactions ────────────────── */
+.travelik-card-container {
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Travelik Diagonal Image Glare Sheen (.image-anime:after) */
+.travelik-img-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.travelik-img-container::after {
+  content: "";
+  position: absolute;
+  width: 220%;
+  height: 0%;
+  left: 50%;
+  top: 50%;
+  background: linear-gradient(
+    90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.25) 50%, 
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translate(-50%, -50%) rotate(-45deg);
+  z-index: 15;
+  pointer-events: none;
+  transition: height 700ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.group:hover .travelik-img-container::after {
+  height: 320%;
+}
+
+/* Travelik Decorative Corner Ornament (.about-sp) */
+.travelik-sp-ornament {
+  position: absolute;
+  bottom: -18px;
+  right: -18px;
+  width: 80px;
+  height: 80px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Travelik Authentic Card Styles ─────────────────── */
+.populer-single-box.style-classic {
+  padding: 20px 20px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  border-radius: 20px;
+}
+
+.populer-single-box.style-classic .populer-thumb {
+  position: relative;
+  z-index: 1;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+}
+
+/* Ultra-Slow & Luxurious Screen Lens Push-In Zoom on Hover */
+.populer-single-box.style-classic .populer-thumb img {
+  transform: scale(1.0001);
+  transition: transform 2.8s cubic-bezier(0.1, 1, 0.2, 1);
+  will-change: transform;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.populer-single-box.style-classic:hover .populer-thumb img {
+  transform: scale(1.15);
+}
+
+.populer-single-box.style-classic .populer-thumb .populer-price {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  backdrop-filter: blur(30px);
+  background: rgba(12, 28, 72, 0.85);
+  text-align: left;
+  padding: 14px 22px;
+  border-radius: 0 0 16px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+[dir="rtl"] .populer-single-box.style-classic .populer-thumb .populer-price {
+  text-align: right;
+}
+
+.populer-single-box.style-classic .populer-thumb .populer-price h2 {
+  color: #f5a623;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.populer-single-box.style-classic .populer-thumb .populer-price h2 span {
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.populer-single-box.style-classic .populer-contnet {
+  text-align: left;
+  padding: 20px 6px 0;
+}
+
+[dir="rtl"] .populer-single-box.style-classic .populer-contnet {
+  text-align: right;
+}
+
+.populer-single-box.style-classic .populer-contnet .popular-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  transition: color 0.4s ease, transform 0.4s ease;
+}
+
+.populer-single-box.style-classic:hover .popular-title {
+  color: #f5a623 !important;
+  transform: translateX(4px);
+}
+
+[dir="rtl"] .populer-single-box.style-classic:hover .popular-title {
+  transform: translateX(-4px);
+}
+
+.populer-single-box.style-classic .about-sp {
+  position: absolute;
+  right: -14%;
+  bottom: -11%;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+[dir="rtl"] .populer-single-box.style-classic .about-sp {
+  right: auto;
+  left: -14%;
+  transform: scaleX(-1);
+}
+
+.populer-single-box.style-classic:hover .about-sp {
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+}
+
+[dir="rtl"] .populer-single-box.style-classic:hover .about-sp {
+  right: auto;
+  left: 0;
+}
+
+.populer-single-box.style-classic .populer-btn a {
+  padding: 10px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: 1px solid rgba(245, 166, 35, 0.4);
+  background: rgba(245, 166, 35, 0.1);
+  border-radius: 12px;
+  color: #1e3a8a;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.dark .populer-single-box.style-classic .populer-btn a {
+  color: #f5a623;
+}
+
+.populer-single-box.style-classic .populer-btn a::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #f5a623;
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: -1;
+}
+
+[dir="rtl"] .populer-single-box.style-classic .populer-btn a::before {
+  left: auto;
+  right: 0;
+}
+
+.populer-single-box.style-classic .populer-btn a:hover::before {
+  width: 100%;
+}
+
+.populer-single-box.style-classic .populer-btn a:hover {
+  color: #0c1c48 !important;
+  border-color: #f5a623;
+  letter-spacing: 2.5px;
+  box-shadow: 0 4px 18px rgba(245, 166, 35, 0.4);
+}
+
+
+
+
 /* ── Accessibility: Reduced Motion ───────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,

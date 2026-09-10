@@ -4,33 +4,17 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  FaStar,
-  FaStarHalfAlt,
-  FaRegStar,
-  FaMapMarkerAlt,
-  FaClock,
   FaSearch,
   FaChevronRight
 } from 'react-icons/fa';
 import { services } from '../../data/services';
 import { useCurrency } from '../../context/CurrencyContext';
 import Button from '../../components/ui/Button';
+import TourCard from '../../components/tour/TourCard';
 import { staggerContainer, fadeInUp } from '../../animations/variants';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
-const StarRating = ({ rating }) => {
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    if (rating >= i) {
-      stars.push(<FaStar key={i} className="text-gold-500" />);
-    } else if (rating >= i - 0.5) {
-      stars.push(<FaStarHalfAlt key={i} className="text-gold-500" />);
-    } else {
-      stars.push(<FaRegStar key={i} className="text-obsidian-300" />);
-    }
-  }
-  return <div className="flex items-center gap-1 text-sm">{stars}</div>;
-};
+
 
 export default function ReligiousTours() {
   const { t } = useTranslation();
@@ -145,109 +129,31 @@ export default function ReligiousTours() {
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
           >
-            {religiousPrograms.map((tour) => (
-              <Link
-                key={tour.id}
-                to={`/services/religious/${tour.slug}`}
-                className="block h-full group"
-              >
-                <motion.div
-                  variants={fadeInUp}
-                  initial="rest"
-                  whileHover="hover"
-                  animate="rest"
-                  className="bg-ivory-50 rounded-xl overflow-hidden flex flex-col h-full shadow-card border border-gold-500/10 cursor-pointer"
-                >
-                  {/* Image & Badges */}
-                  <div className="relative h-[280px] overflow-hidden block">
-                    <div className="absolute top-4 left-4 z-10 bg-obsidian-900/80 backdrop-blur-md text-gold-500 text-caption px-4 py-1.5 rounded-full border border-gold-500/30 shadow-glass">
-                      {t('programs.religiousType', 'Religious Tour')}
-                    </div>
-                    <div className="absolute top-4 right-4 z-10 bg-obsidian-900/60 backdrop-blur-md text-ivory-50 text-caption px-3 py-1 rounded-full border border-white/10 shadow-glass flex items-center gap-1.5">
-                      <FaMapMarkerAlt size={10} className="text-gold-500" />
-                      <span className="text-[11px] font-medium">
-                        {t(`data.${tour.location}`, tour.location)}
-                      </span>
-                    </div>
-                    <img
-                      src={tour.images[0]}
-                      alt={t(`data.${tour.title}`, tour.title)}
-                      className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] cinematic-transition"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    {tour.itinerary && (
-                      <div className="absolute bottom-4 left-4 z-10">
-                        <span className="bg-obsidian-950/80 backdrop-blur-sm border border-gold-500/20 text-ivory-50 text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-glass">
-                          <FaClock size={10} className="text-gold-500" />
-                          <span>
-                            {tour.itinerary.length} {t('tour.days', 'Days')}
-                          </span>
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 flex flex-col flex-grow">
-                    <span className="text-caption text-gold-600 uppercase tracking-widest mb-1 block">
-                      {t(`data.${tour.location}`, tour.location)}
-                    </span>
-                    <h3
-                      className="text-display-md text-obsidian-900 mb-3 line-clamp-2 group-hover:text-gold-700 transition-colors"
-                      style={{ fontFamily: "'Playfair Display', serif" }}
-                    >
-                      {t(tour.title, tour.title)}
-                    </h3>
-                    <p className="text-body-sm text-obsidian-500 line-clamp-3 mb-4 flex-grow">
-                      {t(tour.shortDesc, tour.shortDesc)}
-                    </p>
-
-                    {/* Rating */}
-                    <div className="flex items-center gap-2 mb-4">
-                      <StarRating rating={tour.rating} />
-                      <span className="text-caption text-obsidian-900 font-semibold ml-1">
-                        {tour.rating.toFixed(1)}
-                      </span>
-                      {tour.reviewCount && (
-                        <span className="text-caption text-obsidian-300">
-                          ({tour.reviewCount} {t('tourCard.reviews', 'reviews')})
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Highlights preview */}
-                    {tour.highlights && tour.highlights.length > 0 && (
-                      <div className="border-t border-gold-500/10 pt-4 mb-4">
-                        <ul className="grid grid-cols-1 gap-y-1.5">
-                          {tour.highlights.slice(0, 3).map((item, idx) => (
-                            <li key={idx} className="text-[12px] text-obsidian-500 flex items-start gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-gold-500 shrink-0 mt-1.5" />
-                              <span className="line-clamp-1">{t(item, item)}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Price & Book Action */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gold-500/10 mt-auto">
-                      <div>
-                        <span className="block text-caption text-obsidian-300 mb-1">
-                          {t('tourCard.from', 'from')}
-                        </span>
-                        <span className="text-display-md text-gold-700">
-                          {formatPrice(tour.price)}
-                        </span>
-                      </div>
-                      <span className="border border-gold-500 text-gold-500 font-medium px-6 py-2 rounded-full group-hover:bg-gold-500 group-hover:text-obsidian-900 transition-all duration-300 inline-flex items-center gap-2 text-xs uppercase tracking-wider cursor-pointer">
-                        {t('tourCard.book', 'Book')} <span className="rtl-flip">→</span>
-                      </span>
-                    </div>
-                  </div>
+            {religiousPrograms.map((tour) => {
+              /* Adapt services data to TourCard interface */
+              const adaptedTour = {
+                id: tour.id,
+                slug: tour.slug,
+                title: tour.title,
+                overview: tour.shortDesc || tour.description || '',
+                destination: tour.location,
+                duration: tour.itinerary ? `${tour.itinerary.length} Days` : '',
+                price: tour.price,
+                rating: tour.rating || 5.0,
+                minPax: '2+',
+                badge: 'Religious',
+                heroImage: tour.images && tour.images[0] ? tour.images[0] : null,
+                images: tour.images || [],
+              };
+              return (
+                <motion.div key={tour.id} variants={fadeInUp}>
+                  <TourCard
+                    tour={adaptedTour}
+                    linkBase="/services/religious"
+                  />
                 </motion.div>
-              </Link>
-            ))}
+              );
+            })}
           </motion.div>
         ) : (
           <div className="text-center py-20 bg-ivory-50 rounded-xl border border-gold-500/10 p-8 shadow-card">

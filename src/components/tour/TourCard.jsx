@@ -2,17 +2,51 @@ import React, { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { variants } from '../../animations/variants';
-import Button from '../ui/Button';
+import { 
+  FaHeart, 
+  FaRegHeart, 
+  FaStar, 
+  FaMapMarkerAlt, 
+  FaClock, 
+  FaUsers, 
+  FaArrowRight, 
+  FaArrowLeft 
+} from 'react-icons/fa';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useWishlist } from '../../hooks/useWishlist';
 import { trackEvent } from '../../utils/analytics';
-import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage } from '../../utils/titleHelper';
+import { 
+  resolveTourTitle, 
+  resolveTourDuration, 
+  resolveTourOverview, 
+  resolveLocalizedText, 
+  resolveTourHeroImage 
+} from '../../utils/titleHelper';
 
 const marketFlag = (market) => {
-  const flags = { Brasil: '🇧🇷', Italia: '🇮🇹', Spain: '🇪🇸' };
+  const flags = { Brasil: '🇧🇷', Italia: '🇮🇹', Spain: '🇪🇸', Egypt: '🇪🇬' };
   return flags[market] ?? '🌍';
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.7, ease: [0.25, 1, 0.5, 1] } 
+  }
+};
+
+
+
+
+const contentStaggerVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1], delay: 0.15 } 
+  }
 };
 
 const TourCard = ({
@@ -21,6 +55,7 @@ const TourCard = ({
 }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || 'en';
+  const isRtl = lang.startsWith('ar');
   const { formatPrice } = useCurrency();
   const { isFavorite, toggleFavorite } = useWishlist();
   const navigate = useNavigate();
@@ -37,12 +72,24 @@ const TourCard = ({
   const tourPrice = Number.isFinite(parsedPrice) ? parsedPrice : null;
   const tourImage = resolveTourHeroImage(tour);
 
-
   const codeText = resolveLocalizedText(tour.code, t, lang);
   const minPaxText = resolveLocalizedText(tour.minPax, t, lang);
+  const destinationText = resolveLocalizedText(tour.destination, t, lang) || resolveLocalizedText(tour.subtitle, t, lang) || (isRtl ? 'مصر' : 'Egypt');
+
+  const ratingValue = tour.rating || 5.0;
 
   const detailUrl = `${linkBase}/${tour.slug || tour.id}`;
   const fav = isFavorite(tour.id || tour.slug);
+
+  const bookNowLabels = {
+    ar: 'احجز الآن',
+    es: 'RESERVAR AHORA',
+    pt: 'RESERVAR AGORA',
+    it: 'PRENOTA ORA',
+    en: 'BOOK NOW',
+  };
+  const langKey = (lang || 'en').substring(0, 2).toLowerCase();
+  const bookNowText = t('tourCard.btnBookNow', bookNowLabels[langKey] || 'BOOK NOW');
 
   const handleCardClick = () => {
     trackEvent('tour_card_click', {
@@ -61,115 +108,172 @@ const TourCard = ({
   return (
     <motion.div
       onClick={handleCardClick}
-      className="bg-white dark:bg-[#1a1a30] rounded-xl overflow-hidden flex flex-col h-full group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-obsidian-200 dark:border-gray-700 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative text-left rtl:text-right"
-      variants={variants.fadeInUp}
+      className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#121829] border border-primary-500/20 dark:border-white/10 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
+      variants={cardVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-50px' }}
+      viewport={{ once: true, margin: '-40px' }}
     >
-      {/* Image as Link */}
-      <Link to={detailUrl} className="block relative h-[240px] overflow-hidden bg-obsidian-900">
-        {/* Wishlist Button - Top Right (LTR) / Top Left (RTL) */}
+      {/* Travelik Corner Accent Ornament (.about-sp) */}
+      <div className="about-sp">
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
+          <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
+          <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+
+      {/* Travelik Thumbnail & Price Overlay (.populer-thumb) */}
+      <div className="populer-thumb relative h-[255px] bg-primary-950 travelik-img-container">
+        {/* Wishlist Button */}
         <button
           type="button"
           onClick={handleWishlistToggle}
           aria-label="Toggle wishlist"
-          className="absolute top-3.5 right-3.5 rtl:right-auto rtl:left-3.5 z-20 w-9 h-9 rounded-full bg-obsidian-900/80 backdrop-blur-md flex items-center justify-center border border-gold-500/40 text-gold-400 hover:scale-110 active:scale-95 transition-all shadow-md cursor-pointer"
+          className="absolute top-3.5 right-3.5 rtl:right-auto rtl:left-3.5 z-20 w-10 h-10 rounded-full bg-primary-950/80 backdrop-blur-md flex items-center justify-center border border-gold-500/40 text-gold-400 hover:scale-110 active:scale-95 hover:bg-gold-500 hover:text-primary-950 transition-all duration-300 shadow-lg cursor-pointer"
         >
-          {fav ? <FaHeart className="text-red-500" size={15} /> : <FaRegHeart size={15} />}
+          {fav ? <FaHeart className="text-red-500" size={16} /> : <FaRegHeart size={16} />}
         </button>
 
-        {/* Duration / Pax Badge */}
+        {/* Duration Badge */}
         {durationLabel && (
-          <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 z-10 bg-obsidian-900/80 backdrop-blur-md text-gold-500 text-caption px-4 py-1.5 rounded-full border border-gold-500/30 shadow-glass">
-            {minPaxText ? `${minPaxText} · ` : ''}{durationLabel}
+          <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-primary-950/85 backdrop-blur-md text-gold-400 text-[12px] font-bold px-3.5 py-1.5 rounded-full border border-gold-500/40 shadow-md flex items-center gap-1.5 transition-transform group-hover:scale-105">
+            <FaClock className="text-gold-400 text-xs" />
+            <span>{durationLabel}</span>
           </div>
         )}
 
-        {/* Custom Tour Badge (if provided) */}
+        {/* Custom Badge */}
         {tour.badge && (
-          <div className="absolute bottom-4 left-4 rtl:left-auto rtl:right-4 z-10 bg-gold-500 text-obsidian-900 text-caption font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+          <div className="absolute top-14 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500 text-primary-950 text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
             {resolveLocalizedText(tour.badge, t, lang)}
           </div>
         )}
 
-        {/* Market Flag (if provided) */}
+        {/* Market Flag */}
         {tour.market && (
-          <div className="absolute bottom-4 right-4 rtl:right-auto rtl:left-4 z-10 bg-obsidian-900/60 backdrop-blur-md text-base px-2.5 py-1 rounded-full border border-white/10 shadow-glass select-none">
+          <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-20 bg-primary-950/60 backdrop-blur-md text-xs px-2.5 py-1 rounded-full border border-white/10 shadow-md select-none">
             {marketFlag(tour.market)}
           </div>
         )}
 
-        {tourImage ? (
-          <img
-            src={tourImage}
-            alt={`${title} — ${resolveLocalizedText(tour.destination, t, lang) || ''}`}
-            className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-700 ease-out"
-            loading="lazy"
-            decoding="async"
-            width="400"
-            height="240"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-obsidian-800 px-6 text-center text-sm text-ivory-300">
-            {t('tour.imageUnavailable', 'No image has been added for this tour.')}
+        {/* Image — CSS controls the hover zoom (scale 1.15 via index.css) */}
+        <Link to={detailUrl} className="block w-full h-full overflow-hidden">
+          {tourImage ? (
+            <img
+              src={tourImage}
+              alt={`${title} — ${destinationText}`}
+              className="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
+              width="400"
+              height="255"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-primary-900 px-6 text-center text-sm text-gold-200">
+              {t('tour.imageUnavailable', 'No image has been added for this tour.')}
+            </div>
+          )}
+        </Link>
+
+        {/* Travelik Price Banner (.populer-price) across bottom of image */}
+        {tourPrice !== null && tourPrice > 0 && (
+          <div className="populer-price">
+            <h2>
+              {formatPrice(tourPrice)} <span>/ {t('tourCard.perPerson', 'Per Person')}</span>
+            </h2>
           </div>
         )}
+      </div>
 
-        {/* Subtle Luxury Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950/60 via-transparent to-black/20 pointer-events-none group-hover:opacity-40 transition-opacity duration-300" />
-      </Link>
-
-      {/* Content */}
-      <div className="p-6 flex flex-col flex-grow">
-        <span className="text-caption text-gold-600 dark:text-gold-400 font-bold uppercase tracking-widest mb-1 block">
-          {codeText || resolveLocalizedText(tour.subtitle || tour.destination, t, lang)}
-        </span>
-
-        {tour.transportOptions && (
-          <div className="mb-2">
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-gold-700 dark:text-gold-300 bg-gold-100/80 dark:bg-gold-900/40 border border-gold-400 dark:border-gold-600 px-2.5 py-1 rounded-full">
-              {tour.transportOptions}
-            </span>
-          </div>
-        )}
-
+      {/* Travelik Content Section (.populer-contnet) with High-Contrast Bold Black Text */}
+      <motion.div 
+        className="populer-contnet flex flex-col flex-grow bg-white dark:bg-[#121829]"
+        variants={contentStaggerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {/* Title - Clear High Contrast Bold Black Text */}
         <Link to={detailUrl}>
-          <h3 className="text-display-md text-gold-600 dark:text-gold-400 font-bold mb-3 line-clamp-2 hover:text-gold-500 transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h3 
+            className="popular-title text-black dark:text-ivory-50 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5" 
+            style={{ fontFamily: "'Playfair Display', 'Cairo', serif", color: '#000000' }}
+          >
             {title}
           </h3>
         </Link>
 
-        <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow">
+        {/* Location - Clear Black Text */}
+        <div className="populer-list mb-2">
+          <span className="flex items-center gap-2 text-black dark:text-ivory-200 font-bold text-[14px]">
+            <FaMapMarkerAlt className="text-gold-500 text-sm flex-shrink-0 animate-bounce" style={{ animationDuration: '2s' }} />
+            <span className="truncate text-black dark:text-ivory-100">{destinationText}</span>
+          </span>
+        </div>
+
+        {/* Overview Paragraph - Deep Solid Pitch Black Text, Strict 2 Lines with Ellipsis (...) */}
+        <p 
+          className="text-black dark:text-ivory-200 font-bold text-[14px] leading-relaxed line-clamp-2 mb-4 flex-grow" 
+          style={{ 
+            color: '#000000',
+            opacity: 1,
+            fontWeight: 700,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            maxHeight: '2.8em',
+            lineHeight: '1.4em'
+          }}
+        >
           {overview}
         </p>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 dark:border-gray-700 mt-auto">
-          {tourPrice !== null && tourPrice > 0 ? (
-            <div>
-              <span className="block text-caption text-gold-600 dark:text-gold-400 font-bold mb-1">
-                {t('tourCard.from', 'from')}
-              </span>
-              <span className="text-display-md text-gold-700 dark:text-gold-400 font-extrabold">
-                {formatPrice(tourPrice)}
-              </span>
-            </div>
+        {/* Days & Ratings */}
+        <div className="flex items-center justify-between bg-gray-100/90 dark:bg-primary-950/60 rounded-xl px-3.5 py-2.5 mb-5 border border-gray-300/60 dark:border-white/5 transition-colors group-hover:border-gold-500/40">
+          {/* Rating */}
+          <div className="popular-ratting flex items-center gap-1.5">
+            <ul className="flex items-center gap-1">
+              <li className="text-[#FF974D] text-xs flex gap-0.5"><FaStar/><FaStar/><FaStar/><FaStar/><FaStar/></li>
+              <li><span className="text-[14px] font-extrabold text-black dark:text-gold-400 ml-1 rtl:mr-1">({ratingValue.toFixed(1)})</span></li>
+            </ul>
+          </div>
+
+          {/* Pax / Group Tag */}
+          <div className="populer-days flex items-center gap-1.5 text-[12px] font-bold text-black dark:text-gold-300">
+            <FaUsers className="text-gold-500" />
+            <span className="text-black dark:text-gold-300">{minPaxText || (isRtl ? 'شخصين فأكثر' : 'Min 2 Pax')}</span>
+          </div>
+        </div>
+
+        {/* Footer CTA Button (.populer-btn-and-days / .populer-btn .defult-btn) */}
+        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between">
+          {codeText ? (
+            <span className="text-[11px] font-extrabold text-black dark:text-gold-400 uppercase tracking-wider">
+              ID: {codeText}
+            </span>
           ) : (
-            <div>
-              <span className="inline-block text-[11px] font-extrabold text-gold-600 dark:text-gold-400 uppercase tracking-wider bg-gold-50 dark:bg-gold-950/40 px-2.5 py-1 rounded-md border border-gold-500/30">
-                {t('tourCard.onQuote', 'On Request')}
-              </span>
-            </div>
+            <span />
           )}
 
-          <Link to={detailUrl} aria-label={`${t('tourCard.viewDetails', 'View Details')} - ${title}`}>
-            <Button variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
-              {t('tourCard.viewDetails', 'View Details')} <span className="rtl-flip">&rarr;</span>
-            </Button>
-          </Link>
+          <div className="populer-btn defult-btn">
+            <Link 
+              to={detailUrl} 
+              className="group/btn"
+              aria-label={`${bookNowText} - ${title}`}
+            >
+              <span>{bookNowText}</span>
+              {isRtl ? (
+                <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
+              ) : (
+                <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+              )}
+            </Link>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
