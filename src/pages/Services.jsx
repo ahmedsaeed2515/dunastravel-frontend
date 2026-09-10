@@ -99,12 +99,12 @@ const Services = () => {
           ) : service === 'transportation' ? (
             <>
               <img
-                src="/imgs/services/transportation-cover.webp"
-                alt="Luxury Car Scenic Road"
+                src="/imgs/transportation-hero.png"
+                alt="Dunas Travel Transportation"
                 width="1200"
                 height="686"
                 className="w-full h-full object-cover object-center"
-                loading="lazy"
+                loading="eager"
               />
               <div
                 className="absolute inset-0"

@@ -685,7 +685,7 @@ const ServiceDetails = () => {
                 <div key={relService.id} className="bg-obsidian-50 rounded-2xl overflow-hidden group h-full flex flex-col shadow-sm border border-obsidian-900/5 hover:shadow-card transition-all">
                   <div className="relative h-60 overflow-hidden text-start">
                     <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 z-10 bg-gold-500 text-obsidian-900 text-caption uppercase px-3 py-1 rounded-full">{translateData(relService.location, relService.location)}</div>
-                    <img src={(relService.images?.[0] || relService.image || '/imgs/services/transportation-cover.webp')} alt={translateData(relService.title, relService.title)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                    <img src={(relService.images?.[0] || relService.image || '/imgs/transportation-hero.png')} alt={translateData(relService.title, relService.title)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                   </div>
                   <div className="p-8 flex flex-col flex-grow text-start">
                     <h3 className="text-display-md text-obsidian-900 mb-3 text-xl line-clamp-1">{translateData(relService.title, relService.title)}</h3>
