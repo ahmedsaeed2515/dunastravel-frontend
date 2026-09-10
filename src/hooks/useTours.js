@@ -48,16 +48,32 @@ function normalizeDest(val) {
   return DEST_ALIASES[clean] || clean;
 }
 
+function getFieldVal(tour, fields, lang = 'en') {
+  if (!tour || typeof tour !== 'object') return '';
+  const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
+  for (const f of fields) {
+    const val = tour[f];
+    if (val && typeof val === 'object' && !Array.isArray(val)) {
+      return val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || '';
+    }
+  }
+  for (const f of fields) {
+    const val = tour[f];
+    if (val !== undefined && val !== null && val !== '') {
+      return String(val);
+    }
+  }
+  return '';
+}
+
 function mapTour(tour, lang = 'en') {
   if (!tour || typeof tour !== 'object') {
     throw new Error('Invalid tour catalog item');
   }
   const id = tour.id || tour.slug;
   const slug = tour.slug || tour.id;
-  const rawTitle = tour.title || tour.name;
-  const title = typeof rawTitle === 'object' && rawTitle !== null
-    ? (rawTitle[lang] || rawTitle.en || rawTitle.ar || Object.values(rawTitle)[0] || slug)
-    : String(rawTitle || slug || '');
+
+  const title = getFieldVal(tour, ['titleJsonb', 'name', 'title'], lang) || slug;
 
   if (!id || !slug || !title) {
     throw new Error('Invalid tour catalog item');
@@ -69,15 +85,8 @@ function mapTour(tour, lang = 'en') {
     throw new Error(`Invalid tour price for ${slug}`);
   }
 
-  const rawOverview = tour.overview ?? tour.description ?? tour.desc ?? '';
-  const overview = typeof rawOverview === 'object' && rawOverview !== null
-    ? (rawOverview[lang] || rawOverview.en || rawOverview.ar || Object.values(rawOverview)[0] || '')
-    : String(rawOverview || '');
-
-  const rawDuration = tour.duration ?? '';
-  const duration = typeof rawDuration === 'object' && rawDuration !== null
-    ? (rawDuration[lang] || rawDuration.en || rawDuration.ar || Object.values(rawDuration)[0] || '')
-    : String(rawDuration || '');
+  const overview = getFieldVal(tour, ['overviewJsonb', 'overview', 'description', 'desc'], lang);
+  const duration = getFieldVal(tour, ['durationJsonb', 'duration'], lang);
 
   const destination = String(tour.destination || tour.country || '').toLowerCase();
 
@@ -113,10 +122,14 @@ function mapTour(tour, lang = 'en') {
 
   const resolveList = (val) => {
     if (!val) return [];
+    const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
+    if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+      val = val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || [];
+    }
     if (Array.isArray(val)) {
       return val.map(item => {
         if (typeof item === 'object' && item !== null) {
-          return item[lang] || item.en || item.ar || Object.values(item)[0] || '';
+          return item[cleanLang] || item[lang] || item.en || item.ar || item.es || item.pt || item.it || Object.values(item)[0] || '';
         }
         return String(item || '');
       }).filter(Boolean);
@@ -146,10 +159,13 @@ function mapTour(tour, lang = 'en') {
   };
 }
 
-function mapStaticTour(t, lang) {
-  const title = typeof t.title === 'object' ? (t.title[lang] || t.title.en || t.title.ar || Object.values(t.title)[0]) : (t.title || '');
-  const overview = typeof t.overview === 'object' ? (t.overview[lang] || t.overview.en || t.overview.ar || Object.values(t.overview)[0]) : (t.overview || '');
-  const duration = typeof t.duration === 'object' ? (t.duration[lang] || t.duration.en || t.duration.ar || Object.values(t.duration)[0]) : (t.duration || '');
+function mapStaticTour(t, lang = 'en') {
+  const id = t.id || t.slug;
+  const slug = t.slug || id;
+  const title = getFieldVal(t, ['titleJsonb', 'name', 'title'], lang) || slug;
+  const overview = getFieldVal(t, ['overviewJsonb', 'overview', 'description', 'desc'], lang);
+  const duration = getFieldVal(t, ['durationJsonb', 'duration'], lang);
+
   const price = Number(t.price || t.basePriceUsd || 0);
   const destination = String(t.destination || t.country || '').toLowerCase();
 
@@ -170,10 +186,14 @@ function mapStaticTour(t, lang) {
 
   const resolveList = (val) => {
     if (!val) return [];
+    const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
+    if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+      val = val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || [];
+    }
     if (Array.isArray(val)) {
       return val.map(item => {
         if (typeof item === 'object' && item !== null) {
-          return item[lang] || item.en || item.ar || Object.values(item)[0] || '';
+          return item[cleanLang] || item[lang] || item.en || item.ar || item.es || item.pt || item.it || Object.values(item)[0] || '';
         }
         return String(item || '');
       }).filter(Boolean);
@@ -198,8 +218,8 @@ function mapStaticTour(t, lang) {
     basePriceUsd: price,
     code: typeof t.code === 'object' ? (t.code[lang] || t.code.en || t.code.ar) : (t.code || t.id),
     highlights: resolveList(t.highlights),
-    included: resolveList(t.included),
-    excluded: resolveList(t.excluded),
+    included: resolveList(t.included || t.includes),
+    excluded: resolveList(t.excluded || t.excludes),
   };
 }
 

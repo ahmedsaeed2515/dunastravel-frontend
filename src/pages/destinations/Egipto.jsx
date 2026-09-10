@@ -32,70 +32,38 @@ export default function Egipto() {
   const [activeTab, setActiveTab] = React.useState('all');
   const { tours: liveTours = [] } = useTours({ destination: 'egypt', limit: 50 });
 
-  const egyptTours = useMemo(() => {
-    if (Array.isArray(liveTours) && liveTours.length > 0) {
-      return liveTours;
-    }
-    return tours.filter((tour) => tour && tour.destination === 'egypt');
+  // Define the 9 standalone base classic tours for Egypt top section
+  const BASE_CLASSIC_SLUGS = [
+    'cairo-express-4d',
+    'cairo-express-alexandria-5d',
+    'egito-classico-8d',
+    'egito-classico-ii-9d',
+    'egito-historico-10d',
+    'cairo-cruzeiro-sharm-11d',
+    'grande-ramses-10d',
+    'tesouros-egipto-9d',
+    'complete-egypt-8d'
+  ];
+
+  const baseClassic9Tours = useMemo(() => {
+    const tourList = Array.isArray(liveTours) && liveTours.length > 0 ? liveTours : tours;
+    const foundMap = new Map();
+    tourList.forEach((t) => {
+      if (t && t.slug) {
+        foundMap.set(t.slug, t);
+      }
+    });
+
+    return BASE_CLASSIC_SLUGS.map((slug) => {
+      if (foundMap.has(slug)) {
+        return foundMap.get(slug);
+      }
+      // Fallback matching in local tours array
+      const local = tours.find((lt) => lt.slug === slug);
+      if (local) return local;
+      return null;
+    }).filter(Boolean);
   }, [liveTours]);
-
-  // Categorize Egypt tours into distinct types
-  const categories = useMemo(() => [
-    {
-      id: 'all',
-      label: t('dest.egypt.catAll', '✨ جميع رحلات مصر'),
-      count: egyptTours.length,
-    },
-    {
-      id: 'classic',
-      label: t('dest.egypt.catClassic', '🚢 الرحلات الكلاسيكية والنيلية'),
-      count: egyptTours.filter(t => 
-        (t.slug && (t.slug.includes('classico') || t.slug === 'cairo-express-4d')) ||
-        (t.type && (t.type.includes('City') || t.type.includes('Cruzeiro + City')))
-      ).length,
-    },
-    {
-      id: 'redsea',
-      label: t('dest.egypt.catRedSea', '🏖️ رحلات النيل والبحر الأحمر'),
-      count: egyptTours.filter(t => 
-        (t.slug && (t.slug.includes('sharm') || t.slug.includes('historico'))) ||
-        (t.type && t.type.includes('Mar Vermelho')) ||
-        (t.highlights && t.highlights.some(h => typeof h === 'string' && (h.includes('Hurghada') || h.includes('Sharm'))))
-      ).length,
-    },
-    {
-      id: 'special',
-      label: t('dest.egypt.catSpecial', '🏛️ رحلات الإسكندرية وأبو سمبل'),
-      count: egyptTours.filter(t => 
-        (t.slug && (t.slug.includes('alexandria') || t.slug.includes('ramses') || t.slug.includes('tesouros'))) ||
-        (t.type && (t.type.includes('Abu Simbel') || t.type.includes('Alexandria')))
-      ).length,
-    },
-  ], [egyptTours, t]);
-
-  const filteredTours = useMemo(() => {
-    if (activeTab === 'all') return egyptTours;
-    if (activeTab === 'classic') {
-      return egyptTours.filter(t => 
-        (t.slug && (t.slug.includes('classico') || t.slug === 'cairo-express-4d')) ||
-        (t.type && (t.type.includes('City') || t.type.includes('Cruzeiro + City')))
-      );
-    }
-    if (activeTab === 'redsea') {
-      return egyptTours.filter(t => 
-        (t.slug && (t.slug.includes('sharm') || t.slug.includes('historico'))) ||
-        (t.type && t.type.includes('Mar Vermelho')) ||
-        (t.highlights && t.highlights.some(h => typeof h === 'string' && (h.includes('Hurghada') || h.includes('Sharm'))))
-      );
-    }
-    if (activeTab === 'special') {
-      return egyptTours.filter(t => 
-        (t.slug && (t.slug.includes('alexandria') || t.slug.includes('ramses') || t.slug.includes('tesouros'))) ||
-        (t.type && (t.type.includes('Abu Simbel') || t.type.includes('Alexandria')))
-      );
-    }
-    return egyptTours;
-  }, [egyptTours, activeTab]);
 
   return (
     <div className="w-full min-h-screen bg-obsidian-50 dark:bg-[#0c0d19] pb-24 text-start">
@@ -136,62 +104,38 @@ export default function Egipto() {
         zoomDuration={12}
       />
 
-      {/* Brief Overview & Categorized Egypt Tours Grid */}
+      {/* Top Section: 9 Essential Standalone Trips (الرحلات الأساسية الـ 9) */}
       <section className="container mx-auto px-6 mt-16" id="tours-grid">
         <div className="max-w-3xl mx-auto text-center mb-12">
+          <span className="inline-block font-body text-gold-500 tracking-[0.2em] uppercase text-sm mb-3 font-semibold">
+            {t('dest.egypt.topToursSubtitle', 'Essential Egypt Journeys')}
+          </span>
+          <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50 mb-4 font-display" style={{ fontFamily: "'Playfair Display', serif" }}>
+            {t('dest.egypt.topToursTitle', 'الرحلات الأساسية في مصر (9 رحلات كلاسيكية)')}
+          </h2>
           <p className="text-body-lg text-obsidian-600 dark:text-ivory-200 leading-relaxed">
             {t(
-              'dest.egypt.brief',
-              'A civilisation that has captivated the world for millennia. Egypt blends monumental history with warm hospitality and breathtaking landscapes — from the iconic Pyramids and the Nile cruise to the coral reefs of the Red Sea. Every itinerary is crafted to deliver maximum comfort, luxury and authentic cultural immersion.'
+              'dest.egypt.topToursDesc',
+              'استكشف أشهر 9 رحلات أساسية ومستقلة في مصر، تغطي القاهرة، الأهرامات، رحلات النيل الفاخرة بين الأقصر وأسوان، ومنتجعات البحر الأحمر ساحرة الجمال.'
             )}
           </p>
         </div>
 
-        {/* Category Filter Tabs Bar */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
-          {categories.map((cat) => {
-            const isActive = activeTab === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveTab(cat.id)}
-                className={`relative px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2 ${
-                  isActive
-                    ? 'bg-gold-500 text-obsidian-950 shadow-[0_4px_16px_rgba(245,166,35,0.4)] scale-105'
-                    : 'bg-white dark:bg-[#151728] text-obsidian-700 dark:text-ivory-200 border border-gold-500/20 hover:border-gold-500/60 hover:text-gold-600 dark:hover:text-gold-400'
-                }`}
-              >
-                <span>{cat.label}</span>
-                <span
-                  className={`text-xs px-2 py-0.5 rounded-full font-extrabold ${
-                    isActive
-                      ? 'bg-obsidian-950 text-gold-400'
-                      : 'bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300'
-                  }`}
-                >
-                  {cat.count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Tours Grid */}
+        {/* 9 Base Standalone Tours Grid */}
         <motion.div
-          key={activeTab}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {filteredTours.map((tour) => (
-            <TourCard key={tour.id} tour={tour} />
+          {baseClassic9Tours.map((tour) => (
+            <TourCard key={tour.id || tour.slug} tour={tour} />
           ))}
         </motion.div>
       </section>
 
-      {/* Exclusive Egypt Experiences & Packages (5 Signature Suites) */}
-      <section className="container mx-auto px-6 mt-24">
+      {/* Bottom Section: 5 Master Programs (برامج مصر الـ 5) */}
+      <section className="container mx-auto px-6 mt-24" id="egypt-programs">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -201,16 +145,16 @@ export default function Egipto() {
         >
           <motion.span
             variants={itemVariants}
-            className="inline-block font-body text-gold-500 tracking-[0.2em] uppercase text-sm mb-4"
+            className="inline-block font-body text-gold-500 tracking-[0.2em] uppercase text-sm mb-4 font-bold"
           >
-            {t('dest.egypt.programsSubtitle', 'Egypt Programs')}
+            {t('dest.egypt.programsSubtitle', 'Egypt Signature Programs')}
           </motion.span>
           <motion.h2
             variants={itemVariants}
             className="text-display-lg text-obsidian-900 dark:text-ivory-50 mb-4 font-display"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            {t('dest.egypt.programsTitle', 'Exclusive Egypt Experiences')}
+            {t('dest.egypt.programsTitle', 'برامج مصر الرئيسية (5 برامج فريدة)')}
           </motion.h2>
           <motion.p
             variants={itemVariants}
@@ -218,7 +162,7 @@ export default function Egipto() {
           >
             {t(
               'dest.egypt.programsDesc',
-              'Discover our curated programs designed to make your Egypt journey truly unforgettable.'
+              'تصفح برامجنا المخصصة والتي تشمل البرنامج الكلاسيكي، شهر العسل، مسار العائلة المقدسة، الجولات متعددة الدول (9 رحلات)، والملحقات الاستجمامية.'
             )}
           </motion.p>
         </motion.div>
@@ -230,7 +174,7 @@ export default function Egipto() {
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >
-          {/* Card 1: Classic Program */}
+          {/* Card 1: Classic Program (برنامج مصر الكلاسيكي) */}
           <motion.div
             variants={itemVariants}
             className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
@@ -242,10 +186,13 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
+              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
+                1 برنامج كلاسيكي
+              </div>
             </Link>
             <div className="p-6 flex flex-col flex-grow">
               <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                {t('nav.classic', 'Classic')}
+                CLASSIC PROGRAM
               </span>
               <Link to="/programs/classic/classic-program">
                 <h3
@@ -273,7 +220,7 @@ export default function Egipto() {
             </div>
           </motion.div>
 
-          {/* Card 2: Honeymooners Package */}
+          {/* Card 2: Honeymooners Program (شهر العسل في مصر) */}
           <motion.div
             variants={itemVariants}
             className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
@@ -285,10 +232,13 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
+              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
+                1 برنامج شهر العسل
+              </div>
             </Link>
             <div className="p-6 flex flex-col flex-grow">
               <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                {t('nav.honeymooners', 'Honeymooners Package')}
+                HONEYMOON PROGRAM
               </span>
               <Link to="/programs/honeymooners">
                 <h3
@@ -316,7 +266,7 @@ export default function Egipto() {
             </div>
           </motion.div>
 
-          {/* Card 3: Religious Programs */}
+          {/* Card 3: Religious / Holy Family Program (رحلة العائلة المقدسة) */}
           <motion.div
             variants={itemVariants}
             className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
@@ -324,21 +274,24 @@ export default function Egipto() {
             <Link to="/programs/religious" className="block relative h-[240px] overflow-hidden">
               <img
                 src="https://sft-nationaltours.com/wp-content/uploads/2024/11/holy-family-egypt_tg_1397-870x555.jpg"
-                alt="Holy Family & Pilgrimages"
+                alt="Holy Family Journey"
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
+              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
+                1 مسار العائلة المقدسة
+              </div>
             </Link>
             <div className="p-6 flex flex-col flex-grow">
               <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                {t('nav.religious', 'Religious Programs')}
+                HOLY FAMILY JOURNEY
               </span>
               <Link to="/programs/religious">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  {t('tour_jordan_title', 'رحلة مسار العائلة المقدسة في مصر')}
+                  {t('tour_jordan_title', 'رحلة العائلة المقدسة (مسار العائلة المقدسة في مصر)')}
                 </h3>
               </Link>
               <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
@@ -348,18 +301,14 @@ export default function Egipto() {
                 )}
               </p>
               
-              {/* Religious options chips */}
               <div className="flex flex-wrap gap-1.5 mb-4">
                 <Link to="/programs/religious" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  {t('programs.holyFamily10d', 'مسار العائلة المقدسة (10D)')}
-                </Link>
-                <Link to="/programs/religious" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  {t('programs.egyptJordan14d', 'مصر والأردن الديني (14D)')}
+                  {t('programs.holyFamily10d', 'مسار العائلة المقدسة في مصر (10D)')}
                 </Link>
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 mt-auto">
-                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">10-14 {t('common.days', 'Days')}</span>
+                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">10 {t('common.days', 'Days')}</span>
                 <Link to="/programs/religious">
                   <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
                     {t('tourCard.viewDetails', 'View Details')}{' '}
@@ -370,7 +319,7 @@ export default function Egipto() {
             </div>
           </motion.div>
 
-          {/* Card 4: Multi-Country Tours */}
+          {/* Card 4: Multi-Country Tours Program (جولات متعددة الدول - 9 رحلات) */}
           <motion.div
             variants={itemVariants}
             className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
@@ -383,61 +332,64 @@ export default function Egipto() {
                 loading="lazy"
               />
               <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
-                9 {t('programs.multiCountBadge', 'رحلات مجمعة')}
+                9 رحلات دولية مجمعة
               </div>
             </Link>
             <div className="p-6 flex flex-col flex-grow">
               <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                {t('nav.multiCountry', 'Multi-Country Tours')}
+                MULTI-COUNTRY TOURS
               </span>
               <Link to="/programs/multi-country">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  {t('nav.multiCountry', 'الواجهات متعددة الدول (9 برامج)')}
+                  {t('nav.multiCountry', 'جولات متعددة الدول (9 رحلات دولية)')}
                 </h3>
               </Link>
               <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
                 {t(
                   'dest.egypt.multiCountryDesc',
-                  'برامج مجمعة تشمل مصر، الأردن، المغرب، تونس، دبي، تركيا، واليونان بـ 9 مسارات فريدة.'
+                  'برامج مجمعة تشمل مصر مع الأردن، المغرب، تونس، دبي، تركيا، واليونان بـ 9 رحلات دولية فريدة.'
                 )}
               </p>
 
-              {/* Multi-country 9 destination chips preview */}
+              {/* Multi-country 9 destination trips preview */}
               <div className="flex flex-wrap gap-1.5 mb-4">
                 <Link to="/tours/jewels-of-egypt-and-jordan-11-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  جواهر مصر والأردن (11D)
+                  1. جواهر مصر والأردن (11D)
                 </Link>
                 <Link to="/tours/spices-of-egypt-and-morocco" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  توابل مصر والمغرب (12D)
+                  2. توابل ونكهات مصر والمغرب (12D)
                 </Link>
                 <Link to="/tours/egypt-and-dubai-13-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  مصر ودبي (13D)
+                  3. مصر ودبي (13D)
                 </Link>
                 <Link to="/tours/treasures-of-egypt-and-tunisia-16-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  كنوز مصر وتونس (16D)
+                  4. كنوز مصر وتونس (16D)
                 </Link>
                 <Link to="/tours/stars-of-the-middle-east-16-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  نجوم الشرق الأوسط (16D/19D)
+                  5. نجوم الشرق الأوسط (16D)
                 </Link>
                 <Link to="/tours/marvels-of-dubai-and-turkey-14-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  روعة دبي وتركيا (14D)
-                </Link>
-                <Link to="/tours/essences-of-egypt-and-turkey-15-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  جوهر مصر وتركيا (15D)
+                  6. روائع دبي وتركيا (14D)
                 </Link>
                 <Link to="/tours/cairo-and-athens-11-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  القاهرة وأثينا (11D)
+                  7. القاهرة وأثينا (11D)
+                </Link>
+                <Link to="/tours/essences-of-egypt-and-turkey-15-days" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                  8. جواهر مصر وتركيا (15D)
+                </Link>
+                <Link to="/tours/estrellas-medio-oriente-19d" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2 py-0.5 rounded font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
+                  9. نجوم الشرق الأوسط الكبرى (19D)
                 </Link>
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-gold-500/20 mt-auto">
-                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">9 {t('programs.journeysCount', 'برامج مجمعة')}</span>
+                <span className="text-xs font-extrabold text-gold-600 dark:text-gold-400">9 {t('programs.journeysCount', 'رحلات دولية')}</span>
                 <Link to="/programs/multi-country">
                   <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2">
-                    {t('tourCard.viewDetails', 'عرض كل الـ9 برامج')}{' '}
+                    {t('tourCard.viewDetails', 'عرض الـ 9 رحلات')}{' '}
                     <span className="rtl-flip">→</span>
                   </Button>
                 </Link>
@@ -445,7 +397,7 @@ export default function Egipto() {
             </div>
           </motion.div>
 
-          {/* Card 5: Egypt Extensions */}
+          {/* Card 5: Egypt Extensions (رحلات الاستجمام والملحقات) */}
           <motion.div
             variants={itemVariants}
             className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
@@ -458,38 +410,38 @@ export default function Egipto() {
                 loading="lazy"
               />
               <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
-                3 {t('extensions.tripsAvailable', 'Trips Available')}
+                3 رحلات شاطئية وصحراوية
               </div>
             </Link>
             <div className="p-6 flex flex-col flex-grow">
               <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                EXTENSION
+                EGYPT EXTENSIONS
               </span>
               <Link to="/programs/extension">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  {t('dest.egypt.extensionTitle', 'Egypt Extensions')}
+                  {t('dest.egypt.extensionTitle', 'رحلات الاستجمام والملحقات')}
                 </h3>
               </Link>
               <p className="text-body-sm text-gold-600 dark:text-gold-300 font-bold line-clamp-3 mb-4 flex-grow leading-relaxed">
                 {t(
                   'dest.egypt.extensionDesc',
-                  'Extend your Egypt journey with added destinations like Hurghada, Sharm El Sheikh, or Siwa Oasis.'
+                  'مدد إقامتك في مصر مع رحلات شاطئية وصحراوية تشمل الغردقة، شرم الشيخ، أو واحة سيوة والإسكندرية.'
                 )}
               </p>
               
               {/* Trip Tags Preview */}
               <div className="flex flex-wrap gap-1.5 mb-4">
                 <Link to="/tours/hurghada-4d3n" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  {t('trip.hurghada.title', 'Hurghada')} (4D)
+                  {t('trip.hurghada.title', 'الغردقة')} (4D)
                 </Link>
                 <Link to="/tours/sharm-4d3n" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  {t('trip.sharm.title', 'Sharm El Sheikh')} (4D)
+                  {t('trip.sharm.title', 'شرم الشيخ')} (4D)
                 </Link>
                 <Link to="/tours/siwa-oasis-alexandria" className="text-[11px] bg-gold-100 dark:bg-gold-900/40 text-gold-700 dark:text-gold-300 px-2.5 py-1 rounded-md font-bold border border-gold-400 dark:border-gold-600 hover:bg-gold-500 hover:text-obsidian-950 transition-colors">
-                  {t('tour_siwa_title', 'Siwa & Alexandria')} (5D)
+                  {t('tour_siwa_title', 'واحة سيوة والإسكندرية')} (5D)
                 </Link>
               </div>
 

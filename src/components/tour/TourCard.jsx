@@ -30,16 +30,19 @@ const marketFlag = (market) => {
 
 /* Multilingual destination name lookup — slug → { ar, en, es, pt, it } */
 const DESTINATION_NAMES = {
-  egypt:        { ar: 'مصر',        en: 'Egypt',    es: 'Egipto',  pt: 'Egito',    it: 'Egitto'  },
-  turkey:       { ar: 'تركيا',      en: 'Turkey',   es: 'Turquía', pt: 'Turquia',  it: 'Turchia' },
-  dubai:        { ar: 'دبي',        en: 'Dubai',    es: 'Dubái',   pt: 'Dubai',    it: 'Dubai'   },
-  jordan:       { ar: 'الأردن',     en: 'Jordan',   es: 'Jordania',pt: 'Jordânia', it: 'Giordania'},
-  tunisia:      { ar: 'تونس',       en: 'Tunisia',  es: 'Túnez',   pt: 'Tunísia',  it: 'Tunisia' },
-  greece:       { ar: 'اليونان',    en: 'Greece',   es: 'Grecia',  pt: 'Grécia',   it: 'Grecia'  },
-  morocco:      { ar: 'المغرب',     en: 'Morocco',  es: 'Marruecos',pt:'Marrocos', it: 'Marocco' },
-  spain:        { ar: 'إسبانيا',    en: 'Spain',    es: 'España',  pt: 'Espanha',  it: 'Spagna'  },
-  brazil:       { ar: 'البرازيل',   en: 'Brazil',   es: 'Brasil',  pt: 'Brasil',   it: 'Brasile' },
-  italy:        { ar: 'إيطاليا',    en: 'Italy',    es: 'Italia',  pt: 'Itália',   it: 'Italia'  },
+  egypt:                  { ar: 'مصر',        en: 'Egypt',    es: 'Egipto',  pt: 'Egito',    it: 'Egitto'  },
+  turkey:                 { ar: 'تركيا',      en: 'Turkey',   es: 'Turquía', pt: 'Turquia',  it: 'Turchia' },
+  dubai:                  { ar: 'دبي',        en: 'Dubai',    es: 'Dubái',   pt: 'Dubai',    it: 'Dubai'   },
+  emirates:               { ar: 'الإمارات',   en: 'Emirates', es: 'Emiratos',pt: 'Emirados',  it: 'Emirati' },
+  uae:                    { ar: 'الإمارات',   en: 'UAE',      es: 'EAU',     pt: 'EAU',      it: 'EAU'     },
+  'united arab emirates': { ar: 'الإمارات العربية المتحدة', en: 'United Arab Emirates', es: 'Emiratos Árabes Unidos', pt: 'Emirados Árabes Unidos', it: 'Emirati Arabi Uniti' },
+  jordan:                 { ar: 'الأردن',     en: 'Jordan',   es: 'Jordania',pt: 'Jordânia', it: 'Giordania'},
+  tunisia:                { ar: 'تونس',       en: 'Tunisia',  es: 'Túnez',   pt: 'Tunísia',  it: 'Tunisia' },
+  greece:                 { ar: 'اليونان',    en: 'Greece',   es: 'Grecia',  pt: 'Grécia',   it: 'Grecia'  },
+  morocco:                { ar: 'المغرب',     en: 'Morocco',  es: 'Marruecos',pt:'Marrocos', it: 'Marocco' },
+  spain:                  { ar: 'إسبانيا',    en: 'Spain',    es: 'España',  pt: 'Espanha',  it: 'Spagna'  },
+  brazil:                 { ar: 'البرازيل',   en: 'Brazil',   es: 'Brasil',  pt: 'Brasil',   it: 'Brasile' },
+  italy:                  { ar: 'إيطاليا',    en: 'Italy',    es: 'Italia',  pt: 'Itália',   it: 'Italia'  },
 };
 
 const resolveDestinationName = (dest, lang) => {

@@ -2,10 +2,34 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTours } from './useTours';
 
+import { resolveLocalizedText } from '../utils/titleHelper';
+
 function getLocalizedField(fieldObj, locale) {
   if (!fieldObj) return '';
-  if (typeof fieldObj === 'string') return fieldObj;
-  return fieldObj[locale] || fieldObj.en || fieldObj.ar || Object.values(fieldObj)[0] || '';
+  const cleanLocale = (locale || 'en').substring(0, 2).toLowerCase();
+  if (typeof fieldObj === 'object' && fieldObj !== null && !Array.isArray(fieldObj)) {
+    return fieldObj[cleanLocale] || fieldObj[locale] || fieldObj.en || fieldObj.ar || fieldObj.es || fieldObj.pt || fieldObj.it || Object.values(fieldObj)[0] || '';
+  }
+  if (typeof fieldObj === 'string') {
+    return resolveLocalizedText(fieldObj, (k) => k, locale);
+  }
+  return String(fieldObj || '');
+}
+
+function getObjectField(program, fields) {
+  for (const f of fields) {
+    const val = program[f];
+    if (val && typeof val === 'object' && !Array.isArray(val)) {
+      return val;
+    }
+  }
+  for (const f of fields) {
+    const val = program[f];
+    if (val !== undefined && val !== null && val !== '') {
+      return val;
+    }
+  }
+  return '';
 }
 
 function slugify(text) {
@@ -23,16 +47,17 @@ export function useDubaiPrograms() {
 
   return useMemo(() => {
     return tours.map((program) => {
-      const title = getLocalizedField(program.name || program.title, locale);
-      const enTitle = getLocalizedField(program.name || program.title, 'en');
+      const titleObj = getObjectField(program, ['titleJsonb', 'name', 'title']);
+      const title = getLocalizedField(titleObj, locale);
+      const enTitle = getLocalizedField(titleObj, 'en');
       const slug = program.slug || slugify(`${program.id}-${enTitle}`);
-      const duration = getLocalizedField(program.duration, locale);
-      const highlights = getLocalizedField(program.highlights, locale);
-      const overview = getLocalizedField(program.overview, locale);
-      const code = getLocalizedField(program.code, locale) || program.id;
-      const minPax = getLocalizedField(program.minPax, locale);
-      const includes = getLocalizedField(program.includes, locale);
-      const excludes = getLocalizedField(program.excludes, locale);
+      const duration = getLocalizedField(getObjectField(program, ['durationJsonb', 'duration']), locale);
+      const highlights = getLocalizedField(getObjectField(program, ['highlightsJsonb', 'highlights']), locale);
+      const overview = getLocalizedField(getObjectField(program, ['overviewJsonb', 'overview', 'description', 'desc']), locale);
+      const code = getLocalizedField(getObjectField(program, ['codeJsonb', 'code']), locale) || program.id;
+      const minPax = getLocalizedField(getObjectField(program, ['minPaxJsonb', 'minPax']), locale);
+      const includes = getLocalizedField(getObjectField(program, ['includes', 'included']), locale);
+      const excludes = getLocalizedField(getObjectField(program, ['excludes', 'excluded']), locale);
 
       const days = Array.isArray(program.days)
         ? program.days.map((d) => ({

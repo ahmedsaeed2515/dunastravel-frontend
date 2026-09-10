@@ -131,14 +131,55 @@ const TAG_FALLBACK_DICTIONARY = {
     es: 'Safaris por el desierto y experiencias exclusivas',
     pt: 'Safáris no deserto e experiências exclusivas',
     it: 'Safari nel deserto ed esperienze esclusive'
-  }
+  },
+  // Dubai & UAE Tour Title / Badge / Duration Multilingual Dictionary
+  'Stop Over Dubai': { ar: 'التوقف في دبي', en: 'Stop Over Dubai', es: 'Stop Over Dubai', pt: 'Stop Over Dubai', it: 'Stop Over Dubai' },
+  'التوقف في دبي (STOP OVER DUBAI)': { ar: 'التوقف في دبي', en: 'Stop Over Dubai', es: 'Stop Over Dubai', pt: 'Stop Over Dubai', it: 'Stop Over Dubai' },
+  'Dubai and Its History': { ar: 'دبي وتاريخها', en: 'Dubai and Its History', es: 'Dubái y Su Historia', pt: 'Dubai e a Sua História', it: 'Dubai e la Sua Storia' },
+  'دبي وتاريخها (DUBAI Y SU HISTORIA)': { ar: 'دبي وتاريخها', en: 'Dubai and Its History', es: 'Dubái y Su Historia', pt: 'Dubai e a Sua História', it: 'Dubai e la Sua Storia' },
+  'Dubai, City of the Future': { ar: 'دبي، مدينة المستقبل', en: 'Dubai, City of the Future', es: 'Dubái, Ciudad del Futuro', pt: 'Dubai, Cidade do Futuro', it: 'Dubai, Città del Futuro' },
+  'دبي، مدينة المستقبل (DUBAI, CIUDAD DEL FUTURO)': { ar: 'دبي، مدينة المستقبل', en: 'Dubai, City of the Future', es: 'Dubái, Ciudad del Futuro', pt: 'Dubai, Cidade do Futuro', it: 'Dubai, Città del Futuro' },
+  'Dubai and Abu Dhabi': { ar: 'دبي وأبوظبي', en: 'Dubai and Abu Dhabi', es: 'Dubái y Abu Dhabi', pt: 'Dubai e Abu Dhabi', it: 'Dubai e Abu Dhabi' },
+  'دبي وأبوظبي (DUBAI Y ABU DHABI)': { ar: 'دبي وأبوظبي', en: 'Dubai and Abu Dhabi', es: 'Dubái y Abu Dhabi', pt: 'Dubai e Abu Dhabi', it: 'Dubai e Abu Dhabi' },
+  'Dubai with Overnight in Abu Dhabi': { ar: 'دبي مع إقامة في أبوظبي', en: 'Dubai with Overnight in Abu Dhabi', es: 'Dubái con Estancia en Abu Dhabi', pt: 'Dubai com Estadia em Abu Dhabi', it: 'Dubai con Soggiorno ad Abu Dhabi' },
+  'دبي مع إقامة في أبوظبي (DUBAI CON ESTANCIA EN ABU DHABI)': { ar: 'دبي مع إقامة في أبوظبي', en: 'Dubai with Overnight in Abu Dhabi', es: 'Dubái con Estancia en Abu Dhabi', pt: 'Dubai com Estadia em Abu Dhabi', it: 'Dubai con Soggiorno ad Abu Dhabi' },
+  'One Week in Dubai': { ar: 'أسبوع في دبي', en: 'One Week in Dubai', es: 'Una Semana en Dubái', pt: 'Uma Semana em Dubai', it: 'Una Settimana a Dubai' },
+  'أسبوع في دبي (UNA SEMANA EN DUBAI)': { ar: 'أسبوع في دبي', en: 'One Week in Dubai', es: 'Una Semana en Dubái', pt: 'Uma Semana em Dubai', it: 'Una Settimana a Dubai' },
+  'The Complete Emirates': { ar: 'الإمارات بالكامل', en: 'The Complete Emirates', es: 'Emiratos al Completo', pt: 'Emirados Completo', it: 'Emirati Completi' },
+  'الإمارات بالكامل (EMIRATOS AL COMPLETO)': { ar: 'الإمارات بالكامل', en: 'The Complete Emirates', es: 'Emiratos al Completo', pt: 'Emirados Completo', it: 'Emirati Completi' },
+  'Honeymoon in Dubai': { ar: 'شهر العسل في دبي', en: 'Honeymoon in Dubai', es: 'Luna de Miel en Dubái', pt: 'Lua de Mel em Dubai', it: 'Luna di Miele a Dubai' },
+  'شهر العسل في دبي': { ar: 'شهر العسل في دبي', en: 'Honeymoon in Dubai', es: 'Luna de Miel en Dubái', pt: 'Lua de Mel em Dubai', it: 'Luna di Miele a Dubai' },
+  'Honeymoon in Dubai with Dinner at Burj Al Arab': { ar: 'شهر العسل في دبي مع عشاء في برج العرب', en: 'Honeymoon in Dubai with Dinner at Burj Al Arab', es: 'Luna de Miel en Dubái con Cena en Burj Al Arab', pt: 'Lua de Mel em Dubai com Jantar no Burj Al Arab', it: 'Luna di Miele a Dubai con Cena al Burj Al Arab' },
+  'شهر العسل في دبي مع عشاء في برج العرب': { ar: 'شهر العسل في دبي مع عشاء في برج العرب', en: 'Honeymoon in Dubai with Dinner at Burj Al Arab', es: 'Luna de Miel en Dubái con Cena en Burj Al Arab', pt: 'Lua de Mel em Dubai com Jantar no Burj Al Arab', it: 'Luna di Miele a Dubai con Cena al Burj Al Arab' },
+  'Jewels of Dubai & Emirates': { ar: 'جواهر دبي والإمارات', en: 'Jewels of Dubai & Emirates', es: 'Joyas de Dubái y los Emiratos', pt: 'Jóias de Dubai e Emirados', it: 'Gioielli di Dubai ed Emirati' },
+  'Grand Emirates Experience': { ar: 'تجربة الإمارات الكبرى', en: 'Grand Emirates Experience', es: 'Gran Experiencia en los Emiratos', pt: 'Grande Experiência nos Emirados', it: 'Grande Esperienza negli Emirati' },
+  'Dubai Luxury & Beach': { ar: 'دبي الفاخرة والشواطئ', en: 'Dubai Luxury & Beach', es: 'Dubái de Lujo y Playa', pt: 'Dubai de Luxo e Praia', it: 'Dubai di Lusso e Spiaggia' },
+  'Emirates Highlights': { ar: 'أبرز معالم الإمارات', en: 'Emirates Highlights', es: 'Lo Mejor de los Emiratos', pt: 'Destaques dos Emirados', it: 'I Punti Salienti degli Emirati' },
+  'Desert & Modern Luxury': { ar: 'سفاري الصحراء والحداثة الفاخرة', en: 'Desert & Modern Luxury', es: 'Desierto y Lujo Moderno', pt: 'Deserto e Luxo Moderno', it: 'Deserto e Lusso Moderno' },
+  'Old & New Dubai': { ar: 'دبي القديمة والحديثة', en: 'Old & New Dubai', es: 'Dubái Antiguo y Moderno', pt: 'Dubai Antiga e Moderna', it: 'Dubai Antica e Moderna' },
+  '2 Nights / 3 Days': { ar: '2 ليالٍ / 3 أيام', en: '2 Nights / 3 Days', es: '2 Noches / 3 Días', pt: '2 Noites / 3 Dias', it: '2 Notti / 3 Giorni' },
+  '2 ليالٍ / 3 أيام': { ar: '2 ليالٍ / 3 أيام', en: '2 Nights / 3 Days', es: '2 Noches / 3 Días', pt: '2 Noites / 3 Dias', it: '2 Notti / 3 Giorni' },
+  '3 Nights / 4 Days': { ar: '3 ليالٍ / 4 أيام', en: '3 Nights / 4 Days', es: '3 Noches / 4 Días', pt: '3 Noites / 4 Dias', it: '3 Notti / 4 Giorni' },
+  '3 ليالٍ / 4 أيام': { ar: '3 ليالٍ / 4 أيام', en: '3 Nights / 4 Days', es: '3 Noches / 4 Días', pt: '3 Noites / 4 Dias', it: '3 Notti / 4 Giorni' },
+  '4 Nights / 5 Days': { ar: '4 ليالٍ / 5 أيام', en: '4 Nights / 5 Days', es: '4 Noches / 5 Días', pt: '4 Noites / 5 Dias', it: '4 Notti / 5 Giorni' },
+  '4 ليالٍ / 5 أيام': { ar: '4 ليالٍ / 5 أيام', en: '4 Nights / 5 Days', es: '4 Noches / 5 Días', pt: '4 Noites / 5 Dias', it: '4 Notti / 5 Giorni' },
+  '5 Nights / 6 Days': { ar: '5 ليالٍ / 6 أيام', en: '5 Nights / 6 Days', es: '5 Noches / 6 Días', pt: '5 Noites / 6 Dias', it: '5 Notti / 6 Giorni' },
+  '5 ليالٍ / 6 أيام': { ar: '5 ليالٍ / 6 أيام', en: '5 Nights / 6 Days', es: '5 Noches / 6 Días', pt: '5 Noites / 6 Dias', it: '5 Notti / 6 Giorni' },
+  '6 Nights / 7 Days': { ar: '6 ليالٍ / 7 أيام', en: '6 Nights / 7 Days', es: '6 Noches / 7 Días', pt: '6 Noites / 7 Dias', it: '6 Notti / 7 Giorni' },
+  '6 ليالٍ / 7 أيام': { ar: '6 ليالٍ / 7 أيام', en: '6 Nights / 7 Days', es: '6 Noches / 7 Días', pt: '6 Noites / 7 Dias', it: '6 Notti / 7 Giorni' },
+  '7 Nights / 8 Days': { ar: '7 ليالٍ / 8 أيام', en: '7 Nights / 8 Days', es: '7 Noches / 8 Días', pt: '7 Noites / 8 Dias', it: '7 Notti / 8 Giorni' },
+  '7 ليالٍ / 8 أيام': { ar: '7 ليالٍ / 8 أيام', en: '7 Nights / 8 Days', es: '7 Noches / 8 Días', pt: '7 Noites / 8 Dias', it: '7 Notti / 8 Giorni' },
+  '2 Pax': { ar: 'فردان', en: '2 Pax', es: '2 Pax', pt: '2 Pax', it: '2 Pax' },
+  'فردان': { ar: 'فردان', en: '2 Pax', es: '2 Pax', pt: '2 Pax', it: '2 Pax' }
 };
 
 export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
   if (!val) return '';
 
-  if (typeof val === 'object' && val !== null) {
-    return val[lang] || val.en || val.ar || val.es || Object.values(val)[0] || '';
+  const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
+
+  if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+    return val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || '';
   }
 
   if (typeof val !== 'string') return String(val);
@@ -151,7 +192,7 @@ export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
 
   const fallbackEntry = TAG_FALLBACK_DICTIONARY[cleanVal];
   if (fallbackEntry) {
-    return fallbackEntry[lang] || fallbackEntry.en || fallbackEntry.ar || '';
+    return fallbackEntry[cleanLang] || fallbackEntry[lang] || fallbackEntry.en || fallbackEntry.ar || '';
   }
 
   if (!cleanVal.startsWith('data.')) {
@@ -179,6 +220,25 @@ export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
   return cleanVal.startsWith('data.') ? cleanVal.replace(/^data\./, '') : cleanVal;
 }
 
+function getObjectOrFallback(tour, fields) {
+  if (!tour || typeof tour !== 'object') return null;
+  // First pass: find a multilingual object field
+  for (const f of fields) {
+    const val = tour[f];
+    if (val && typeof val === 'object' && !Array.isArray(val)) {
+      return val;
+    }
+  }
+  // Second pass: find scalar field
+  for (const f of fields) {
+    const val = tour[f];
+    if (val !== undefined && val !== null && val !== '') {
+      return val;
+    }
+  }
+  return null;
+}
+
 export function resolveTourTitle(tour, t, lang = 'en') {
   if (!tour) return '';
   const safeT = typeof t === 'function' ? t : (k) => k;
@@ -186,21 +246,22 @@ export function resolveTourTitle(tour, t, lang = 'en') {
     const translated = safeT(tour.titleKey);
     if (translated && translated !== tour.titleKey) return translated;
   }
-  return resolveLocalizedText(tour.titleJsonb || tour.title || tour.name || tour.slug, safeT, lang);
+  const titleVal = getObjectOrFallback(tour, ['titleJsonb', 'name', 'title', 'slug']);
+  return resolveLocalizedText(titleVal, safeT, lang);
 }
 
 export function resolveTourOverview(tour, t, lang = 'en') {
   if (!tour) return '';
   const safeT = typeof t === 'function' ? t : (k) => k;
-  const val = tour.overviewJsonb || tour.overview || tour.description || tour.desc || tour.overviewKey;
-  return resolveLocalizedText(val, safeT, lang);
+  const overviewVal = getObjectOrFallback(tour, ['overviewJsonb', 'overview', 'description', 'desc', 'overviewKey']);
+  return resolveLocalizedText(overviewVal, safeT, lang);
 }
 
 export function resolveTourDuration(tour, t, lang = 'en') {
   if (!tour) return '';
   const safeT = typeof t === 'function' ? t : (k) => k;
-  const val = tour.durationJsonb || tour.duration || tour.durationKey;
-  return resolveLocalizedText(val, safeT, lang);
+  const durationVal = getObjectOrFallback(tour, ['durationJsonb', 'duration', 'durationKey']);
+  return resolveLocalizedText(durationVal, safeT, lang);
 }
 
 const ITINERARY_DAY_DICTIONARY = {
