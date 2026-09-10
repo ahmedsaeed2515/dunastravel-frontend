@@ -1570,23 +1570,23 @@ const HomeExperienceSection = () => {
                   aria-label={`${t("destination.viewGuide", "View destination guide")} ${dest.name}`}
                   className="group relative h-[380px] sm:h-[420px] w-full rounded-[32px] overflow-hidden shadow-2xl border border-white/20 hover:border-gold-400/90 transition-all duration-500 cursor-pointer focus:outline-none"
                 >
-                  {/* Background Image */}
+                  {/* Background Image (Ultra-clear, high resolution & contrast) */}
                   <img
                     src={dest.image}
                     srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
-                      ${dest.image.replace(/w=\d+&h=\d+/, 'w=600&h=800')} 600w
+                      ${dest.image.replace(/w=\d+&h=\d+/, 'w=800&q=90')} 800w
                     ` : undefined}
-                    sizes="(max-width: 768px) 480px, 600px"
+                    sizes="(max-width: 768px) 600px, 800px"
                     alt={dest.name}
-                    width="600"
-                    height="800"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    width="800"
+                    height="1000"
+                    className="w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-110 transition-transform duration-700 ease-out"
                     loading="lazy"
                     decoding="async"
                   />
 
-                  {/* Dynamic Dark Gradient Overlay - Deeper contrast on hover for maximum text legibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020817] via-[#020817]/50 to-transparent opacity-85 group-hover:opacity-95 group-hover:from-[#020817] group-hover:via-[#020817]/80 transition-all duration-500" />
+                  {/* Gradient Overlay focused at the bottom only - keeps top image 100% bright & crystal clear */}
+                  <div className="absolute bottom-0 inset-x-0 h-3/4 bg-gradient-to-t from-[#020817] via-[#020817]/40 to-transparent group-hover:h-full group-hover:via-[#020817]/75 transition-all duration-500 pointer-events-none" />
 
                   {/* Top Tour Count Badge */}
                   <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-amber-300/60 text-black font-extrabold text-xs flex items-center gap-1.5 shadow-lg group-hover:bg-gold-400 group-hover:scale-105 transition-all duration-300">
