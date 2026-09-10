@@ -6153,5 +6153,6 @@
   "auth.resendCode": "Reenviar Código",
   "auth.accountCreatedVerification": "Conta criada! Verifique seu e-mail para confirmar.",
   "home.destSectionDesc": "Descubra os destinos de luxo mais fascinantes e deslumbrantes, com pacotes e excursões meticulosamente elaborados para lhe proporcionar uma experiência de viagem extraordinária.",
-  "destination.explore": "Explorar Destino"
+  "destination.explore": "Explorar Destino",
+  "destination.viewGuide": "Guia do Destino"
 }
