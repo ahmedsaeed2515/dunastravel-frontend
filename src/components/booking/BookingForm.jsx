@@ -25,13 +25,13 @@ import { trackEvent } from '../../utils/analytics';
 import { useAuth } from '../../context/AuthContext';
 
 const inputClass =
-  'w-full px-3.5 py-3 rounded-xl bg-[rgba(15,23,42,0.65)] text-ivory-50 placeholder:text-ivory-400/40 border border-gold-500/20 focus:border-gold-400 focus:ring-2 focus:ring-[#2563eb]/30 focus:outline-none text-[13.5px] transition-all duration-200 [color-scheme:dark] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] hover:border-gold-500/40';
+  'w-full px-3.5 py-3 rounded-xl bg-[#141826] text-ivory-50 placeholder:text-ivory-400/40 border border-gold-500/20 focus:border-gold-400 focus:ring-2 focus:ring-[#1d4ed8]/40 focus:outline-none text-[13.5px] transition-all duration-200 [color-scheme:dark] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] hover:border-gold-500/40';
 
 const labelClass =
-  'block text-[11px] font-bold text-gold-400 uppercase tracking-[1.3px] mb-1.5 flex items-center gap-1.5 font-display';
+  'block text-[11px] font-bold text-gold-400 uppercase tracking-[1.2px] mb-1.5 flex items-center gap-1.5 font-display';
 
 const counterBtnClass =
-  'w-8 h-8 rounded-lg bg-gradient-to-br from-[#1e3a8a]/40 to-[#78350f]/40 hover:from-[#2563eb] hover:to-[#f59e0b] text-gold-300 hover:text-obsidian-950 border border-gold-500/30 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:from-[#1e3a8a]/40 disabled:hover:to-[#78350f]/40 disabled:hover:text-gold-300';
+  'w-8 h-8 rounded-lg bg-[#1a2136] hover:bg-[#1d4ed8] text-gold-400 hover:text-white border border-gold-500/25 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-[#1a2136] disabled:hover:text-gold-400';
 
 const omitEmptyFields = (payload) =>
   Object.fromEntries(
@@ -504,7 +504,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
 
   return (
     <div
-      className="bg-gradient-to-b from-[#0b0e17] via-[#101422] to-[#07090f] text-ivory-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-gold-500/25 hover:border-gold-500/50 transition-all duration-500 overflow-hidden relative backdrop-blur-2xl"
+      className="bg-[#0f121e]/98 text-ivory-50 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.6)] border border-gold-500/25 hover:border-gold-500/40 transition-all duration-300 overflow-hidden relative backdrop-blur-xl"
     >
       <AnimatePresence mode="wait">
         {status === 'success' && bookingResult ? (
@@ -515,8 +515,8 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col items-center text-center py-10 px-6"
           >
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#1d4ed8] via-gold-500 to-[#f59e0b] flex items-center justify-center mb-4 shadow-[0_0_35px_rgba(37,99,235,0.4)] ring-4 ring-gold-500/20">
-              <FaCheckCircle className="text-obsidian-950 text-2xl" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#1e3a8a] to-gold-500 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(245,166,35,0.3)] ring-4 ring-gold-500/20">
+              <FaCheckCircle className="text-ivory-50 text-2xl" />
             </div>
             <span className="text-[11px] font-mono text-gold-400 uppercase tracking-widest block mb-1">
               Ref: #{bookingResult.referenceCode || bookingResult.id || 'CONFIRMED'}
@@ -543,7 +543,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                   e.stopPropagation();
                   setShowInvoice(true);
                 }}
-                className="mt-5 px-6 py-3 bg-gradient-to-r from-[#1d4ed8] via-gold-500 to-[#f59e0b] text-obsidian-950 font-bold rounded-xl hover:shadow-[0_0_30px_rgba(245,166,35,0.5)] hover:scale-105 active:scale-95 transition-all text-[12px] uppercase tracking-[1.5px] flex items-center gap-2 cursor-pointer"
+                className="mt-5 px-6 py-3 bg-[#1e3a8a] hover:bg-[#1d4ed8] text-gold-300 hover:text-white font-bold rounded-xl border border-gold-500/40 shadow-lg transition-all text-[12px] uppercase tracking-[1.5px] flex items-center gap-2 cursor-pointer"
               >
                 <FaFileInvoiceDollar size={14} /> {t('booking.viewInvoice', 'Inspect Official Invoice')}
               </button>
@@ -564,40 +564,37 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
           </motion.div>
         ) : (
           <div key="form-view">
-            {/* Header */}
-            <div className="px-5 pt-5 pb-4 border-b border-gold-500/15 bg-gradient-to-r from-[#1e3a8a]/40 via-[#451a03]/30 to-[#0f172a]/40 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/10 rounded-full blur-2xl pointer-events-none" />
+            {/* Elegant Header */}
+            <div className="px-6 pt-6 pb-4 border-b border-gold-500/15 bg-gradient-to-r from-[#1e3a8a]/30 via-[#3a2010]/20 to-[#0f121e]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1d4ed8] via-gold-500 to-[#f59e0b] p-[1px] shadow-[0_4px_15px_rgba(37,99,235,0.3)]">
-                    <div className="w-full h-full bg-[#0b0e17] rounded-[11px] flex items-center justify-center text-gold-400">
-                      <FaPaperPlane className="text-[13px]" />
-                    </div>
+                  <div className="w-10 h-10 rounded-xl bg-[#1e3a8a] border border-gold-500/40 flex items-center justify-center text-gold-400 shadow-md">
+                    <FaPaperPlane className="text-[13px]" />
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-body-lg text-ivory-50 font-display font-bold truncate leading-tight tracking-wide">
                       {t('booking.formTitle', 'Reserve Your Experience')}
                     </h3>
-                    <p className="text-[11.5px] text-gold-300/80 truncate mt-0.5 font-medium">{tourTitle || 'Exclusive Luxury Itinerary'}</p>
+                    <p className="text-[11.5px] text-gold-400/90 truncate mt-0.5 font-medium">{tourTitle || 'Exclusive Luxury Itinerary'}</p>
                   </div>
                 </div>
-                <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-[10px] text-gold-400 font-bold uppercase tracking-wider">
+                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-[10px] text-gold-400 font-bold uppercase tracking-wider">
                   <FaShieldAlt className="text-gold-400 text-[10px]" />
                   <span>SSL Secured</span>
                 </div>
               </div>
             </div>
 
-            {/* Tab Switcher */}
-            <div className="px-5 pt-4">
-              <div className="flex p-1.5 bg-[#0a0d16] rounded-xl border border-gold-500/20 shadow-inner">
+            {/* Segmented Tab Switcher */}
+            <div className="px-6 pt-4">
+              <div className="flex p-1 bg-[#141826] rounded-xl border border-gold-500/20">
                 <button
                   type="button"
                   onClick={() => setTab('booking')}
-                  className={`flex-1 py-2.5 rounded-lg text-[12px] font-extrabold uppercase tracking-[1.6px] transition-all duration-300 flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-2.5 rounded-lg text-[12px] font-bold uppercase tracking-[1.5px] transition-all duration-300 flex items-center justify-center gap-2 ${
                     tab === 'booking'
-                      ? 'bg-gradient-to-r from-[#1d4ed8] via-[#d4af37] to-[#f59e0b] text-obsidian-950 shadow-[0_4px_18px_rgba(37,99,235,0.35)] scale-[1.02]'
-                      : 'text-ivory-300 hover:text-ivory-50 hover:bg-white/5'
+                      ? 'bg-[#1e3a8a] text-gold-300 border border-gold-500/40 shadow-[0_2px_12px_rgba(30,58,138,0.4)]'
+                      : 'text-ivory-400 hover:text-ivory-100 hover:bg-white/5'
                   }`}
                 >
                   <FaCalendarAlt size={11} /> {t('booking.tabBooking', 'Book Trip')}
@@ -605,10 +602,10 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                 <button
                   type="button"
                   onClick={() => setTab('inquiry')}
-                  className={`flex-1 py-2.5 rounded-lg text-[12px] font-extrabold uppercase tracking-[1.6px] transition-all duration-300 flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-2.5 rounded-lg text-[12px] font-bold uppercase tracking-[1.5px] transition-all duration-300 flex items-center justify-center gap-2 ${
                     tab === 'inquiry'
-                      ? 'bg-gradient-to-r from-[#1d4ed8] via-[#d4af37] to-[#f59e0b] text-obsidian-950 shadow-[0_4px_18px_rgba(37,99,235,0.35)] scale-[1.02]'
-                      : 'text-ivory-300 hover:text-ivory-50 hover:bg-white/5'
+                      ? 'bg-[#1e3a8a] text-gold-300 border border-gold-500/40 shadow-[0_2px_12px_rgba(30,58,138,0.4)]'
+                      : 'text-ivory-400 hover:text-ivory-100 hover:bg-white/5'
                   }`}
                 >
                   <FaPaperPlane size={10} /> {t('booking.tabInquiry', 'Inquiry')}
@@ -1091,14 +1088,13 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                   const formattedPrice = totalToDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                   return (
-                    <div className="bg-gradient-to-br from-[#1e3a8a]/25 via-[#451a03]/20 to-[#0f172a]/30 border border-gold-500/35 rounded-xl p-4 space-y-2.5 shadow-lg relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-gold-500/10 rounded-full blur-xl pointer-events-none" />
+                    <div className="bg-gradient-to-br from-[#161b2e] via-[#1f192b] to-[#121522] border border-gold-500/30 rounded-xl p-4 space-y-2.5 shadow-lg relative overflow-hidden">
                       <div className="flex items-center justify-between text-[11px] text-ivory-300">
                         <span className="uppercase tracking-wider font-semibold flex items-center gap-1.5">
                           <FaUser className="text-gold-400" size={10} />
                           {b.adults + b.children} {t('booking.passengers', 'Guest(s)')}
                         </span>
-                        <span className="font-mono text-gold-300">{b.arrivalDate}</span>
+                        <span className="font-mono text-gold-400">{b.arrivalDate}</span>
                       </div>
 
                       <div className="flex items-baseline justify-between pt-2 border-t border-gold-500/20">
@@ -1106,7 +1102,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                           {t('booking.totalPrice', 'Authoritative Total')}
                         </span>
                         <div className="text-right">
-                          <span className="text-display-sm font-display font-extrabold bg-gradient-to-r from-gold-300 via-gold-400 to-amber-500 bg-clip-text text-transparent">
+                          <span className="text-display-sm font-display font-extrabold text-gold-400 tracking-tight">
                             ${formattedPrice}
                           </span>
                         </div>
@@ -1168,17 +1164,16 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                   </div>
                 )}
 
-                {/* Submit Action */}
+                {/* Primary Action Button */}
                 <button
                   type="submit"
                   disabled={status === 'submitting'}
-                  className="w-full py-4 px-6 bg-gradient-to-r from-[#1d4ed8] via-[#d4af37] to-[#f59e0b] text-obsidian-950 font-extrabold rounded-xl shadow-[0_6px_25px_rgba(37,99,235,0.35)] hover:shadow-[0_8px_35px_rgba(245,166,35,0.5)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.8px] flex items-center justify-center gap-2.5 cursor-pointer relative overflow-hidden group"
+                  className="w-full py-4 px-6 bg-gradient-to-r from-[#1e3a8a] via-[#1d4ed8] to-[#1e3a8a] text-gold-300 hover:text-white font-extrabold rounded-xl border border-gold-500/40 shadow-[0_6px_25px_rgba(30,58,138,0.4)] hover:shadow-[0_8px_30px_rgba(245,166,35,0.35)] hover:border-gold-400 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.8px] flex items-center justify-center gap-2.5 cursor-pointer relative overflow-hidden group"
                 >
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
                   <span className="relative z-10 flex items-center gap-2">
                     {status === 'submitting' ? (
                       <span className="flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-obsidian-950 border-t-transparent rounded-full animate-spin" />
+                        <span className="w-4 h-4 border-2 border-gold-300 border-t-transparent rounded-full animate-spin" />
                         {t('common.sending', 'Locking Experience...')}
                       </span>
                     ) : !user ? (
