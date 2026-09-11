@@ -99,10 +99,10 @@ const Services = () => {
           ) : service === 'transportation' ? (
             <>
               <img
-                src="/imgs/transportation-hero.png"
+                src="https://res.cloudinary.com/u7xf91gp/image/upload/c_limit,q_auto,w_1920/v1788557737/dunas-travel/general/transport/za5d6wtpnp3kfhpoakeo.webp"
                 alt="Dunas Travel Transportation"
-                width="1200"
-                height="686"
+                width="1920"
+                height="1080"
                 className="w-full h-full object-cover object-center"
                 loading="eager"
               />
@@ -114,10 +114,10 @@ const Services = () => {
           ) : (
             <>
               <img
-                src="https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920,c_fill/v1783026771/11_xydddd.jpg"
-                alt="Luxury Travel Resort Sunset"
+                src="https://res.cloudinary.com/u7xf91gp/image/upload/c_limit,q_auto,w_1920/v1788557737/dunas-travel/general/transport/za5d6wtpnp3kfhpoakeo.webp"
+                alt="Luxury Travel Services Hero"
                 className="w-full h-full object-cover object-center"
-                loading="lazy"
+                loading="eager"
               />
               <div
                 className="absolute inset-0"
