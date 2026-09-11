@@ -17,6 +17,7 @@ const BackgroundMusic = () => {
   const playerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const autoPlayAttempted = useRef(false);
 
   const isPlayingRef = useRef(isPlaying);
   const hasInteractedRef = useRef(hasInteracted);
@@ -168,14 +169,34 @@ const BackgroundMusic = () => {
     }
   };
 
-  // Only resume playback across routes if the user previously actively started it
+  // Auto-play on home page on first user interaction (click / scroll / touch / key)
   useEffect(() => {
-    const musicWasPlaying = sessionStorage.getItem('musicPlaying') === 'true';
     const explicitlyPaused = sessionStorage.getItem('userExplicitlyPaused') === 'true';
 
     if (isHomePage) {
-      if (musicWasPlaying && !explicitlyPaused) {
-        playMusic();
+      if (!explicitlyPaused && !autoPlayAttempted.current) {
+        autoPlayAttempted.current = true;
+
+        const handleFirstInteraction = () => {
+          if (!isPlayingRef.current) {
+            playMusic();
+          }
+          cleanup();
+        };
+
+        const cleanup = () => {
+          window.removeEventListener('click', handleFirstInteraction);
+          window.removeEventListener('scroll', handleFirstInteraction);
+          window.removeEventListener('keydown', handleFirstInteraction);
+          window.removeEventListener('touchstart', handleFirstInteraction);
+        };
+
+        window.addEventListener('click', handleFirstInteraction, { once: true });
+        window.addEventListener('scroll', handleFirstInteraction, { once: true });
+        window.addEventListener('keydown', handleFirstInteraction, { once: true });
+        window.addEventListener('touchstart', handleFirstInteraction, { once: true });
+
+        return cleanup;
       }
     } else {
       const manualNonHomePlay = sessionStorage.getItem('userManualPlayNonHome') === 'true';

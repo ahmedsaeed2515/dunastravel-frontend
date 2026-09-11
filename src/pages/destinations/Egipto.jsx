@@ -382,18 +382,24 @@ export default function Egipto() {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: 'url(/imgs/egyothero.webp)' }}
         />
-        <div className="absolute inset-0 bg-obsidian-900/80" />
+
         <div className="relative z-10 container mx-auto px-6 text-center max-w-3xl">
-          <span className="text-gold-500 uppercase tracking-widest text-sm font-semibold block mb-4">
+          <span
+            className="text-gold-400 uppercase tracking-widest text-sm font-bold block mb-4"
+            style={{ textShadow: '0 2px 10px rgba(0,0,0,0.9)' }}
+          >
             {t('dest.egypt.ctaLabel', "DIDN'T FIND WHAT YOU'RE LOOKING FOR?")}
           </span>
           <h2
-            className="text-display-xl text-ivory-50 mb-6 font-display"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-display-xl text-white mb-6 font-display"
+            style={{ fontFamily: "'Playfair Display', serif", textShadow: '0 2px 16px rgba(0,0,0,0.95)' }}
           >
             {t('dest.egypt.ctaTitle', 'Let us design your perfect Egypt tour')}
           </h2>
-          <p className="text-body-lg text-ivory-300 mb-10">
+          <p
+            className="text-body-lg text-white mb-10 font-semibold"
+            style={{ textShadow: '0 1px 10px rgba(0,0,0,0.9)' }}
+          >
             {t(
               'dest.egypt.ctaDesc',
               'Tell us your preferences, and our expert travel designers will craft a bespoke itinerary tailored just for you.'
@@ -401,12 +407,12 @@ export default function Egipto() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/tailor-a-tour">
-              <Button variant="gold-glow" className="w-full sm:w-auto px-10 py-4">
+              <Button variant="gold-glow" className="w-full sm:w-auto px-10 py-4 font-bold text-base">
                 {t('home.tailorTour', 'Tailor Your Tour')}
               </Button>
             </Link>
             <Link to="/contact">
-              <Button variant="glass" className="w-full sm:w-auto px-10 py-4">
+              <Button variant="glass" className="w-full sm:w-auto px-10 py-4 font-bold text-base text-white border-white/60">
                 {t('nav.contact', 'Contact Us')}
               </Button>
             </Link>
