@@ -93,7 +93,8 @@ const TourCard = ({
   const durationStr = typeof duration === 'string' ? duration : String(duration || '');
   const durationLabel = durationStr.includes('/') ? durationStr.split('/')[0].trim() : durationStr;
 
-  const tourPrice = Number(tour.price ?? tour.basePriceUsd ?? tour.raw?.price);
+  const parsedPrice = Number(tour.price ?? tour.basePriceUsd ?? tour.raw?.price);
+  const tourPrice = Number.isFinite(parsedPrice) ? parsedPrice : null;
   const tourImage =
     resolveTourHeroImage(tour) ||
     (typeof tour.heroImageUrl === 'string' ? tour.heroImageUrl.trim() : null) ||
@@ -214,13 +215,17 @@ const TourCard = ({
         </Link>
 
         {/* Travelik Price Banner (.populer-price) across bottom of image */}
-        {tourPrice !== null && tourPrice > 0 && (
-          <div className="populer-price">
-            <h2>
-              {formatPrice(tourPrice)} <span>/ {t('tourCard.perPerson', 'Per Person')}</span>
-            </h2>
-          </div>
-        )}
+        <div className="populer-price">
+          <h2>
+            {tourPrice !== null && tourPrice > 0 ? (
+              <>
+                {formatPrice(tourPrice)} <span>/ {t('tourCard.perPerson', 'Per Person')}</span>
+              </>
+            ) : (
+              <span>{t('tourCard.onQuote', 'On Request')}</span>
+            )}
+          </h2>
+        </div>
       </div>
 
       {/* Travelik Content Section (.populer-contnet) with High-Contrast Bold Black Text */}

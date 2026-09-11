@@ -421,7 +421,9 @@ function App() {
                   <Route path="religious" element={<PageTransition><BackendToursPage titleKey="programs.religiousTitle" titleDefault="Religious Tours" filters={{ category: 'Religious' }} /></PageTransition>} />
                   <Route path="religious/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="multi-country" element={<PageTransition><MultiCountryTours /></PageTransition>} />
+                  <Route path="multi_country" element={<PageTransition><MultiCountryTours /></PageTransition>} />
                   <Route path="multi-country/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
+                  <Route path="multi_country/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="extension" element={<PageTransition><ExtensionTours /></PageTransition>} />
                   <Route path="extension/:id" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="extensions" element={<PageTransition><ExtensionTours /></PageTransition>} />
@@ -690,7 +692,9 @@ function App() {
                 <Route path="religious" element={<PageTransition><ReligiousTours /></PageTransition>} />
                 <Route path="religious/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                 <Route path="multi-country" element={<PageTransition><MultiCountryTours /></PageTransition>} />
+                <Route path="multi_country" element={<PageTransition><MultiCountryTours /></PageTransition>} />
                 <Route path="multi-country/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
+                <Route path="multi_country/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                 <Route path="extension" element={<PageTransition><ExtensionTours /></PageTransition>} />
                 <Route path="extension/:id" element={<PageTransition><ExtensionDetails /></PageTransition>} />
                 <Route path="extensions" element={<PageTransition><ExtensionTours /></PageTransition>} />

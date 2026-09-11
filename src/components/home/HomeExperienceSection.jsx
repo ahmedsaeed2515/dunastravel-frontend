@@ -578,7 +578,8 @@ const HomeExperienceSection = () => {
       destination: "multi-country",
       rating: 4.94,
       reviewCount: 165,
-      images: ["/imgs/Stars of the Middle East .png"],
+      images: ["https://internationalandroaming.orange.jo/sites/default/files/wp-content/uploads/2020/11/egypt-roaming.jpg"],
+      heroImage: "https://internationalandroaming.orange.jo/sites/default/files/wp-content/uploads/2020/11/egypt-roaming.jpg",
       link: "/programs/multi-country/stars-of-the-middle-east-16-days"
     },
     {
@@ -801,7 +802,7 @@ const HomeExperienceSection = () => {
     const classicLive = safeTours.filter((tour) => matches(tour, ['classic', 'classico', 'clásico', 'cairo']));
     const honeymoonLive = safeTours.filter((tour) => matches(tour, ['honeymoon', 'luna de miel', 'شهر العسل']));
     const religiousLive = safeTours.filter((tour) => matches(tour, ['religious', 'holy family', 'العائلة المقدسة']));
-    const multiLive = safeTours.filter((tour) => matches(tour, ['multi-country', 'combined', 'and-']));
+    const multiLive = safeTours.filter((tour) => matches(tour, ['multi-country', 'combined', 'and-', 'متعددة', 'stars-of-the-middle-east', 'middle-east']));
     const extLive = safeTours.filter((tour) => matches(tour, ['extension', 'escape']));
 
     return {

@@ -474,33 +474,45 @@ export function resolveItineraryDayTitle(day, t = (k) => k, lang = 'en') {
 export function resolveTourHeroImage(tour) {
   if (!tour) return null;
 
-  if (Array.isArray(tour.images) && tour.images.length > 0) {
-    const heroObj = tour.images.find(img => img && (img.isHero === true || img.is_hero === true));
-    if (heroObj) {
-      if (typeof heroObj === 'string') return heroObj.trim();
-      return heroObj.imageUrl || heroObj.url || heroObj.src || null;
-    }
-  }
-
+  // 1. Check explicit heroImage
   if (tour.heroImage) {
-    if (typeof tour.heroImage === 'string') return tour.heroImage.trim();
+    if (typeof tour.heroImage === 'string' && tour.heroImage.trim()) return tour.heroImage.trim();
     if (typeof tour.heroImage === 'object') {
-      return tour.heroImage.imageUrl || tour.heroImage.url || tour.heroImage.src || null;
+      const u = tour.heroImage.imageUrl || tour.heroImage.url || tour.heroImage.src;
+      if (u) return String(u).trim();
     }
   }
 
+  // 2. Check explicit heroImageUrl
+  if (tour.heroImageUrl && typeof tour.heroImageUrl === 'string' && tour.heroImageUrl.trim()) {
+    return tour.heroImageUrl.trim();
+  }
+
+  // 3. Check if tour.images has an object marked as hero
+  if (Array.isArray(tour.images) && tour.images.length > 0) {
+    const heroObj = tour.images.find(img => img && typeof img === 'object' && (img.isHero === true || img.is_hero === true));
+    if (heroObj) {
+      const u = heroObj.imageUrl || heroObj.url || heroObj.src;
+      if (u) return String(u).trim();
+    }
+  }
+
+  // 4. Check tour.image
   if (tour.image) {
-    if (typeof tour.image === 'string') return tour.image.trim();
+    if (typeof tour.image === 'string' && tour.image.trim()) return tour.image.trim();
     if (typeof tour.image === 'object') {
-      return tour.image.imageUrl || tour.image.url || tour.image.src || null;
+      const u = tour.image.imageUrl || tour.image.url || tour.image.src;
+      if (u) return String(u).trim();
     }
   }
 
+  // 5. Fallback to first image in array
   if (Array.isArray(tour.images) && tour.images.length > 0) {
     const first = tour.images[0];
-    if (typeof first === 'string') return first.trim();
-    if (typeof first === 'object') {
-      return first?.imageUrl || first?.url || first?.src || null;
+    if (typeof first === 'string' && first.trim()) return first.trim();
+    if (typeof first === 'object' && first !== null) {
+      const u = first.imageUrl || first.url || first.src;
+      if (u) return String(u).trim();
     }
   }
 
