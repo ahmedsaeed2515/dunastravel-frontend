@@ -23,7 +23,7 @@ export default function MultiCountryTours() {
       {/* Luxury Hero Section */}
       <LuxuryHeroSection
         badge={t('programs.multiCountryBadge', '🌐 تجارب سياحية عابرة للحدود')}
-        title={t('programs.multiCountryTitle', 'الرحلات المجمعة.. اكتشاف عدة حضارات في رحلة واحدة')}
+        title=""
         subtitle={t('programs.multiCountrySubtitle', 'Multi-Country Odysseys: Egypt, Jordan, Turkey & Dubai')}
         description={t(
           'programs.multiCountryHeroDesc',
@@ -42,7 +42,7 @@ export default function MultiCountryTours() {
           text: t('programs.multiSecondaryCta', 'طلب برنامج مخصص للجموع'),
           link: '/tailor-tour'
         }}
-        bgImage="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
+        bgImage="/imgs/multicountryhero.jpg"
       />
 
       {/* Breadcrumb Header */}
@@ -72,7 +72,7 @@ export default function MultiCountryTours() {
               {t('programs.multiCountryHeading', 'باقات الرحلات المجمعة المتاحة')}
             </h2>
             <p className="text-body-lg text-obsidian-600 max-w-2xl mx-auto">
-              اختر وجهتك المفضلة التي تجمع أكثر من بلد ببرنامج سياحي واحد مريح وشامل.
+              {t('programs.multiCountrySubheading', 'اختر وجهتك المفضلة التي تجمع أكثر من بلد ببرنامج سياحي واحد مريح وشامل.')}
             </p>
           </div>
 

@@ -73,10 +73,10 @@ export default function MultiCountryTourDetails() {
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection
-        badge={t('programs.multiCountryBadge', '🌍 جولات متعددة الوجهات والدول')}
+        badge={t('programs.multiCountryBadge', '🌍 Multi-Country Tours')}
         title={title}
         subtitle={subtitle || duration}
-        bgImage={tour.images && tour.images[0] ? tour.images[0] : 'https://theglobetrottingdetective.com/wp-content/uploads/2022/03/best-places-in-the-middle-east-traveling-the-middle-east-cappadocia-turkey.jpg'}
+        bgImage="/imgs/multicountryhero.jpg"
         onImageClick={() => setIsLightboxOpen(true)}
         breadcrumbs={
           <div className="flex flex-wrap items-center justify-center gap-2 text-caption text-gold-400 mb-2 uppercase tracking-wider text-xs font-semibold">

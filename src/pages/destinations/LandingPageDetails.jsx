@@ -560,7 +560,10 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
           >
             {t(`dest.${slug}.ctaTitle`, t('dest.egypt.ctaTitle', `Let us design your perfect ${heroTitle} journey`))}
           </h2>
-          <p className="text-body-lg text-ivory-300 mb-10">
+          <p
+            className="text-body-lg text-ivory-50 mb-10 font-semibold leading-relaxed"
+            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}
+          >
             {t(
               `dest.${slug}.ctaDesc`,
               t('dest.egypt.ctaDesc', 'Tell us your preferences, and our expert travel designers will craft a bespoke itinerary tailored just for you.')
@@ -568,12 +571,12 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/tailor-a-tour">
-              <Button variant="gold-glow" className="w-full sm:w-auto px-10 py-4">
+              <Button variant="gold-glow" className="w-full sm:w-auto px-10 py-4 font-bold text-base">
                 {t('home.tailorTour', 'Tailor Your Tour')}
               </Button>
             </Link>
             <Link to="/contact">
-              <Button variant="glass" className="w-full sm:w-auto px-10 py-4">
+              <Button variant="glass" className="w-full sm:w-auto px-10 py-4 font-bold text-base text-ivory-50">
                 {t('nav.contact', 'Contact Us')}
               </Button>
             </Link>
