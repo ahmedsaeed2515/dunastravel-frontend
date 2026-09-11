@@ -124,7 +124,7 @@ const ServiceDetails = () => {
 
           {/* Large Image Showcase */}
           <section
-            className="relative w-full h-[50vh] lg:h-[70vh] overflow-hidden group cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500"
+            className="relative w-full min-h-[300px] sm:min-h-[420px] h-[50vh] lg:h-[70vh] overflow-hidden group cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500 bg-obsidian-950 flex items-center justify-center"
             onClick={() => setActiveImage(serviceImages[0])}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -139,8 +139,8 @@ const ServiceDetails = () => {
             <motion.img
               src={serviceImages[0]}
               alt={translateData(service.title, service.title)}
-              className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
-              loading="lazy"
+              className="w-full h-full object-contain sm:object-cover transition-transform duration-[2s] ease-out group-hover:scale-[1.03] object-center max-h-full"
+              loading="eager"
             />
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
             <div className="absolute bottom-6 right-6 bg-obsidian-900/80 backdrop-blur-md px-4 py-2 rounded-full text-ivory-50 text-caption border border-gold-500/20">
@@ -522,13 +522,13 @@ const ServiceDetails = () => {
         </>
       ) : (
         /* Original Non-Itinerary Hero Section */
-        <section className="relative h-[65vh] flex items-end justify-center overflow-hidden pb-16">
-          <div className="absolute inset-0 z-0">
+        <section className="relative min-h-[350px] sm:min-h-[450px] h-[60vh] lg:h-[65vh] flex items-end justify-center overflow-hidden pb-12 sm:pb-16 bg-obsidian-950">
+          <div className="absolute inset-0 z-0 flex items-center justify-center">
             {serviceImages[0] ? (
               <img
                 src={serviceImages[0]}
                 alt={translateData(service.title, service.title)}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain sm:object-cover object-center max-h-full"
                 loading="lazy"
               />
             ) : (
@@ -536,7 +536,7 @@ const ServiceDetails = () => {
                 {t('tour.imageUnavailable', 'No image has been added for this service.')}
               </div>
             )}
-            <div className="absolute inset-0 bg-obsidian-900/60 bg-gradient-to-t from-obsidian-900 via-obsidian-900/30 to-transparent"></div>
+            <div className="absolute inset-0 bg-obsidian-900/60 bg-gradient-to-t from-obsidian-900 via-obsidian-900/30 to-transparent pointer-events-none"></div>
           </div>
 
           <motion.div

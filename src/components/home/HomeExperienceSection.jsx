@@ -1495,14 +1495,14 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Destinations & Their Tours - Travelik Replica Style */}
-      <section className="py-20 relative overflow-hidden bg-cover bg-center" style={{ background: 'radial-gradient(ellipse at 50% 10%, #0c2b64 0%, #06183e 50%, #030a1c 100%)' }}>
-        {/* Ambient Glow Elements */}
+      {/* Destinations & Their Tours - Travolo Style Replica */}
+      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #041446 0%, #061d5d 50%, #020b26 100%)' }}>
+        {/* Ambient Royal Blue & Gold Glow Elements */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#F5A623]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#0a2540]/60 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#041446]/80 rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
-          {/* Travelik Style Header Section */}
+          {/* Header Section */}
           <div className="text-center mb-14 max-w-3xl mx-auto">
             <div className="inline-block mb-2">
               <span className="text-[#F5A623] font-serif text-lg sm:text-xl tracking-widest font-normal lowercase block">
@@ -1526,31 +1526,32 @@ const HomeExperienceSection = () => {
             </p>
           </div>
 
-          {/* Travelik Popular Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {/* Destination Cards Grid - Exact Travolo Replica (3 Columns, Tall 520px Cards, Top Hanging Badge & Bottom Floating Box) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(destinationsLoading || toursLoading) && (
-              <div className="lg:col-span-4 rounded-3xl border border-white/20 bg-[#06183e]/50 px-6 py-12 text-center text-white backdrop-blur-md">
-                <div className="inline-block w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin mb-3"></div>
-                <p className="font-semibold text-white">{t('common.loading', 'Loading destinations and tours...')}</p>
+              <div className="lg:col-span-3 rounded-3xl border border-white/20 bg-[#041446]/50 px-6 py-16 text-center text-white backdrop-blur-md">
+                <div className="inline-block w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p className="font-bold text-lg text-white">{t('common.loading', 'Loading destinations and tours...')}</p>
               </div>
             )}
             {(destinationsError || toursError) && liveDestinationCards.length === 0 && !destinationsLoading && !toursLoading && (
-              <div className="lg:col-span-4 rounded-3xl border border-red-400/30 bg-red-950/20 px-6 py-12 text-center text-white backdrop-blur-md">
+              <div className="lg:col-span-3 rounded-3xl border border-red-400/30 bg-red-950/20 px-6 py-16 text-center text-white backdrop-blur-md">
                 {t('common.loadError', 'Unable to load live catalog data. Please try again later.')}
               </div>
             )}
             {!destinationsLoading && !toursLoading && liveDestinationCards.length === 0 && !destinationsError && !toursError && (
-              <div className="lg:col-span-4 rounded-3xl border border-white/20 bg-[#06183e]/50 px-6 py-12 text-center text-white backdrop-blur-md">
+              <div className="lg:col-span-3 rounded-3xl border border-white/20 bg-[#041446]/50 px-6 py-16 text-center text-white backdrop-blur-md">
                 {t('destination.empty', 'No destinations are currently available.')}
               </div>
             )}
             {!destinationsLoading && !toursLoading && liveDestinationCards.length > 0 && liveDestinationCards.map((dest, index) => {
               const tourCount = dest.toursCount;
+              const isFirst = index % 3 === 0;
 
               return (
                 <motion.div
                   key={dest.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 35 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.08 }}
@@ -1564,66 +1565,49 @@ const HomeExperienceSection = () => {
                   role="button"
                   tabIndex={0}
                   aria-label={`${t("destination.viewGuide", "View destination guide")} ${dest.name}`}
-                  className="group populer-single-box relative rounded-[20px] p-4 pt-7 pb-6 bg-white/[0.07] backdrop-blur-2xl border border-white/15 hover:border-[#F5A623]/80 hover:bg-white/[0.12] transition-all duration-500 shadow-2xl hover:-translate-y-2 cursor-pointer focus:outline-none flex flex-col justify-between"
+                  className="group relative h-[480px] sm:h-[520px] rounded-[24px] overflow-hidden shadow-2xl border border-white/15 hover:border-[#F5A623]/80 transition-all duration-500 hover:-translate-y-2.5 cursor-pointer focus:outline-none flex flex-col justify-between"
                 >
-                  <div>
-                    {/* Travelik populer-country (Country Serif Title) */}
-                    <div className="populer-country text-center text-3xl sm:text-4xl font-serif text-[#F5A623] font-normal tracking-widest mb-3 capitalize drop-shadow-md">
-                      {dest.name}
-                    </div>
+                  {/* Full Background Cover Photo */}
+                  <img
+                    src={dest.image}
+                    srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
+                      ${dest.image.replace(/w=\d+&h=\d+/, 'w=1000&q=90')} 1000w
+                    ` : undefined}
+                    sizes="(max-width: 768px) 600px, 1000px"
+                    alt={dest.name}
+                    width="1000"
+                    height="800"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                  />
 
-                    {/* Travelik populer-thumb (Image Container) */}
-                    <div className="populer-thumb relative w-full h-[220px] rounded-xl overflow-hidden shadow-lg border border-white/10">
-                      <img
-                        src={dest.image}
-                        srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
-                          ${dest.image.replace(/w=\d+&h=\d+/, 'w=800&q=90')} 800w
-                        ` : undefined}
-                        sizes="(max-width: 768px) 600px, 800px"
-                        alt={dest.name}
-                        width="800"
-                        height="600"
-                        className="w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-110 transition-transform duration-700 ease-out"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      {/* Soft Bottom Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#020817]/70 via-transparent to-transparent pointer-events-none" />
-                    </div>
+                  {/* Gradient Overlay for photo contrast */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#041446]/85 via-transparent to-transparent pointer-events-none" />
 
-                    {/* Travelik populer-content */}
-                    <div className="populer-contnet text-left rtl:text-right pt-4 px-2">
-                      {/* Travelik populer-list (Description with unified Compass icon badge) */}
-                      <div className="populer-list flex items-start gap-2.5 my-3 min-h-[44px]">
-                        <div className="w-7 h-7 rounded-full bg-[#F5A623]/15 border border-[#F5A623]/35 flex items-center justify-center shrink-0 mt-0.5 shadow-sm group-hover:bg-[#F5A623] group-hover:text-slate-950 transition-all duration-300">
-                          <FaCompass className="text-[#F5A623] group-hover:text-slate-950 transition-colors" size={14} />
-                        </div>
-                        <p className="text-xs sm:text-sm text-white font-medium leading-relaxed line-clamp-2">
-                          {dest.description || t("destination.luxuryGuide", "Luxury Tours & Packages")}
-                        </p>
-                      </div>
-
-                      {/* Travelik populer-price (Tour Count Divider) */}
-                      <div className="populer-price border-b border-white/15 pb-3.5 mb-3.5 mt-2">
-                        <h4 className="text-white text-base sm:text-lg font-bold flex items-center justify-between">
-                          <span className="text-white font-bold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
-                        </h4>
-                      </div>
+                  {/* Top Badge: Country Name in Ultra-Luxury Gold Box with Bold Black Text */}
+                  <div className="absolute top-0 ltr:right-8 rtl:left-8 z-20">
+                    <div 
+                      className="px-7 py-3 rounded-b-2xl font-extrabold text-2xl sm:text-3xl font-serif shadow-[0_8px_25px_rgba(245,166,35,0.45)] flex items-center justify-center tracking-wide border-b-2 border-x-2 border-[#B38728]/70 hover:brightness-110 transition-all duration-300"
+                      style={{ background: 'linear-gradient(135deg, #FFE082 0%, #F5A623 45%, #D4AF37 80%, #B38728 100%)' }}
+                    >
+                      <span className="text-black font-extrabold tracking-wider" style={{ color: '#000000' }}>
+                        {dest.name}
+                      </span>
                     </div>
                   </div>
 
-                  {/* Travelik populer-btn-and-days (Bottom Days & Hover Button physics) */}
-                  <div className="populer-btn-and-days relative h-9 px-2 flex items-center justify-between overflow-hidden">
-                    {/* Default Days / Info (Fades on hover) */}
-                    <div className="populer-days flex items-center gap-2 text-white font-bold text-xs sm:text-sm transition-all duration-500 group-hover:opacity-0 group-hover:-translate-y-4">
-                      <FaBookOpen className="text-[#F5A623]" size={14} />
-                      <span>{t("destination.viewGuide", "دليل الوجهة")}</span>
-                    </div>
+                  {/* Bottom Translucent Strip Overlay: Royal Blue Background & Pure White Text Above Line */}
+                  <div className="absolute bottom-6 left-6 right-6 z-20 rounded-[20px] p-4 sm:p-5 shadow-2xl backdrop-blur-md transition-all duration-300 bg-[#041446]/90 border border-[#F5A623]/40 group-hover:bg-[#041446] group-hover:border-[#F5A623]/80">
+                    {/* Description (Text above line: Pure Crisp White) */}
+                    <p className="text-sm sm:text-base font-bold leading-relaxed line-clamp-2 mb-3 text-white tracking-wide" style={{ color: '#FFFFFF' }}>
+                      {dest.description || t("destination.luxuryGuide", "Explore Sea & Get Relax")}
+                    </p>
 
-                    {/* Hover Button (Slides up & reveals on hover) */}
-                    <div className="populer-btn absolute inset-0 px-2 flex items-center justify-between text-[#F5A623] font-extrabold text-xs sm:text-sm uppercase tracking-wider opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                      <span>{t("destination.explore", "استكشف الوجهة")}</span>
-                      <FaArrowRight className="w-4 h-4 rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1.5 rtl:group-hover:-translate-x-1.5" />
+                    {/* Tour Count (Text below line) */}
+                    <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-[#F5A623] pt-2.5 border-t border-white/20">
+                      <FaCompass className="text-[#F5A623]" size={16} />
+                      <span className="text-white font-extrabold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -2246,12 +2230,12 @@ const HomeExperienceSection = () => {
                       }}
                       tabIndex={0}
                       role="button"
-                      aria-label={`${t("home.viewLarger", "View larger image of")} ${img.label || 'image'}`}
+                      aria-label={`${t("home.viewLarger", "View larger image of")} dunas travel`}
                     >
                       <div className="w-[260px] sm:w-[300px] md:w-[340px] h-[350px] sm:h-[400px] md:h-[440px] overflow-hidden rounded-xl">
                         <img
                           src={getOptimizedImageUrl(img.url, 500, 650)}
-                          alt={img.label || 'Luxury moment'}
+                          alt="dunas travel"
                           loading="lazy"
                           decoding="async"
                           width="340"
@@ -2262,10 +2246,10 @@ const HomeExperienceSection = () => {
                       {/* Travelik Dark Gradient Hover Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 rounded-xl">
                         <span className="text-[#0CB2DB] text-xs font-black tracking-widest uppercase mb-1">
-                          {img.category || t("home.galleryLabel", "Captured Moment")}
+                          Dunas Travel
                         </span>
                         <span className="text-white text-sm font-bold truncate">
-                          {img.label || t("home.luxuryExperience", "Luxury Experience")}
+                          dunas travel
                         </span>
                         <div className="mt-3">
                           <span className="inline-flex items-center gap-1.5 text-white text-[11px] font-bold tracking-wider uppercase bg-[#0CB2DB]/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-lg">
