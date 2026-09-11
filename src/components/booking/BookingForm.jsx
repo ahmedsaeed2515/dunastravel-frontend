@@ -25,13 +25,13 @@ import { trackEvent } from '../../utils/analytics';
 import { useAuth } from '../../context/AuthContext';
 
 const inputClass =
-  'w-full px-3.5 py-3 rounded-xl bg-[#141826] text-ivory-50 placeholder:text-ivory-400/40 border border-gold-500/20 focus:border-gold-400 focus:ring-2 focus:ring-[#1d4ed8]/40 focus:outline-none text-[13.5px] transition-all duration-200 [color-scheme:dark] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] hover:border-gold-500/40';
+  'w-full px-3.5 py-3 rounded-xl bg-[rgba(255,252,247,0.03)] text-ivory-50 placeholder:text-ivory-400/40 border border-[rgba(201,162,39,0.18)] focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 focus:outline-none text-[13.5px] transition-all [color-scheme:dark]';
 
 const labelClass =
-  'block text-[11px] font-bold text-gold-400 uppercase tracking-[1.2px] mb-1.5 flex items-center gap-1.5 font-display';
+  'block text-[11px] font-semibold text-gold-400 uppercase tracking-[1.2px] mb-1.5 flex items-center gap-1.5';
 
 const counterBtnClass =
-  'w-8 h-8 rounded-lg bg-[#1a2136] hover:bg-[#1d4ed8] text-gold-400 hover:text-white border border-gold-500/25 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-[#1a2136] disabled:hover:text-gold-400';
+  'w-8 h-8 rounded-lg bg-gold-500/10 hover:bg-gold-500 text-gold-400 hover:text-obsidian-900 border border-gold-500/25 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-gold-500/10 disabled:hover:text-gold-400';
 
 const omitEmptyFields = (payload) =>
   Object.fromEntries(
@@ -504,7 +504,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
 
   return (
     <div
-      className="bg-[#0f121e]/98 text-ivory-50 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.6)] border border-gold-500/25 hover:border-gold-500/40 transition-all duration-300 overflow-hidden relative backdrop-blur-xl"
+      className="bg-[#121118]/95 backdrop-blur-xl text-ivory-50 rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.55)] border border-[rgba(201,162,39,0.22)] hover:border-gold-500/40 transition-all duration-300 overflow-hidden"
     >
       <AnimatePresence mode="wait">
         {status === 'success' && bookingResult ? (
@@ -515,8 +515,8 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col items-center text-center py-10 px-6"
           >
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#1e3a8a] to-gold-500 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(245,166,35,0.3)] ring-4 ring-gold-500/20">
-              <FaCheckCircle className="text-ivory-50 text-2xl" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(201,162,39,0.35)] ring-4 ring-gold-500/20">
+              <FaCheckCircle className="text-obsidian-900 text-2xl" />
             </div>
             <span className="text-[11px] font-mono text-gold-400 uppercase tracking-widest block mb-1">
               Ref: #{bookingResult.referenceCode || bookingResult.id || 'CONFIRMED'}
@@ -543,14 +543,14 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                   e.stopPropagation();
                   setShowInvoice(true);
                 }}
-                className="mt-5 px-6 py-3 bg-[#1e3a8a] hover:bg-[#1d4ed8] text-gold-300 hover:text-white font-bold rounded-xl border border-gold-500/40 shadow-lg transition-all text-[12px] uppercase tracking-[1.5px] flex items-center gap-2 cursor-pointer"
+                className="mt-5 px-6 py-3 bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-obsidian-900 font-bold rounded-xl hover:shadow-[0_0_25px_rgba(245,166,35,0.4)] hover:scale-105 active:scale-95 transition-all text-[12px] uppercase tracking-[1.5px] flex items-center gap-2 cursor-pointer"
               >
                 <FaFileInvoiceDollar size={14} /> {t('booking.viewInvoice', 'Inspect Official Invoice')}
               </button>
             )}
 
             {transportChoice && (
-              <div className="mt-4 bg-[#1e3a8a]/20 border border-gold-500/30 rounded-xl px-4 py-2.5 text-start w-full">
+              <div className="mt-4 bg-gold-500/10 border border-gold-500/30 rounded-xl px-4 py-2.5 text-start w-full">
                 <p className="text-[10px] text-gold-400 uppercase tracking-widest font-semibold mb-0.5">
                   {t('booking.transport', 'Selected Transport')}
                 </p>
@@ -564,37 +564,31 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
           </motion.div>
         ) : (
           <div key="form-view">
-            {/* Elegant Header */}
-            <div className="px-6 pt-6 pb-4 border-b border-gold-500/15 bg-gradient-to-r from-[#1e3a8a]/30 via-[#3a2010]/20 to-[#0f121e]">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#1e3a8a] border border-gold-500/40 flex items-center justify-center text-gold-400 shadow-md">
-                    <FaPaperPlane className="text-[13px]" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-body-lg text-ivory-50 font-display font-bold truncate leading-tight tracking-wide">
-                      {t('booking.formTitle', 'Reserve Your Experience')}
-                    </h3>
-                    <p className="text-[11.5px] text-gold-400/90 truncate mt-0.5 font-medium">{tourTitle || 'Exclusive Luxury Itinerary'}</p>
-                  </div>
+            {/* Header */}
+            <div className="px-5 pt-5 pb-3 border-b border-[rgba(201,162,39,0.12)] bg-gradient-to-b from-[rgba(201,162,39,0.06)] to-transparent">
+              <div className="flex items-center gap-2.5 mb-1">
+                <div className="w-8 h-8 rounded-lg bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                  <FaPaperPlane className="text-[11px]" />
                 </div>
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-[10px] text-gold-400 font-bold uppercase tracking-wider">
-                  <FaShieldAlt className="text-gold-400 text-[10px]" />
-                  <span>SSL Secured</span>
+                <div className="min-w-0">
+                  <h3 className="text-body-lg text-ivory-50 font-display font-semibold truncate leading-tight">
+                    {t('booking.formTitle', 'Reserve Your Experience')}
+                  </h3>
+                  <p className="text-[11px] text-ivory-400 truncate mt-0.5">{tourTitle || 'Exclusive Itinerary'}</p>
                 </div>
               </div>
             </div>
 
-            {/* Segmented Tab Switcher */}
-            <div className="px-6 pt-4">
-              <div className="flex p-1 bg-[#141826] rounded-xl border border-gold-500/20">
+            {/* Tab Switcher */}
+            <div className="px-5 pt-3">
+              <div className="flex p-1 bg-[rgba(255,252,247,0.03)] rounded-xl border border-gold-500/15">
                 <button
                   type="button"
                   onClick={() => setTab('booking')}
-                  className={`flex-1 py-2.5 rounded-lg text-[12px] font-bold uppercase tracking-[1.5px] transition-all duration-300 flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-2 rounded-lg text-[12px] font-bold uppercase tracking-[1.5px] transition-all flex items-center justify-center gap-1.5 ${
                     tab === 'booking'
-                      ? 'bg-[#1e3a8a] text-gold-300 border border-gold-500/40 shadow-[0_2px_12px_rgba(30,58,138,0.4)]'
-                      : 'text-ivory-400 hover:text-ivory-100 hover:bg-white/5'
+                      ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-obsidian-900 shadow-[0_2px_10px_rgba(245,166,35,0.25)]'
+                      : 'text-ivory-400 hover:text-ivory-100'
                   }`}
                 >
                   <FaCalendarAlt size={11} /> {t('booking.tabBooking', 'Book Trip')}
@@ -602,10 +596,10 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                 <button
                   type="button"
                   onClick={() => setTab('inquiry')}
-                  className={`flex-1 py-2.5 rounded-lg text-[12px] font-bold uppercase tracking-[1.5px] transition-all duration-300 flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-2 rounded-lg text-[12px] font-bold uppercase tracking-[1.5px] transition-all flex items-center justify-center gap-1.5 ${
                     tab === 'inquiry'
-                      ? 'bg-[#1e3a8a] text-gold-300 border border-gold-500/40 shadow-[0_2px_12px_rgba(30,58,138,0.4)]'
-                      : 'text-ivory-400 hover:text-ivory-100 hover:bg-white/5'
+                      ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-obsidian-900 shadow-[0_2px_10px_rgba(245,166,35,0.25)]'
+                      : 'text-ivory-400 hover:text-ivory-100'
                   }`}
                 >
                   <FaPaperPlane size={10} /> {t('booking.tabInquiry', 'Inquiry')}
@@ -1088,32 +1082,28 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                   const formattedPrice = totalToDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                   return (
-                    <div className="bg-gradient-to-br from-[#161b2e] via-[#1f192b] to-[#121522] border border-gold-500/30 rounded-xl p-4 space-y-2.5 shadow-lg relative overflow-hidden">
-                      <div className="flex items-center justify-between text-[11px] text-ivory-300">
-                        <span className="uppercase tracking-wider font-semibold flex items-center gap-1.5">
-                          <FaUser className="text-gold-400" size={10} />
+                    <div className="bg-gradient-to-br from-[rgba(201,162,39,0.08)] to-transparent border border-gold-500/30 rounded-xl p-4 space-y-2">
+                      <div className="flex items-center justify-between text-[11px] text-ivory-400">
+                        <span className="uppercase tracking-wider">
                           {b.adults + b.children} {t('booking.passengers', 'Guest(s)')}
                         </span>
-                        <span className="font-mono text-gold-400">{b.arrivalDate}</span>
+                        <span>{b.arrivalDate}</span>
                       </div>
 
-                      <div className="flex items-baseline justify-between pt-2 border-t border-gold-500/20">
-                        <span className="text-[12px] font-bold text-ivory-100 uppercase tracking-wider">
+                      <div className="flex items-baseline justify-between pt-1 border-t border-gold-500/15">
+                        <span className="text-[12px] font-semibold text-ivory-200 uppercase tracking-wider">
                           {t('booking.totalPrice', 'Authoritative Total')}
                         </span>
                         <div className="text-right">
-                          <span className="text-display-sm font-display font-extrabold text-gold-400 tracking-tight">
+                          <span className="text-display-sm text-gold-400 font-display font-bold">
                             ${formattedPrice}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-[10px] text-ivory-400/90 pt-1.5 border-t border-gold-500/10">
-                        <div className="flex items-center gap-1.5">
-                          <FaShieldAlt className="text-gold-400" size={10} />
-                          <span>{t('booking.gatePayInGuarantee', 'GatePayIn SSL Secured Checkout')}</span>
-                        </div>
-                        <span className="text-gold-400 font-semibold">🔒 Instant Lock</span>
+                      <div className="flex items-center gap-1.5 text-[10px] text-ivory-400/80 pt-1">
+                        <FaShieldAlt className="text-gold-400" size={10} />
+                        <span>{t('booking.gatePayInGuarantee', 'GatePayIn SSL Secured Checkout')}</span>
                       </div>
                     </div>
                   );
@@ -1164,35 +1154,33 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                   </div>
                 )}
 
-                {/* Primary Action Button */}
+                {/* Submit Action */}
                 <button
                   type="submit"
                   disabled={status === 'submitting'}
-                  className="w-full py-4 px-6 bg-gradient-to-r from-[#1e3a8a] via-[#1d4ed8] to-[#1e3a8a] text-gold-300 hover:text-white font-extrabold rounded-xl border border-gold-500/40 shadow-[0_6px_25px_rgba(30,58,138,0.4)] hover:shadow-[0_8px_30px_rgba(245,166,35,0.35)] hover:border-gold-400 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.8px] flex items-center justify-center gap-2.5 cursor-pointer relative overflow-hidden group"
+                  className="w-full py-3.5 px-6 bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-obsidian-900 font-bold rounded-xl shadow-[0_4px_20px_rgba(245,166,35,0.3)] hover:shadow-[0_6px_30px_rgba(245,166,35,0.45)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.5px] flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {status === 'submitting' ? (
-                      <span className="flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-gold-300 border-t-transparent rounded-full animate-spin" />
-                        {t('common.sending', 'Locking Experience...')}
-                      </span>
-                    ) : !user ? (
-                      <>
-                        <FaUserCheck size={14} />
-                        {t('booking.signInToBook', 'Sign in & Confirm Booking')}
-                      </>
-                    ) : user.isVerified === false ? (
-                      <>
-                        <FaShieldAlt size={14} />
-                        {t('booking.verifyEmailToBook', 'Verify Email & Confirm Booking')}
-                      </>
-                    ) : (
-                      <>
-                        <FaPaperPlane size={13} />
-                        {t('booking.sendInquiry', 'Confirm & Proceed to Payment')}
-                      </>
-                    )}
-                  </span>
+                  {status === 'submitting' ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-obsidian-900 border-t-transparent rounded-full animate-spin" />
+                      {t('common.sending', 'Locking Experience...')}
+                    </span>
+                  ) : !user ? (
+                    <>
+                      <FaUserCheck size={13} />
+                      {t('booking.signInToBook', 'Sign in & Confirm Booking')}
+                    </>
+                  ) : user.isVerified === false ? (
+                    <>
+                      <FaShieldAlt size={13} />
+                      {t('booking.verifyEmailToBook', 'Verify Email & Confirm Booking')}
+                    </>
+                  ) : (
+                    <>
+                      <FaPaperPlane size={12} />
+                      {t('booking.sendInquiry', 'Confirm & Proceed to Payment')}
+                    </>
+                  )}
                 </button>
               </form>
             ) : (
