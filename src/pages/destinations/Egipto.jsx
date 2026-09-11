@@ -106,20 +106,7 @@ export default function Egipto() {
 
       {/* Top Section: 9 Essential Standalone Trips (الرحلات الأساسية الـ 9) */}
       <section className="container mx-auto px-6 mt-16" id="tours-grid">
-        <div className="max-w-3xl mx-auto text-center mb-12">
-          <span className="inline-block font-body text-gold-500 tracking-[0.2em] uppercase text-sm mb-3 font-semibold">
-            {t('dest.egypt.topToursSubtitle', 'Essential Egypt Journeys')}
-          </span>
-          <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50 mb-4 font-display" style={{ fontFamily: "'Playfair Display', serif" }}>
-            {t('dest.egypt.topToursTitle', 'الرحلات الأساسية في مصر (9 رحلات كلاسيكية)')}
-          </h2>
-          <p className="text-body-lg text-obsidian-600 dark:text-ivory-200 leading-relaxed">
-            {t(
-              'dest.egypt.topToursDesc',
-              'استكشف أشهر 9 رحلات أساسية ومستقلة في مصر، تغطي القاهرة، الأهرامات، رحلات النيل الفاخرة بين الأقصر وأسوان، ومنتجعات البحر الأحمر ساحرة الجمال.'
-            )}
-          </p>
-        </div>
+
 
         {/* 9 Base Standalone Tours Grid */}
         <motion.div
@@ -186,14 +173,10 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
-              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
-                1 برنامج كلاسيكي
-              </div>
+
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                CLASSIC PROGRAM
-              </span>
+
               <Link to="/programs/classic/classic-program">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
@@ -232,14 +215,10 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
-              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
-                1 برنامج شهر العسل
-              </div>
+
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                HONEYMOON PROGRAM
-              </span>
+
               <Link to="/programs/honeymooners">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
@@ -278,14 +257,10 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
-              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
-                1 مسار العائلة المقدسة
-              </div>
+
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                HOLY FAMILY JOURNEY
-              </span>
+
               <Link to="/programs/religious">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
@@ -331,14 +306,10 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
-              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
-                9 رحلات دولية مجمعة
-              </div>
+
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                MULTI-COUNTRY TOURS
-              </span>
+
               <Link to="/programs/multi-country">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
@@ -409,14 +380,10 @@ export default function Egipto() {
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"
               />
-              <div className="absolute top-3 right-3 bg-gold-500 text-obsidian-950 font-extrabold text-xs uppercase px-3 py-1 rounded-full shadow-md">
-                3 رحلات شاطئية وصحراوية
-              </div>
+
             </Link>
             <div className="p-6 flex flex-col flex-grow">
-              <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-extrabold mb-1">
-                EGYPT EXTENSIONS
-              </span>
+
               <Link to="/programs/extension">
                 <h3
                   className="text-display-md text-gold-600 dark:text-gold-400 font-bold mt-1 mb-3 hover:text-gold-500 transition-colors line-clamp-2 font-display"
