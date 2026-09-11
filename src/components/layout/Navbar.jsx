@@ -241,7 +241,7 @@ const Navbar = () => {
                         <button
                           key={lang.code}
                           onClick={() => changeLanguage(lang.code)}
-                          className={`w-full ${isRtl ? 'text-right' : 'text-left'} px-3 py-2.5 flex items-center justify-between text-[13px] border-b border-gray-200 last:border-0 transition-colors ${i18n.language === lang.code ? 'text-amber-600 font-semibold bg-amber-50' : 'text-black hover:text-amber-600 hover:bg-amber-50'}`}
+                          className={`w-full ${isRtl ? 'text-right' : 'text-left'} px-3 py-2.5 flex items-center justify-between text-sm border-b border-gray-200 last:border-0 transition-colors ${i18n.language === lang.code ? 'text-amber-600 font-extrabold bg-amber-50' : 'text-black font-bold hover:text-amber-600 hover:bg-amber-50'}`}
                         >
                           <span className={`flex items-center gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
                             <span className="text-base">{lang.flag}</span>
@@ -278,11 +278,11 @@ const Navbar = () => {
                 onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
               >
                 {link.dropdown ? (
-                  <button className="flex items-center gap-1 text-obsidian-900 dark:text-ivory-50 hover:text-[#C9A227] transition-colors text-body-md font-bold py-2 whitespace-nowrap flex-shrink-0">
+                  <button className="flex items-center gap-1.5 text-black dark:text-ivory-50 hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0">
                     {link.name} <FaChevronDown className={`text-xs transition-transform duration-200 ${activeDropdown === link.name ? 'rotate-180' : ''}`} />
                   </button>
                 ) : (
-                  <Link to={link.path} className="text-obsidian-900 dark:text-ivory-50 hover:text-[#C9A227] transition-colors text-body-md font-bold py-2 whitespace-nowrap flex-shrink-0">
+                  <Link to={link.path} className="text-black dark:text-ivory-50 hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0">
                     {link.name}
                   </Link>
                 )}
@@ -299,7 +299,7 @@ const Navbar = () => {
                     >
                       {link.name === t('nav.services') ? (
                         <>
-                          <h4 className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest mb-4 px-1 font-semibold">
+                          <h4 className="text-caption text-amber-700 dark:text-gold-400 uppercase tracking-widest mb-4 px-1 font-extrabold">
                             {link.name}
                           </h4>
                           <div className="flex flex-col gap-1">
@@ -307,7 +307,7 @@ const Navbar = () => {
                               <Link
                                 key={item.name}
                                 to={item.path}
-                                className="px-4 py-2.5 text-obsidian-900 dark:text-ivory-200 hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-body-md rounded-lg"
+                                className="px-4 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base rounded-lg"
                               >
                                 {item.name}
                               </Link>
@@ -321,17 +321,17 @@ const Navbar = () => {
                               <>
                                 <Link
                                   to={item.path}
-                                  className="px-4 py-3 text-obsidian-900 dark:text-ivory-200 hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-body-md border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 flex justify-between items-center w-full"
+                                  className="px-4 py-3 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 flex justify-between items-center w-full"
                                 >
                                   <span>{item.name}</span>
-                                  <FaChevronDown className="-rotate-90 text-[10px] opacity-40 group-hover/sub:text-[#F5A623] group-hover/sub:rotate-0 transition-transform duration-200" />
+                                  <FaChevronDown className="-rotate-90 text-[10px] opacity-60 group-hover/sub:text-[#F5A623] group-hover/sub:rotate-0 transition-transform duration-200" />
                                 </Link>
                                 <div className={`absolute ${isRtl ? 'right-full mr-0.5' : 'left-full ml-0.5'} top-0 hidden group-hover/sub:block w-56 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-2xl z-[9999]`}>
                                   {item.subItems.map((sub) => (
                                     <Link
                                       key={sub.name}
                                       to={sub.path}
-                                      className="block px-4 py-3 text-obsidian-900 dark:text-ivory-200 hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-body-md border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                      className="block px-4 py-3 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
                                     >
                                       {sub.name}
                                     </Link>
@@ -341,7 +341,7 @@ const Navbar = () => {
                             ) : (
                               <Link
                                 to={item.path}
-                                className="group/link block px-4 py-3 text-obsidian-900 dark:text-ivory-200 hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-body-md border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                className="group/link block px-4 py-3 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
                               >
                                 <span className="flex items-center gap-2">
                                   <FaPlane className="text-[10px] opacity-0 -ml-1 group-hover/link:opacity-100 group-hover/link:ml-0 transition-all duration-200 text-[#F5A623]" />
@@ -448,7 +448,7 @@ const Navbar = () => {
                       <>
                         <button
                           onClick={() => handleMobileDropdownToggle(link.name)}
-                          className="w-full flex justify-between items-center text-left text-2xl text-obsidian-900 dark:text-ivory-50 hover:text-[#F5A623] font-semibold py-2 transition-colors"
+                          className="w-full flex justify-between items-center text-left text-2xl text-black dark:text-white hover:text-[#F5A623] font-extrabold py-2 transition-colors"
                         >
                           <span className={mobileActiveDropdown === link.name ? 'text-[#F5A623]' : ''}>
                             {link.name}
@@ -472,7 +472,7 @@ const Navbar = () => {
                                 <div key={item.name} className="w-full">
                                   {item.subItems ? (
                                     <>
-                                      <div className="flex justify-between items-center text-lg text-obsidian-700 dark:text-ivory-300 py-3.5 px-4 border-b border-obsidian-100 dark:border-obsidian-700 last:border-0">
+                                      <div className="flex justify-between items-center text-lg text-black dark:text-white font-bold py-3.5 px-4 border-b border-obsidian-100 dark:border-obsidian-700 last:border-0">
                                         <Link
                                           to={item.path}
                                           onClick={() => setMobileMenuOpen(false)}
@@ -507,7 +507,7 @@ const Navbar = () => {
                                                   setMobileMenuOpen(false);
                                                   setMobileActiveSubDropdown(null);
                                                 }}
-                                                className="text-body-md text-obsidian-600 dark:text-ivory-400 hover:text-[#F5A623] py-3 px-4 block transition-colors border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                                className="text-base font-bold text-black dark:text-white hover:text-[#F5A623] py-3 px-4 block transition-colors border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
                                               >
                                                 {sub.name}
                                               </Link>
@@ -521,7 +521,7 @@ const Navbar = () => {
                                       key={item.name}
                                       to={item.path}
                                       onClick={() => setMobileMenuOpen(false)}
-                                      className="text-lg text-obsidian-700 dark:text-ivory-300 hover:text-[#F5A623] hover:bg-obsidian-50 dark:hover:bg-obsidian-800 py-3.5 px-4 block transition-all border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 font-medium"
+                                      className="text-lg text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-obsidian-50 dark:hover:bg-obsidian-800 py-3.5 px-4 block transition-all border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
                                     >
                                       {item.name}
                                     </Link>
@@ -536,7 +536,7 @@ const Navbar = () => {
                       <Link
                         to={link.path}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-2xl text-obsidian-900 dark:text-ivory-50 block hover:text-[#F5A623] transition-colors font-semibold py-2"
+                        className="text-2xl text-black dark:text-white block hover:text-[#F5A623] transition-colors font-extrabold py-2"
                       >
                         {link.name}
                       </Link>
@@ -635,19 +635,19 @@ const Navbar = () => {
               className={`absolute top-full ${isRtl ? 'left-1' : 'right-1'} mt-5 w-48 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-xl overflow-hidden shadow-xl z-[10000]`}
             >
               <div className="px-4 py-3 border-b border-obsidian-100 dark:border-obsidian-700">
-                <p className="text-caption text-obsidian-900 dark:text-ivory-50 font-semibold">{user.name}</p>
-                <p className="text-[10px] text-obsidian-400 dark:text-ivory-500 truncate">{user.email}</p>
+                <p className="text-caption text-black dark:text-white font-extrabold">{user.name}</p>
+                <p className="text-[10px] text-gray-600 dark:text-ivory-400 truncate font-semibold">{user.email}</p>
               </div>
-              <Link to="/dashboard" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-obsidian-700 dark:text-ivory-300 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-body-md border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
+              <Link to="/dashboard" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-black dark:text-white font-bold hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
                 <FaUserCircle className="text-amber-500" size={15} /> {t('user.tabOverview', 'My Dashboard')}
               </Link>
-              <Link to="/profile" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-obsidian-700 dark:text-ivory-300 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-body-md border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
+              <Link to="/profile" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-black dark:text-white font-bold hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
                 <FaUserCircle className="text-amber-500" size={15} /> {t('nav.myProfile', 'My Profile')}
               </Link>
-              <Link to="/bookings" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-obsidian-700 dark:text-ivory-300 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-body-md border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
+              <Link to="/bookings" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-black dark:text-white font-bold hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
                 <FaBookmark className="text-amber-500" size={15} /> {t('nav.myBookings', 'My Bookings')}
               </Link>
-              <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-red-500 hover:text-white hover:bg-red-500 transition-colors text-body-md flex items-center gap-2">
+              <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-red-600 dark:text-red-400 font-bold hover:text-white hover:bg-red-500 transition-colors text-base flex items-center gap-2">
                 <FaSignOutAlt size={15} /> {t('nav.logout', 'Logout')}
               </button>
             </motion.div>

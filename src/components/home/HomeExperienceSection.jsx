@@ -149,7 +149,7 @@ const _packagesData = [
     tag2Key: "egyptPackages.multiCountry.tag2",
     tag3Key: "egyptPackages.multiCountry.tag3",
     price: 2450,
-    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=65&fm=webp",
+    image: "/imgs/multicountryhero.jpg",
     link: "/programs/multi-country",
     featured: false,
   },
@@ -1425,7 +1425,10 @@ const HomeExperienceSection = () => {
               <h2 className="text-display-lg text-obsidian-900 mb-6">
                 {t("home.aboutTitle", "Experiencias exclusivas, diseñadas a medida")}
               </h2>
-              <p className="text-body-lg text-obsidian-700 mb-8 leading-relaxed">
+              <p 
+                className="text-body-lg text-black font-bold mb-8 leading-relaxed"
+                style={{ color: '#000000', fontWeight: 700 }}
+              >
                 {t(
                   "home.aboutDesc",
                   "En Dunas Travel diseñamos experiencias exclusivas por los destinos más fascinantes de Oriente Medio y el Mediterráneo. Con un profundo conocimiento de cada destino y una cuidada selección de hoteles, cruceros boutique y experiencias privadas, creamos itinerarios a medida donde la excelencia, la autenticidad y la atención personalizada convierten cada viaje en una experiencia verdaderamente inolvidable."
@@ -1486,7 +1489,7 @@ const HomeExperienceSection = () => {
                 <div className="text-4xl md:text-5xl font-bold text-obsidian-900 dark:text-white font-display">
                   <AnimatedCounter value={s.count} suffix={s.suffix} />
                 </div>
-                <div className="text-obsidian-700 dark:text-ivory-200 text-sm mt-2 tracking-wide uppercase font-semibold">
+                <div className="text-black dark:text-ivory-200 text-sm mt-2 tracking-wide uppercase font-bold">
                   {t(s.labelKey)}
                 </div>
               </motion.div>
@@ -1710,12 +1713,12 @@ const HomeExperienceSection = () => {
 
         <div className="flex justify-center mt-12">
           <Link to="/tours">
-            <Button
-              variant="gold-glow"
-              className="px-8 py-3 font-bold"
+            <button
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-amber-400 hover:from-amber-400 hover:to-gold-500 text-black font-extrabold text-base md:text-lg px-8 py-3.5 rounded-full shadow-[0_4px_20px_rgba(245,166,35,0.4)] hover:shadow-[0_6px_25px_rgba(245,166,35,0.6)] hover:scale-105 transition-all duration-300 border border-gold-600/30 cursor-pointer"
+              style={{ color: '#000000', fontWeight: 800 }}
             >
               {t("home.exploreAllTours", isAr ? "استكشف جميع الرحلات" : "Explore All Tours")} →
-            </Button>
+            </button>
           </Link>
         </div>
       </section>
@@ -2014,9 +2017,12 @@ const HomeExperienceSection = () => {
 
         <div className="flex justify-center mt-12">
           <Link to="/tours">
-            <Button variant="outline-gold" className="px-8 py-3 text-body-sm font-bold">
+            <button 
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-amber-400 hover:from-amber-400 hover:to-gold-500 text-black font-extrabold text-base md:text-lg px-8 py-3.5 rounded-full shadow-[0_4px_20px_rgba(245,166,35,0.4)] hover:shadow-[0_6px_25px_rgba(245,166,35,0.6)] hover:scale-105 transition-all duration-300 border border-gold-600/30 cursor-pointer"
+              style={{ color: '#000000', fontWeight: 800 }}
+            >
               {t("home.exploreAllTours", isAr ? "استكشف جميع البرامج والرحلات" : "Explore All Programs & Tours")} →
-            </Button>
+            </button>
           </Link>
         </div>
       </section>
@@ -2042,22 +2048,7 @@ const HomeExperienceSection = () => {
             >
               {t('home.transportTitle', 'Premium Transportation Services')}
             </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="text-body-lg text-obsidian-700 max-w-2xl mx-auto"
-            >
-              {t('home.transportDesc', 'Luxury vehicles and professional drivers — available across Egypt, Jordan, Turkey & Tunisia')}
-            </motion.p>
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: 96 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="h-1 bg-gold-500 mx-auto mt-6"
-            ></motion.div>
+
           </div>
 
           {/* Filter Tabs */}
@@ -2399,7 +2390,7 @@ const HomeExperienceSection = () => {
             <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50 font-display mb-6 tracking-wide">
               {t('home.servicesTitle', 'Services')}
             </h2>
-            <p className="text-obsidian-700 dark:text-ivory-300 text-body-md max-w-xl mx-auto font-body font-medium">
+            <p className="text-black dark:text-ivory-100 text-body-md max-w-xl mx-auto font-body font-semibold">
               {t('home.servicesDesc', 'Premium travel solutions tailored to your needs')}
             </p>
             <div className="w-20 h-[3px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mt-8 rounded-full" />
@@ -2961,7 +2952,7 @@ const HomeExperienceSection = () => {
 
                     {/* Short description if available */}
                     {tour.description && (
-                      <p className="text-[13px] text-gray-600 px-3 pb-3 flex-grow line-clamp-3">
+                      <p className="text-[13px] text-black font-medium px-3 pb-3 flex-grow line-clamp-3">
                         {t(`data.${tour.description}`, tour.description)}
                       </p>
                     )}
