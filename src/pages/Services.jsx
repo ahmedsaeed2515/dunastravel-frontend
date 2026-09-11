@@ -42,7 +42,7 @@ const Services = () => {
         <title>{service ? `${t(`nav.${service}`, service.charAt(0).toUpperCase() + service.slice(1))} | ${t('services.seoServices', 'Luxury Services')}` : t('services.seoTitle', 'Our Services | Luxury Travel')}</title>
         <meta name="description" content={t('services.seoDesc', 'Discover our tailored luxury services including 5-star hotels, desert safaris, glamping, and private Nile cruises.')} />
       </Helmet>
-      <section className="relative w-full h-[400px] md:h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full h-[480px] md:h-[650px] lg:h-[720px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           {service === 'safari' ? (
             <>
@@ -103,12 +103,12 @@ const Services = () => {
                 alt="Dunas Travel Transportation"
                 width="1920"
                 height="1080"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-[center_35%]"
                 loading="eager"
               />
               <div
                 className="absolute inset-0"
-                style={{ backgroundImage: 'linear-gradient(to bottom, rgba(15,13,11,0.3), rgba(15,13,11,0.65))' }}
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgba(4,20,70,0.2), rgba(4,20,70,0.55))' }}
               ></div>
             </>
           ) : (
@@ -116,12 +116,12 @@ const Services = () => {
               <img
                 src="https://res.cloudinary.com/u7xf91gp/image/upload/c_limit,q_auto,w_1920/v1788557737/dunas-travel/general/transport/za5d6wtpnp3kfhpoakeo.webp"
                 alt="Luxury Travel Services Hero"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-[center_35%]"
                 loading="eager"
               />
               <div
                 className="absolute inset-0"
-                style={{ backgroundImage: 'linear-gradient(to bottom, rgba(15,13,11,0.4), rgba(15,13,11,0.7))' }}
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgba(4,20,70,0.2), rgba(4,20,70,0.55))' }}
               ></div>
             </>
           )}
