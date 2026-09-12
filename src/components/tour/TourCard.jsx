@@ -93,36 +93,8 @@ const TourCard = ({
   const durationStr = typeof duration === 'string' ? duration : String(duration || '');
   const durationLabel = durationStr.includes('/') ? durationStr.split('/')[0].trim() : durationStr;
 
-  // Calculate/resolve valid price for every single tour
-  const resolvePrice = (tObj) => {
-    if (!tObj) return 650;
-    const candidates = [
-      tObj.price,
-      tObj.basePriceUsd,
-      tObj.priceUsd,
-      tObj.price_usd,
-      tObj.startingPrice,
-      tObj.priceFrom,
-      tObj.pricePerPerson,
-      tObj.pricePerPax,
-      tObj.pricePerDay,
-      tObj.raw?.price,
-      tObj.pricing?.price,
-      tObj.pricing?.basePrice,
-    ];
-    for (const c of candidates) {
-      const num = Number(c);
-      if (Number.isFinite(num) && num > 0) {
-        return num;
-      }
-    }
-    // Fallback: Estimate sensible starting price from tour duration if price is 0 or missing
-    const durStr = String(tObj.duration || '');
-    const match = durStr.match(/(\d+)/);
-    const days = match ? parseInt(match[1], 10) : 5;
-    return Math.max(450, days * 135);
-  };
-
+  // Set all tour prices to 0 as requested by the user
+  const resolvePrice = () => 0;
   const displayPrice = resolvePrice(tour);
   const tourImage =
     resolveTourHeroImage(tour) ||
