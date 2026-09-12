@@ -187,7 +187,7 @@ const TourCard = ({
       </div>
 
       {/* Travelik Thumbnail (.populer-thumb) */}
-      <div className="populer-thumb relative h-[255px] bg-primary-950 travelik-img-container overflow-hidden rounded-t-2xl">
+      <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-obsidian-900 travelik-img-container overflow-hidden rounded-t-2xl">
         {/* Wishlist Button */}
         <button
           type="button"
