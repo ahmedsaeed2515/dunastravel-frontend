@@ -1072,5 +1072,128 @@ html[dir="rtl"] .dropdown-item:hover {
   animation-play-state: paused;
 }
 
+/* ── Travelik index-3dark Hero Section Signature Styles & Animations ───── */
+@keyframes heroZoomAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rotateTextCircle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-zoom-bg {
+  animation: heroZoomAnimation 22s infinite ease-in-out;
+  will-change: transform;
+}
+
+.circle-video-container {
+  position: absolute;
+  width: 164px;
+  height: 164px;
+  background: rgba(12, 28, 72, 0.75);
+  border: 1px solid rgba(245, 166, 35, 0.4);
+  border-radius: 50%;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(245, 166, 35, 0.2);
+  z-index: 25;
+}
+
+.circle-video-container svg.rotate-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.circle-video-container text {
+  fill: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.circle-video-container .rotate-text-path {
+  animation: rotateTextCircle 12s linear infinite;
+  transform-origin: center;
+}
+
+.circle-video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  background: linear-gradient(135deg, #f5a623 0%, #d48806 100%);
+  height: 52px;
+  width: 52px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  color: #0c1c48;
+  box-shadow: 0 0 25px rgba(245, 166, 35, 0.6);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.circle-video-play-btn:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow: 0 0 35px rgba(245, 166, 35, 0.9);
+  background: #ffffff;
+  color: #f5a623;
+}
+
+/* Travelik Hero Button Style */
+.travelik-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 36px;
+  background: #0cb2db;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(12, 178, 219, 0.35);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.travelik-hero-btn:hover {
+  background: #f5a623;
+  color: #0c1c48;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(245, 166, 35, 0.45);
+}
+
+.travelik-hero-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.travelik-hero-btn:hover svg {
+  transform: translateX(6px);
+}
+
+[dir="rtl"] .travelik-hero-btn:hover svg {
+  transform: translateX(-6px);
+}
+
 
 

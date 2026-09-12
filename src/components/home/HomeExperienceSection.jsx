@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaStar, FaTimes, FaChevronLeft, FaChevronRight, FaVolumeMute, FaVolumeUp, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaHeadset, FaWhatsapp, FaArrowRight, FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaClock, FaCompass, FaLandmark, FaBookOpen } from "react-icons/fa";
 import Button from "../ui/Button";
 import TourCard from "../tour/TourCard";
+import TravelikHeroSection from "./TravelikHeroSection";
 import { useTours } from "../../hooks/useTours";
 import { useMedia } from "../../hooks/useMedia";
 import { useDestinations } from "../../hooks/useDestinations";
@@ -1215,38 +1216,8 @@ const HomeExperienceSection = () => {
         <meta property="og:image" content="/dunas-travel-logo.png" />
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="relative w-full aspect-video flex items-center justify-center overflow-hidden bg-black mt-[104px] sm:mt-[108px] lg:mt-[124px]">
-        {/* Video Background */}
-        <div className="absolute inset-0 z-0 flex items-center justify-center bg-black">
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted={isMuted}
-            playsInline
-            preload="none"
-            poster="/imgs/hero-poster.webp"
-            className="w-full h-full object-contain"
-            width="1440"
-            height="812"
-          >
-            {shouldLoadVideo && (
-              <source src="/imgs/hero.webm" type="video/webm" />
-            )}
-          </video>
-          <div className="absolute inset-0 bg-obsidian-900/50 pointer-events-none"></div>
-        </div>
-        {/* Sound Toggle */}
-        <button
-          onClick={toggleMute}
-          title={isMuted ? t('home.unmuteVideo', 'Unmute Hero Video') : t('home.muteVideo', 'Mute Hero Video')}
-          className="absolute bottom-4 sm:bottom-6 md:bottom-8 right-4 sm:right-6 md:right-8 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-950/80 backdrop-blur-md border border-gold-500/40 flex items-center justify-center text-gold-400 hover:text-gold-200 hover:border-gold-400 hover:bg-slate-900 hover:scale-108 active:scale-95 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
-          aria-label={isMuted ? t('home.unmuteVideo', 'Unmute Hero Video') : t('home.muteVideo', 'Mute Hero Video')}
-        >
-          {isMuted ? <FaVolumeMute size={16} /> : <FaVolumeUp size={16} className="text-gold-300" />}
-        </button>
-      </section>
+      {/* Hero Section — Travelik index-3dark Replica Style */}
+      <TravelikHeroSection />
       {/* Search Section */}
       <section className="relative w-full py-20 md:py-28 overflow-hidden mt-12">
         {/* Background Image */}
