@@ -17,6 +17,7 @@ import BookingForm from '../../components/booking/BookingForm';
 import AdvancedBooking from '../../components/booking/AdvancedBooking';
 import { useCurrency } from '../../context/CurrencyContext';
 import { services as staticServices } from '../../data/services';
+import SuggestedTours from '../../components/tour/SuggestedTours';
 
 const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));

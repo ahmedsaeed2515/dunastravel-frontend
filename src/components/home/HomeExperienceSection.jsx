@@ -18,7 +18,33 @@ import {
   homeJordanPreviewTours,
   homeDubaiPreviewTours,
 } from "../../data/homePreviewTours";
-import { resolveLocalizedText, resolveTourOverview } from "../../utils/titleHelper";
+import {
+  resolveLocalizedText,
+  resolveTourOverview,
+  resolveTourTitle,
+  resolveTourDuration,
+  resolveTourHeroImage,
+} from "../../utils/titleHelper";
+import TourCard from "../tour/TourCard";
+import {
+  FaCalendarAlt,
+  FaSuitcase,
+  FaUsers,
+  FaMapMarkedAlt,
+  FaGlobe,
+  FaCompass,
+  FaClock,
+  FaStar,
+  FaTimes,
+  FaMapMarkerAlt,
+  FaArrowRight,
+  FaHeadset,
+  FaWhatsapp,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 
 
 const _destinationsData = [
@@ -419,7 +445,7 @@ const HomeExperienceSection = () => {
     return rawList.map((v, idx) => {
       const seats = Number(v.seats || v.capacity || (v.category === 'bus' ? 45 : v.category === 'coaster' ? 24 : 4));
       const rawCat = String(v.vehicleCategory || v.category || '').toLowerCase();
-      let normalizedCat = 'private';
+      let normalizedCat;
       if (rawCat.includes('bus') || seats > 30) normalizedCat = 'bus';
       else if (rawCat.includes('coaster') || rawCat.includes('mini') || (seats > 8 && seats <= 30)) normalizedCat = 'coaster';
       else normalizedCat = 'private';
@@ -985,13 +1011,13 @@ const HomeExperienceSection = () => {
     const targetDest = normalizeDest(destId);
 
     if (targetDest === "dubai") {
-      (dubaiTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
+      (homeDubaiPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
       return result;
     }
 
     if (targetDest === "all") {
       (allLiveTours || []).forEach((tour) => addTourItem(tour, "/tours"));
-      (dubaiTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
+      (homeDubaiPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
       (homeTurkeyPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/turkey", "turkey"));
       (homeJordanPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/jordan", "jordan"));
       return result;
