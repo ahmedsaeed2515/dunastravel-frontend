@@ -38,6 +38,26 @@ export default function HomeHeroSection() {
       btnText: "SEE DESTINATION",
       btnLink: "#search-section",
     },
+    {
+      id: 3,
+      bgClass: "slider-bg three",
+      bgImage: "/imgs/egypt-hero-luxury.jpg",
+      titlePart1: "luxury",
+      titlePart2: "journey",
+      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
+      btnText: "SEE DESTINATION",
+      btnLink: "#search-section",
+    },
+    {
+      id: 4,
+      bgClass: "slider-bg four",
+      bgImage: "/imgs/multicountryhero.jpg",
+      titlePart1: "luxury",
+      titlePart2: "journey",
+      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
+      btnText: "SEE DESTINATION",
+      btnLink: "#search-section",
+    },
   ];
 
   // Run silky-smooth fluid element entrance on active slide (runs every slide change)
@@ -171,11 +191,16 @@ export default function HomeHeroSection() {
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
-          speed={1400}
+          speed={1200}
           autoplay={{
-            delay: 10000,
+            delay: 6500,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
+          }}
+          onSwiper={(swiper) => {
+            if (swiper && swiper.autoplay) {
+              swiper.autoplay.start();
+            }
           }}
           onSlideChangeTransitionStart={(swiper) => setActiveIndex(swiper.realIndex)}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}

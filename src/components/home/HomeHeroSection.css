@@ -129,8 +129,8 @@
 }
 
 .swiper-slide-active .slider-bg {
-  -webkit-animation: heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
-  animation: heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
+  -webkit-animation: heroZoomSequence 6.5s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
+  animation: heroZoomSequence 6.5s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
 }
 
 @-webkit-keyframes heroZoomSequence {
