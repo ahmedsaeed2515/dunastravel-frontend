@@ -40,92 +40,113 @@ export default function HomeHeroSection() {
     },
   ];
 
-  // Run distinct GSAP animation on active slide
+  // Run distinct GSAP character animation on active slide (runs every slide change)
   useEffect(() => {
     if (!containerRef.current) return;
+
+    // Reset all non-active slides text/logo/desc/btn to hidden
+    const allSlides = containerRef.current.querySelectorAll(".swiper-slide");
+    allSlides.forEach((slideEl) => {
+      if (!slideEl.classList.contains("swiper-slide-active")) {
+        const chars = slideEl.querySelectorAll(".char");
+        const logo = slideEl.querySelector(".dunas-logo");
+        const desc = slideEl.querySelector(".slider-contect-des");
+        const btn = slideEl.querySelector(".defult-btn a");
+        const elsToReset = [...chars, logo, desc, btn].filter(Boolean);
+        if (elsToReset.length > 0) {
+          gsap.set(elsToReset, { opacity: 0, y: 0 });
+        }
+      }
+    });
 
     const activeSlideEl = containerRef.current.querySelector(".swiper-slide-active");
     if (!activeSlideEl) return;
 
-    const heading1 = activeSlideEl.querySelector(".hero-heading-1");
-    const heading2 = activeSlideEl.querySelector(".hero-heading-2");
+    const chars1 = activeSlideEl.querySelectorAll(".hero-heading-1 .char");
+    const chars2 = activeSlideEl.querySelectorAll(".hero-heading-2 .char");
     const logo = activeSlideEl.querySelector(".dunas-logo");
     const desc = activeSlideEl.querySelector(".slider-contect-des");
     const btn = activeSlideEl.querySelector(".defult-btn a");
 
-    // Clear previous tweens
-    gsap.killTweensOf([heading1, heading2, logo, desc, btn]);
+    const allActiveElements = [...chars1, ...chars2, logo, desc, btn].filter(Boolean);
+    gsap.killTweensOf(allActiveElements);
 
-    // 1. First Heading line ("LUXURY"): Drops DOWN from top (-160px)
-    if (heading1) {
+    // 1. First Heading line characters drop DOWN from top (-100px) with stagger
+    if (chars1.length > 0) {
       gsap.fromTo(
-        heading1,
-        { opacity: 0, y: -160 },
+        chars1,
+        { opacity: 0, y: -100, rotateX: -60 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.1,
+          rotateX: 0,
+          duration: 0.85,
+          stagger: 0.035,
           ease: "power3.out",
         }
       );
     }
 
-    // 2. Second Heading line ("JOURNEY"): Drops DOWN from top (-160px)
-    if (heading2) {
+    // 2. Second Heading line characters drop DOWN from top (-100px) with stagger
+    if (chars2.length > 0) {
       gsap.fromTo(
-        heading2,
-        { opacity: 0, y: -160 },
+        chars2,
+        { opacity: 0, y: -100, rotateX: -60 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.1,
+          rotateX: 0,
+          duration: 0.85,
+          stagger: 0.035,
+          delay: 0.15,
           ease: "power3.out",
-          delay: 0.12,
         }
       );
     }
 
-    // 3. Dunas Logo Image: Comes UP from bottom (+160px)
+    // 3. Dunas Logo Image: Comes UP from bottom (+100px)
     if (logo) {
       gsap.fromTo(
         logo,
-        { opacity: 0, y: 160 },
+        { opacity: 0, y: 100, scale: 0.8 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.1,
+          scale: 1,
+          duration: 0.9,
+          delay: 0.25,
           ease: "power3.out",
-          delay: 0.22,
         }
       );
     }
 
-    // 4. Paragraph description: Comes UP from bottom (+160px)
+    // 4. Paragraph description: Comes UP from bottom (+100px)
     if (desc) {
       gsap.fromTo(
         desc,
-        { opacity: 0, y: 160 },
+        { opacity: 0, y: 100 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.1,
+          duration: 0.9,
+          delay: 0.4,
           ease: "power3.out",
-          delay: 0.35,
         }
       );
     }
 
-    // 5. Action button: Comes UP from bottom (+160px)
+    // 5. Action button: Comes UP from bottom (+100px)
     if (btn) {
       gsap.fromTo(
         btn,
-        { opacity: 0, y: 160 },
+        { opacity: 0, y: 100, scale: 0.9 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.1,
+          scale: 1,
+          duration: 0.9,
+          delay: 0.55,
           ease: "power3.out",
-          delay: 0.48,
         }
       );
     }
@@ -155,11 +176,12 @@ export default function HomeHeroSection() {
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
-          speed={1000}
+          speed={1200}
           autoplay={{
             delay: 10000,
             disableOnInteraction: false,
           }}
+          onSlideChangeTransitionStart={(swiper) => setActiveIndex(swiper.realIndex)}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           className="swiper slider__active"
         >

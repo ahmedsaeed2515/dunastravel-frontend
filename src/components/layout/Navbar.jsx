@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaGlobe, FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { syncDocumentDirection } from '../../i18n';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
   const lastScrollYRef = useRef(0);
@@ -56,7 +57,8 @@ const Navbar = () => {
       tickingRef.current = true;
       requestAnimationFrame(() => {
         const currentScrollY = window.scrollY;
-        const isScrolled = currentScrollY > 50;
+        const threshold = location.pathname === '/' ? 550 : 50;
+        const isScrolled = currentScrollY > threshold;
         setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
 
         if (mobileMenuRef.current) {
@@ -70,9 +72,11 @@ const Navbar = () => {
         tickingRef.current = false;
       });
     };
+
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (mobileMenuOpen) {

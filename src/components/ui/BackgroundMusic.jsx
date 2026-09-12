@@ -17,10 +17,22 @@ const BackgroundMusic = () => {
   const playerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [showMusicIcon, setShowMusicIcon] = useState(false);
   const autoPlayAttempted = useRef(false);
 
   const isPlayingRef = useRef(isPlaying);
   const hasInteractedRef = useRef(hasInteracted);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const threshold = isHomePage ? 550 : 80;
+      setShowMusicIcon(window.scrollY > threshold);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isHomePage]);
 
   useEffect(() => {
     isPlayingRef.current = isPlaying;
@@ -274,17 +286,21 @@ const BackgroundMusic = () => {
         </div>
       )}
 
-      {/* Music Floating Button - Bottom Left */}
+      {/* Music Floating Button - Bottom Left (Appears after hero section) */}
       <button
         type="button"
         id="webflow-music-toggle-btn"
         onClick={togglePlay}
         title={tooltipText}
         aria-label={tooltipText}
-        className={`fixed left-5 bottom-[80px] sm:left-6 sm:bottom-[88px] z-[9997] flex h-12 w-12 items-center justify-center rounded-full border bg-slate-950/90 backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
+        className={`fixed left-5 bottom-[80px] sm:left-6 sm:bottom-[88px] z-[9997] flex h-12 w-12 items-center justify-center rounded-full border bg-slate-950/90 backdrop-blur-md transition-all duration-500 hover:scale-110 active:scale-95 ${
+          showMusicIcon
+            ? 'opacity-100 scale-100 pointer-events-auto translate-y-0'
+            : 'opacity-0 scale-75 pointer-events-none translate-y-6'
+        } ${
           isPlaying
             ? 'border-gold-400 text-gold-300 music-glowing-glow shadow-lg shadow-gold-500/20'
-            : 'border-gold-500/30 text-gold-500/40 bg-slate-950/80 opacity-75 hover:opacity-100 hover:border-gold-500/60 hover:text-gold-400 shadow-md'
+            : 'border-gold-500/30 text-gold-500/40 bg-slate-950/80 hover:border-gold-500/60 hover:text-gold-400 shadow-md'
         }`}
       >
         <svg
