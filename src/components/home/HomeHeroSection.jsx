@@ -1,13 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectFade, Autoplay, Pagination, Navigation } from "swiper/modules";
+import { EffectFade, Autoplay } from "swiper/modules";
 import { FaPlay, FaTimes } from "react-icons/fa";
 import gsap from "gsap";
 import "swiper/css";
 import "swiper/css/effect-fade";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
 import "./HomeHeroSection.css";
 
 export default function HomeHeroSection() {
@@ -203,7 +201,7 @@ export default function HomeHeroSection() {
       <div className="main-slider-wrpper">
         <Swiper
           ref={swiperRef}
-          modules={[EffectFade, Autoplay, Pagination, Navigation]}
+          modules={[EffectFade, Autoplay]}
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}

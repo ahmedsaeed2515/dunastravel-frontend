@@ -3,31 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { FaStar, FaTimes, FaChevronLeft, FaChevronRight, FaVolumeMute, FaVolumeUp, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaHeadset, FaWhatsapp, FaArrowRight, FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaClock, FaCompass, FaLandmark, FaBookOpen } from "react-icons/fa";
 import Button from "../ui/Button";
-import TourCard from "../tour/TourCard";
 import { useTours } from "../../hooks/useTours";
-import { useMedia } from "../../hooks/useMedia";
-import { useDestinations } from "../../hooks/useDestinations";
-import { useServices } from "../../hooks/useServices";
-import { transportation as fallbackTransportation } from "../../data/transportation";
 import AnimatedCounter from "../common/AnimatedCounter";
 import HomeHeroSection from "./HomeHeroSection";
 import { useCurrency } from "../../context/CurrencyContext";
 import api from "../../utils/api";
-import {
-  homeTurkeyPreviewTours,
-  homeJordanPreviewTours,
-  homeDubaiPreviewTours,
-} from "../../data/homePreviewTours";
-import { dubaiTours } from "../../data/dubaiTours";
-import {
-  resolveTourTitle,
-  resolveTourDuration,
-  resolveTourOverview,
-  resolveLocalizedText,
-  resolveTourHeroImage
-} from "../../utils/titleHelper";
 
 
 const _destinationsData = [
