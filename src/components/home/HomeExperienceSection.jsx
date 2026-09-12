@@ -13,7 +13,12 @@ import AnimatedCounter from "../common/AnimatedCounter";
 import HomeHeroSection from "./HomeHeroSection";
 import { useCurrency } from "../../context/CurrencyContext";
 import api from "../../utils/api";
-import { resolveLocalizedText } from "../../utils/titleHelper";
+import {
+  homeTurkeyPreviewTours,
+  homeJordanPreviewTours,
+  homeDubaiPreviewTours,
+} from "../../data/homePreviewTours";
+import { resolveLocalizedText, resolveTourOverview } from "../../utils/titleHelper";
 
 
 const _destinationsData = [
