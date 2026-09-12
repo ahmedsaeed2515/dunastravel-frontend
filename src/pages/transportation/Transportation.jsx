@@ -136,9 +136,9 @@ const Transportation = () => {
       <section className="relative w-full h-[480px] md:h-[650px] lg:h-[720px] flex items-center justify-start overflow-hidden bg-obsidian-950">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://res.cloudinary.com/u7xf91gp/image/upload/c_limit,q_auto,w_1920/v1788557737/dunas-travel/general/transport/za5d6wtpnp3kfhpoakeo.webp"
+            src="/imgs/transportation-hero.png"
             alt="Transportation Hero"
-            className="w-full h-full object-cover object-[center_35%]"
+            className="w-full h-full object-cover object-center"
             loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#041446]/30 via-[#041446]/50 to-[#041446]/85" />
