@@ -117,7 +117,7 @@
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.4));
 }
 
-/* Background Image Zoom Sequence (Clean 6s Zoom-In ➔ Zoom-Out ➔ Next Slide Switch) */
+/* Background Image 10s Sequence (Calm Zoom In 3.5s ➔ Creep 1.5s ➔ Zoom Out 3.5s ➔ Creep 1.5s ➔ Switch) */
 .slider-bg {
   transform-origin: center center;
   -webkit-transform-origin: center center;
@@ -129,8 +129,8 @@
 }
 
 .swiper-slide-active .slider-bg {
-  -webkit-animation: heroZoomSequence 6s ease-in-out forwards !important;
-  animation: heroZoomSequence 6s ease-in-out forwards !important;
+  -webkit-animation: heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
+  animation: heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
 }
 
 @-webkit-keyframes heroZoomSequence {
@@ -138,9 +138,17 @@
     -webkit-transform: scale(1);
     transform: scale(1);
   }
+  35% {
+    -webkit-transform: scale(1.60);
+    transform: scale(1.60);
+  }
   50% {
-    -webkit-transform: scale(1.65);
-    transform: scale(1.65);
+    -webkit-transform: scale(1.68);
+    transform: scale(1.68);
+  }
+  85% {
+    -webkit-transform: scale(1.07);
+    transform: scale(1.07);
   }
   100% {
     -webkit-transform: scale(1);
@@ -153,9 +161,17 @@
     -webkit-transform: scale(1);
     transform: scale(1);
   }
+  35% {
+    -webkit-transform: scale(1.60);
+    transform: scale(1.60);
+  }
   50% {
-    -webkit-transform: scale(1.65);
-    transform: scale(1.65);
+    -webkit-transform: scale(1.68);
+    transform: scale(1.68);
+  }
+  85% {
+    -webkit-transform: scale(1.07);
+    transform: scale(1.07);
   }
   100% {
     -webkit-transform: scale(1);

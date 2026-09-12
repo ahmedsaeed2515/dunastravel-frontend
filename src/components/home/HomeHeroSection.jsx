@@ -171,9 +171,9 @@ export default function HomeHeroSection() {
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
-          speed={1000}
+          speed={1200}
           autoplay={{
-            delay: 6000,
+            delay: 10000,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
             waitForTransition: false,
