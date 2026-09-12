@@ -94,7 +94,7 @@ export default function HomeHeroSection() {
       activeBg.style.animation = "none";
       requestAnimationFrame(() => {
         if (activeBg) {
-          activeBg.style.animation = "heroZoomSequence 6s cubic-bezier(0.37, 0, 0.63, 1) forwards";
+          activeBg.style.animation = "heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards";
         }
       });
     }
@@ -209,7 +209,7 @@ export default function HomeHeroSection() {
           loop={true}
           speed={1200}
           autoplay={{
-            delay: 6000,
+            delay: 10000,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
             stopOnLastSlide: false,
