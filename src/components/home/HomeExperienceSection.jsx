@@ -52,7 +52,7 @@ const _destinationsData = [
     id: "egypt",
     nameKey: "home.destEgypt",
     descKey: "home.destEgyptDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600,c_fill/v1783023886/3776ecde-249e-4183-9840-e9fd900ad96b_xvmumu.jpg",
+    image: "/imgs/egyothero.webp",
   },
   {
     id: "turkey",
