@@ -38,6 +38,26 @@ export default function HomeHeroSection() {
       btnText: "SEE DESTINATION",
       btnLink: "#search-section",
     },
+    {
+      id: 3,
+      bgClass: "slider-bg",
+      bgImage: "/imgs/slider-bg.webp",
+      titlePart1: "luxury",
+      titlePart2: "journey",
+      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
+      btnText: "SEE DESTINATION",
+      btnLink: "#search-section",
+    },
+    {
+      id: 4,
+      bgClass: "slider-bg two",
+      bgImage: "/imgs/slider-two.webp",
+      titlePart1: "luxury",
+      titlePart2: "journey",
+      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
+      btnText: "SEE DESTINATION",
+      btnLink: "#search-section",
+    },
   ];
 
   // Run silky-smooth fluid element entrance & restart background zoom animation on active slide
@@ -162,7 +182,7 @@ export default function HomeHeroSection() {
 
   const handleSlideTo = (index) => {
     if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideTo(index);
+      swiperRef.current.swiper.slideToLoop(index);
     }
   };
 
@@ -294,11 +314,11 @@ export default function HomeHeroSection() {
 
           {/* Dots Navigation Thumbnail Bar */}
           <div className="travel-slider-dots">
-            {slides.map((s, idx) => (
+            {slides.slice(0, 2).map((s, idx) => (
               <span
                 key={s.id}
                 onClick={() => handleSlideTo(idx)}
-                className={`dot-slide ${activeIndex === idx ? "active" : ""}`}
+                className={`dot-slide ${(activeIndex % 2) === idx ? "active" : ""}`}
                 style={{ backgroundImage: `url('${s.bgImage}')` }}
               ></span>
             ))}
