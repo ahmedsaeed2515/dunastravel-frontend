@@ -149,7 +149,7 @@ const TourCard = ({
       whileInView="visible"
       viewport={{ once: true, margin: '-40px' }}
     >
-      {/* Travelik Corner Accent Ornament (.about-sp) */}
+      {/* Dunas Corner Accent Ornament (.about-sp) */}
       <div className="about-sp">
         <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
@@ -158,8 +158,8 @@ const TourCard = ({
         </svg>
       </div>
 
-      {/* Travelik Thumbnail (.populer-thumb) */}
-      <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-obsidian-900 travelik-img-container overflow-hidden rounded-t-2xl">
+      {/* Dunas Thumbnail (.populer-thumb) */}
+      <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-obsidian-900 dunas-img-container overflow-hidden rounded-t-2xl">
         {/* Wishlist Button */}
         <button
           type="button"
@@ -216,7 +216,7 @@ const TourCard = ({
         </Link>
       </div>
 
-      {/* Travelik Content Section (.populer-contnet) */}
+      {/* Dunas Content Section (.populer-contnet) */}
       <motion.div 
         className="populer-contnet flex flex-col flex-grow bg-white dark:bg-[#121829]"
         variants={contentStaggerVariants}

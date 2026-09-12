@@ -17,8 +17,8 @@ import {
   getPasswordValidationErrors,
 } from '../../utils/passwordPolicy';
 
-// Custom Travelik Styles
-import '../../pages/auth/travelik-auth.css';
+// Custom Dunas Styles
+import '../../pages/auth/dunas-auth.css';
 
 const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
   const { t } = useTranslation();
@@ -175,10 +175,8 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                 alt="Dunas Travel Logo"
                 className="mx-auto max-w-[170px] sm:max-w-[200px] h-auto drop-shadow-xl"
               />
-            </div>
-
-            {/* Travelik Login Card Modal Container */}
-            <div className="travelik-login-card relative shadow-[0_25px_70px_rgba(0,0,0,0.9)] border border-gold-500/40">
+            </div>            {/* Dunas Login Card Modal Container */}
+            <div className="dunas-login-card relative shadow-[0_25px_70px_rgba(0,0,0,0.9)] border border-gold-500/40">
               
               {/* Close Button */}
               <button
@@ -196,14 +194,14 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                   ? t('auth.welcomeTitle', 'Welcome')
                   : t('auth.createAccountTitle', 'Create Account')}
               </h2>
-              <p className="travelik-subtitle text-xs text-gold-300 mb-5" id="subtitle">
+              <p className="dunas-subtitle text-xs text-gold-300 mb-5" id="subtitle">
                 {activeTab === 'login'
                   ? t('auth.signInSubtitle', 'Sign In Your Account')
                   : t('auth.registerSubtitle', 'Register New Account')}
               </p>
 
-              {/* Travelik Tabs Switcher */}
-              <div className="travelik-tabs mb-5 flex gap-2 border-b border-gold-500/20 pb-3">
+              {/* Dunas Tabs Switcher */}
+              <div className="dunas-tabs mb-5 flex gap-2 border-b border-gold-500/20 pb-3">
                 <button
                   type="button"
                   className={activeTab === 'login' ? 'active' : ''}
@@ -275,7 +273,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                   animate={{ opacity: 1 }}
                   onSubmit={handleLoginSubmit}
                 >
-                  <div className="travelik-input-box mb-3">
+                  <div className="dunas-input-box mb-3">
                     <span>
                       <FaEnvelope />
                     </span>
@@ -288,7 +286,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                     />
                   </div>
 
-                  <div className="travelik-input-box mb-3">
+                  <div className="dunas-input-box mb-3">
                     <span>
                       <FaLock />
                     </span>
@@ -300,7 +298,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                       placeholder={t('auth.passwordPlaceholder', 'Password')}
                     />
                     <span
-                      className="travelik-eye"
+                      className="dunas-eye"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -308,7 +306,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                   </div>
 
                   {/* Options */}
-                  <div className="travelik-options flex items-center justify-between text-xs my-3">
+                  <div className="dunas-options flex items-center justify-between text-xs my-3">
                     <label className="flex items-center gap-2 cursor-pointer select-none text-white">
                       <input
                         type="checkbox"
@@ -333,7 +331,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="travelik-login-btn mt-4"
+                    className="dunas-login-btn mt-4"
                   >
                     {isLoading ? (
                       <span>{t('auth.authenticating', 'Authenticating...')}</span>
@@ -342,7 +340,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                     )}
                   </button>
 
-                  <div className="travelik-bottom-text mt-5 text-xs text-center">
+                  <div className="dunas-bottom-text mt-5 text-xs text-center">
                     <span>{t('auth.noAccount', "Don't have an account?")} </span>
                     <a
                       href="#register"
@@ -364,7 +362,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                   animate={{ opacity: 1 }}
                   onSubmit={handleRegisterSubmit}
                 >
-                  <div className="travelik-input-box mb-3">
+                  <div className="dunas-input-box mb-3">
                     <span>
                       <FaUser />
                     </span>
@@ -377,7 +375,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                     />
                   </div>
 
-                  <div className="travelik-input-box mb-3">
+                  <div className="dunas-input-box mb-3">
                     <span>
                       <FaEnvelope />
                     </span>
@@ -390,7 +388,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                     />
                   </div>
 
-                  <div className="travelik-input-box mb-3">
+                  <div className="dunas-input-box mb-3">
                     <span>
                       <FaPhone />
                     </span>
@@ -403,7 +401,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                     />
                   </div>
 
-                  <div className="travelik-input-box mb-3">
+                  <div className="dunas-input-box mb-3">
                     <span>
                       <FaLock />
                     </span>
@@ -415,14 +413,14 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                       placeholder={t('auth.password', 'Password')}
                     />
                     <span
-                      className="travelik-eye"
+                      className="dunas-eye"
                       onClick={() => setRegShowPassword(!regShowPassword)}
                     >
                       {regShowPassword ? <FaEyeSlash /> : <FaEye />}
                     </span>
                   </div>
 
-                  <div className="travelik-input-box mb-3">
+                  <div className="dunas-input-box mb-3">
                     <span>
                       <FaLock />
                     </span>
@@ -434,7 +432,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                       placeholder={t('auth.confirmPassword', 'Confirm Password')}
                     />
                     <span
-                      className="travelik-eye"
+                      className="dunas-eye"
                       onClick={() =>
                         setRegShowConfirmPassword(!regShowConfirmPassword)
                       }
@@ -467,7 +465,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="travelik-login-btn"
+                    className="dunas-login-btn"
                   >
                     {isLoading ? (
                       <span>{t('common.loading', 'Creating Account...')}</span>
@@ -476,7 +474,7 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
                     )}
                   </button>
 
-                  <div className="travelik-bottom-text mt-5 text-xs text-center">
+                  <div className="dunas-bottom-text mt-5 text-xs text-center">
                     <span>{t('auth.alreadyHaveAccount', 'Already have an account?')} </span>
                     <a
                       href="#login"

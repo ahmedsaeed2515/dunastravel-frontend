@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Travelik-inspired Auth Page Styling for Dunas Travel
+   Auth Page Styling for Dunas Travel
    Colors: Primary Blue (#1E3A8A, #0C1C48), Gold (#F5A623, #C07D0A), 
            Brown (#8B4513, #5E2D0B), Neutral White (#FFFFFF), Dark (#1A1A2E)
    ========================================================================== */
 
 /* ── 1. Hero Breadcrumb Section ── */
-.travelik-breadcumb-section {
+.dunas-breadcumb-section {
   position: relative;
   background-size: cover;
   background-position: center;
@@ -17,27 +17,27 @@
   justify-content: center;
 }
 
-.travelik-breadcumb-overlay {
+.dunas-breadcumb-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(12, 28, 72, 0.85) 0%, rgba(26, 26, 46, 0.92) 100%);
   z-index: 1;
 }
 
-.travelik-breadcumb-content {
+.dunas-breadcumb-content {
   position: relative;
   z-index: 2;
   text-align: center;
 }
 
-.travelik-breadcumb-logo {
+.dunas-breadcumb-logo {
   max-width: 170px;
   height: auto;
   margin: 0 auto 16px;
   filter: drop-shadow(0 4px 12px rgba(245, 166, 35, 0.3));
 }
 
-.travelik-breadcumb-title {
+.dunas-breadcumb-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 42px;
   font-weight: 700;
@@ -46,7 +46,7 @@
   letter-spacing: 0.5px;
 }
 
-.travelik-breadcumb-item {
+.dunas-breadcumb-item {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -58,23 +58,23 @@
   color: #F9C76B;
 }
 
-.travelik-breadcumb-item a {
+.dunas-breadcumb-item a {
   color: #ffffff;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.travelik-breadcumb-item a:hover {
+.dunas-breadcumb-item a:hover {
   color: #F5A623;
 }
 
-.travelik-login-page {
+.dunas-login-page {
   padding: 60px 0 80px;
   background-color: #ffffff;
   background-image: none;
 }
 
-.travelik-image-box {
+.dunas-image-box {
   position: relative;
   border-radius: 20px;
   overflow: hidden;
@@ -84,7 +84,7 @@
   min-height: 480px;
 }
 
-.travelik-image-box img {
+.dunas-image-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -92,11 +92,11 @@
   transition: transform 0.8s ease;
 }
 
-.travelik-image-box:hover img {
+.dunas-image-box:hover img {
   transform: scale(1.04);
 }
 
-.travelik-image-overlay {
+.dunas-image-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(0deg, rgba(12, 28, 72, 0.95) 0%, rgba(12, 28, 72, 0.3) 60%, rgba(0,0,0,0.1) 100%);
@@ -107,7 +107,7 @@
   color: #ffffff;
 }
 
-.travelik-image-tag {
+.dunas-image-tag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -124,7 +124,7 @@
   letter-spacing: 1px;
 }
 
-.travelik-image-title {
+.dunas-image-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 28px;
   font-weight: 700;
@@ -133,14 +133,14 @@
   line-height: 1.25;
 }
 
-.travelik-image-desc {
+.dunas-image-desc {
   font-size: 14px;
   color: #E8D0BF;
   line-height: 1.6;
 }
 
 /* ── 3. Login Card ── */
-.travelik-login-card {
+.dunas-login-card {
   background: #152B6B;
   border: 1px solid rgba(245, 166, 35, 0.3);
   border-radius: 18px;
@@ -149,14 +149,14 @@
   position: relative;
 }
 
-.travelik-card-logo {
+.dunas-card-logo {
   max-width: 140px;
   height: auto;
   margin: 0 auto 20px;
   display: block;
 }
 
-.travelik-demo-box {
+.dunas-demo-box {
   background: #ffffff;
   color: #1A1A2E;
   padding: 16px 24px;
@@ -168,17 +168,17 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-[dir="rtl"] .travelik-demo-box {
+[dir="rtl"] .dunas-demo-box {
   border-left: none;
   border-right: 4px solid #F5A623;
 }
 
-.travelik-demo-box b {
+.dunas-demo-box b {
   color: #1E3A8A;
   font-weight: 700;
 }
 
-.travelik-login-card h2 {
+.dunas-login-card h2 {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 30px;
   color: #ffffff;
@@ -186,14 +186,14 @@
   margin-bottom: 6px;
 }
 
-.travelik-subtitle {
+.dunas-subtitle {
   color: #F9C76B;
   font-size: 14px;
   margin-bottom: 24px;
 }
 
 /* ── 4. Tabs Component ── */
-.travelik-tabs {
+.dunas-tabs {
   display: flex;
   gap: 12px;
   margin-bottom: 25px;
@@ -201,7 +201,7 @@
   padding-bottom: 12px;
 }
 
-.travelik-tabs button {
+.dunas-tabs button {
   border: none;
   background: transparent;
   font-size: 15px;
@@ -213,12 +213,12 @@
   transition: all 0.25s ease;
 }
 
-.travelik-tabs button:hover {
+.dunas-tabs button:hover {
   color: #ffffff;
   background: rgba(245, 166, 35, 0.15);
 }
 
-.travelik-tabs button.active {
+.dunas-tabs button.active {
   background: linear-gradient(135deg, #F5A623 0%, #C07D0A 100%);
   color: #1A1A2E;
   box-shadow: 0 4px 15px rgba(245, 166, 35, 0.35);
@@ -226,7 +226,7 @@
 }
 
 /* ── 5. Input Boxes ── */
-.travelik-input-box {
+.dunas-input-box {
   display: flex;
   align-items: center;
   background: #ffffff;
@@ -237,12 +237,12 @@
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.travelik-input-box:focus-within {
+.dunas-input-box:focus-within {
   border-color: #F5A623;
   box-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
 }
 
-.travelik-input-box span {
+.dunas-input-box span {
   margin-right: 12px;
   font-size: 16px;
   color: #8B4513;
@@ -250,12 +250,12 @@
   align-items: center;
 }
 
-[dir="rtl"] .travelik-input-box span {
+[dir="rtl"] .dunas-input-box span {
   margin-right: 0;
   margin-left: 12px;
 }
 
-.travelik-input-box input {
+.dunas-input-box input {
   border: none;
   outline: none;
   flex: 1;
@@ -265,23 +265,23 @@
   width: 100%;
 }
 
-.travelik-input-box input::placeholder {
+.dunas-input-box input::placeholder {
   color: #8C8880;
 }
 
-.travelik-eye {
+.dunas-eye {
   cursor: pointer;
   color: #8B4513;
   padding: 4px;
   transition: color 0.2s ease;
 }
 
-.travelik-eye:hover {
+.dunas-eye:hover {
   color: #F5A623;
 }
 
 /* ── 6. Options & Buttons ── */
-.travelik-options {
+.dunas-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -290,19 +290,19 @@
   color: #ffffff;
 }
 
-.travelik-options a {
+.dunas-options a {
   color: #F9C76B;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
-.travelik-options a:hover {
+.dunas-options a:hover {
   color: #F5A623;
   text-decoration: underline;
 }
 
-.travelik-login-btn {
+.dunas-login-btn {
   width: 100%;
   padding: 15px;
   background: linear-gradient(135deg, #F5A623 0%, #C07D0A 100%);
@@ -321,43 +321,43 @@
   gap: 8px;
 }
 
-.travelik-login-btn:hover {
+.dunas-login-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(245, 166, 35, 0.45);
   background: linear-gradient(135deg, #F9C76B 0%, #F5A623 100%);
 }
 
-.travelik-login-btn:disabled {
+.dunas-login-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
 }
 
-.travelik-divider {
+.dunas-divider {
   height: 1px;
   background: rgba(245, 166, 35, 0.2);
   margin: 25px 0;
 }
 
-.travelik-bottom-text {
+.dunas-bottom-text {
   text-align: center;
   font-size: 14px;
   color: #E8D0BF;
 }
 
-.travelik-bottom-text a {
+.dunas-bottom-text a {
   color: #F9C76B;
   font-weight: 600;
   text-decoration: none;
 }
 
-.travelik-bottom-text a:hover {
+.dunas-bottom-text a:hover {
   color: #F5A623;
   text-decoration: underline;
 }
 
 /* ── 7. Offer / Newsletter Section ── */
-.travelik-offer-section {
+.dunas-offer-section {
   background: linear-gradient(135deg, #1E3A8A 0%, #0C1C48 100%);
   padding: 60px 0;
   border-top: 2px solid #F5A623;
@@ -366,7 +366,7 @@
   overflow: hidden;
 }
 
-.travelik-offer-title {
+.dunas-offer-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 32px;
   font-weight: 700;
@@ -375,11 +375,11 @@
   text-transform: capitalize;
 }
 
-.travelik-offer-title span {
+.dunas-offer-title span {
   color: #F5A623;
 }
 
-.travelik-subscribe-box input {
+.dunas-subscribe-box input {
   padding: 14px 20px;
   border-radius: 8px;
   border: 1px solid rgba(245, 166, 35, 0.3);
@@ -389,7 +389,7 @@
   width: 100%;
 }
 
-.travelik-subscribe-box button {
+.dunas-subscribe-box button {
   padding: 14px 28px;
   background: #F5A623;
   color: #1A1A2E;
@@ -401,20 +401,20 @@
   white-space: nowrap;
 }
 
-.travelik-subscribe-box button:hover {
+.dunas-subscribe-box button:hover {
   background: #F9C76B;
 }
 
 /* Responsive Tweaks */
 @media (max-width: 991px) {
-  .travelik-image-box {
+  .dunas-image-box {
     min-height: 320px;
     margin-bottom: 30px;
   }
-  .travelik-login-card {
+  .dunas-login-card {
     padding: 24px;
   }
-  .travelik-breadcumb-title {
+  .dunas-breadcumb-title {
     font-size: 32px;
   }
 }

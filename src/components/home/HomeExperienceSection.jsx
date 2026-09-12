@@ -2160,7 +2160,7 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Photo Gallery - Travelik Replica Style */}
+      {/* Photo Gallery - Dunas Replica Style */}
       <section className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
         {/* Section Header */}
         <div className="container mx-auto px-6 mb-10 relative z-10 text-center">
@@ -2235,7 +2235,7 @@ const HomeExperienceSection = () => {
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                       </div>
-                      {/* Travelik Dark Gradient Hover Overlay */}
+                      {/* Dunas Dark Gradient Hover Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 rounded-xl">
                         <span className="text-[#0CB2DB] text-xs font-black tracking-widest uppercase mb-1">
                           Dunas Travel
