@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { useTours } from "../../hooks/useTours";
+import { useMedia } from "../../hooks/useMedia";
 import AnimatedCounter from "../common/AnimatedCounter";
 import HomeHeroSection from "./HomeHeroSection";
 import { useCurrency } from "../../context/CurrencyContext";
