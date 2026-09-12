@@ -38,26 +38,6 @@ export default function HomeHeroSection() {
       btnText: "SEE DESTINATION",
       btnLink: "#search-section",
     },
-    {
-      id: 3,
-      bgClass: "slider-bg three",
-      bgImage: "/imgs/egypt-hero-luxury.jpg",
-      titlePart1: "luxury",
-      titlePart2: "journey",
-      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
-      btnText: "SEE DESTINATION",
-      btnLink: "#search-section",
-    },
-    {
-      id: 4,
-      bgClass: "slider-bg four",
-      bgImage: "/imgs/multicountryhero.jpg",
-      titlePart1: "luxury",
-      titlePart2: "journey",
-      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
-      btnText: "SEE DESTINATION",
-      btnLink: "#search-section",
-    },
   ];
 
   // Run silky-smooth fluid element entrance on active slide (runs every slide change)
