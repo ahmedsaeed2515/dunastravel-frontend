@@ -1,4 +1,4 @@
-/* --- Copied exact CSS from index.html template (yacht dark hero) --- */
+/* --- Yacht Dark Hero Section Styles (Fully Responsive for All Devices) --- */
 
 :root {
   --color-white: #fff;
@@ -28,10 +28,7 @@
   z-index: 5;
   background: var(--dark-bg-color);
   width: 100%;
-}
-
-.boxed.two {
-  z-index: inherit;
+  box-sizing: border-box;
 }
 
 .main-slider-wrpper {
@@ -41,7 +38,7 @@
 }
 
 .main-slider-wrpper .slider-section {
-  height: 950px;
+  height: 850px;
   position: relative;
   border-radius: 30px;
   overflow: hidden;
@@ -73,12 +70,13 @@
   position: relative;
   z-index: 10;
   padding: 0 15px;
+  max-width: 100%;
 }
 
 .slider-section .hero_content h1 {
-  font-size: 230px;
+  font-size: 200px;
   font-weight: 400;
-  line-height: 190px;
+  line-height: 170px;
   font-family: var(--title-font);
   color: var(--title-color);
   margin: 0;
@@ -97,46 +95,45 @@
 }
 
 .slider-section .hero_content .slider-contect-des {
-  font-size: 24px;
+  font-size: 22px;
   position: relative;
   font-weight: 500;
   color: var(--color-white);
-  width: 40%;
-  line-height: 34px;
-  margin: 10px 0 5px;
+  width: 45%;
+  line-height: 32px;
+  margin: 14px 0 5px;
   font-family: var(--text-font);
 }
 
 .slider-section .hero_content h1 img.dunas-logo {
   display: inline-block;
-  width: 320px;
+  width: 280px;
   height: auto;
   vertical-align: middle;
-  margin-right: 10px;
-  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.35));
+  margin-right: 12px;
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.4));
 }
 
 .swiper-slide-active .slider-bg {
-  animation: zoomAnimation 20s infinite;
+  animation: zoomAnimation 20s infinite alternate ease-in-out;
 }
 
 @keyframes zoomAnimation {
   0% { transform: scale(1); }
-  50% { transform: scale(1.5); }
-  100% { transform: scale(1); }
+  100% { transform: scale(1.12); }
 }
 
+/* Circular Video Badge */
 .circle__video {
   position: absolute;
-  width: 164px;
-  height: 164px;
-  line-height: 164px;
+  width: 160px;
+  height: 160px;
+  line-height: 160px;
   background: rgba(53, 90, 105, 0.75);
   border-radius: 50%;
   text-align: center;
-  margin: auto;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   left: 38%;
   top: 14%;
   z-index: 20;
@@ -144,6 +141,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
 .circle__video svg {
@@ -207,25 +205,24 @@
   transform-box: view-box;
 }
 
+/* Dots Thumbnail Bar */
 .travel-slider-dots {
-  width: 590px !important;
   position: absolute;
   right: 0;
-  left: inherit !important;
-  bottom: -10px !important;
+  bottom: 0;
   display: flex;
-  gap: 32px;
+  gap: 24px;
   background: var(--dark-bg-color2);
-  height: 190px;
+  height: 170px;
   z-index: 30;
-  border-radius: 30px 0 0 0;
-  padding: 30px 25px 0 26px;
+  border-radius: 28px 0 0 0;
+  padding: 24px 28px 20px;
   text-align: left;
 }
 
 .travel-slider-dots .dot-slide {
-  width: 240px;
-  height: 140px;
+  width: 220px;
+  height: 125px;
   display: inline-block;
   border-radius: 15px;
   opacity: 0.75;
@@ -236,17 +233,17 @@
   z-index: 1;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .travel-slider-dots .dot-slide::before {
   position: absolute;
   content: '';
-  left: -10px;
-  top: -10px;
-  height: 160px;
-  width: 260px;
-  border-radius: 20px;
+  left: -8px;
+  top: -8px;
+  height: 141px;
+  width: 236px;
+  border-radius: 18px;
   border: 1px solid #FFFFFF1A;
   transition: border-color 0.3s ease;
 }
@@ -261,7 +258,7 @@
   border: 1px solid var(--primary-color);
 }
 
-/* --- Default button (defult-btn) --- */
+/* Default button */
 .defult-btn a {
   display: inline-block;
   background: var(--primary-color);
@@ -271,7 +268,7 @@
   font-size: 18px;
   letter-spacing: 2.3px;
   padding: 15px 40px;
-  margin-top: 30px;
+  margin-top: 24px;
   border-radius: 30px;
   transition: 0.5s;
   position: relative;
@@ -315,99 +312,100 @@
   fill: var(--theme-bg-color2);
 }
 
-/* --- Responsive (copy from original responsive.css) --- */
+/* --- Comprehensive Media Queries for Mobile Responsiveness --- */
+
+/* 1600px screens */
 @media only screen and (max-width: 1600px) {
-  .slider-section .hero_content h1 { font-size: 175px; line-height: 130px; }
-  .slider-section .hero_content .slider-contect-des { width: 48%; }
+  .slider-section .hero_content h1 { font-size: 160px; line-height: 135px; }
+  .slider-section .hero_content h1 img.dunas-logo { width: 240px; }
+  .slider-section .hero_content .slider-contect-des { width: 48%; font-size: 20px; }
+  .main-slider-wrpper .slider-section { height: 780px; }
 }
 
+/* 1200px screens (Laptops / Large Tablets) */
 @media only screen and (max-width: 1200px) {
-  .slider-section .hero_content h1 { font-size: 140px; line-height: 110px; }
-}
-
-@media only screen and (max-width: 1024px) {
-  .slider-section .hero_content h1 { font-size: 115px; line-height: 95px; }
-  .circle__video {
-    position: absolute;
-    width: 164px;
-    height: 164px;
-    line-height: 164px;
-    background: rgba(53, 90, 105, 0.75);
-    border-radius: 50%;
-    text-align: center;
-    margin: auto;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    left: 38%;
-    top: 14%;
-    z-index: 20;
-    overflow: visible;
-  }
-}
-
-@media only screen and (max-width: 992px) {
-  .slider-section .hero_content h1 { font-size: 125px; line-height: 73px; }
+  .slider-section .hero_content h1 { font-size: 130px; line-height: 110px; }
+  .slider-section .hero_content h1 img.dunas-logo { width: 200px; }
+  .slider-section .hero_content .slider-contect-des { width: 55%; font-size: 18px; line-height: 28px; }
   .main-slider-wrpper .slider-section { height: 700px; }
-  .slider-section .hero_content .slider-contect-des { width: 60%; }
-  .travel-slider-dots { width: 100% !important; bottom: 0 !important; border-radius: 20px 20px 0 0; height: auto; }
+  .circle__video { width: 130px; height: 130px; left: 42%; top: 12%; }
+  .travel-slider-dots { height: 150px; padding: 18px 20px; }
+  .travel-slider-dots .dot-slide { width: 180px; height: 110px; }
+  .travel-slider-dots .dot-slide::before { width: 196px; height: 126px; }
 }
 
+/* 992px screens (Tablets) */
+@media only screen and (max-width: 992px) {
+  .boxed { padding: 20px; }
+  .slider-section .hero_content h1 { font-size: 96px; line-height: 84px; }
+  .slider-section .hero_content h1 img.dunas-logo { width: 160px; }
+  .slider-section .hero_content .slider-contect-des { width: 68%; font-size: 17px; line-height: 25px; }
+  .main-slider-wrpper .slider-section { height: 620px; border-radius: 24px; }
+  .circle__video { width: 100px; height: 100px; left: auto; right: 30px; top: 30px; }
+  .travel-slider-dots {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: auto !important;
+    height: auto;
+    border-radius: 20px 0 0 0;
+    padding: 14px 18px;
+    gap: 16px;
+  }
+  .travel-slider-dots .dot-slide { width: 140px; height: 85px; border-radius: 12px; }
+  .travel-slider-dots .dot-slide::before { display: none; }
+}
+
+/* 768px screens (Portrait Tablets / Big Mobile) */
 @media only screen and (max-width: 768px) {
-  .circle__video {
-    position: absolute;
-    width: 164px;
-    height: 164px;
-    line-height: 164px;
-    background: rgba(53, 90, 105, 0.75);
-    border-radius: 50%;
-    text-align: center;
-    margin: auto;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    left: 38%;
-    top: 14%;
-    z-index: 20;
-    overflow: visible;
+  .boxed { padding: 12px; }
+  .main-slider-wrpper .slider-section { height: 540px; border-radius: 20px; }
+  .slider-section .hero_content h1 { font-size: 72px; line-height: 64px; }
+  .slider-section .hero_content h1 img.dunas-logo { width: 130px; margin-right: 8px; }
+  .slider-section .hero_content .slider-contect-des { width: 85%; font-size: 15px; line-height: 22px; margin-top: 10px; }
+  .defult-btn a { font-size: 15px; padding: 12px 30px; margin-top: 18px; }
+  .circle__video { width: 80px; height: 80px; right: 20px; top: 20px; }
+  .circle__video text { font-size: 16px; }
+  .circle__video .circle-vide_btn { width: 38px; height: 38px; font-size: 12px; }
+  .travel-slider-dots {
+    width: 100% !important;
+    justify-content: center;
+    border-radius: 20px 20px 0 0;
+    padding: 12px 14px;
+    gap: 12px;
   }
-  .main-slider-wrpper .slider-section { height: 550px; }
-  .slider-section .hero_content h1 { font-size: 95px; line-height: 80px; }
+  .travel-slider-dots .dot-slide { width: 110px; height: 70px; }
 }
 
-@media only screen and (max-width: 600px) {
-  .slider-section .hero_content h1 img { display: none; }
-  .slider-section .hero_content h1 { font-size: 100px; line-height: 100px; }
-  .circle__video {
-    position: absolute;
-    width: 164px;
-    height: 164px;
-    line-height: 164px;
-    background: rgba(53, 90, 105, 0.75);
-    border-radius: 50%;
-    text-align: center;
-    margin: auto;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    left: 38%;
-    top: 14%;
-    z-index: 20;
-    overflow: visible;
-  }
-  .slider-section .hero_content .slider-contect-des { width: 100%; }
-  .main-slider-wrpper .slider-section { height: 750px; }
-  .travel-slider-dots .dot-slide { width: 100px; height: 90px; }
-  .travel-slider-dots { bottom: -45px !important; }
-}
-
+/* 576px screens (Mobile Devices) */
 @media only screen and (max-width: 576px) {
-  .boxed { padding: 15px; }
-  .main-slider-wrpper .slider-section { height: 480px; border-radius: 18px; }
-  .slider-section .hero_content h1 { font-size: 58px; line-height: 55px; }
-  .slider-section .hero_content .slider-contect-des { font-size: 16px; line-height: 26px; }
-  .defult-btn a { font-size: 15px; padding: 12px 26px; }
-  .travel-slider-dots { bottom: 0 !important; gap: 16px; }
+  .boxed { padding: 8px; }
+  .main-slider-wrpper .slider-section { height: 500px; border-radius: 16px; }
+  .slider-section .hero_content { padding: 0 10px; }
+  .slider-section .hero_content h1 { font-size: 52px; line-height: 48px; }
+  .slider-section .hero_content h1 img.dunas-logo { width: 105px; margin-right: 6px; }
+  .slider-section .hero_content .slider-contect-des { width: 100%; font-size: 14px; line-height: 20px; margin-top: 8px; }
+  .defult-btn a { font-size: 14px; padding: 10px 24px; margin-top: 14px; letter-spacing: 1.5px; }
+  .circle__video { width: 70px; height: 70px; right: 16px; top: 16px; backdrop-filter: blur(10px); }
+  .circle__video text { font-size: 14px; }
+  .circle__video .circle-vide_btn { width: 34px; height: 34px; font-size: 11px; }
+  .travel-slider-dots { padding: 10px; gap: 10px; }
+  .travel-slider-dots .dot-slide { width: 95px; height: 60px; border-radius: 10px; }
 }
 
-/* --- Video Modal Overlay --- */
+/* 400px screens (Small Mobile Phones - iPhone SE, Galaxy Mini) */
+@media only screen and (max-width: 400px) {
+  .main-slider-wrpper .slider-section { height: 460px; }
+  .slider-section .hero_content h1 { font-size: 42px; line-height: 40px; }
+  .slider-section .hero_content h1 img.dunas-logo { width: 85px; margin-right: 4px; }
+  .slider-section .hero_content .slider-contect-des { font-size: 13px; line-height: 18px; }
+  .defult-btn a { font-size: 13px; padding: 9px 20px; }
+  .circle__video { width: 60px; height: 60px; right: 12px; top: 12px; }
+  .circle__video .circle-vide_btn { width: 30px; height: 30px; font-size: 10px; }
+  .travel-slider-dots .dot-slide { width: 80px; height: 50px; }
+}
+
+/* Video Modal Overlay */
 .video-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -434,7 +432,7 @@
 
 .video-modal-close {
   position: absolute;
-  top: -48px;
+  top: -44px;
   right: 0;
   background: transparent;
   border: none;
