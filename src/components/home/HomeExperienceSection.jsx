@@ -6,10 +6,14 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { useTours } from "../../hooks/useTours";
 import { useMedia } from "../../hooks/useMedia";
+import { useDestinations } from "../../hooks/useDestinations";
+import { useServices } from "../../hooks/useServices";
+import { transportation as fallbackTransportation } from "../../data/transportation";
 import AnimatedCounter from "../common/AnimatedCounter";
 import HomeHeroSection from "./HomeHeroSection";
 import { useCurrency } from "../../context/CurrencyContext";
 import api from "../../utils/api";
+import { resolveLocalizedText } from "../../utils/titleHelper";
 
 
 const _destinationsData = [
