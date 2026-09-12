@@ -2526,11 +2526,20 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* Contact Info Section */}
-      <section className="py-20 lg:py-32 relative overflow-hidden bg-obsidian-900 content-auto">
+      <section 
+        className="py-20 lg:py-32 relative overflow-hidden content-auto"
+        style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
+      >
+        {/* Subtle shine overlay matching top header */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%)' }} />
+
+        {/* Top and Bottom Gold accent borders matching top header */}
+        <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+
         {/* Glow Effects */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary-500/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-gold-500/5 blur-[100px] pointer-events-none" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-[#F5A623]/10 blur-[100px] pointer-events-none" />
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
@@ -2553,7 +2562,7 @@ const HomeExperienceSection = () => {
                   {t('home.contactTitle', "We're Here to Help")}
                 </h2>
                 
-                <p className="text-body-md text-ivory-300 leading-relaxed font-body max-w-md mx-auto lg:mx-0">
+                <p className="text-body-md text-white leading-relaxed font-body max-w-md mx-auto lg:mx-0">
                   {i18n.language === 'ar' 
                     ? "فريق مستشاري السفر الفاخر لدينا متاح دائمًا لتصميم رحلتك المخصصة والإجابة على أي استفسارات على مدار الساعة."
                     : "Our dedicated travel advisors are standing by 24/7 to design your bespoke itinerary, answer questions, or provide support at any point of your journey."
@@ -2570,14 +2579,14 @@ const HomeExperienceSection = () => {
                 className="relative w-48 h-48 mx-auto lg:ms-0 flex items-center justify-center"
               >
                 {/* Glowing Circles */}
-                <div className="absolute inset-0 rounded-full border border-gold-500/10 animate-ring-slow" />
-                <div className="absolute inset-4 rounded-full border border-gold-500/20 animate-ring-fast" />
+                <div className="absolute inset-0 rounded-full border border-[#F5A623]/25 animate-ring-slow" />
+                <div className="absolute inset-4 rounded-full border border-[#F5A623]/40 animate-ring-fast" />
                 
                 {/* Center visual box */}
-                <div className="w-28 h-28 rounded-3xl bg-gradient-to-tr from-primary-900 to-primary-500 p-0.5 shadow-gold/20 shadow-2xl relative flex items-center justify-center border border-white/10 group hover:rotate-6 transition-transform duration-500">
-                  <div className="absolute inset-[2px] bg-obsidian-900 rounded-[22px] flex items-center justify-center overflow-hidden">
-                    <div className="absolute inset-0 bg-gold-gradient opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
-                    <FaHeadset className="w-12 h-12 text-gold-500 group-hover:scale-110 transition-transform duration-500" />
+                <div className="w-28 h-28 rounded-3xl bg-gradient-to-tr from-[#C9A227] to-[#F5A623] p-0.5 shadow-[#F5A623]/20 shadow-2xl relative flex items-center justify-center border border-white/10 group hover:rotate-6 transition-transform duration-500">
+                  <div className="absolute inset-[2px] bg-[#061D5D] rounded-[22px] flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 bg-gold-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+                    <FaHeadset className="w-12 h-12 text-[#F5A623] group-hover:scale-110 transition-transform duration-500" />
                   </div>
                 </div>
               </motion.div>
@@ -2596,16 +2605,16 @@ const HomeExperienceSection = () => {
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-semibold uppercase tracking-wider text-xs px-8 py-4 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 group"
                 >
-                  <FaWhatsapp className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                  <FaWhatsapp className="w-5 h-5 group-hover:rotate-12 transition-transform text-white" />
                   {i18n.language === 'ar' ? "تحدث معنا عبر واتساب" : "Chat on WhatsApp"}
                 </a>
                 
                 <Link
                   to="/contact"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 glassmorphism-card text-ivory-50 font-medium uppercase tracking-wider text-xs px-8 py-4 rounded-full hover:bg-white/5 transition-all duration-300"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 glassmorphism-card text-white font-medium uppercase tracking-wider text-xs px-8 py-4 rounded-full hover:bg-white/10 transition-all duration-300"
                 >
                   {i18n.language === 'ar' ? "صفحة الاتصال" : "Contact Page"}
-                  <FaArrowRight className="w-3.5 h-3.5" />
+                  <FaArrowRight className="w-3.5 h-3.5 text-white" />
                 </Link>
               </motion.div>
             </div>
@@ -2622,13 +2631,13 @@ const HomeExperienceSection = () => {
                 whileHover={{ y: -6 }}
                 className="glassmorphism-card rounded-2xl p-6 md:p-8 flex items-start gap-6 group transition-all duration-300 text-start"
               >
-                <div className="w-14 h-14 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 group-hover:bg-gold-500 group-hover:text-obsidian-900 transition-all duration-300 shrink-0 shadow-lg">
+                <div className="w-14 h-14 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-[#061D5D] transition-all duration-300 shrink-0 shadow-lg">
                   <FaMapMarkerAlt className="w-6 h-6" />
                 </div>
                 <div className="space-y-2 flex-grow">
-                  <span className="text-[10px] text-gold-400 font-bold uppercase tracking-widest block">01 / {t('contact.office', 'Address')}</span>
-                  <h3 className="text-lg font-bold text-ivory-50 tracking-wide font-display">{t('home.contactAddress', 'Our Location')}</h3>
-                  <p className="text-ivory-300 text-sm leading-relaxed font-body">
+                  <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest block">01 / {t('contact.office', 'Address')}</span>
+                  <h3 className="text-lg font-bold text-white tracking-wide font-display">{t('home.contactAddress', 'Our Location')}</h3>
+                  <p className="text-white/90 text-sm leading-relaxed font-body">
                     5 Hussein Said St, Old Hadayk El Ahram<br />
                     First floor, Flat 102 – 103<br />
                     Haram - Giza – Egypt
@@ -2637,10 +2646,10 @@ const HomeExperienceSection = () => {
                     href="https://maps.google.com/?q=5+Hussein+Said+St,+Old+Hadayk+El+Ahram,+Haram,+Giza,+Egypt" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-gold-400 hover:text-gold-300 transition-colors pt-2 group/link"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-white hover:text-white/80 transition-colors pt-2 group/link"
                   >
                     {i18n.language === 'ar' ? "عرض على الخريطة" : "Open in Google Maps"}
-                    <FaArrowRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
+                    <FaArrowRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform text-white" />
                   </a>
                 </div>
               </motion.div>
@@ -2654,26 +2663,26 @@ const HomeExperienceSection = () => {
                 whileHover={{ y: -6 }}
                 className="glassmorphism-card rounded-2xl p-6 md:p-8 flex items-start gap-6 group transition-all duration-300 text-start"
               >
-                <div className="w-14 h-14 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 group-hover:bg-gold-500 group-hover:text-obsidian-900 transition-all duration-300 shrink-0 shadow-lg">
+                <div className="w-14 h-14 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-[#061D5D] transition-all duration-300 shrink-0 shadow-lg">
                   <FaPhoneAlt className="w-6 h-6" />
                 </div>
                 <div className="space-y-2 flex-grow">
-                  <span className="text-[10px] text-gold-400 font-bold uppercase tracking-widest block">02 / {t('contact.phoneLabel', 'Phone')}</span>
-                  <h3 className="text-lg font-bold text-ivory-50 tracking-wide font-display">{t('home.contactPhone', 'Call Us')}</h3>
+                  <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest block">02 / {t('contact.phoneLabel', 'Phone')}</span>
+                  <h3 className="text-lg font-bold text-white tracking-wide font-display">{t('home.contactPhone', 'Call Us')}</h3>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                     <a
                       href="tel:+20233746643"
-                      className="inline-flex items-center gap-2.5 text-ivory-300 hover:text-gold-400 text-sm font-medium transition-colors py-1 px-3 rounded-lg bg-white/5 border border-white/5 hover:border-gold-500/30 hover:bg-gold-500/5"
+                      className="inline-flex items-center gap-2.5 text-white hover:text-white/80 text-sm font-medium transition-colors py-1 px-3 rounded-lg bg-white/10 border border-white/10 hover:border-white/30 hover:bg-white/15"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       02 33746643
                     </a>
                     <a
                       href="tel:+20233746654"
-                      className="inline-flex items-center gap-2.5 text-ivory-300 hover:text-gold-400 text-sm font-medium transition-colors py-1 px-3 rounded-lg bg-white/5 border border-white/5 hover:border-gold-500/30 hover:bg-gold-500/5"
+                      className="inline-flex items-center gap-2.5 text-white hover:text-white/80 text-sm font-medium transition-colors py-1 px-3 rounded-lg bg-white/10 border border-white/10 hover:border-white/30 hover:bg-white/15"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       02 33746654
                     </a>
                   </div>
@@ -2689,20 +2698,20 @@ const HomeExperienceSection = () => {
                 whileHover={{ y: -6 }}
                 className="glassmorphism-card rounded-2xl p-6 md:p-8 flex items-start gap-6 group transition-all duration-300 text-start"
               >
-                <div className="w-14 h-14 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 group-hover:bg-gold-500 group-hover:text-obsidian-900 transition-all duration-300 shrink-0 shadow-lg">
+                <div className="w-14 h-14 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-[#061D5D] transition-all duration-300 shrink-0 shadow-lg">
                   <FaEnvelope className="w-6 h-6" />
                 </div>
                 <div className="space-y-2 flex-grow">
-                  <span className="text-[10px] text-gold-400 font-bold uppercase tracking-widest block">03 / {t('contact.emailLabel', 'Email')}</span>
-                  <h3 className="text-lg font-bold text-ivory-50 tracking-wide font-display">{t('home.contactEmail', 'Email Us')}</h3>
+                  <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest block">03 / {t('contact.emailLabel', 'Email')}</span>
+                  <h3 className="text-lg font-bold text-white tracking-wide font-display">{t('home.contactEmail', 'Email Us')}</h3>
                   
                   <div className="pt-2">
                     <a
                       href="mailto:info@dunas-travel.com"
                       aria-label="Send us an email at info@dunas-travel.com"
-                      className="inline-flex items-center gap-2.5 text-ivory-300 hover:text-gold-400 text-sm font-medium transition-colors py-1.5 px-4 rounded-lg bg-white/5 border border-white/5 hover:border-gold-500/30 hover:bg-gold-500/5"
+                      className="inline-flex items-center gap-2.5 text-white hover:text-white/80 text-sm font-medium transition-colors py-1.5 px-4 rounded-lg bg-white/10 border border-white/10 hover:border-white/30 hover:bg-white/15"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
                       info@dunas-travel.com
                     </a>
                   </div>
