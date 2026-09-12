@@ -88,12 +88,15 @@ export default function HomeHeroSection() {
     const activeSlideEl = containerRef.current.querySelector(".swiper-slide-active");
     if (!activeSlideEl) return;
 
-    // Force re-trigger CSS zoom animation on active slide background
+    // Force re-trigger CSS zoom animation on active slide background without forced reflow
     const activeBg = activeSlideEl.querySelector(".slider-bg");
     if (activeBg) {
       activeBg.style.animation = "none";
-      void activeBg.offsetHeight; // trigger reflow
-      activeBg.style.animation = "heroZoomSequence 6s cubic-bezier(0.37, 0, 0.63, 1) forwards";
+      requestAnimationFrame(() => {
+        if (activeBg) {
+          activeBg.style.animation = "heroZoomSequence 6s cubic-bezier(0.37, 0, 0.63, 1) forwards";
+        }
+      });
     }
 
     const heading1 = activeSlideEl.querySelector(".hero-heading-1");
