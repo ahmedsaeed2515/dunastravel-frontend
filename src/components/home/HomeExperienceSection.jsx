@@ -6,13 +6,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaStar, FaTimes, FaChevronLeft, FaChevronRight, FaVolumeMute, FaVolumeUp, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaHeadset, FaWhatsapp, FaArrowRight, FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaClock, FaCompass, FaLandmark, FaBookOpen } from "react-icons/fa";
 import Button from "../ui/Button";
 import TourCard from "../tour/TourCard";
-import TravelikHeroSection from "./TravelikHeroSection";
 import { useTours } from "../../hooks/useTours";
 import { useMedia } from "../../hooks/useMedia";
 import { useDestinations } from "../../hooks/useDestinations";
 import { useServices } from "../../hooks/useServices";
 import { transportation as fallbackTransportation } from "../../data/transportation";
 import AnimatedCounter from "../common/AnimatedCounter";
+import HomeHeroSection from "./HomeHeroSection";
 import { useCurrency } from "../../context/CurrencyContext";
 import api from "../../utils/api";
 import {
@@ -935,40 +935,6 @@ const HomeExperienceSection = () => {
   }, [allLiveTours, homeTurkeyPreviewTours, homeJordanPreviewTours, homeDubaiPreviewTours, lang, t]);
 
 
-  // Hero Video State
-  const videoRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
-
-  // Load hero video only on desktop viewports (>= 768px) after first paint to save 1.78 MB payload on mobile
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const isDesktop = window.innerWidth >= 768;
-    if (!isDesktop) return;
-
-    if ('requestIdleCallback' in window) {
-      const handle = window.requestIdleCallback(() => setShouldLoadVideo(true), { timeout: 1500 });
-      return () => window.cancelIdleCallback(handle);
-    } else {
-      const timer = setTimeout(() => setShouldLoadVideo(true), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  // Sync muted state to video DOM element (reliable approach)
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.muted = isMuted;
-    if (!isMuted) {
-      el.play().catch(() => {});
-    }
-  }, [isMuted]);
-
-  const toggleMute = () => {
-    setIsMuted(prev => !prev);
-  };
-
   // Search Form State
   const [searchDest, setSearchDest] = useState("all");
   const [searchTour, setSearchTour] = useState("");
@@ -1216,10 +1182,11 @@ const HomeExperienceSection = () => {
         <meta property="og:image" content="/dunas-travel-logo.png" />
       </Helmet>
 
-      {/* Hero Section — Travelik index-3dark Replica Style */}
-      <TravelikHeroSection />
+      {/* Yacht Dark Hero Section */}
+      <HomeHeroSection />
+
       {/* Search Section */}
-      <section className="relative w-full py-20 md:py-28 overflow-hidden mt-12">
+      <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-12">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
