@@ -268,7 +268,11 @@
   bottom: 0;
   display: flex;
   gap: 24px;
-  background: var(--dark-bg-color2);
+  background: linear-gradient(to bottom, rgba(18, 35, 39, 0.7), rgba(18, 35, 39, 0.88)), url('https://res.cloudinary.com/degbrq3ck/image/upload/w_640,h_400,c_fill,q_auto:eco,f_auto/v1783067135/grand_tour_of_turkey_lxb1f4.webp');
+  background-size: cover;
+  background-position: top right;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   height: 170px;
   z-index: 30;
   border-radius: 28px 0 0 0;
