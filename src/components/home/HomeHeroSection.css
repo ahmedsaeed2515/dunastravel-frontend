@@ -118,11 +118,6 @@
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.35));
 }
 
-[dir="rtl"] .slider-section .hero_content h1 img.dunas-logo {
-  margin-right: 0;
-  margin-left: 10px;
-}
-
 .swiper-slide-active .slider-bg {
   animation: zoomAnimation 20s infinite;
 }
@@ -151,11 +146,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-[dir="rtl"] .circle__video {
-  left: auto;
-  right: 38%;
 }
 
 .circle__video svg {
@@ -233,12 +223,6 @@
   border-radius: 30px 0 0 0;
   padding: 30px 25px 0 26px;
   text-align: left;
-}
-
-[dir="rtl"] .travel-slider-dots {
-  right: inherit !important;
-  left: 0 !important;
-  border-radius: 0 30px 0 0;
 }
 
 .travel-slider-dots .dot-slide {

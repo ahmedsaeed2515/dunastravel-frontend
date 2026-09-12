@@ -132,7 +132,7 @@ export default function HomeHeroSection() {
   };
 
   return (
-    <div className="boxed" ref={containerRef}>
+    <div className="boxed ltr" dir="ltr" style={{ direction: 'ltr', textAlign: 'left' }} ref={containerRef}>
       <div className="main-slider-wrpper">
         <Swiper
           ref={swiperRef}
