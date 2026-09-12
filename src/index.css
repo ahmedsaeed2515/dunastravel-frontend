@@ -796,18 +796,33 @@ html[dir="rtl"] .dropdown-item:hover {
   transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Dunas Image Container — Crisp and clear with no light overlay */
+/* Dunas Image Shimmer Flash Animation (.dunas-img-container::after) */
 .dunas-img-container {
   position: relative;
   overflow: hidden;
 }
 
 .dunas-img-container::after {
-  display: none !important;
+  content: "";
+  position: absolute;
+  width: 220%;
+  height: 0%;
+  left: 50%;
+  top: 50%;
+  background: linear-gradient(
+    90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.25) 50%, 
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translate(-50%, -50%) rotate(-45deg);
+  z-index: 15;
+  pointer-events: none;
+  transition: height 700ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .group:hover .dunas-img-container::after {
-  display: none !important;
+  height: 320%;
 }
 
 /* Dunas Decorative Corner Ornament (.about-sp) */
@@ -840,18 +855,19 @@ html[dir="rtl"] .dropdown-item:hover {
   overflow: hidden;
 }
 
-/* Clear & Pristine Image Display - No Zoom or Distortion on Hover */
+/* Luxurious Screen Lens Push-In Zoom on Hover */
 .populer-single-box.style-classic .populer-thumb img {
-  transform: scale(1);
-  transition: transform 0.5s cubic-bezier(0.1, 1, 0.2, 1);
+  transform: scale(1.0001);
+  transition: transform 1.8s cubic-bezier(0.1, 1, 0.2, 1);
   will-change: transform;
   transform-origin: center center;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-.populer-single-box.style-classic:hover .populer-thumb img {
-  transform: scale(1);
+.populer-single-box.style-classic:hover .populer-thumb img,
+.group:hover .populer-thumb img {
+  transform: scale(1.12);
 }
 
 .populer-single-box.style-classic .populer-thumb .populer-price {
