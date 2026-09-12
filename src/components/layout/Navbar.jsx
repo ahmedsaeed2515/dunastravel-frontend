@@ -260,7 +260,7 @@ const Navbar = () => {
 
       {/* Main Header */}
       <header
-        className={`fixed top-[40px] sm:top-[44px] left-0 right-0 z-[9998] transition-all duration-300 h-16 lg:h-20 flex items-center ${headerVisible ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'bg-obsidian-950/90 backdrop-blur-md shadow-2xl border-b border-gold-500/10' : 'bg-transparent border-none shadow-none'}`}
+        className={`fixed top-[40px] sm:top-[44px] left-0 right-0 z-[9998] transition-all duration-300 h-16 lg:h-20 flex items-center ${headerVisible ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'bg-white/95 dark:bg-obsidian-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/80 dark:border-gold-500/20' : 'bg-transparent border-none shadow-none'}`}
       >
         <div className="container mx-auto px-6 h-full flex justify-between items-center relative z-10">
           {/* Logo */}
@@ -278,11 +278,11 @@ const Navbar = () => {
                 onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
               >
                 {link.dropdown ? (
-                  <button className="flex items-center gap-1.5 text-white hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0">
+                  <button className={`flex items-center gap-1.5 ${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0`}>
                     {link.name} <FaChevronDown className={`text-xs transition-transform duration-200 ${activeDropdown === link.name ? 'rotate-180' : ''}`} />
                   </button>
                 ) : (
-                  <Link to={link.path} className="text-white hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0">
+                  <Link to={link.path} className={`${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0`}>
                     {link.name}
                   </Link>
                 )}
