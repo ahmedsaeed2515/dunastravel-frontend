@@ -8,6 +8,56 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "./HomeHeroSection.css";
 
+const SLIDE_DATA = [
+  {
+    bgClass: "slider-bg one",
+    bgImage: "/imgs/slider-abu-simbel.webp",
+    titlePart1: "luxury",
+    titlePart2: "journey",
+    desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
+    btnText: "SEE DESTINATION",
+    btnLink: "#search-section",
+  },
+  {
+    bgClass: "slider-bg two",
+    bgImage: "/imgs/slider-pyramids.webp",
+    titlePart1: "luxury",
+    titlePart2: "journey",
+    desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
+    btnText: "SEE DESTINATION",
+    btnLink: "#search-section",
+  },
+  {
+    bgClass: "slider-bg three",
+    bgImage: "/imgs/slider-karnak.webp",
+    titlePart1: "luxury",
+    titlePart2: "journey",
+    desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
+    btnText: "SEE DESTINATION",
+    btnLink: "#search-section",
+  },
+];
+
+// Static 6-slide buffer (repeating 1, 2, 3, 1, 2, 3) prevents Swiper loop boundary pauses
+const SLIDES = [
+  { id: "hero-s1", ...SLIDE_DATA[0] },
+  { id: "hero-s2", ...SLIDE_DATA[1] },
+  { id: "hero-s3", ...SLIDE_DATA[2] },
+  { id: "hero-s4", ...SLIDE_DATA[0] },
+  { id: "hero-s5", ...SLIDE_DATA[1] },
+  { id: "hero-s6", ...SLIDE_DATA[2] },
+];
+
+const SWIPER_MODULES = [EffectFade, Autoplay];
+const SWIPER_AUTOPLAY_CONFIG = {
+  delay: 4500,
+  disableOnInteraction: false,
+  pauseOnMouseEnter: false,
+  stopOnLastSlide: false,
+  waitForTransition: false,
+};
+const SWIPER_FADE_EFFECT = { crossFade: true };
+
 export default function HomeHeroSection() {
   const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -15,48 +65,19 @@ export default function HomeHeroSection() {
   const swiperRef = useRef(null);
   const containerRef = useRef(null);
 
-  const slides = [
-    {
-      id: 1,
-      bgClass: "slider-bg",
-      bgImage: "/imgs/slider-bg.webp",
-      titlePart1: "luxury",
-      titlePart2: "journey",
-      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
-      btnText: "SEE DESTINATION",
-      btnLink: "#search-section",
-    },
-    {
-      id: 2,
-      bgClass: "slider-bg two",
-      bgImage: "/imgs/slider-two.webp",
-      titlePart1: "luxury",
-      titlePart2: "journey",
-      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
-      btnText: "SEE DESTINATION",
-      btnLink: "#search-section",
-    },
-    {
-      id: 3,
-      bgClass: "slider-bg",
-      bgImage: "/imgs/slider-bg.webp",
-      titlePart1: "luxury",
-      titlePart2: "journey",
-      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
-      btnText: "SEE DESTINATION",
-      btnLink: "#search-section",
-    },
-    {
-      id: 4,
-      bgClass: "slider-bg two",
-      bgImage: "/imgs/slider-two.webp",
-      titlePart1: "luxury",
-      titlePart2: "journey",
-      desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
-      btnText: "SEE DESTINATION",
-      btnLink: "#search-section",
-    },
-  ];
+  // Bulletproof autoplay watchdog: ensures autoplay is always active and advancing continuously
+  useEffect(() => {
+    const watchdogTimer = setInterval(() => {
+      if (swiperRef.current && swiperRef.current.swiper) {
+        const swiper = swiperRef.current.swiper;
+        if (swiper.autoplay && !swiper.autoplay.running) {
+          swiper.autoplay.start();
+        }
+      }
+    }, 2000);
+
+    return () => clearInterval(watchdogTimer);
+  }, []);
 
   // Run silky-smooth fluid element entrance & restart background zoom animation on active slide
   useEffect(() => {
@@ -92,7 +113,7 @@ export default function HomeHeroSection() {
       activeBg.style.animation = "none";
       requestAnimationFrame(() => {
         if (activeBg) {
-          activeBg.style.animation = "heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards";
+          activeBg.style.animation = "heroZoomSequence 5s cubic-bezier(0.37, 0, 0.63, 1) forwards";
         }
       });
     }
@@ -184,6 +205,9 @@ export default function HomeHeroSection() {
   const handleSlideTo = (index) => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slideToLoop(index);
+      if (swiperRef.current.swiper.autoplay) {
+        swiperRef.current.swiper.autoplay.start();
+      }
     }
   };
 
@@ -201,38 +225,31 @@ export default function HomeHeroSection() {
       <div className="main-slider-wrpper">
         <Swiper
           ref={swiperRef}
-          modules={[EffectFade, Autoplay]}
+          modules={SWIPER_MODULES}
           effect="fade"
-          fadeEffect={{ crossFade: true }}
+          fadeEffect={SWIPER_FADE_EFFECT}
           loop={true}
           speed={1200}
-          autoplay={{
-            delay: 10000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: false,
-            stopOnLastSlide: false,
-            waitForTransition: false,
-          }}
+          autoplay={SWIPER_AUTOPLAY_CONFIG}
           onSwiper={(swiper) => {
             if (swiper && swiper.autoplay) {
               swiper.autoplay.start();
             }
           }}
-          onSlideChangeTransitionStart={(swiper) => {
+          onSlideChangeTransitionEnd={(swiper) => {
             setActiveIndex(swiper.realIndex);
             if (swiper && swiper.autoplay && !swiper.autoplay.running) {
               swiper.autoplay.start();
             }
           }}
-          onSlideChange={(swiper) => {
-            setActiveIndex(swiper.realIndex);
-            if (swiper && swiper.autoplay && !swiper.autoplay.running) {
+          onAutoplayStop={(swiper) => {
+            if (swiper && swiper.autoplay) {
               swiper.autoplay.start();
             }
           }}
           className="swiper slider__active"
         >
-          {slides.map((slide) => (
+          {SLIDES.map((slide) => (
             <SwiperSlide key={slide.id}>
               <div className="slider-section d-flex align-items-center">
                 <div
@@ -313,15 +330,16 @@ export default function HomeHeroSection() {
             </SwiperSlide>
           ))}
 
-          {/* Dots Navigation Thumbnail Bar */}
+          {/* Dots Navigation Bar */}
           <div className="travel-slider-dots">
-            {slides.slice(0, 2).map((s, idx) => (
-              <span
-                key={s.id}
+            {SLIDE_DATA.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
                 onClick={() => handleSlideTo(idx)}
-                className={`dot-slide ${(activeIndex % 2) === idx ? "active" : ""}`}
-                style={{ backgroundImage: `url('${s.bgImage}')` }}
-              ></span>
+                className={`dot-slide ${(activeIndex % 3) === idx ? "active" : ""}`}
+                aria-label={`Go to slide ${idx + 1}`}
+              ></button>
             ))}
           </div>
         </Swiper>
