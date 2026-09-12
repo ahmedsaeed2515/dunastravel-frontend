@@ -168,7 +168,7 @@ const _packagesData = [
     tag2Key: "egyptPackages.extension.tag2",
     tag3Key: "egyptPackages.extension.tag3",
     price: 0,
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/w_600,h_450,c_fill,q_60,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/w_600,h_450,c_fill,q_40,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp",
     link: "/programs/extension",
     featured: false,
   }
