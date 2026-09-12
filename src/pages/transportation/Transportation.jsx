@@ -138,10 +138,9 @@ const Transportation = () => {
           <img
             src="/imgs/transportation-hero.png"
             alt="Transportation Hero"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-contain object-center"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#041446]/30 via-[#041446]/50 to-[#041446]/85" />
         </div>
 
         <div className="container mx-auto px-6 md:px-12 relative z-10 mt-16">
