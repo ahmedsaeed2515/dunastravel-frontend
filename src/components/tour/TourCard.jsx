@@ -93,8 +93,7 @@ const TourCard = ({
   const durationStr = typeof duration === 'string' ? duration : String(duration || '');
   const durationLabel = durationStr.includes('/') ? durationStr.split('/')[0].trim() : durationStr;
 
-  // Set all tour prices to 0 as requested by the user
-  const resolvePrice = () => 0;
+  const resolvePrice = (tData) => Number(tData?.price ?? tData?.basePriceUsd ?? 0);
   const displayPrice = resolvePrice(tour);
   const tourImage =
     resolveTourHeroImage(tour) ||
@@ -286,10 +285,12 @@ const TourCard = ({
               {t('tourCard.startingFrom', 'يبدأ من')}
             </span>
             <div className="flex items-baseline gap-1 text-[#D97706] dark:text-gold-400 font-extrabold text-lg md:text-xl">
-              <span>{formatPrice(displayPrice)}</span>
-              <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400">
-                / {t('tourCard.perPerson', 'للشخص')}
-              </span>
+              <span>{displayPrice > 0 ? formatPrice(displayPrice) : t('tourCard.onRequest', 'On Request')}</span>
+              {displayPrice > 0 && (
+                <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400">
+                  / {t('tourCard.perPerson', 'للشخص')}
+                </span>
+              )}
             </div>
           </div>
 
