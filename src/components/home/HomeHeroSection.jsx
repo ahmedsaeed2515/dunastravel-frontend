@@ -40,77 +40,92 @@ export default function HomeHeroSection() {
     },
   ];
 
-  // Run exact animation on active slide (Headings from top, Logo/Desc/Btn from bottom)
+  // Run distinct GSAP animation on active slide
   useEffect(() => {
     if (!containerRef.current) return;
 
     const activeSlideEl = containerRef.current.querySelector(".swiper-slide-active");
     if (!activeSlideEl) return;
 
-    const headings = activeSlideEl.querySelectorAll(".text-anime-3");
+    const heading1 = activeSlideEl.querySelector(".hero-heading-1");
+    const heading2 = activeSlideEl.querySelector(".hero-heading-2");
     const logo = activeSlideEl.querySelector(".dunas-logo");
     const desc = activeSlideEl.querySelector(".slider-contect-des");
     const btn = activeSlideEl.querySelector(".defult-btn a");
 
-    // 1. Heading text ("luxury journey"): drops DOWN from top (y: -100 -> 0)
-    if (headings.length > 0) {
-      gsap.killTweensOf(headings);
+    // Clear previous tweens
+    gsap.killTweensOf([heading1, heading2, logo, desc, btn]);
+
+    // 1. First Heading line ("LUXURY"): Drops DOWN from top (-160px)
+    if (heading1) {
       gsap.fromTo(
-        headings,
-        { opacity: 0, y: -100 },
+        heading1,
+        { opacity: 0, y: -160 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: "power2.out",
+          duration: 1.1,
+          ease: "power3.out",
         }
       );
     }
 
-    // 2. Logo image: comes UP from bottom (y: 100 -> 0)
+    // 2. Second Heading line ("JOURNEY"): Drops DOWN from top (-160px)
+    if (heading2) {
+      gsap.fromTo(
+        heading2,
+        { opacity: 0, y: -160 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.1,
+          ease: "power3.out",
+          delay: 0.12,
+        }
+      );
+    }
+
+    // 3. Dunas Logo Image: Comes UP from bottom (+160px)
     if (logo) {
-      gsap.killTweensOf(logo);
       gsap.fromTo(
         logo,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 160 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: "power2.out",
-          delay: 0.15,
+          duration: 1.1,
+          ease: "power3.out",
+          delay: 0.22,
         }
       );
     }
 
-    // 3. Paragraph description: comes UP from bottom (y: 100 -> 0)
+    // 4. Paragraph description: Comes UP from bottom (+160px)
     if (desc) {
-      gsap.killTweensOf(desc);
       gsap.fromTo(
         desc,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 160 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: "power2.out",
-          delay: 0.25,
+          duration: 1.1,
+          ease: "power3.out",
+          delay: 0.35,
         }
       );
     }
 
-    // 4. Action button: comes UP from bottom (y: 100 -> 0)
+    // 5. Action button: Comes UP from bottom (+160px)
     if (btn) {
-      gsap.killTweensOf(btn);
       gsap.fromTo(
         btn,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 160 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: "power2.out",
-          delay: 0.35,
+          duration: 1.1,
+          ease: "power3.out",
+          delay: 0.48,
         }
       );
     }
@@ -159,10 +174,10 @@ export default function HomeHeroSection() {
                   <div className="row align-items-center d-flex">
                     <div className="col-lg-12">
                       <div className="hero_content">
-                        <h1 className="text-anime-3">
+                        <h1 className="text-anime-3 hero-heading-1">
                           {renderAnimatedWord(slide.titlePart1)}
                         </h1>
-                        <h1 className="text-anime-3">
+                        <h1 className="text-anime-3 hero-heading-2">
                           <img
                             src="/dunas-travel-logo.png"
                             alt="Dunas Travel"
