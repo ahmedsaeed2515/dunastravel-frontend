@@ -117,7 +117,7 @@
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.4));
 }
 
-/* Background Image Alive Zoom Sequence with Subtle Micro-Motion during Holds */
+/* Background Image Calm & Deep Continuous Zoom Sequence */
 .slider-bg {
   transform-origin: center center;
   -webkit-transform-origin: center center;
@@ -129,8 +129,8 @@
 }
 
 .swiper-slide-active .slider-bg {
-  -webkit-animation: heroZoomSequence 10s ease-in-out forwards !important;
-  animation: heroZoomSequence 10s ease-in-out forwards !important;
+  -webkit-animation: heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
+  animation: heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
 }
 
 @-webkit-keyframes heroZoomSequence {
@@ -138,17 +138,17 @@
     -webkit-transform: scale(1);
     transform: scale(1);
   }
-  30% {
-    -webkit-transform: scale(1.48);
-    transform: scale(1.48);
+  35% {
+    -webkit-transform: scale(1.60);
+    transform: scale(1.60);
   }
   50% {
-    -webkit-transform: scale(1.53);
-    transform: scale(1.53);
+    -webkit-transform: scale(1.68);
+    transform: scale(1.68);
   }
-  80% {
-    -webkit-transform: scale(1.03);
-    transform: scale(1.03);
+  85% {
+    -webkit-transform: scale(1.07);
+    transform: scale(1.07);
   }
   100% {
     -webkit-transform: scale(1);
@@ -161,17 +161,17 @@
     -webkit-transform: scale(1);
     transform: scale(1);
   }
-  30% {
-    -webkit-transform: scale(1.48);
-    transform: scale(1.48);
+  35% {
+    -webkit-transform: scale(1.60);
+    transform: scale(1.60);
   }
   50% {
-    -webkit-transform: scale(1.53);
-    transform: scale(1.53);
+    -webkit-transform: scale(1.68);
+    transform: scale(1.68);
   }
-  80% {
-    -webkit-transform: scale(1.03);
-    transform: scale(1.03);
+  85% {
+    -webkit-transform: scale(1.07);
+    transform: scale(1.07);
   }
   100% {
     -webkit-transform: scale(1);

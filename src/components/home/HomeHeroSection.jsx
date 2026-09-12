@@ -40,7 +40,7 @@ export default function HomeHeroSection() {
     },
   ];
 
-  // Run distinct GSAP character animation on active slide (runs every slide change)
+  // Run silky-smooth fluid element entrance on active slide (runs every slide change)
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -48,11 +48,12 @@ export default function HomeHeroSection() {
     const allSlides = containerRef.current.querySelectorAll(".swiper-slide");
     allSlides.forEach((slideEl) => {
       if (!slideEl.classList.contains("swiper-slide-active")) {
-        const chars = slideEl.querySelectorAll(".char");
+        const heading1 = slideEl.querySelector(".hero-heading-1");
+        const heading2 = slideEl.querySelector(".hero-heading-2");
         const logo = slideEl.querySelector(".dunas-logo");
         const desc = slideEl.querySelector(".slider-contect-des");
         const btn = slideEl.querySelector(".defult-btn a");
-        const elsToReset = [...chars, logo, desc, btn].filter(Boolean);
+        const elsToReset = [heading1, heading2, logo, desc, btn].filter(Boolean);
         if (elsToReset.length > 0) {
           gsap.set(elsToReset, { opacity: 0, y: 0 });
         }
@@ -62,91 +63,85 @@ export default function HomeHeroSection() {
     const activeSlideEl = containerRef.current.querySelector(".swiper-slide-active");
     if (!activeSlideEl) return;
 
-    const chars1 = activeSlideEl.querySelectorAll(".hero-heading-1 .char");
-    const chars2 = activeSlideEl.querySelectorAll(".hero-heading-2 .char");
+    const heading1 = activeSlideEl.querySelector(".hero-heading-1");
+    const heading2 = activeSlideEl.querySelector(".hero-heading-2");
     const logo = activeSlideEl.querySelector(".dunas-logo");
     const desc = activeSlideEl.querySelector(".slider-contect-des");
     const btn = activeSlideEl.querySelector(".defult-btn a");
 
-    const allActiveElements = [...chars1, ...chars2, logo, desc, btn].filter(Boolean);
+    const allActiveElements = [heading1, heading2, logo, desc, btn].filter(Boolean);
     gsap.killTweensOf(allActiveElements);
 
-    // 1. First Heading line characters drop DOWN from top (-100px) with stagger
-    if (chars1.length > 0) {
+    // 1. First Heading line ("LUXURY"): Smoothly glides down from top (-65px)
+    if (heading1) {
       gsap.fromTo(
-        chars1,
-        { opacity: 0, y: -100, rotateX: -60 },
+        heading1,
+        { opacity: 0, y: -65 },
         {
           opacity: 1,
           y: 0,
-          rotateX: 0,
-          duration: 0.85,
-          stagger: 0.035,
-          ease: "power3.out",
+          duration: 1.25,
+          ease: "power2.out",
         }
       );
     }
 
-    // 2. Second Heading line characters drop DOWN from top (-100px) with stagger
-    if (chars2.length > 0) {
+    // 2. Second Heading line ("JOURNEY"): Smoothly glides down from top (-65px)
+    if (heading2) {
       gsap.fromTo(
-        chars2,
-        { opacity: 0, y: -100, rotateX: -60 },
+        heading2,
+        { opacity: 0, y: -65 },
         {
           opacity: 1,
           y: 0,
-          rotateX: 0,
-          duration: 0.85,
-          stagger: 0.035,
+          duration: 1.25,
           delay: 0.15,
-          ease: "power3.out",
+          ease: "power2.out",
         }
       );
     }
 
-    // 3. Dunas Logo Image: Comes UP from bottom (+100px)
+    // 3. Dunas Logo Image: Smoothly rises up from bottom (+65px)
     if (logo) {
       gsap.fromTo(
         logo,
-        { opacity: 0, y: 100, scale: 0.8 },
+        { opacity: 0, y: 65 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.9,
+          duration: 1.25,
           delay: 0.25,
-          ease: "power3.out",
+          ease: "power2.out",
         }
       );
     }
 
-    // 4. Paragraph description: Comes UP from bottom (+100px)
+    // 4. Paragraph description: Smoothly rises up from bottom (+65px)
     if (desc) {
       gsap.fromTo(
         desc,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 65 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.9,
-          delay: 0.4,
-          ease: "power3.out",
+          duration: 1.25,
+          delay: 0.38,
+          ease: "power2.out",
         }
       );
     }
 
-    // 5. Action button: Comes UP from bottom (+100px)
+    // 5. Action button: Smoothly rises up from bottom (+65px)
     if (btn) {
       gsap.fromTo(
         btn,
-        { opacity: 0, y: 100, scale: 0.9 },
+        { opacity: 0, y: 65 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.9,
-          delay: 0.55,
-          ease: "power3.out",
+          duration: 1.25,
+          delay: 0.52,
+          ease: "power2.out",
         }
       );
     }
@@ -176,10 +171,11 @@ export default function HomeHeroSection() {
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
-          speed={1200}
+          speed={1400}
           autoplay={{
             delay: 10000,
             disableOnInteraction: false,
+            pauseOnMouseEnter: false,
           }}
           onSlideChangeTransitionStart={(swiper) => setActiveIndex(swiper.realIndex)}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
