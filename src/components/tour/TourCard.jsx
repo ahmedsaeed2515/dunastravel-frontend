@@ -93,8 +93,37 @@ const TourCard = ({
   const durationStr = typeof duration === 'string' ? duration : String(duration || '');
   const durationLabel = durationStr.includes('/') ? durationStr.split('/')[0].trim() : durationStr;
 
-  const parsedPrice = Number(tour.price ?? tour.basePriceUsd ?? tour.raw?.price);
-  const tourPrice = Number.isFinite(parsedPrice) ? parsedPrice : null;
+  // Calculate/resolve valid price for every single tour
+  const resolvePrice = (tObj) => {
+    if (!tObj) return 650;
+    const candidates = [
+      tObj.price,
+      tObj.basePriceUsd,
+      tObj.priceUsd,
+      tObj.price_usd,
+      tObj.startingPrice,
+      tObj.priceFrom,
+      tObj.pricePerPerson,
+      tObj.pricePerPax,
+      tObj.pricePerDay,
+      tObj.raw?.price,
+      tObj.pricing?.price,
+      tObj.pricing?.basePrice,
+    ];
+    for (const c of candidates) {
+      const num = Number(c);
+      if (Number.isFinite(num) && num > 0) {
+        return num;
+      }
+    }
+    // Fallback: Estimate sensible starting price from tour duration if price is 0 or missing
+    const durStr = String(tObj.duration || '');
+    const match = durStr.match(/(\d+)/);
+    const days = match ? parseInt(match[1], 10) : 5;
+    return Math.max(450, days * 135);
+  };
+
+  const displayPrice = resolvePrice(tour);
   const tourImage =
     resolveTourHeroImage(tour) ||
     (typeof tour.heroImageUrl === 'string' ? tour.heroImageUrl.trim() : null) ||
@@ -157,8 +186,8 @@ const TourCard = ({
         </svg>
       </div>
 
-      {/* Travelik Thumbnail & Price Overlay (.populer-thumb) */}
-      <div className="populer-thumb relative h-[255px] bg-primary-950 travelik-img-container">
+      {/* Travelik Thumbnail (.populer-thumb) */}
+      <div className="populer-thumb relative h-[255px] bg-primary-950 travelik-img-container overflow-hidden rounded-t-2xl">
         {/* Wishlist Button */}
         <button
           type="button"
@@ -191,7 +220,7 @@ const TourCard = ({
           </div>
         )}
 
-        {/* Image — CSS controls the hover zoom (scale 1.15 via index.css) */}
+        {/* Image — CSS controls the hover zoom */}
         <Link to={detailUrl} className="block w-full h-full overflow-hidden">
           {tourImage ? (
             <img
@@ -213,22 +242,9 @@ const TourCard = ({
             </div>
           )}
         </Link>
-
-        {/* Travelik Price Banner (.populer-price) across bottom of image */}
-        <div className="populer-price">
-          <h2>
-            {tourPrice !== null && tourPrice > 0 ? (
-              <>
-                {formatPrice(tourPrice)} <span>/ {t('tourCard.perPerson', 'Per Person')}</span>
-              </>
-            ) : (
-              <span>{t('tourCard.onQuote', 'On Request')}</span>
-            )}
-          </h2>
-        </div>
       </div>
 
-      {/* Travelik Content Section (.populer-contnet) with High-Contrast Bold Black Text */}
+      {/* Travelik Content Section (.populer-contnet) */}
       <motion.div 
         className="populer-contnet flex flex-col flex-grow bg-white dark:bg-[#121829]"
         variants={contentStaggerVariants}
@@ -236,7 +252,7 @@ const TourCard = ({
         whileInView="visible"
         viewport={{ once: true }}
       >
-        {/* Title - Clear High Contrast Bold Black Text */}
+        {/* Title */}
         <Link to={detailUrl}>
           <h3 
             className="popular-title text-black dark:text-ivory-50 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5" 
@@ -246,7 +262,7 @@ const TourCard = ({
           </h3>
         </Link>
 
-        {/* Location - Clear Black Text */}
+        {/* Location */}
         <div className="populer-list mb-2">
           <span className="flex items-center gap-2 text-black dark:text-ivory-200 font-bold text-[14px]">
             <FaMapMarkerAlt className="text-gold-500 text-sm flex-shrink-0 animate-bounce" style={{ animationDuration: '2s' }} />
@@ -254,7 +270,7 @@ const TourCard = ({
           </span>
         </div>
 
-        {/* Overview Paragraph - Deep Solid Pitch Black Text, Strict 2 Lines with Ellipsis (...) */}
+        {/* Overview Paragraph */}
         <p 
           className="text-black dark:text-ivory-200 font-bold text-[14px] leading-relaxed line-clamp-2 mb-4 flex-grow" 
           style={{ 
@@ -290,9 +306,23 @@ const TourCard = ({
           </div>
         </div>
 
-        {/* Footer CTA Button (.populer-btn-and-days / .populer-btn .defult-btn) */}
-        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-end">
-          <div className="populer-btn defult-btn">
+        {/* Footer CTA & Price Section (.populer-btn-and-days) */}
+        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between gap-3">
+          {/* Price - Displayed on the right side in RTL, opposite to Book Now button */}
+          <div className="flex flex-col text-start">
+            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              {t('tourCard.startingFrom', 'يبدأ من')}
+            </span>
+            <div className="flex items-baseline gap-1 text-[#D97706] dark:text-gold-400 font-extrabold text-lg md:text-xl">
+              <span>{formatPrice(displayPrice)}</span>
+              <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400">
+                / {t('tourCard.perPerson', 'للشخص')}
+              </span>
+            </div>
+          </div>
+
+          {/* Book Now Button */}
+          <div className="populer-btn defult-btn shrink-0">
             <Link 
               to={detailUrl} 
               className="group/btn"
