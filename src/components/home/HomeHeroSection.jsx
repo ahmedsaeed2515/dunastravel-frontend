@@ -40,11 +40,11 @@ export default function HomeHeroSection() {
     },
   ];
 
-  // Run silky-smooth fluid element entrance on active slide (runs every slide change)
+  // Run silky-smooth fluid element entrance & restart background zoom animation on active slide
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Reset all non-active slides text/logo/desc/btn to hidden
+    // Reset non-active slides text/logo/desc/btn to hidden and reset background animation
     const allSlides = containerRef.current.querySelectorAll(".swiper-slide");
     allSlides.forEach((slideEl) => {
       if (!slideEl.classList.contains("swiper-slide-active")) {
@@ -53,15 +53,28 @@ export default function HomeHeroSection() {
         const logo = slideEl.querySelector(".dunas-logo");
         const desc = slideEl.querySelector(".slider-contect-des");
         const btn = slideEl.querySelector(".defult-btn a");
+        const bg = slideEl.querySelector(".slider-bg");
+
         const elsToReset = [heading1, heading2, logo, desc, btn].filter(Boolean);
         if (elsToReset.length > 0) {
           gsap.set(elsToReset, { opacity: 0, y: 0 });
+        }
+        if (bg) {
+          bg.style.animation = "none";
         }
       }
     });
 
     const activeSlideEl = containerRef.current.querySelector(".swiper-slide-active");
     if (!activeSlideEl) return;
+
+    // Force re-trigger CSS zoom animation on active slide background
+    const activeBg = activeSlideEl.querySelector(".slider-bg");
+    if (activeBg) {
+      activeBg.style.animation = "none";
+      void activeBg.offsetHeight; // trigger reflow
+      activeBg.style.animation = "heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards";
+    }
 
     const heading1 = activeSlideEl.querySelector(".hero-heading-1");
     const heading2 = activeSlideEl.querySelector(".hero-heading-2");
@@ -183,8 +196,18 @@ export default function HomeHeroSection() {
               swiper.autoplay.start();
             }
           }}
-          onSlideChangeTransitionStart={(swiper) => setActiveIndex(swiper.realIndex)}
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          onSlideChangeTransitionStart={(swiper) => {
+            setActiveIndex(swiper.realIndex);
+            if (swiper && swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          }}
+          onSlideChange={(swiper) => {
+            setActiveIndex(swiper.realIndex);
+            if (swiper && swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          }}
           className="swiper slider__active"
         >
           {slides.map((slide) => (
