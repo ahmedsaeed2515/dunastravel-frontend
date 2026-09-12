@@ -1186,7 +1186,7 @@ const HomeExperienceSection = () => {
       <HomeHeroSection />
 
       {/* Search Section */}
-      <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-12">
+      <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-0">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
