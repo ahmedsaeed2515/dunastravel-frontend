@@ -191,11 +191,12 @@ export default function HomeHeroSection() {
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
-          speed={1200}
+          speed={1000}
           autoplay={{
-            delay: 6500,
+            delay: 6000,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
+            waitForTransition: false,
           }}
           onSwiper={(swiper) => {
             if (swiper && swiper.autoplay) {
