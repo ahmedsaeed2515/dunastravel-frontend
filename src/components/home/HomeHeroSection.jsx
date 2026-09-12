@@ -21,7 +21,7 @@ export default function HomeHeroSection() {
     {
       id: 1,
       bgClass: "slider-bg",
-      bgImage: "/imgs/slider-bg.png",
+      bgImage: "/imgs/slider-bg.webp",
       titlePart1: "luxury",
       titlePart2: "journey",
       desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
@@ -31,7 +31,7 @@ export default function HomeHeroSection() {
     {
       id: 2,
       bgClass: "slider-bg two",
-      bgImage: "/imgs/slider-two.png",
+      bgImage: "/imgs/slider-two.webp",
       titlePart1: "luxury",
       titlePart2: "journey",
       desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
@@ -73,7 +73,7 @@ export default function HomeHeroSection() {
     if (activeBg) {
       activeBg.style.animation = "none";
       void activeBg.offsetHeight; // trigger reflow
-      activeBg.style.animation = "heroZoomSequence 10s cubic-bezier(0.37, 0, 0.63, 1) forwards";
+      activeBg.style.animation = "heroZoomSequence 6s cubic-bezier(0.37, 0, 0.63, 1) forwards";
     }
 
     const heading1 = activeSlideEl.querySelector(".hero-heading-1");
@@ -186,9 +186,10 @@ export default function HomeHeroSection() {
           loop={true}
           speed={1200}
           autoplay={{
-            delay: 10000,
+            delay: 6000,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
+            stopOnLastSlide: false,
             waitForTransition: false,
           }}
           onSwiper={(swiper) => {
@@ -226,8 +227,10 @@ export default function HomeHeroSection() {
                         </h1>
                         <h1 className="text-anime-3 hero-heading-2">
                           <img
-                            src="/dunas-travel-logo.png"
+                            src="/dunas-travel-logo.webp"
                             alt="Dunas Travel"
+                            width="201"
+                            height="100"
                             className="dunas-logo"
                           />
                           {renderAnimatedWord(slide.titlePart2)}

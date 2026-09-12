@@ -171,8 +171,10 @@ const LoginModal = ({ isOpen, onClose, initialTab = 'login' }) => {
             {/* Dunas Travel Logo Outside Card Header */}
             <div className="text-center mb-5 relative">
               <img
-                src="/dunas-travel-logo.png"
+                src="/dunas-travel-logo.webp"
                 alt="Dunas Travel Logo"
+                width="200"
+                height="99"
                 className="mx-auto max-w-[170px] sm:max-w-[200px] h-auto drop-shadow-xl"
               />
             </div>            {/* Dunas Login Card Modal Container */}

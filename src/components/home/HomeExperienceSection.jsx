@@ -1179,7 +1179,7 @@ const HomeExperienceSection = () => {
           property="og:description"
           content="Premium luxury travel agency — Egypt, Jordan, Turkey, Tunisia, Greece, Holy Land, Morocco & Dubai"
         />
-        <meta property="og:image" content="/dunas-travel-logo.png" />
+        <meta property="og:image" content="/dunas-travel-logo.webp" />
       </Helmet>
 
       {/* Yacht Dark Hero Section */}
@@ -1190,11 +1190,11 @@ const HomeExperienceSection = () => {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="https://res.cloudinary.com/degbrq3ck/image/upload/w_640,h_400,c_fill,q_auto:eco,f_auto/v1783067135/grand_tour_of_turkey_lxb1f4.webp"
+            src="https://res.cloudinary.com/degbrq3ck/image/upload/w_640,h_400,c_fill,q_55,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp"
             srcSet="
-              https://res.cloudinary.com/degbrq3ck/image/upload/w_640,h_400,c_fill,q_auto:eco,f_auto/v1783067135/grand_tour_of_turkey_lxb1f4.webp 640w,
-              https://res.cloudinary.com/degbrq3ck/image/upload/w_1024,h_500,c_fill,q_auto:eco,f_auto/v1783067135/grand_tour_of_turkey_lxb1f4.webp 1024w,
-              https://res.cloudinary.com/degbrq3ck/image/upload/w_1440,h_600,c_fill,q_auto:eco,f_auto/v1783067135/grand_tour_of_turkey_lxb1f4.webp 1440w
+              https://res.cloudinary.com/degbrq3ck/image/upload/w_640,h_400,c_fill,q_55,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp 640w,
+              https://res.cloudinary.com/degbrq3ck/image/upload/w_1024,h_500,c_fill,q_55,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp 1024w,
+              https://res.cloudinary.com/degbrq3ck/image/upload/w_1440,h_600,c_fill,q_55,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp 1440w
             "
             sizes="100vw"
             alt="Search tours and holiday packages background"
@@ -1388,7 +1388,7 @@ const HomeExperienceSection = () => {
               className="w-full lg:w-1/2"
             >
               <img
-                src="https://alrahhal.net/wp-content/uploads/2026/01/%D8%A3%D9%81%D8%B6%D9%84-%D8%A7%D9%84%D8%A3%D9%85%D8%A7%D9%83%D9%86-%D9%84%D8%B9%D8%B4%D8%A7%D9%82-%D8%A7%D9%84%D8%AA%D8%B5%D9%88%D9%8A%D8%B1-%D8%A7%D9%84%D9%84%D9%8A%D9%84%D9%8A-%D9%81%D9%8A-%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9.webp"
+                src="/images/cairo-night-photo.webp"
                 onError={(e) => { e.currentTarget.src = "/images/cairo-night-photo.webp"; }}
                 alt="Cairo Night Photography - Crafting Luxury Journeys"
                 className="w-full h-[300px] lg:h-[480px] object-cover rounded-[16px] shadow-[0_0_40px_rgba(245,166,35,0.25)] transition-transform duration-400 ease hover:-translate-y-[8px]"
