@@ -1676,7 +1676,7 @@ const HomeExperienceSection = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent"></div>
 
-                    <div className="absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase" style={{ color: '#ffffff' }}>
+                    <div className="package-badge-text absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
                       {resolvedDest}
                     </div>
 
@@ -1811,11 +1811,8 @@ const HomeExperienceSection = () => {
                       {/* Top Floating Badges */}
                       <div className="relative z-10 p-6 sm:p-8 flex items-center justify-between gap-4">
                         {pkg.badge && (
-                          <span 
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 font-bold text-caption uppercase tracking-wider shadow-lg backdrop-blur-md"
-                            style={{ color: '#ffffff' }}
-                          >
-                            <span style={{ color: '#ffffff' }}>★</span> {pkg.badge}
+                          <span className="package-badge-text inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 font-bold text-caption uppercase tracking-wider shadow-lg backdrop-blur-md">
+                            <span className="package-badge-text">★</span> {pkg.badge}
                           </span>
                         )}
                         {pkg.duration && (
@@ -1982,7 +1979,7 @@ const HomeExperienceSection = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent"></div>
 
                     {/* Destination Badge (الوجهة) */}
-                    <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-white text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40" style={{ color: '#ffffff' }}>
+                    <div className="package-badge-text absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
                       <FaMapMarkerAlt className="text-xs text-obsidian-950" />
                       <span>{pkgDestName}</span>
                     </div>
@@ -2111,7 +2108,7 @@ const HomeExperienceSection = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 via-obsidian-900/40 to-transparent"></div>
 
-                    <div className="absolute top-4 left-4 bg-gold-500 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded shadow-md" style={{ color: '#ffffff' }}>
+                    <div className="package-badge-text absolute top-4 left-4 bg-gold-500 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded shadow-md">
                       {vehicle.category === 'bus' ? t('transportation.filter.buses', 'Buses') :
                         vehicle.category === 'coaster' ? t('transportation.filter.coasters', 'Coaster Vehicles') :
                           t('transportation.filter.private', 'Private Vehicles')}

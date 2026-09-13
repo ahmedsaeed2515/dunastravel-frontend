@@ -695,3 +695,14 @@
   }
 }
 
+/* Package Badge Text Color - Black in Light Mode, White in Dark Mode */
+.package-badge-text {
+  color: #000000 !important;
+}
+
+html.dark .package-badge-text,
+.dark .package-badge-text,
+[data-theme="dark"] .package-badge-text {
+  color: #ffffff !important;
+}
+
