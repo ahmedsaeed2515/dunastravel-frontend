@@ -1494,7 +1494,7 @@ const HomeExperienceSection = () => {
                 <div className="text-4xl md:text-5xl font-bold text-obsidian-900 dark:text-white font-display">
                   <AnimatedCounter value={s.count} suffix={s.suffix} />
                 </div>
-                <div className="text-black dark:text-ivory-200 text-sm mt-2 tracking-wide uppercase font-bold">
+                <div className="text-black dark:text-white text-sm mt-2 tracking-wide uppercase font-bold">
                   {t(s.labelKey)}
                 </div>
               </motion.div>
@@ -1630,7 +1630,7 @@ const HomeExperienceSection = () => {
       <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 500px' }}>
         <div className="container mx-auto px-6">
           <div className="text-center mb-10 max-w-3xl mx-auto">
-            <span className="text-gold-600 dark:text-gold-400 uppercase tracking-widest text-caption block mb-2 font-semibold">
+            <span className="text-[#F5A623] dark:text-[#F5A623] uppercase tracking-widest text-caption block mb-2 font-bold">
               {t("home.destToursBadge", isAr ? "تجارب مصممة بعناية فائقة عبر جميع وجهاتنا الساحرة" : "Meticulously crafted experiences across all our destinations")}
             </span>
             <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -1811,8 +1811,8 @@ const HomeExperienceSection = () => {
                       {/* Top Floating Badges */}
                       <div className="relative z-10 p-6 sm:p-8 flex items-center justify-between gap-4">
                         {pkg.badge && (
-                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 text-black dark:text-black font-bold text-caption uppercase tracking-wider shadow-lg backdrop-blur-md">
-                            <span className="text-black dark:text-black">★</span> {pkg.badge}
+                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 text-black dark:!text-white font-bold text-caption uppercase tracking-wider shadow-lg backdrop-blur-md">
+                            <span className="text-black dark:!text-white">★</span> {pkg.badge}
                           </span>
                         )}
                         {pkg.duration && (
