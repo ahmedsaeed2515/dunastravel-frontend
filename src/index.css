@@ -254,7 +254,7 @@ html[data-scroll-locked] {
     background: #0f0f1a !important;
   }
   .dark .about-page .event-row {
-    background: #0f0f1a !important;
+    background: transparent !important;
   }
   .dark .about-page .svc-card,
   .dark .about-page .val-card {
