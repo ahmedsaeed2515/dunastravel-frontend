@@ -18,6 +18,29 @@ import {
 import 'swiper/css';
 import 'swiper/css/navigation';
 
+function getEmbedInfo(url) {
+  if (!url) return null;
+  const ytMatch = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  if (ytMatch) {
+    return {
+      type: 'youtube',
+      embedUrl: `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0`,
+      thumbnailUrl: `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`,
+    };
+  }
+  const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vimeoMatch) {
+    return {
+      type: 'vimeo',
+      embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`,
+      thumbnailUrl: null,
+    };
+  }
+  return null;
+}
+
 export default function VideoShowcaseCarousel({ videos = [], loading = false }) {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
@@ -217,7 +240,8 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
           className="rounded-3xl !overflow-hidden py-4"
         >
           {videos.map((video, index) => {
-            const poster = video.posterUrl || video.thumbnailUrl || video.url;
+            const embed = getEmbedInfo(video.url || video.videoUrl || video.secureUrl);
+            const poster = video.posterUrl || video.thumbnailUrl || embed?.thumbnailUrl || video.url;
             const videoTitle = video.title || video.alt || 'Dunas Travel Video';
 
             return (
@@ -355,20 +379,36 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
               className="relative w-full max-w-4xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/15"
               onClick={(e) => e.stopPropagation()}
             >
-              <video
-                ref={videoPlayerRef}
-                src={activeVideo.url || activeVideo.videoUrl || activeVideo.secureUrl}
-                poster={activeVideo.posterUrl || activeVideo.thumbnailUrl}
-                controls
-                autoPlay
-                playsInline
-                muted={isMuted}
-                onEnded={handleVideoEnded}
-                className="w-full aspect-video object-contain bg-black"
-              >
-                <track kind="captions" />
-                Your browser does not support the video tag.
-              </video>
+              {(() => {
+                const activeEmbed = getEmbedInfo(activeVideo.url || activeVideo.videoUrl || activeVideo.secureUrl);
+                if (activeEmbed) {
+                  return (
+                    <iframe
+                      src={activeEmbed.embedUrl}
+                      title={activeVideo.title || activeVideo.alt || 'Dunas Travel Video'}
+                      className="w-full aspect-video object-contain bg-black border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  );
+                }
+                return (
+                  <video
+                    ref={videoPlayerRef}
+                    src={activeVideo.url || activeVideo.videoUrl || activeVideo.secureUrl}
+                    poster={activeVideo.posterUrl || activeVideo.thumbnailUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    muted={isMuted}
+                    onEnded={handleVideoEnded}
+                    className="w-full aspect-video object-contain bg-black"
+                  >
+                    <track kind="captions" />
+                    Your browser does not support the video tag.
+                  </video>
+                );
+              })()}
 
               {/* Bottom Details Bar */}
               <div className="p-6 bg-gradient-to-t from-[#0E1726] to-[#0A101C] flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-white/10">
@@ -387,21 +427,23 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
                   )}
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMuted((m) => !m);
-                      if (videoPlayerRef.current) {
-                        videoPlayerRef.current.muted = !isMuted;
-                      }
-                    }}
-                    className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-                    title={isMuted ? 'Unmute' : 'Mute'}
-                  >
-                    {isMuted ? <FaVolumeMute className="w-4 h-4" /> : <FaVolumeUp className="w-4 h-4" />}
-                  </button>
-                </div>
+                {!getEmbedInfo(activeVideo.url || activeVideo.videoUrl || activeVideo.secureUrl) && (
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMuted((m) => !m);
+                        if (videoPlayerRef.current) {
+                          videoPlayerRef.current.muted = !isMuted;
+                        }
+                      }}
+                      className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                      title={isMuted ? 'Unmute' : 'Mute'}
+                    >
+                      {isMuted ? <FaVolumeMute className="w-4 h-4" /> : <FaVolumeUp className="w-4 h-4" />}
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>
