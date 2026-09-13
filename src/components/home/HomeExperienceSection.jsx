@@ -2990,9 +2990,9 @@ const HomeExperienceSection = () => {
       </AnimatePresence>
 
       {/* Our Brands Logos - White Background */}
-      <section className="w-full bg-white py-12 sm:py-16 content-auto">
+      <section className="w-full bg-white dark:bg-white py-12 sm:py-16 content-auto">
         <div className="max-w-6xl mx-auto px-6">
-          <h3 className="text-center text-obsidian-900 text-xl sm:text-2xl font-bold mb-10">{t('ourBrands.title', 'Our Brands')}</h3>
+          <h3 className="text-center text-obsidian-900 dark:text-obsidian-900 text-xl sm:text-2xl font-bold mb-10">{t('ourBrands.title', 'Our Brands')}</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-12 lg:gap-16 items-center justify-items-center">
             {[
               { src: "https://res.cloudinary.com/degbrq3ck/image/upload/w_200,h_120,c_limit,q_auto,f_webp/v1783033035/dunas-travel-logo-removebg-preview_mjfl90.webp", alt: "Logo 1" },
