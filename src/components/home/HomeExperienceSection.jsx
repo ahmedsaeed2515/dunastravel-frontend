@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { useTours } from "../../hooks/useTours";
-import { useMedia, useMediaShowcase } from "../../hooks/useMedia";
+import { useMediaShowcase } from "../../hooks/useMedia";
 import PhotoShowcaseCarousel from "./PhotoShowcaseCarousel";
 import VideoShowcaseCarousel from "./VideoShowcaseCarousel";
 import { useDestinations } from "../../hooks/useDestinations";
@@ -349,11 +349,7 @@ const HomeExperienceSection = () => {
   const lang = i18n.language || 'en';
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
-  const [zoomScale, setZoomScale] = useState(1);
   const [isAllToursPopupOpen, setIsAllToursPopupOpen] = useState(false);
-  const [activeVideo, setActiveVideo] = useState(null);
   const pkgMarqueeRef = useRef(null);
   const destMarqueeRef = useRef(null);
   const pkgHoveredRef = useRef(false);
@@ -433,7 +429,6 @@ const HomeExperienceSection = () => {
 
     el.scrollBy({ left: scrollDelta, behavior: 'smooth' });
   };
-  const { galleryImages = [], videos = [] } = useMedia({ category: 'general' });
   const { photos: showcasePhotos, videos: showcaseVideos, loading: showcaseLoading } = useMediaShowcase();
   const {
     tours: allLiveToursRaw,
@@ -1134,36 +1129,6 @@ const HomeExperienceSection = () => {
       return cat === vehicleFilter.toLowerCase();
     });
   }, [vehicleFilter, transportationList]);
-
-  const generalGalleryImages = useMemo(() => {
-    return (galleryImages || []).slice(0, 8);
-  }, [galleryImages]);
-
-  const cloudName = 'degbrq3ck';
-
-  const openLightbox = (index) => {
-    setActiveGalleryIndex(index);
-    setZoomScale(1);
-    setIsLightboxOpen(true);
-  };
-
-  const nextImage = (e) => {
-    e.stopPropagation();
-    setZoomScale(1);
-    setActiveGalleryIndex((prev) =>
-      prev === generalGalleryImages.length - 1 ? 0 : prev + 1,
-    );
-  };
-
-  const prevImage = (e) => {
-    e.stopPropagation();
-    setZoomScale(1);
-    setActiveGalleryIndex((prev) =>
-      prev === 0 ? generalGalleryImages.length - 1 : prev - 1,
-    );
-  };
-
-
 
   const handleDestinationClick = (id) => {
     navigate(`/destinations/${id}`);
@@ -2272,7 +2237,7 @@ const HomeExperienceSection = () => {
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
                 style={{
-                  backgroundImage: "url('https://res.cloudinary.com/degbrq3ck/image/upload/w_800,q_auto,f_auto/v1783071610/bus1_lprkiy.jpg')"
+                  backgroundImage: "url('https://res.cloudinary.com/degbrq3ck/image/upload/w_800,c_limit,q_auto:good,f_webp/v1783071610/bus1_lprkiy.jpg')"
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />

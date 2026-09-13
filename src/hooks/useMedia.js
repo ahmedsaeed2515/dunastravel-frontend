@@ -148,7 +148,18 @@ export function useMedia(optionsOrTourId = null) {
 }
 
 const showcaseCache = { data: null, timestamp: 0 };
-const SHOWCASE_CACHE_TTL_MS = 300_000;
+const SHOWCASE_CACHE_TTL_MS = 60_000; // 60 seconds
+
+export function invalidateShowcaseCache() {
+  showcaseCache.data = null;
+  showcaseCache.timestamp = 0;
+}
+
+function getCloudNameFromUrl(url) {
+  if (!url) return 'u7xf91gp';
+  const match = url.match(/cloudinary\.com\/([^/]+)\//);
+  return match ? match[1] : 'u7xf91gp';
+}
 
 export function useMediaShowcase() {
   const [photos, setPhotos] = useState(() => showcaseCache.data?.photos || DEFAULT_GALLERY_IMAGES);
@@ -178,15 +189,18 @@ export function useMediaShowcase() {
         : DEFAULT_GALLERY_IMAGES;
 
       const fetchedVideos = (res && Array.isArray(res.videos) && res.videos.length > 0)
-        ? res.videos.map(v => ({
-            ...v,
-            url: v.secureUrl || v.url,
-            label: v.title || v.altText || 'Dunas Travel',
-            altText: v.altText || v.title || 'Dunas Travel',
-            publicId: v.publicId,
-            duration: v.duration,
-            thumbnailUrl: v.thumbnailUrl || (v.publicId ? `https://res.cloudinary.com/degbrq3ck/video/upload/w_600,h_400,c_fill,so_0/${v.publicId}.jpg` : undefined),
-          }))
+        ? res.videos.map(v => {
+            const cloudName = getCloudNameFromUrl(v.secureUrl || v.url);
+            return {
+              ...v,
+              url: v.secureUrl || v.url,
+              label: v.title || v.altText || 'Dunas Travel',
+              altText: v.altText || v.title || 'Dunas Travel',
+              publicId: v.publicId,
+              duration: v.duration,
+              thumbnailUrl: v.thumbnailUrl || (v.publicId ? `https://res.cloudinary.com/${cloudName}/video/upload/w_600,h_400,c_fill,so_0,f_jpg/${v.publicId}.jpg` : undefined),
+            };
+          })
         : [];
 
       showcaseCache.data = { photos: fetchedPhotos, videos: fetchedVideos };
@@ -208,8 +222,17 @@ export function useMediaShowcase() {
   useEffect(() => {
     let isMounted = true;
     fetchShowcase();
+
+    const handleFocus = () => {
+      if (Date.now() - showcaseCache.timestamp > 30_000) {
+        fetchShowcase(true);
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
     return () => {
       isMounted = false;
+      window.removeEventListener('focus', handleFocus);
     };
   }, []);
 
