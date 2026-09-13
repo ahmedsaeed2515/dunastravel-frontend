@@ -340,7 +340,7 @@ export default function HomeHeroSection() {
                     aria-label="Play Video"
                   >
                     <span className="play-now">
-                      <FaPlay style={{ fontSize: "11px", marginLeft: "2px" }} />
+                      <FaPlay style={{ fontSize: "7px", marginLeft: "1px" }} />
                     </span>
                   </button>
                 </div>

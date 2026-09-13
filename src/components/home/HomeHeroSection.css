@@ -193,10 +193,11 @@
 /* Circular Video Badge */
 .circle__video {
   position: absolute;
-  width: 160px;
-  height: 160px;
-  line-height: 160px;
-  background: rgba(53, 90, 105, 0.75);
+  width: 85px;
+  height: 85px;
+  line-height: 85px;
+  background: linear-gradient(135deg, rgba(4, 20, 70, 0.88) 0%, rgba(6, 29, 93, 0.88) 40%, rgba(10, 40, 120, 0.88) 100%);
+  border: 1px solid rgba(201, 162, 39, 0.35);
   border-radius: 50%;
   text-align: center;
   backdrop-filter: blur(16px);
@@ -208,7 +209,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
 .circle__video svg {
@@ -247,10 +248,10 @@
   text-decoration: none;
   z-index: 2;
   background: transparent;
-  height: 50px;
-  width: 50px;
+  height: 28px;
+  width: 28px;
   border: 0;
-  font-size: 14px;
+  font-size: 8px;
   color: var(--color-white);
   cursor: pointer;
   transition: transform 0.3s ease, color 0.3s ease;
@@ -364,6 +365,8 @@
 }
 
 .defult-btn a svg {
+  width: 12px;
+  height: 9px;
   margin-left: 10px;
   transition: 0.5s;
   display: inline-block;
@@ -390,7 +393,7 @@
   .slider-section .hero_content h1 img.dunas-logo { width: 200px; }
   .slider-section .hero_content .slider-contect-des { width: 55%; font-size: 18px; line-height: 28px; }
   .main-slider-wrpper .slider-section { height: 700px; }
-  .circle__video { width: 130px; height: 130px; left: 42%; top: 12%; }
+  .circle__video { width: 75px; height: 75px; line-height: 75px; left: 42%; top: 12%; }
   .travel-slider-dots { right: 30px; bottom: 30px; padding: 8px 16px; gap: 10px; }
 }
 
@@ -405,8 +408,9 @@
   /* Video Circle positioned at bottom-right above dots */
   .circle__video {
     position: absolute;
-    width: 95px;
-    height: 95px;
+    width: 58px;
+    height: 58px;
+    line-height: 58px;
     left: auto !important;
     right: 24px !important;
     top: auto !important;
@@ -470,15 +474,16 @@
   
   /* Video Circle at Bottom-Right */
   .circle__video {
-    width: 80px;
-    height: 80px;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
     left: auto !important;
     right: 20px !important;
     top: auto !important;
     bottom: 75px !important;
   }
   .circle__video text { font-size: 14px; }
-  .circle__video .circle-vide_btn { width: 38px; height: 38px; font-size: 12px; }
+  .circle__video .circle-vide_btn { width: 22px; height: 22px; font-size: 7px; }
   
   .travel-slider-dots {
     width: auto !important;
@@ -516,8 +521,9 @@
   
   /* Video Circle at Bottom-Right */
   .circle__video {
-    width: 72px;
-    height: 72px;
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
     left: auto !important;
     right: 16px !important;
     top: auto !important;
@@ -525,7 +531,7 @@
     backdrop-filter: blur(10px);
   }
   .circle__video text { font-size: 14px; }
-  .circle__video .circle-vide_btn { width: 34px; height: 34px; font-size: 12px; }
+  .circle__video .circle-vide_btn { width: 18px; height: 18px; font-size: 6px; }
   
   .travel-slider-dots { padding: 8px 14px; gap: 8px; bottom: 20px !important; }
 }
@@ -549,12 +555,13 @@
   
   /* Video Circle at Bottom-Right */
   .circle__video {
-    width: 65px;
-    height: 65px;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
     right: 14px !important;
     bottom: 65px !important;
   }
-  .circle__video .circle-vide_btn { width: 32px; height: 32px; font-size: 11px; }
+  .circle__video .circle-vide_btn { width: 16px; height: 16px; font-size: 6px; }
 }
 
 /* Video Modal Overlay */
