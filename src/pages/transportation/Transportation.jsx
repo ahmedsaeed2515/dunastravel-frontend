@@ -126,7 +126,7 @@ const Transportation = () => {
   }
 
   return (
-    <div className="w-full bg-obsidian-50 pb-24">
+    <div className="w-full bg-obsidian-50 dark:bg-obsidian-950 pb-24 transition-colors duration-300">
       <Helmet>
         <title>{t('nav.transportation', 'Transportation')} | {t('services.seoServices', 'Luxury Services')}</title>
         <meta name="description" content={t('transportation.seoDesc', 'Premium vehicles with professional drivers across Egypt, Jordan & Turkey')} />
@@ -138,7 +138,7 @@ const Transportation = () => {
           <img
             src="/imgs/transportation-hero.png"
             alt="Transportation Hero"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
             loading="eager"
           />
         </div>
@@ -176,8 +176,8 @@ const Transportation = () => {
               onClick={() => setActiveFilter(filter.id)}
               className={`px-8 py-3 rounded-full text-body-md font-semibold transition-all duration-300 cursor-pointer ${
                 activeFilter === filter.id
-                  ? 'bg-gold-500 text-obsidian-900 shadow-[0_0_20px_rgba(201,162,39,0.4)]'
-                  : 'bg-ivory-50 text-obsidian-700 hover:bg-gold-50 shadow-sm border border-gray-100'
+                  ? 'bg-gold-500 text-obsidian-900 dark:text-white shadow-[0_0_20px_rgba(201,162,39,0.4)]'
+                  : 'bg-ivory-50 dark:bg-obsidian-900 text-obsidian-700 dark:text-ivory-200 hover:bg-gold-50 dark:hover:bg-obsidian-800 shadow-sm border border-gray-100 dark:border-obsidian-800'
               }`}
             >
               {filter.label}
@@ -217,7 +217,7 @@ const Transportation = () => {
                   boxShadow: '0 0 32px rgba(201,162,39,0.22)',
                   transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className="bg-ivory-50 rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 group flex flex-col justify-between"
+                className="bg-ivory-50 dark:bg-obsidian-900 border border-gray-100 dark:border-obsidian-800 rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 group flex flex-col justify-between"
               >
                 <div>
                   <div
@@ -232,13 +232,16 @@ const Transportation = () => {
                         e.currentTarget.src = '/imgs/transportation/bus1.jpeg';
                       }}
                     />
-                    <div className="absolute top-4 left-4 bg-gold-500 text-obsidian-900 text-caption uppercase px-3 py-1 rounded-full shadow-md font-bold">
+                    <div
+                      className="absolute top-4 left-4 bg-gold-500 !text-white text-caption uppercase px-3 py-1 rounded-full shadow-md font-bold"
+                      style={{ color: '#ffffff' }}
+                    >
                       {categoryBadge}
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                      <span className="text-ivory-50 font-semibold flex items-center gap-2">
-                        <span>{t('transportation.reserveNow', 'Reserve Now')}</span>
-                        <span className={isRtl ? 'rotate-180 inline-block' : 'inline-block'}>&rarr;</span>
+                      <span className="!text-white font-semibold flex items-center gap-2" style={{ color: '#ffffff' }}>
+                        <span style={{ color: '#ffffff' }}>{t('transportation.reserveNow', 'Reserve Now')}</span>
+                        <span className={isRtl ? 'rotate-180 inline-block' : 'inline-block'} style={{ color: '#ffffff' }}>&rarr;</span>
                       </span>
                     </div>
                   </div>
@@ -248,17 +251,17 @@ const Transportation = () => {
                       <div>
                         <h3
                           onClick={() => handleReserveClick(vehicle.id)}
-                          className="text-display-md text-xl text-obsidian-900 font-display cursor-pointer hover:text-gold-600 transition-colors"
+                          className="text-display-md text-xl text-obsidian-900 dark:text-white font-display cursor-pointer hover:text-gold-600 dark:hover:text-gold-400 transition-colors"
                           style={{ fontFamily: "'Playfair Display', serif" }}
                         >
                           {t(`data.${vehicle.name}`, vehicle.name)}
                         </h3>
                         {vehicle.rating && (
-                          <div className="flex items-center gap-1.5 mt-1 text-sm text-gold-600">
+                          <div className="flex items-center gap-1.5 mt-1 text-sm text-gold-600 dark:text-gold-400">
                             <FaStar className="text-gold-500" />
                             <span className="font-bold">{vehicle.rating}</span>
                             {vehicle.reviews && (
-                              <span className="text-obsidian-400 text-xs">
+                              <span className="text-obsidian-400 dark:text-ivory-400 text-xs">
                                 ({vehicle.reviews} {t('common.reviews', 'reviews')})
                               </span>
                             )}
@@ -267,7 +270,7 @@ const Transportation = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-caption text-obsidian-700 mb-4 pb-4 border-b border-gray-100">
+                    <div className="flex items-center gap-4 text-caption text-obsidian-700 dark:text-ivory-200 mb-4 pb-4 border-b border-gray-100 dark:border-obsidian-800">
                       <span className="flex items-center gap-1">
                         <FaUserFriends className="text-gold-500" /> {vehicle.seats || vehicle.capacity || 50} {t('transportation.seatsCount', 'Seats')}
                       </span>
@@ -281,13 +284,13 @@ const Transportation = () => {
 
                     <ul className="mb-6 space-y-2">
                       {vehicle.features?.slice(0, 3).map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-caption text-obsidian-700">
+                        <li key={idx} className="flex items-center gap-2 text-caption text-obsidian-700 dark:text-ivory-200">
                           <FaCheck className="text-sage-500 flex-shrink-0" size={12} />
                           <span className="truncate">{t(`data.${feature}`, feature)}</span>
                         </li>
                       ))}
                       {vehicle.features?.length > 3 && (
-                        <li className="text-caption text-obsidian-500 italic">
+                        <li className="text-caption text-obsidian-500 dark:text-ivory-400 italic">
                           {t('transportation.moreFeatures', '+ {{count}} more features', {
                             count: vehicle.features.length - 3,
                           })}
@@ -297,19 +300,20 @@ const Transportation = () => {
                   </div>
                 </div>
 
-                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-gray-100 mt-auto">
+                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-gray-100 dark:border-obsidian-800 mt-auto">
                   <div>
-                    <span className="text-body-lg font-bold text-obsidian-900">
+                    <span className="text-body-lg font-bold text-obsidian-900 dark:text-white">
                       {formatPrice(vehicle.pricePerDay || vehicle.pricePerTrip || vehicle.basePriceUsd || 0)}
                     </span>
-                    <span className="text-caption text-obsidian-500"> / {t('transportation.trip', 'trip')}</span>
+                    <span className="text-caption text-obsidian-500 dark:text-ivory-400"> / {t('transportation.trip', 'trip')}</span>
                   </div>
                   <button
                     onClick={() => handleReserveClick(vehicle.id)}
-                    className="px-5 py-2.5 bg-gold-500 hover:bg-gold-400 text-obsidian-900 font-bold rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(201,162,39,0.3)] hover:shadow-[0_0_20px_rgba(201,162,39,0.5)] cursor-pointer text-sm flex items-center gap-1.5"
+                    className="px-5 py-2.5 bg-gold-500 hover:bg-gold-400 !text-white font-bold rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(201,162,39,0.3)] hover:shadow-[0_0_20px_rgba(201,162,39,0.5)] cursor-pointer text-sm flex items-center gap-1.5"
+                    style={{ color: '#ffffff' }}
                   >
-                    <span>{t('transportation.reserveNow', 'Reserve Now')}</span>
-                    <span className={isRtl ? 'rotate-180 inline-block' : ''}>&rarr;</span>
+                    <span className="!text-white" style={{ color: '#ffffff' }}>{t('transportation.reserveNow', 'Reserve Now')}</span>
+                    <span className={`${isRtl ? 'rotate-180 inline-block' : ''} !text-white`} style={{ color: '#ffffff' }}>&rarr;</span>
                   </button>
                 </div>
               </motion.div>
@@ -382,7 +386,8 @@ const Transportation = () => {
               <div className="mt-8">
                 <Button
                   variant="gold-glow"
-                  className="w-full py-4 text-lg font-bold rounded-full uppercase tracking-wider cursor-pointer"
+                  className="w-full py-4 text-lg font-bold rounded-full uppercase tracking-wider cursor-pointer !text-white"
+                  style={{ color: '#ffffff' }}
                   onClick={() => handleReserveClick('')}
                 >
                   {t('transportation.reserveNow', 'Reserve Now')}
@@ -545,12 +550,12 @@ const Transportation = () => {
       <section className="container mx-auto px-6 max-w-4xl" id="reservation">
         <div className="text-center mb-12">
           <h2
-            className="text-display-lg text-obsidian-900 mb-4 font-display"
+            className="text-display-lg text-obsidian-900 dark:text-white mb-4 font-display"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {t('transportation.makeReservation', 'Make a Reservation')}
           </h2>
-          <p className="text-body-md text-obsidian-500 max-w-2xl mx-auto">
+          <p className="text-body-md text-obsidian-500 dark:text-ivory-300 max-w-2xl mx-auto">
             {t(
               'transportation.reservationDesc',
               'Book your luxury transportation in advance. We provide professional chauffeurs and premium vehicles to ensure a comfortable and stylish journey.'

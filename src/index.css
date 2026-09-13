@@ -291,8 +291,14 @@ html[data-scroll-locked] {
   .dark .bg-ivory-50 li,
   .dark .bg-ivory-50 h3,
   .dark .bg-ivory-50 h2,
-  .dark .bg-ivory-50 span {
+  .dark .bg-ivory-50 span:not(button *):not(.bg-gold-500 *) {
     color: #d4a843 !important;
+  }
+  .dark .bg-ivory-50 button,
+  .dark .bg-ivory-50 button *,
+  .dark .bg-ivory-50 .bg-gold-500,
+  .dark .bg-ivory-50 .bg-gold-500 * {
+    color: #ffffff !important;
   }
   .dark .bg-ivory-50 .text-obsidian-900,
   .dark .bg-ivory-50 .text-obsidian-700,

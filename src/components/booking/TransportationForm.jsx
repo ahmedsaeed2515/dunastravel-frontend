@@ -452,17 +452,17 @@ const TransportationForm = ({ preSelectedVehicleId = '' }) => {
               <button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="w-full py-3.5 px-6 bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-obsidian-900 font-bold rounded-xl shadow-[0_4px_20px_rgba(245,166,35,0.3)] hover:shadow-[0_6px_30px_rgba(245,166,35,0.45)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.5px] flex items-center justify-center gap-2 cursor-pointer pt-3"
+                className="w-full py-3.5 px-6 bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-obsidian-900 dark:text-white font-bold rounded-xl shadow-[0_4px_20px_rgba(245,166,35,0.3)] hover:shadow-[0_6px_30px_rgba(245,166,35,0.45)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.5px] flex items-center justify-center gap-2 cursor-pointer pt-3"
               >
                 {status === 'submitting' ? (
-                  <span className="flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-obsidian-900 border-t-transparent rounded-full animate-spin" />
+                  <span className="flex items-center gap-2 text-obsidian-900 dark:text-white">
+                    <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                     {t('common.processing', 'Securing Chauffeur...')}
                   </span>
                 ) : (
                   <>
-                    <FaPaperPlane size={12} />
-                    {t('transportation.reserveNow', 'Reserve Private Transfer')}
+                    <FaPaperPlane size={12} className="text-obsidian-900 dark:text-white" />
+                    <span className="text-obsidian-900 dark:text-white">{t('transportation.reserveNow', 'Reserve Private Transfer')}</span>
                   </>
                 )}
               </button>
