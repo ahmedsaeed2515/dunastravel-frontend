@@ -2033,7 +2033,7 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* Transportation & Transfers (Vehicles Marquee Slider Only) */}
-      <section className="py-12 bg-ivory-50 relative overflow-hidden content-auto">
+      <section className="py-12 bg-ivory-50 dark:bg-obsidian-950 relative overflow-hidden content-auto">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <motion.span
@@ -2049,7 +2049,7 @@ const HomeExperienceSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-display-lg text-obsidian-900 mb-6"
+              className="text-display-lg text-obsidian-900 dark:text-white mb-6"
             >
               {t('home.transportTitle', 'Premium Transportation Services')}
             </motion.h2>
@@ -2062,12 +2062,11 @@ const HomeExperienceSection = () => {
               <button
                 key={tab}
                 onClick={() => setVehicleFilter(tab)}
-                className={`px-6 py-2 rounded-full border transition-all duration-300 font-medium tracking-wide ${vehicleFilter === tab
-                  ? tab === "all"
-                    ? "bg-obsidian-900/80 text-white border-gold-500"
-                    : "bg-gold-500 text-obsidian-900 border-gold-500 shadow-[0_0_15px_rgba(245,166,35,0.4)]"
-                  : "bg-obsidian-900/80 text-white border-obsidian-900/80"
-                  }`}
+                className={`px-6 py-2 rounded-full border-2 transition-all duration-300 font-semibold tracking-wide cursor-pointer ${
+                  vehicleFilter === tab
+                    ? "bg-obsidian-900 dark:bg-obsidian-900 text-white border-gold-500 shadow-[0_0_15px_rgba(245,166,35,0.4)] scale-105"
+                    : "bg-obsidian-900/70 dark:bg-obsidian-900/70 text-white/80 border-transparent hover:border-gold-500/50 hover:text-white"
+                }`}
               >
                 {tab === "all"
                   ? t("home.allVehicles", "All")
