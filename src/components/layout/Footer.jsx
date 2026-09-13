@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaFacebook, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt, FaRobot } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaPhone, FaEnvelope, FaWhatsapp, FaMapMarkerAlt, FaRobot } from 'react-icons/fa';
 import Logo from '../ui/Logo';
 import TiT0Chat from '../ui/TiT0Chat';
 import { useJaiderChat } from '../../context/JaiderChatContext';
@@ -55,15 +55,56 @@ const Footer = () => {
           <p className="text-white text-base sm:text-lg font-bold leading-snug">
             {t('footer.desc', 'Since 2010, we craft unforgettable luxury travel experiences across Egypt, Jordan, Turkey, Tunisia, Greece, the Holy Land, Morocco, and Dubai.')}
           </p>
-          <div className="flex items-center gap-3 mt-4">
-            <a href="https://www.facebook.com/share/1EsALYq8cg/" aria-label="Visit our Facebook page" className="footer-social w-10 h-10 rounded-full bg-white/15 border border-white/25 flex items-center justify-center text-white hover:bg-[#F5A623] hover:text-[#1A1A2E] transition-all duration-300 hover:scale-110">
-              <FaFacebook size={16} />
+          <div className="flex items-center gap-3 mt-4 flex-wrap">
+            {/* Facebook */}
+            <a
+              href="https://www.facebook.com/share/1EsALYq8cg/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our Facebook page"
+              className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(24,119,242,0.6)] transition-all duration-300"
+            >
+              <FaFacebook size={18} />
             </a>
-            <a href="https://www.instagram.com/dunas_travel?igsh=bWkyb2FhY2hoNnN" aria-label="Visit our Instagram page" className="footer-social w-10 h-10 rounded-full bg-white/15 border border-white/25 flex items-center justify-center text-white hover:bg-[#F5A623] hover:text-[#1A1A2E] transition-all duration-300 hover:scale-110">
-              <FaInstagram size={16} />
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/dunas_travel?igsh=bWkyb2FhY2hoNnN"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our Instagram page"
+              className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(220,39,67,0.6)] transition-all duration-300"
+            >
+              <FaInstagram size={18} />
             </a>
-            <a href="tel:+3374664302" aria-label="Call us" className="footer-social w-10 h-10 rounded-full bg-white/15 border border-white/25 flex items-center justify-center text-white hover:bg-[#F5A623] hover:text-[#1A1A2E] transition-all duration-300 hover:scale-110">
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/201149401111"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat on WhatsApp"
+              className="w-10 h-10 rounded-full bg-[#25D366] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(37,211,102,0.6)] transition-all duration-300"
+            >
+              <FaWhatsapp size={18} />
+            </a>
+            {/* Phone */}
+            <a
+              href="tel:+3374664302"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Call us"
+              className="w-10 h-10 rounded-full bg-[#007AFF] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(0,122,255,0.6)] transition-all duration-300"
+            >
               <FaPhone size={16} />
+            </a>
+            {/* Email */}
+            <a
+              href="mailto:info@dunas-travel.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Email us"
+              className="w-10 h-10 rounded-full bg-[#EA4335] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(234,67,53,0.6)] transition-all duration-300"
+            >
+              <FaEnvelope size={16} />
             </a>
           </div>
         </div>
