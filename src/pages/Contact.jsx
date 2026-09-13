@@ -512,7 +512,7 @@ const Contact = () => {
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-ivory-50 mb-2">
                 {t('contact.sendMessage', 'أرسل رسالتك مباشرة')}
               </h3>
-              <p className="text-sm text-ivory-200/90 mb-6 font-normal leading-relaxed">
+              <p className="text-sm text-white mb-6 font-medium leading-relaxed">
                 {t('contact.formDesc', 'يسعدنا الإجابة على جميع تساؤلاتك وتصميم برنامج رحلتك بما يتناسب مع رغباتك.')}
               </p>
 

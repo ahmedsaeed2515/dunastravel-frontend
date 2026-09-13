@@ -510,11 +510,19 @@ const ContactForms = () => {
         }
 
         /* Counter controls styling */
+        .travelers-counter-box {
+          background-color: rgba(5, 8, 26, 0.9);
+          border: 1px solid rgba(212, 168, 67, 0.35);
+          border-radius: 16px;
+          padding: 20px;
+          margin-bottom: 24px;
+        }
+
         .counter-container {
           display: flex;
           align-items: center;
           gap: 16px;
-          background-color: rgba(5, 8, 26, 0.9);
+          background-color: rgba(15, 21, 53, 0.7);
           border: 1px solid rgba(212, 168, 67, 0.35);
           padding: 8px 18px;
           width: fit-content;
@@ -596,10 +604,23 @@ const ContactForms = () => {
 
         .dropzone-text {
           font-size: 13px;
-          color: #64748B;
+          color: #000000;
+          font-weight: 500;
         }
         .dark .dropzone-text {
           color: #8A8FA8;
+          font-weight: 400;
+        }
+
+        .dropzone-hint {
+          font-size: 10px;
+          color: #000000;
+          display: inline-block;
+          margin-top: 4px;
+        }
+        .dark .dropzone-hint {
+          color: #8A8FA8;
+          opacity: 0.85;
         }
 
         .dropzone-filename {
@@ -929,7 +950,7 @@ const ContactForms = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#141A3D] p-6 border border-gold-500/10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 travelers-counter-box">
                       <div>
                         <label className="form-label block mb-2">{t('contactForms.adults', 'Adults (Age 12+)')}</label>
                         <div className="counter-container">
@@ -1414,7 +1435,7 @@ const ContactForms = () => {
                           ) : (
                             <div className="dropzone-text">
                               {t('contactForms.dropzone', 'Drag and drop file here or')} <strong>{t('contactForms.browse', 'browse')}</strong>.<br />
-                              <span style={{ fontSize: '10px', opacity: 0.7 }}>{t('contactForms.dropzoneHint', '(PDF, PNG, JPG max 5MB)')}</span>
+                              <span className="dropzone-hint">{t('contactForms.dropzoneHint', '(PDF, PNG, JPG max 5MB)')}</span>
                             </div>
                           )}
                         </div>
@@ -1445,7 +1466,7 @@ const ContactForms = () => {
                           ) : (
                             <div className="dropzone-text">
                               {t('contactForms.dropzone', 'Drag and drop file here or')} <strong>{t('contactForms.browse', 'browse')}</strong>.<br />
-                              <span style={{ fontSize: '10px', opacity: 0.7 }}>{t('contactForms.dropzoneHint', '(PDF, PNG, JPG max 5MB)')}</span>
+                              <span className="dropzone-hint">{t('contactForms.dropzoneHint', '(PDF, PNG, JPG max 5MB)')}</span>
                             </div>
                           )}
                         </div>
