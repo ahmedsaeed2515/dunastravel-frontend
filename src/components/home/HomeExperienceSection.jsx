@@ -2391,10 +2391,10 @@ const HomeExperienceSection = () => {
             <span className="inline-block text-gold-600 dark:text-gold-400 uppercase tracking-[0.25em] text-caption mb-4 font-bold text-xs px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 shadow-sm">
               {t('home.servicesSub', 'Our Services')}
             </span>
-            <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50 font-display mb-6 tracking-wide">
+            <h2 className="text-display-lg text-obsidian-900 dark:text-white font-display mb-6 tracking-wide">
               {t('home.servicesTitle', 'Services')}
             </h2>
-            <p className="text-black dark:text-ivory-100 text-body-md max-w-xl mx-auto font-body font-semibold">
+            <p className="text-black dark:text-white text-body-md max-w-xl mx-auto font-body font-semibold">
               {t('home.servicesDesc', 'Premium travel solutions tailored to your needs')}
             </p>
             <div className="w-20 h-[3px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mt-8 rounded-full" />
