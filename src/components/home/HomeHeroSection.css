@@ -706,3 +706,21 @@ html.dark .package-badge-text,
   color: #ffffff !important;
 }
 
+/* Our Brands Section Background - Pure White in Both Light and Dark Mode */
+.our-brands-section,
+html.dark .our-brands-section,
+.dark .our-brands-section,
+[data-theme="dark"] .our-brands-section {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.our-brands-title,
+html.dark .our-brands-title,
+.dark .our-brands-title,
+[data-theme="dark"] .our-brands-title {
+  color: #000000 !important;
+}
+
+
