@@ -238,6 +238,15 @@ html[data-scroll-locked] {
   .dark .about-page .hero .sub {
     color: #e8d5b0 !important;
   }
+  /* Section 02 #growth text colors */
+  html:not(.dark) .about-page #growth .eyebrow,
+  html:not(.dark) .about-page #growth h2,
+  html:not(.dark) .about-page #growth h2 *,
+  html:not(.dark) .about-page #growth p,
+  html:not(.dark) .about-page #growth .bar-yr {
+    color: #000000 !important;
+  }
+
   .dark .about-page #growth .eyebrow,
   .dark .about-page #growth h2,
   .dark .about-page #growth h2 *,
