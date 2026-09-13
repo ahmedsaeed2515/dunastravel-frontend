@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay } from "swiper/modules";
 import { FaPlay, FaTimes } from "react-icons/fa";
@@ -16,7 +17,7 @@ const SLIDE_DATA = [
     titlePart2: "journey",
     desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
     btnText: "SEE DESTINATION",
-    btnLink: "#search-section",
+    btnLink: "/destinations",
   },
   {
     bgClass: "slider-bg two",
@@ -25,7 +26,7 @@ const SLIDE_DATA = [
     titlePart2: "journey",
     desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
     btnText: "SEE DESTINATION",
-    btnLink: "#search-section",
+    btnLink: "/destinations",
   },
   {
     bgClass: "slider-bg three",
@@ -34,7 +35,7 @@ const SLIDE_DATA = [
     titlePart2: "journey",
     desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
     btnText: "SEE DESTINATION",
-    btnLink: "#search-section",
+    btnLink: "/destinations",
   },
 ];
 
@@ -115,7 +116,7 @@ export default function HomeHeroSection() {
       activeBg.style.animation = "none";
       requestAnimationFrame(() => {
         if (activeBg) {
-          activeBg.style.animation = "heroZoomSequence 5s cubic-bezier(0.37, 0, 0.63, 1) forwards";
+          activeBg.style.animation = "heroZoomSequence 6.5s cubic-bezier(0.37, 0, 0.63, 1) forwards";
         }
       });
     }
@@ -286,7 +287,7 @@ export default function HomeHeroSection() {
                         </h1>
                         <p className="slider-contect-des">{t("home.heroDesc", slide.desc)}</p>
                         <div className="hero-btn defult-btn">
-                          <a href={slide.btnLink}>
+                          <Link to={slide.btnLink}>
                             {t("home.heroBtnText", slide.btnText)}
                             <svg
                               width="16"
@@ -302,7 +303,7 @@ export default function HomeHeroSection() {
                                 fill="white"
                               ></path>
                             </svg>
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>

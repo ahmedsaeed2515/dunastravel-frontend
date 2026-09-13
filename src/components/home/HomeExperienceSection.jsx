@@ -1206,19 +1206,46 @@ const HomeExperienceSection = () => {
 
       {/* Search Section */}
       <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-0">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
+        {/* Background Image with Subtle Motion & Glow */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.img
             src="/images/pyramids-search-bg.jpg"
             alt="Search tours and holiday packages background"
             className="w-full h-full object-cover object-center"
+            initial={{ scale: 1 }}
+            animate={{ scale: [1, 1.07, 1] }}
+            transition={{
+              duration: 18,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut"
+            }}
             fetchPriority="high"
             loading="eager"
             decoding="sync"
             width="1440"
             height="600"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-obsidian-900/30 via-obsidian-900/20 to-obsidian-900/50"></div>
+          {/* Ambient animated light blobs */}
+          <motion.div
+            className="absolute -top-24 -left-24 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"
+            animate={{
+              x: [0, 60, 0],
+              y: [0, 40, 0],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"
+            animate={{
+              x: [0, -60, 0],
+              y: [0, -40, 0],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-obsidian-900/40 via-obsidian-900/25 to-obsidian-900/55"></div>
         </div>
 
         {/* Search Content (overlay on image) */}
@@ -1226,9 +1253,9 @@ const HomeExperienceSection = () => {
           {/* Search Form */}
           <div className="w-full max-w-5xl">
             <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.5)] p-5 sm:p-6 md:p-8 border border-white/25">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 items-end">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-3 sm:gap-4 items-end">
                 {/* Destination */}
-                <div className="col-span-1">
+                <div className="col-span-1 md:col-span-2">
                   <label htmlFor="search-dest-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
                     <FaMapMarkerAlt className="text-amber-400 text-xs" />
                     {t('home.searchDest', 'Destination')}
@@ -1257,7 +1284,7 @@ const HomeExperienceSection = () => {
                 </div>
 
                 {/* Tour */}
-                <div className="col-span-1">
+                <div className="col-span-1 md:col-span-2">
                   <label htmlFor="search-tour-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
                     <FaSuitcase className="text-amber-400 text-xs" />
                     {t('home.searchTour', 'Tour / Program')}
@@ -1295,34 +1322,16 @@ const HomeExperienceSection = () => {
                   </div>
                 </div>
 
-                {/* People + Search */}
-                <div className="col-span-1">
-                  <label htmlFor="search-people-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
-                    <FaUsers className="text-amber-400 text-xs" />
-                    {t('home.searchPeople', 'People')}
-                  </label>
-                  <div className="flex gap-2">
-                    <div className="relative w-24 shrink-0">
-                      <input
-                        id="search-people-input"
-                        type="number"
-                        min="1"
-                        max="50"
-                        value={searchPeople}
-                        onChange={(e) => setSearchPeople(Math.max(1, parseInt(e.target.value) || 1))}
-                        className="w-full px-3 py-3 rounded-xl border border-white/30 bg-black/40 backdrop-blur-md text-white font-bold text-base text-center focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 shadow-inner [color-scheme:dark]"
-                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)', color: '#FFFFFF' }}
-                      />
-                    </div>
-                    <button
-                      onClick={handleSearch}
-                      className="flex-1 flex items-center justify-center gap-2 px-5 py-3 font-bold rounded-xl transition-all duration-200 text-base text-white shadow-lg hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-95 cursor-pointer"
-                      style={{ background: 'linear-gradient(135deg, #FF6B35 0%, #D93800 50%, #1E3A8A 100%)' }}
-                    >
-                      <FaSearch className="text-sm" />
-                      <span>{t('home.searchBtn', 'Search')}</span>
-                    </button>
-                  </div>
+                {/* Search Button */}
+                <div className="col-span-1 md:col-span-1">
+                  <button
+                    onClick={handleSearch}
+                    className="w-full flex items-center justify-center gap-2 px-5 py-3 font-bold rounded-xl transition-all duration-200 text-base text-white shadow-lg hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-95 cursor-pointer h-[50px] sm:h-[52px]"
+                    style={{ background: 'linear-gradient(135deg, #FF6B35 0%, #D93800 50%, #1E3A8A 100%)' }}
+                  >
+                    <FaSearch className="text-sm" />
+                    <span>{t('home.searchBtn', 'Search')}</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1667,7 +1676,7 @@ const HomeExperienceSection = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent"></div>
 
-                    <div className="absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-obsidian-900 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
+                    <div className="absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-black dark:text-black text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
                       {resolvedDest}
                     </div>
 
@@ -1802,8 +1811,8 @@ const HomeExperienceSection = () => {
                       {/* Top Floating Badges */}
                       <div className="relative z-10 p-6 sm:p-8 flex items-center justify-between gap-4">
                         {pkg.badge && (
-                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 text-obsidian-950 font-bold text-caption uppercase tracking-wider shadow-lg backdrop-blur-md">
-                            <span>★</span> {pkg.badge}
+                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 text-black dark:text-black font-bold text-caption uppercase tracking-wider shadow-lg backdrop-blur-md">
+                            <span className="text-black dark:text-black">★</span> {pkg.badge}
                           </span>
                         )}
                         {pkg.duration && (
@@ -1970,7 +1979,7 @@ const HomeExperienceSection = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent"></div>
 
                     {/* Destination Badge (الوجهة) */}
-                    <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-obsidian-950 text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
+                    <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-black dark:text-black text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
                       <FaMapMarkerAlt className="text-xs text-obsidian-950" />
                       <span>{pkgDestName}</span>
                     </div>
@@ -2099,7 +2108,7 @@ const HomeExperienceSection = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 via-obsidian-900/40 to-transparent"></div>
 
-                    <div className="absolute top-4 left-4 bg-gold-500 text-obsidian-900 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded shadow-md">
+                    <div className="absolute top-4 left-4 bg-gold-500 text-black dark:text-black text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded shadow-md">
                       {vehicle.category === 'bus' ? t('transportation.filter.buses', 'Buses') :
                         vehicle.category === 'coaster' ? t('transportation.filter.coasters', 'Coaster Vehicles') :
                           t('transportation.filter.private', 'Private Vehicles')}

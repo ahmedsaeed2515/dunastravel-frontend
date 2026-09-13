@@ -140,8 +140,8 @@
 }
 
 .swiper-slide-active .slider-bg {
-  -webkit-animation: heroZoomSequence 5s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
-  animation: heroZoomSequence 5s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
+  -webkit-animation: heroZoomSequence 6.5s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
+  animation: heroZoomSequence 6.5s cubic-bezier(0.37, 0, 0.63, 1) forwards !important;
 }
 
 @-webkit-keyframes heroZoomSequence {
@@ -150,16 +150,16 @@
     transform: scale(1);
   }
   35% {
-    -webkit-transform: scale(1.60);
-    transform: scale(1.60);
+    -webkit-transform: scale(2.15);
+    transform: scale(2.15);
   }
   50% {
-    -webkit-transform: scale(1.68);
-    transform: scale(1.68);
+    -webkit-transform: scale(2.30);
+    transform: scale(2.30);
   }
   85% {
-    -webkit-transform: scale(1.07);
-    transform: scale(1.07);
+    -webkit-transform: scale(1.15);
+    transform: scale(1.15);
   }
   100% {
     -webkit-transform: scale(1);
@@ -173,16 +173,16 @@
     transform: scale(1);
   }
   35% {
-    -webkit-transform: scale(1.60);
-    transform: scale(1.60);
+    -webkit-transform: scale(2.15);
+    transform: scale(2.15);
   }
   50% {
-    -webkit-transform: scale(1.68);
-    transform: scale(1.68);
+    -webkit-transform: scale(2.30);
+    transform: scale(2.30);
   }
   85% {
-    -webkit-transform: scale(1.07);
-    transform: scale(1.07);
+    -webkit-transform: scale(1.15);
+    transform: scale(1.15);
   }
   100% {
     -webkit-transform: scale(1);
