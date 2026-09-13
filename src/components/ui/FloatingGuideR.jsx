@@ -14,14 +14,14 @@ const TOOLTIP_TEXT = {
 
 const FloatingGuideR = () => {
   const { t, i18n } = useTranslation();
-  const { isOpen, setIsOpen } = useJaiderChat();
+  const { isOpen, setIsOpen, guiderAvailability } = useJaiderChat();
   const [isHovered, setIsHovered] = useState(false);
 
   const isRtl = i18n.dir() === 'rtl';
   const tooltip = t('guider.tooltip', 'Ask GuideR • AI Travel Concierge');
 
-  // Don't render the launcher when the chat modal is already open
-  if (isOpen) return null;
+  // Don't render the launcher when the chat modal is already open or when GuideR is disabled/maintenance
+  if (isOpen || (guiderAvailability?.loaded && !guiderAvailability?.enabled)) return null;
 
   return (
     <div

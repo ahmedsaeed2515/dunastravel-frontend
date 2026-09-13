@@ -5,7 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { useTours } from "../../hooks/useTours";
-import { useMedia } from "../../hooks/useMedia";
+import { useMedia, useMediaShowcase } from "../../hooks/useMedia";
+import PhotoShowcaseCarousel from "./PhotoShowcaseCarousel";
+import VideoShowcaseCarousel from "./VideoShowcaseCarousel";
 import { useDestinations } from "../../hooks/useDestinations";
 import { useServices } from "../../hooks/useServices";
 import { transportation as fallbackTransportation } from "../../data/transportation";
@@ -432,6 +434,7 @@ const HomeExperienceSection = () => {
     el.scrollBy({ left: scrollDelta, behavior: 'smooth' });
   };
   const { galleryImages = [], videos = [] } = useMedia({ category: 'general' });
+  const { photos: showcasePhotos, videos: showcaseVideos, loading: showcaseLoading } = useMediaShowcase();
   const {
     tours: allLiveToursRaw,
     loading: toursLoading,
@@ -2163,212 +2166,6 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-      {/* Photo Gallery - Dunas Replica Style */}
-      <section className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
-        {/* Section Header */}
-        <div className="container mx-auto px-6 mb-10 relative z-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#0CB2DB] border border-[#0CB2DB]/60 rounded-full bg-[#0CB2DB]/10 shadow-[0_0_15px_rgba(12,178,219,0.2)] mb-4">
-              {t("home.galleryLabel", "CAPTURED MOMENTS")}
-            </div>
-            <h2
-              className="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-tight mb-4"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
-              {t("home.galleryHeading", "A Glimpse Into Your Journey")}
-            </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#0CB2DB] to-transparent mx-auto mt-2" />
-          </motion.div>
-        </div>
-
-        {/* Gallery Marquee Container with Seamless Top & Bottom Arch Overlays */}
-        <div className="relative w-full overflow-hidden my-4">
-          {/* Top Shape Overlay SVG */}
-          <div className="absolute top-0 left-0 right-0 w-full z-20 pointer-events-none -mt-1 select-none">
-            <svg className="w-full h-12 md:h-20 text-[#1E3A8A] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
-              <path d="M0,0 L1440,0 L1440,20 Q720,80 0,20 Z" />
-            </svg>
-          </div>
-
-          {/* Marquee Track */}
-          <div dir="ltr" className="w-full relative overflow-hidden py-8 z-10">
-            <div
-              className="flex w-max"
-              style={{
-                animation: "tourMarquee 75s linear infinite",
-                gap: "20px",
-                paddingLeft: "20px",
-              }}
-              onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
-              onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
-            >
-              {(() => {
-                const infiniteImages = buildInfiniteMarqueeList(generalGalleryImages, 'gal', 8);
-                return infiniteImages.map((img, idx) => {
-                  const originalIndex = typeof img.origIdx === 'number' ? img.origIdx : (idx % Math.max(1, generalGalleryImages.length));
-                  return (
-                    <div
-                      key={img.uKey || `gal-${idx}`}
-                      className="flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.04] hover:z-30 border border-white/20 hover:border-[#0CB2DB] bg-slate-900/50 shadow-2xl"
-                      onClick={() => openLightbox(originalIndex)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          openLightbox(originalIndex);
-                        }
-                      }}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={`${t("home.viewLarger", "View larger image of")} dunas travel`}
-                    >
-                      <div className="w-[260px] sm:w-[300px] md:w-[340px] h-[350px] sm:h-[400px] md:h-[440px] overflow-hidden rounded-xl">
-                        <img
-                          src={getOptimizedImageUrl(img.url, 500, 650)}
-                          alt="dunas travel"
-                          loading="lazy"
-                          decoding="async"
-                          width="340"
-                          height="440"
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                      </div>
-                      {/* Dunas Dark Gradient Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 rounded-xl">
-                        <span className="text-[#0CB2DB] text-xs font-black tracking-widest uppercase mb-1">
-                          Dunas Travel
-                        </span>
-                        <span className="text-white text-sm font-bold truncate">
-                          dunas travel
-                        </span>
-                        <div className="mt-3">
-                          <span className="inline-flex items-center gap-1.5 text-white text-[11px] font-bold tracking-wider uppercase bg-[#0CB2DB]/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-lg">
-                            {t("home.viewPhoto", "View Photo")}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-          </div>
-
-          {/* Bottom Shape Overlay SVG */}
-          <div className="absolute bottom-0 left-0 right-0 w-full z-20 pointer-events-none -mb-1 select-none">
-            <svg className="w-full h-12 md:h-20 text-[#1E3A8A] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
-              <path d="M0,80 L1440,80 L1440,60 Q720,0 0,60 Z" />
-            </svg>
-          </div>
-        </div>
-
-        {/* View All Button */}
-        <div className="flex justify-center mt-8 mb-4 relative z-10">
-          <button
-            onClick={() => navigate('/media-gallery?tab=photos')}
-            className="group relative px-10 py-4 text-white text-sm md:text-base font-bold rounded-full uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[#0CB2DB]/35 hover:scale-105 active:scale-95 cursor-pointer outline-none"
-            style={{
-              background: 'linear-gradient(135deg, #0CB2DB 0%, #1E3A8A 100%)',
-              border: '1px solid rgba(255,255,255,0.3)'
-            }}
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              {t("home.viewAllImages", "View All Images")}
-              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </span>
-          </button>
-        </div>
-      </section>
-
-      {/* Render this only when the provider returns persisted video assets. */}
-      {videos.length > 0 && <section className="py-16 content-auto" style={{ background: 'linear-gradient(180deg, rgb(10,25,105) 0%, rgb(6,29,93) 50%, rgb(10,21,53) 100%)' }}>
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <span className="text-gold-500 uppercase tracking-widest text-caption block mb-4">
-              {t('home.videoSectionSub', 'Moments to Remember')}
-            </span>
-            <h2 className="text-display-lg text-ivory-50 font-display">
-              {t('home.videoSectionTitle', 'Join Our Beautiful Journey')}
-            </h2>
-            <div className="w-24 h-1 bg-gold-500 mx-auto mt-6"></div>
-          </motion.div>
-
-          <div className="overflow-hidden">
-            <div className="flex gap-6 pb-4"
-              style={{
-                width: 'max-content',
-                animation: `${isRtl ? 'marqueeVideoRTL' : 'marqueeVideo'} 90s linear infinite`,
-              }}
-              onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
-              onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
-            >
-              {[...videos, ...videos, ...videos].map((video, idx) => {
-                const isDuplicate = idx >= videos.length;
-                return (
-                  <motion.div
-                    key={`${video.publicId}-${idx}`}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: (idx % videos.length) * 0.1 }}
-                    onClick={isDuplicate ? undefined : () => setActiveVideo(video.publicId)}
-                    onKeyDown={isDuplicate ? undefined : (e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setActiveVideo(video.publicId);
-                      }
-                    }}
-                    tabIndex={isDuplicate ? -1 : 0}
-                    role={isDuplicate ? undefined : "button"}
-                    aria-label={isDuplicate ? undefined : t('home.playVideo', 'Play video clip')}
-                    aria-hidden={isDuplicate ? "true" : undefined}
-                    className="min-w-[300px] md:min-w-[360px] shrink-0 relative rounded-2xl overflow-hidden cursor-pointer group h-[200px] md:h-[240px] focus:outline-none focus:ring-2 focus:ring-gold-500"
-                  >
-                    <img
-                      src={`https://res.cloudinary.com/${cloudName}/video/upload/w_400,h_240,c_fill/${video.publicId}.jpg`}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-obsidian-900/40 group-hover:bg-obsidian-900/20 transition-colors flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-gold-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                        <svg className="w-6 h-6 text-obsidian-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="flex justify-center mt-12 mb-4">
-            <button
-              onClick={() => navigate('/media-gallery?tab=videos')}
-              className="animated-media-btn btn-videos-glow px-10 py-4 text-white text-base font-bold rounded-full uppercase tracking-wider transition-all duration-300"
-              style={{
-                background: 'linear-gradient(135deg, #2563EB 0%, #06B6D4 100%)',
-              }}
-            >
-              {t("home.viewAllVideos", "View All Videos")}
-            </button>
-          </div>
-        </div>
-      </section>}
-
       {/* Services Section */}
       <section className="py-20 lg:py-28 relative overflow-hidden bg-white dark:bg-obsidian-950 border-t border-gray-100 dark:border-white/5 content-auto">
         {/* Decorative backdrop elements */}
@@ -2527,6 +2324,12 @@ const HomeExperienceSection = () => {
           </div>
         </div>
       </section>
+
+      {/* 2. Photo Showcase Carousel */}
+      <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
+
+      {/* 3. Video Showcase Carousel */}
+      <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
 
       {/* Contact Info Section */}
       <section 
@@ -2774,133 +2577,6 @@ const HomeExperienceSection = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Video Lightbox */}
-      <AnimatePresence>
-        {activeVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-obsidian-900/90 backdrop-blur-md flex items-center justify-center p-4"
-            onClick={() => setActiveVideo(null)}
-          >
-            <button
-              onClick={() => setActiveVideo(null)}
-              className="absolute top-6 right-6 text-ivory-50 hover:text-gold-500 z-50 text-2xl"
-            >
-              <FaTimes />
-            </button>
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-               className="w-full max-w-4xl aspect-video max-h-[75vh] rounded-lg overflow-hidden shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <iframe
-                src={`https://player.cloudinary.com/embed/?cloud_name=${cloudName}&public_id=${activeVideo}&autoplay=true&controls=true&muted=false`}
-                className="w-full h-full"
-                allow="autoplay; encrypted-media; fullscreen"
-                allowFullScreen
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Lightbox Modal */}
-      <AnimatePresence>
-        {isLightboxOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[100] bg-obsidian-900/95 flex items-center justify-center backdrop-blur-md"
-            onClick={() => setIsLightboxOpen(false)}
-          >
-            <button
-              className="absolute top-6 right-6 text-ivory-50 hover:text-gold-500 transition-colors z-[101]"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsLightboxOpen(false);
-              }}
-            >
-              <FaTimes size={32} />
-            </button>
-
-            <button
-              className={`absolute ${isRtl ? 'right-4 md:right-10' : 'left-4 md:left-10'} text-ivory-50 hover:text-gold-500 transition-colors z-[101] p-4`}
-              onClick={isRtl ? nextImage : prevImage}
-            >
-              <FaChevronLeft size={40} />
-            </button>
-
-            <motion.img
-              key={activeGalleryIndex}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: zoomScale }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
-              src={generalGalleryImages[activeGalleryIndex]?.url}
-              alt={generalGalleryImages[activeGalleryIndex]?.label}
-              className="max-w-[90vw] max-h-[90vh] object-contain shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-md cursor-zoom-in"
-              onClick={(e) => e.stopPropagation()}
-              onWheel={(e) => {
-                e.stopPropagation();
-                const delta = e.deltaY > 0 ? -0.25 : 0.25;
-                setZoomScale((s) => Math.max(1, Math.min(4, s + delta)));
-              }}
-            />
-
-            {/* Zoom Controls */}
-            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[101] flex gap-3 bg-obsidian-900/70 backdrop-blur-md rounded-full px-4 py-2 border border-white/10">
-              <button
-                onClick={(e) => { e.stopPropagation(); setZoomScale((s) => Math.max(1, s - 0.5)); }}
-                className="text-ivory-50 hover:text-gold-500 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-lg font-bold"
-              >
-                -
-              </button>
-              <span className="text-ivory-50 text-sm flex items-center">{Math.round(zoomScale * 100)}%</span>
-              <button
-                onClick={(e) => { e.stopPropagation(); setZoomScale((s) => Math.min(4, s + 0.5)); }}
-                className="text-ivory-50 hover:text-gold-500 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-lg font-bold"
-              >
-                +
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); setZoomScale(1); }}
-                className="text-gold-500 hover:text-gold-400 transition-colors text-xs font-semibold px-2"
-              >
-                RESET
-              </button>
-            </div>
-
-            <button
-              className={`absolute ${isRtl ? 'left-4 md:left-10' : 'right-4 md:right-10'} text-ivory-50 hover:text-gold-500 transition-colors z-[101] p-4`}
-              onClick={isRtl ? prevImage : nextImage}
-            >
-              <FaChevronRight size={40} />
-            </button>
-
-            <div className="absolute bottom-10 left-0 right-0 text-center text-ivory-50">
-              <p className="font-display text-2xl mb-1">
-                {t(
-                  generalGalleryImages[activeGalleryIndex]?.label,
-                  generalGalleryImages[activeGalleryIndex]?.label,
-                )}
-              </p>
-              <p className="text-gold-500 tracking-widest text-xs uppercase">
-                {t(
-                  'mediaGallery.subheading',
-                  'Visual Journey',
-                )}
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* All Tours Popup Modal */}
       <AnimatePresence>

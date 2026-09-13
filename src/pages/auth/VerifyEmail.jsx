@@ -2,21 +2,24 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
-import { FaCheckCircle, FaExclamationTriangle, FaEnvelope, FaShieldAlt } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaCheckCircle, FaExclamationTriangle, FaEnvelope, FaShieldAlt, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
-import Button from '../../components/ui/Button';
+import AuthFormField from '../../components/auth/AuthFormField';
 
 const VerifyEmail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const isRtl = i18n.dir() === 'rtl';
+  const BackArrowIcon = isRtl ? FaArrowRight : FaArrowLeft;
+
   const codeFromUrl = searchParams.get('code') || searchParams.get('token') || '';
   const emailFromUrl = searchParams.get('email') || '';
 
   const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
-  const inputRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
-  
+  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
+
   const [isVerifying, setIsVerifying] = useState(Boolean(codeFromUrl));
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -25,7 +28,8 @@ const VerifyEmail = () => {
   const [resendSuccess, setResendSuccess] = useState('');
   const [resendError, setResendError] = useState('');
   const [countdown, setCountdown] = useState(60);
-  const [canResend, setCanResend] = useState(false);
+
+  const canResend = countdown <= 0;
 
   const { verifyEmail, resendVerification, getMe } = useAuth();
 
@@ -42,10 +46,15 @@ const VerifyEmail = () => {
         if (typeof getMe === 'function') {
           try {
             await getMe();
-          } catch {}
+          } catch {
+            // Non-critical session hydrate
+          }
         }
         if (isMounted) {
-          const rawPending = typeof window !== 'undefined' ? sessionStorage.getItem('dunas_pending_booking_intent') : null;
+          const rawPending =
+            typeof window !== 'undefined'
+              ? sessionStorage.getItem('dunas_pending_booking_intent')
+              : null;
           let targetUrl = '/dashboard';
           let isResumingBooking = false;
           if (rawPending) {
@@ -56,7 +65,9 @@ const VerifyEmail = () => {
                 targetUrl = `/tours/${tourKey}`;
                 isResumingBooking = true;
               }
-            } catch {}
+            } catch {
+              // Ignore invalid storage
+            }
           }
 
           setSuccess(
@@ -70,7 +81,7 @@ const VerifyEmail = () => {
         }
       } catch (err) {
         if (isMounted) {
-          setError(err.message || t('auth.verifyEmailError', 'Verification code is invalid or has expired.'));
+          setError(err?.message || t('auth.verifyEmailError', 'Verification code is invalid or has expired.'));
         }
       } finally {
         if (isMounted) setIsVerifying(false);
@@ -84,27 +95,22 @@ const VerifyEmail = () => {
     };
   }, [codeFromUrl, emailFromUrl, verifyEmail, getMe, navigate, t]);
 
-  // Handle resend countdown timer
+  // Handle countdown interval cleanly without effect setState anti-patterns
   useEffect(() => {
-    if (countdown <= 0) {
-      setCanResend(true);
-      return;
-    }
+    if (countdown <= 0) return;
     const timer = setInterval(() => {
-      setCountdown((prev) => prev - 1);
+      setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
     return () => clearInterval(timer);
   }, [countdown]);
 
   const handleDigitChange = (index, value) => {
-    // Only accept numeric digits
     const digit = value.replace(/\D/g, '').slice(-1);
     const updated = [...otpDigits];
     updated[index] = digit;
     setOtpDigits(updated);
     setError('');
 
-    // Focus next box if digit was entered
     if (digit && index < 5) {
       inputRefs[index + 1].current?.focus();
     }
@@ -135,7 +141,8 @@ const VerifyEmail = () => {
     e.preventDefault();
     const fullCode = otpDigits.join('');
     if (fullCode.length !== 6) {
-      return setError(t('auth.otpRequired', 'Please enter all 6 digits of the verification code.'));
+      setError(t('auth.otpRequired', 'Please enter all 6 digits of the verification code.'));
+      return;
     }
 
     setIsVerifying(true);
@@ -147,10 +154,15 @@ const VerifyEmail = () => {
       if (typeof getMe === 'function') {
         try {
           await getMe();
-        } catch {}
+        } catch {
+          // Non-critical session hydrate
+        }
       }
 
-      const rawPending = typeof window !== 'undefined' ? sessionStorage.getItem('dunas_pending_booking_intent') : null;
+      const rawPending =
+        typeof window !== 'undefined'
+          ? sessionStorage.getItem('dunas_pending_booking_intent')
+          : null;
       let targetUrl = '/dashboard';
       let isResumingBooking = false;
       if (rawPending) {
@@ -161,7 +173,9 @@ const VerifyEmail = () => {
             targetUrl = `/tours/${tourKey}`;
             isResumingBooking = true;
           }
-        } catch {}
+        } catch {
+          // Ignore invalid storage
+        }
       }
 
       setSuccess(
@@ -173,14 +187,14 @@ const VerifyEmail = () => {
         navigate(targetUrl, { replace: true });
       }, 2000);
     } catch (err) {
-      setError(err.message || t('auth.verifyEmailError', 'Invalid or expired 6-digit verification code.'));
+      setError(err?.message || t('auth.verifyEmailError', 'Invalid or expired 6-digit verification code.'));
     } finally {
       setIsVerifying(false);
     }
   };
 
   const handleResend = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!resendEmail.trim()) return;
 
     setIsResending(true);
@@ -189,82 +203,85 @@ const VerifyEmail = () => {
 
     try {
       const response = await resendVerification(resendEmail.trim());
-      setResendSuccess(response?.message || t('auth.verificationResent', 'Verification code sent! Please check your inbox.'));
+      setResendSuccess(
+        response?.message || t('auth.verificationResent', 'Verification code sent! Please check your inbox.')
+      );
       setCountdown(60);
-      setCanResend(false);
     } catch (err) {
-      setResendError(err.message || t('auth.resendFailed', 'Failed to resend verification code.'));
+      setResendError(err?.message || t('auth.resendFailed', 'Failed to resend verification code.'));
     } finally {
       setIsResending(false);
     }
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-16 bg-obsidian-900 flex items-center justify-center px-4 font-body">
+    <div className="min-h-screen pt-28 pb-16 bg-gradient-to-b from-[#060D23] via-[#0A183D] to-[#040917] flex items-center justify-center px-4 font-body">
       <Helmet>
         <title>{t('auth.verifyEmailTitle', 'Verify Account Code | Dunas Travel')}</title>
       </Helmet>
 
-      <div className="w-full max-w-md bg-[#121118] border border-[rgba(201,162,39,0.25)] rounded-2xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.85)] relative">
-        {/* State 1: Verifying in progress */}
+      <div className="w-full max-w-md bg-gradient-to-b from-[#091535] to-[#060D23] border border-gold-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_25px_70px_rgba(0,0,0,0.85)] relative text-white text-start">
+        {/* Verification in progress */}
         {isVerifying && (
           <div className="text-center py-8 space-y-4">
-            <div className="w-16 h-16 border-3 border-gold-500/30 border-t-gold-500 rounded-full animate-spin mx-auto" />
-            <h2 className="text-display-sm text-ivory-50 font-display font-semibold">
+            <div className="w-14 h-14 border-3 border-gold-500/30 border-t-gold-500 rounded-full animate-spin mx-auto" />
+            <h2 className="text-xl font-display font-bold text-ivory-50">
               {t('auth.verifyingEmail', 'Verifying Code...')}
             </h2>
-            <p className="text-body-sm text-ivory-400">
-              {t('auth.verifyingEmailDesc', 'Please wait while we activate your bespoke journey account.')}
+            <p className="text-xs text-ivory-300">
+              {t('auth.verifyingEmailDesc', 'Please wait while we verify and activate your account.')}
             </p>
           </div>
         )}
 
-        {/* State 2: Verification Succeeded */}
+        {/* Verification Succeeded */}
         {!isVerifying && success && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-4 space-y-4"
           >
-            <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-700 rounded-full flex items-center justify-center mx-auto shadow-[0_0_25px_rgba(201,162,39,0.3)]">
-              <FaCheckCircle size={32} className="text-obsidian-900" />
+            <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-700 rounded-full flex items-center justify-center mx-auto shadow-[0_0_25px_rgba(245,166,35,0.35)]">
+              <FaCheckCircle size={30} className="text-[#0C1C48]" />
             </div>
-            <h2 className="text-display-sm text-ivory-50 font-display font-semibold">
+            <h2 className="text-xl font-display font-bold text-ivory-50">
               {t('auth.emailVerified', 'Account Activated!')}
             </h2>
-            <p className="text-body-sm text-ivory-300">
-              {success}
+            <p className="text-xs text-ivory-300 leading-relaxed">{success}</p>
+            <p className="text-xs text-gold-400 font-medium">
+              {t('auth.redirectingToLogin', 'Redirecting shortly...')}
             </p>
-            <p className="text-xs text-gold-400">
-              {t('auth.redirectingToLogin', 'Redirecting to sign in shortly...')}
-            </p>
-            <div className="pt-4">
-              <Button
-                variant="gold-glow"
+            <div className="pt-2">
+              <button
+                type="button"
                 onClick={() => navigate('/login')}
-                className="w-full py-3 font-bold uppercase tracking-wider text-[13px]"
+                className="w-full py-3 px-4 rounded-xl font-bold uppercase tracking-wider text-xs shadow-lg transition-all"
+                style={{
+                  background: 'linear-gradient(135deg, #F5A623 0%, #C07D0A 100%)',
+                  color: '#0C1C48',
+                }}
               >
                 {t('auth.proceedToLogin', 'Proceed to Sign In')}
-              </Button>
+              </button>
             </div>
           </motion.div>
         )}
 
-        {/* State 3: OTP Entry Form */}
+        {/* OTP Input State */}
         {!isVerifying && !success && (
           <div>
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-gold-500/20 to-gold-700/20 border border-gold-500/40 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(201,162,39,0.2)]">
+              <div className="w-14 h-14 bg-gradient-to-br from-gold-500/20 to-gold-700/20 border border-gold-500/40 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-[0_0_25px_rgba(245,166,35,0.2)]">
                 {error ? (
-                  <FaExclamationTriangle size={26} className="text-red-400" />
+                  <FaExclamationTriangle size={22} className="text-red-400" />
                 ) : (
-                  <FaShieldAlt size={26} className="text-gold-500" />
+                  <FaShieldAlt size={22} className="text-gold-400" />
                 )}
               </div>
-              <h1 className="text-display-sm text-ivory-50 font-display font-semibold mb-2">
+              <h1 className="text-xl font-display font-bold text-ivory-50 tracking-tight">
                 {t('auth.enterOtpHeading', 'Enter Verification Code')}
               </h1>
-              <p className="text-body-sm text-ivory-300">
+              <p className="text-xs text-ivory-300 mt-1">
                 {t('auth.otpSentDesc', 'We sent a 6-digit confirmation code to your email address')}
               </p>
               {emailFromUrl && (
@@ -274,15 +291,28 @@ const VerifyEmail = () => {
               )}
             </div>
 
-            {error && (
-              <div className="mb-5 p-3.5 rounded-xl bg-red-500/15 border border-red-500/40 text-red-400 text-xs text-center">
-                {typeof error === 'object' && error !== null ? error.message : error}
-              </div>
-            )}
+            {/* Error Alert */}
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="mb-5 p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-200 text-xs text-center font-medium"
+                  role="alert"
+                >
+                  {error}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-            {/* 6-Digit OTP Code Inputs */}
-            <form onSubmit={handleCodeSubmit} className="space-y-6 mb-6">
-              <div className="flex justify-center items-center gap-2 sm:gap-3" onPaste={handlePaste}>
+            {/* 6-Digit OTP Form */}
+            <form onSubmit={handleCodeSubmit} className="space-y-5 mb-5">
+              <div
+                className="flex justify-center items-center gap-2 sm:gap-2.5 dir-ltr"
+                style={{ direction: 'ltr' }}
+                onPaste={handlePaste}
+              >
                 {otpDigits.map((digit, idx) => (
                   <input
                     key={idx}
@@ -293,28 +323,31 @@ const VerifyEmail = () => {
                     value={digit}
                     onChange={(e) => handleDigitChange(idx, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(idx, e)}
-                    className="w-11 h-13 sm:w-12 sm:h-14 text-center text-xl font-bold font-mono rounded-xl bg-[rgba(255,252,247,0.05)] text-gold-400 border border-[rgba(201,162,39,0.25)] focus:border-gold-500 focus:bg-gold-500/10 focus:shadow-[0_0_15px_rgba(201,162,39,0.3)] outline-none transition-all"
+                    aria-label={`Digit ${idx + 1}`}
+                    className="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold font-mono rounded-xl bg-white/5 text-gold-400 border border-gold-500/30 focus:border-gold-500 focus:bg-gold-500/10 focus:ring-2 focus:ring-gold-500/25 outline-none transition-all"
                   />
                 ))}
               </div>
 
-              <Button
-                variant="gold-glow"
+              <button
                 type="submit"
-                className="w-full py-3.5 font-bold uppercase tracking-[1.5px] text-[13px]"
+                disabled={otpDigits.join('').length !== 6}
+                className="w-full py-3.5 px-4 rounded-xl font-bold uppercase tracking-[1.5px] text-xs transition-all duration-300 flex items-center justify-center gap-2 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                style={{
+                  background: 'linear-gradient(135deg, #F5A623 0%, #C07D0A 100%)',
+                  color: '#0C1C48',
+                }}
               >
                 {t('auth.submitVerificationCode', 'Confirm Code & Activate')}
-              </Button>
+              </button>
             </form>
 
             {/* Resend Section */}
-            <div className="border-t border-[rgba(201,162,39,0.15)] pt-6 mt-6">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs text-ivory-300">
-                  {t('auth.didntReceiveCode', "Didn't receive the code?")}
-                </span>
-                {!canResend && countdown > 0 ? (
-                  <span className="text-xs text-gold-400 font-mono">
+            <div className="border-t border-white/10 pt-5 mt-5">
+              <div className="flex items-center justify-between text-xs text-ivory-300">
+                <span>{t('auth.didntReceiveCode', "Didn't receive the code?")}</span>
+                {!canResend ? (
+                  <span className="text-gold-400 font-mono font-medium">
                     {t('auth.resendIn', 'Resend in')} {countdown}s
                   </span>
                 ) : (
@@ -322,7 +355,7 @@ const VerifyEmail = () => {
                     type="button"
                     onClick={handleResend}
                     disabled={isResending}
-                    className="text-xs text-gold-400 hover:text-gold-300 font-semibold underline underline-offset-2 transition-all cursor-pointer"
+                    className="text-gold-400 hover:text-gold-300 font-bold underline transition-colors cursor-pointer"
                   >
                     {isResending ? t('common.sending', 'Sending...') : t('auth.resendCodeNow', 'Resend Code')}
                   </button>
@@ -330,47 +363,48 @@ const VerifyEmail = () => {
               </div>
 
               {resendSuccess && (
-                <div className="mb-4 p-3 rounded-xl bg-sage-500/15 border border-sage-500/40 text-sage-400 text-xs text-center">
+                <div className="mt-3 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 text-xs text-center">
                   {resendSuccess}
                 </div>
               )}
               {resendError && (
-                <div className="mb-4 p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-400 text-xs text-center">
+                <div className="mt-3 p-2.5 rounded-xl bg-red-500/15 border border-red-500/40 text-red-400 text-xs text-center">
                   {resendError}
                 </div>
               )}
 
               {/* Email update form if email was missing */}
               {!emailFromUrl && (
-                <form onSubmit={handleResend} className="space-y-3 mt-3">
-                  <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ivory-400">
-                      <FaEnvelope size={14} />
-                    </span>
-                    <input
-                      type="email"
-                      required
-                      value={resendEmail}
-                      onChange={(e) => setResendEmail(e.target.value)}
-                      placeholder={t('auth.emailPlaceholder', 'Enter your account email')}
-                      className="w-full p-2.5 pl-10 rounded-xl bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-gold-500 outline-none transition-all text-[13px]"
-                    />
-                  </div>
-                  <Button
-                    variant="gold-glow"
-                    type="submit"
+                <form onSubmit={handleResend} className="space-y-2.5 mt-3">
+                  <AuthFormField
+                    id="resend-email"
+                    type="email"
+                    value={resendEmail}
+                    onChange={(e) => setResendEmail(e.target.value)}
+                    placeholder={t('auth.emailPlaceholder', 'Enter account email')}
+                    icon={FaEnvelope}
+                    required
                     disabled={isResending}
-                    className="w-full py-2.5 font-bold uppercase tracking-wider text-[12px]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isResending || !resendEmail.trim()}
+                    className="w-full py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/15 text-ivory-200 text-xs font-semibold transition-colors disabled:opacity-60"
                   >
                     {isResending ? t('common.loading', 'Sending...') : t('auth.resendVerificationBtn', 'Send New Code')}
-                  </Button>
+                  </button>
                 </form>
               )}
             </div>
 
-            <div className="mt-6 text-center border-t border-[rgba(201,162,39,0.1)] pt-4">
-              <Link to="/login" className="text-gold-500 font-semibold hover:underline text-xs">
-                ← {t('auth.backToSignIn', 'Back to Sign In')}
+            {/* Back to sign in link */}
+            <div className="mt-6 text-center border-t border-white/10 pt-4">
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 text-gold-400 hover:text-gold-300 text-xs font-bold transition-colors"
+              >
+                <BackArrowIcon size={11} />
+                <span>{t('auth.backToSignIn', 'Back to Sign In')}</span>
               </Link>
             </div>
           </div>

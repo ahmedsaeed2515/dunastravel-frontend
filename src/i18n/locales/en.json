@@ -6169,5 +6169,21 @@
   "auth.signInShort": "Sign In",
   "home.destSectionDesc": "Discover the most enchanting and beautiful luxury destinations, with packages and tours meticulously crafted to give you an extraordinary travel experience.",
   "destination.explore": "Explore Destination",
-  "destination.viewGuide": "Destination Guide"
+  "destination.viewGuide": "Destination Guide",
+  "auth.resendCodeNow": "Resend Code",
+  "auth.checkYourEmail": "Check Your Email",
+  "auth.tryAnotherEmail": "Try another email address",
+  "auth.reqUpperLower": "Upper & lowercase",
+  "auth.reqNumberSymbol": "Numbers / symbols",
+  "auth.reqUnpredictable": "Unpredictable",
+  "auth.passwordUpdated": "Password Updated!",
+  "auth.enterOtpHeading": "Enter Verification Code",
+  "auth.otpSentDesc": "We sent a 6-digit confirmation code to your email address",
+  "auth.otpRequired": "Please enter all 6 digits of the verification code.",
+  "auth.submitVerificationCode": "Confirm Code & Activate",
+  "auth.didntReceiveCode": "Didn't receive the code?",
+  "auth.resendIn": "Resend in",
+  "nav.selectLanguage": "Select language",
+  "nav.languages": "Languages",
+  "auth.authenticationTabs": "Authentication options"
 }

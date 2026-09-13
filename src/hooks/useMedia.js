@@ -146,3 +146,79 @@ export function useMedia(optionsOrTourId = null) {
     },
   };
 }
+
+const showcaseCache = { data: null, timestamp: 0 };
+const SHOWCASE_CACHE_TTL_MS = 300_000;
+
+export function useMediaShowcase() {
+  const [photos, setPhotos] = useState(() => showcaseCache.data?.photos || DEFAULT_GALLERY_IMAGES);
+  const [videos, setVideos] = useState(() => showcaseCache.data?.videos || []);
+  const [loading, setLoading] = useState(() => !showcaseCache.data);
+  const [error, setError] = useState(null);
+
+  const fetchShowcase = async (force = false) => {
+    if (!force && showcaseCache.data && Date.now() - showcaseCache.timestamp < SHOWCASE_CACHE_TTL_MS) {
+      setPhotos(showcaseCache.data.photos);
+      setVideos(showcaseCache.data.videos);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await api.get('/media/showcase');
+      const fetchedPhotos = (res && Array.isArray(res.photos) && res.photos.length > 0)
+        ? res.photos.map(p => ({
+            ...p,
+            url: p.optimizedUrl || p.secureUrl || p.url,
+            label: p.title || p.altText || 'Dunas Travel',
+            altText: p.altText || p.title || 'Dunas Travel',
+          }))
+        : DEFAULT_GALLERY_IMAGES;
+
+      const fetchedVideos = (res && Array.isArray(res.videos) && res.videos.length > 0)
+        ? res.videos.map(v => ({
+            ...v,
+            url: v.secureUrl || v.url,
+            label: v.title || v.altText || 'Dunas Travel',
+            altText: v.altText || v.title || 'Dunas Travel',
+            publicId: v.publicId,
+            duration: v.duration,
+            thumbnailUrl: v.thumbnailUrl || (v.publicId ? `https://res.cloudinary.com/degbrq3ck/video/upload/w_600,h_400,c_fill,so_0/${v.publicId}.jpg` : undefined),
+          }))
+        : [];
+
+      showcaseCache.data = { photos: fetchedPhotos, videos: fetchedVideos };
+      showcaseCache.timestamp = Date.now();
+      setPhotos(fetchedPhotos);
+      setVideos(fetchedVideos);
+    } catch (err) {
+      console.warn('Failed to load media showcase from API, using defaults:', err);
+      setError(err);
+      if (!showcaseCache.data) {
+        setPhotos(DEFAULT_GALLERY_IMAGES);
+        setVideos([]);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchShowcase();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  return {
+    photos,
+    videos,
+    loading,
+    error,
+    refetch: () => fetchShowcase(true),
+  };
+}
+

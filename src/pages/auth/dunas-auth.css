@@ -1,10 +1,30 @@
 /* ==========================================================================
-   Auth Page Styling for Dunas Travel
-   Colors: Primary Blue (#1E3A8A, #0C1C48), Gold (#F5A623, #C07D0A), 
-           Brown (#8B4513, #5E2D0B), Neutral White (#FFFFFF), Dark (#1A1A2E)
+   Auth Page & Modal Styling for Dunas Travel
+   Colors: Primary Navy (#0C1C48, #1E3A8A), Champagne Gold (#F5A623, #C07D0A),
+           Ivory (#FEFCF7), Obsidian (#1A1A2E)
    ========================================================================== */
 
-/* ── 1. Hero Breadcrumb Section ── */
+/* Custom scrollbar for Auth Modal internal body */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(245, 166, 35, 0.35);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 166, 35, 0.6);
+}
+
+/* Breadcrumbs Section */
 .dunas-breadcumb-section {
   position: relative;
   background-size: cover;
@@ -20,7 +40,7 @@
 .dunas-breadcumb-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(12, 28, 72, 0.85) 0%, rgba(26, 26, 46, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(12, 28, 72, 0.88) 0%, rgba(26, 26, 46, 0.94) 100%);
   z-index: 1;
 }
 
@@ -66,355 +86,4 @@
 
 .dunas-breadcumb-item a:hover {
   color: #F5A623;
-}
-
-.dunas-login-page {
-  padding: 60px 0 80px;
-  background-color: #ffffff;
-  background-image: none;
-}
-
-.dunas-image-box {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(245, 166, 35, 0.25);
-  height: 100%;
-  min-height: 480px;
-}
-
-.dunas-image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.8s ease;
-}
-
-.dunas-image-box:hover img {
-  transform: scale(1.04);
-}
-
-.dunas-image-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgba(12, 28, 72, 0.95) 0%, rgba(12, 28, 72, 0.3) 60%, rgba(0,0,0,0.1) 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 36px;
-  color: #ffffff;
-}
-
-.dunas-image-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(245, 166, 35, 0.2);
-  border: 1px solid #F5A623;
-  color: #F9C76B;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 20px;
-  width: fit-content;
-  margin-bottom: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.dunas-image-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 8px;
-  line-height: 1.25;
-}
-
-.dunas-image-desc {
-  font-size: 14px;
-  color: #E8D0BF;
-  line-height: 1.6;
-}
-
-/* ── 3. Login Card ── */
-.dunas-login-card {
-  background: #152B6B;
-  border: 1px solid rgba(245, 166, 35, 0.3);
-  border-radius: 18px;
-  padding: 40px;
-  box-shadow: 0 16px 64px rgba(12, 28, 72, 0.5);
-  position: relative;
-}
-
-.dunas-card-logo {
-  max-width: 140px;
-  height: auto;
-  margin: 0 auto 20px;
-  display: block;
-}
-
-.dunas-demo-box {
-  background: #ffffff;
-  color: #1A1A2E;
-  padding: 16px 24px;
-  font-size: 14px;
-  border-radius: 8px;
-  margin-bottom: 24px;
-  text-align: center;
-  border-left: 4px solid #F5A623;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-[dir="rtl"] .dunas-demo-box {
-  border-left: none;
-  border-right: 4px solid #F5A623;
-}
-
-.dunas-demo-box b {
-  color: #1E3A8A;
-  font-weight: 700;
-}
-
-.dunas-login-card h2 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 30px;
-  color: #ffffff;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.dunas-subtitle {
-  color: #F9C76B;
-  font-size: 14px;
-  margin-bottom: 24px;
-}
-
-/* ── 4. Tabs Component ── */
-.dunas-tabs {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 25px;
-  border-bottom: 1px solid rgba(245, 166, 35, 0.2);
-  padding-bottom: 12px;
-}
-
-.dunas-tabs button {
-  border: none;
-  background: transparent;
-  font-size: 15px;
-  font-weight: 600;
-  color: #E8D0BF;
-  cursor: pointer;
-  padding: 8px 20px;
-  border-radius: 6px;
-  transition: all 0.25s ease;
-}
-
-.dunas-tabs button:hover {
-  color: #ffffff;
-  background: rgba(245, 166, 35, 0.15);
-}
-
-.dunas-tabs button.active {
-  background: linear-gradient(135deg, #F5A623 0%, #C07D0A 100%);
-  color: #1A1A2E;
-  box-shadow: 0 4px 15px rgba(245, 166, 35, 0.35);
-  font-weight: 700;
-}
-
-/* ── 5. Input Boxes ── */
-.dunas-input-box {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 18px;
-  border: 2px solid transparent;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.dunas-input-box:focus-within {
-  border-color: #F5A623;
-  box-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
-}
-
-.dunas-input-box span {
-  margin-right: 12px;
-  font-size: 16px;
-  color: #8B4513;
-  display: flex;
-  align-items: center;
-}
-
-[dir="rtl"] .dunas-input-box span {
-  margin-right: 0;
-  margin-left: 12px;
-}
-
-.dunas-input-box input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 14px;
-  color: #1A1A2E;
-  background: transparent;
-  width: 100%;
-}
-
-.dunas-input-box input::placeholder {
-  color: #8C8880;
-}
-
-.dunas-eye {
-  cursor: pointer;
-  color: #8B4513;
-  padding: 4px;
-  transition: color 0.2s ease;
-}
-
-.dunas-eye:hover {
-  color: #F5A623;
-}
-
-/* ── 6. Options & Buttons ── */
-.dunas-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  margin-bottom: 22px;
-  color: #ffffff;
-}
-
-.dunas-options a {
-  color: #F9C76B;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.dunas-options a:hover {
-  color: #F5A623;
-  text-decoration: underline;
-}
-
-.dunas-login-btn {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(135deg, #F5A623 0%, #C07D0A 100%);
-  border: none;
-  color: #1A1A2E;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(245, 166, 35, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.dunas-login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(245, 166, 35, 0.45);
-  background: linear-gradient(135deg, #F9C76B 0%, #F5A623 100%);
-}
-
-.dunas-login-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.dunas-divider {
-  height: 1px;
-  background: rgba(245, 166, 35, 0.2);
-  margin: 25px 0;
-}
-
-.dunas-bottom-text {
-  text-align: center;
-  font-size: 14px;
-  color: #E8D0BF;
-}
-
-.dunas-bottom-text a {
-  color: #F9C76B;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.dunas-bottom-text a:hover {
-  color: #F5A623;
-  text-decoration: underline;
-}
-
-/* ── 7. Offer / Newsletter Section ── */
-.dunas-offer-section {
-  background: linear-gradient(135deg, #1E3A8A 0%, #0C1C48 100%);
-  padding: 60px 0;
-  border-top: 2px solid #F5A623;
-  border-bottom: 1px solid rgba(245, 166, 35, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.dunas-offer-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1.25;
-  text-transform: capitalize;
-}
-
-.dunas-offer-title span {
-  color: #F5A623;
-}
-
-.dunas-subscribe-box input {
-  padding: 14px 20px;
-  border-radius: 8px;
-  border: 1px solid rgba(245, 166, 35, 0.3);
-  background: #ffffff;
-  color: #1A1A2E;
-  font-size: 14px;
-  width: 100%;
-}
-
-.dunas-subscribe-box button {
-  padding: 14px 28px;
-  background: #F5A623;
-  color: #1A1A2E;
-  font-weight: 700;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  white-space: nowrap;
-}
-
-.dunas-subscribe-box button:hover {
-  background: #F9C76B;
-}
-
-/* Responsive Tweaks */
-@media (max-width: 991px) {
-  .dunas-image-box {
-    min-height: 320px;
-    margin-bottom: 30px;
-  }
-  .dunas-login-card {
-    padding: 24px;
-  }
-  .dunas-breadcumb-title {
-    font-size: 32px;
-  }
 }

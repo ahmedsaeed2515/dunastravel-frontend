@@ -2,215 +2,213 @@ import { useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
-import { FaKey, FaLock, FaEye, FaEyeSlash, FaCheck, FaTimes } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaKey, FaLock, FaArrowLeft, FaArrowRight, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
-import Button from '../../components/ui/Button';
+import AuthFormField from '../../components/auth/AuthFormField';
+import PasswordStrengthMeter, { calculatePasswordStrength } from '../../components/auth/PasswordStrengthMeter';
 
 const ResetPassword = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const tokenFromUrl = searchParams.get('token') || '';
+  const isRtl = i18n.dir() === 'rtl';
+  const BackArrowIcon = isRtl ? FaArrowRight : FaArrowLeft;
+
+  const tokenFromUrl = searchParams.get('token') || searchParams.get('code') || '';
 
   const [token, setToken] = useState(tokenFromUrl);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const { resetPassword } = useAuth();
 
-  // Password Complexity Metrics
-  const hasLength = newPassword.length >= 8;
-  const hasUpper = /[A-Z]/.test(newPassword);
-  const hasLower = /[a-z]/.test(newPassword);
-  const hasDigit = /\d/.test(newPassword);
-  const strengthScore = [hasLength, hasUpper, hasLower, hasDigit].filter(Boolean).length;
-  const isPasswordValid = hasLength && hasUpper && hasLower && hasDigit;
+  const passwordMetrics = calculatePasswordStrength(newPassword);
+  const passwordsMatch = confirmPassword.length > 0 && newPassword === confirmPassword;
+  const isFormValid = (tokenFromUrl || token.trim()) && passwordMetrics.isValid && passwordsMatch;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    if (!token.trim()) {
-      return setError(t('auth.tokenRequired', 'Reset token is required.'));
+    const activeToken = tokenFromUrl || token.trim();
+    if (!activeToken) {
+      setError(t('auth.tokenRequired', 'Reset token is required.'));
+      return;
     }
-    if (!isPasswordValid) {
-      return setError(t('auth.passwordComplexityError', 'Password must contain at least 8 characters, including an uppercase letter, a lowercase letter, and a number'));
+
+    if (!passwordMetrics.isValid) {
+      setError(
+        t(
+          'auth.passwordComplexityError',
+          'Password must have at least 12 characters and satisfy the security requirements below.'
+        )
+      );
+      return;
     }
+
     if (newPassword !== confirmPassword) {
-      return setError(t('auth.passwordsDoNotMatch', 'Passwords do not match.'));
+      setError(t('auth.passwordsDoNotMatch', 'Passwords do not match.'));
+      return;
     }
 
     setIsLoading(true);
 
     try {
-      await resetPassword(token.trim(), newPassword);
-      setSuccess(t('auth.resetPasswordSuccess', 'Password has been reset successfully! You can now log in.'));
+      await resetPassword(activeToken, newPassword);
+      setSuccess(
+        t('auth.resetPasswordSuccess', 'Your password has been reset successfully! Redirecting to sign in...')
+      );
       setTimeout(() => {
         navigate('/login');
-      }, 2500);
+      }, 2200);
     } catch (err) {
-      setError(err.message || t('common.errorOccurred', 'Failed to reset password.'));
+      setError(err?.message || t('common.errorOccurred', 'Failed to reset password. Please try again.'));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-16 bg-obsidian-900 flex items-center justify-center px-4 font-body">
+    <div className="min-h-screen pt-28 pb-16 bg-gradient-to-b from-[#060D23] via-[#0A183D] to-[#040917] flex items-center justify-center px-4 font-body">
       <Helmet>
         <title>{t('auth.resetPasswordTitle', 'Reset Password | Dunas Travel')}</title>
       </Helmet>
 
-      <div className="w-full max-w-md bg-[#121118] border border-[rgba(201,162,39,0.2)] rounded-2xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(201,162,39,0.3)]">
-            <FaKey size={26} className="text-obsidian-900" />
+      <div className="w-full max-w-md bg-gradient-to-b from-[#091535] to-[#060D23] border border-gold-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_25px_70px_rgba(0,0,0,0.85)] relative text-white text-start">
+        {/* Header Icon */}
+        <div className="text-center mb-6">
+          <div className="w-14 h-14 bg-gradient-to-br from-gold-500 to-gold-700 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-[0_0_25px_rgba(245,166,35,0.35)]">
+            <FaKey size={22} className="text-[#0C1C48]" />
           </div>
-          <h1 className="text-display-sm text-ivory-50 font-display font-semibold mb-2">
+          <h1 className="text-2xl font-display font-bold text-ivory-50 tracking-tight">
             {t('auth.resetPassword', 'Set New Password')}
           </h1>
-          <p className="text-body-sm text-ivory-400">
-            {t('auth.resetPasswordDesc', 'Enter your new password below to update your account access.')}
+          <p className="text-xs text-ivory-300 mt-1">
+            {t('auth.resetPasswordDesc', 'Enter your new secure password below to regain account access.')}
           </p>
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/15 border border-red-500/40 text-red-400 text-body-sm text-center">
-            {typeof error === 'object' && error !== null ? (error.message || String(error)) : error}
-          </div>
-        )}
-        {success && (
-          <div className="mb-6 p-4 rounded-xl bg-sage-500/15 border border-sage-500/40 text-sage-400 text-body-sm text-center">
-            {success}
-          </div>
-        )}
+        {/* Error Alert */}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              className="mb-5 p-3.5 rounded-xl bg-red-500/15 border border-red-500/40 text-red-200 text-xs flex items-start gap-2.5"
+              role="alert"
+            >
+              <FaExclamationCircle className="text-red-400 mt-0.5 shrink-0" size={14} />
+              <p className="flex-1">{error}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {!tokenFromUrl && (
-            <div>
-              <label className="block text-caption text-gold-500 font-medium mb-1.5 uppercase tracking-[1px] text-[11px]">
-                {t('auth.resetToken', 'Reset Token')}
-              </label>
-              <input
+        {/* Success Alert */}
+        <AnimatePresence>
+          {success && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-5 p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 text-xs text-center space-y-2"
+            >
+              <div className="flex justify-center mb-1">
+                <FaCheckCircle className="text-emerald-400" size={24} />
+              </div>
+              <p className="font-semibold text-sm text-emerald-300">
+                {t('auth.passwordUpdated', 'Password Updated!')}
+              </p>
+              <p className="text-ivory-300 leading-relaxed">{success}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {!success && (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {!tokenFromUrl && (
+              <AuthFormField
+                id="reset-token"
+                name="token"
+                label={t('auth.resetToken', 'Reset Token')}
                 type="text"
-                required
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
-                placeholder={t('auth.enterTokenPlaceholder', 'Enter reset token')}
-                className="w-full p-3 rounded-xl bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-gold-500 outline-none transition-all text-[14px]"
-              />
-            </div>
-          )}
-
-          <div>
-            <label className="block text-caption text-gold-500 font-medium mb-1.5 uppercase tracking-[1px] text-[11px]">
-              {t('auth.newPassword', 'New Password')}
-            </label>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ivory-400">
-                <FaLock size={14} />
-              </span>
-              <input
-                type={showPassword ? 'text' : 'password'}
+                placeholder={t('auth.enterTokenPlaceholder', 'Enter reset token from your email')}
                 required
+                disabled={isLoading}
+              />
+            )}
+
+            <div>
+              <AuthFormField
+                id="reset-new-password"
+                name="newPassword"
+                label={t('auth.newPassword', 'New Password')}
+                type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder={t('auth.newPasswordPlaceholder', 'Enter new password')}
-                className="w-full p-3 pl-10 pr-10 rounded-xl bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-gold-500 outline-none transition-all text-[14px]"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ivory-400 hover:text-gold-500 transition-colors"
-                aria-label="Toggle password visibility"
-              >
-                {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
-              </button>
-            </div>
-
-            {/* Strength Meter Bar */}
-            {newPassword && (
-              <div className="mt-2 space-y-1.5">
-                <div className="flex gap-1 h-1.5 w-full bg-obsidian-800 rounded-full overflow-hidden">
-                  <div className={`h-full transition-all duration-300 ${strengthScore >= 1 ? (strengthScore === 1 ? 'bg-red-500 w-1/4' : strengthScore === 2 ? 'bg-amber-500 w-1/2' : strengthScore === 3 ? 'bg-yellow-500 w-3/4' : 'bg-emerald-500 w-full') : 'w-0'}`} />
-                </div>
-                
-                {/* Requirements Checklist */}
-                <div className="grid grid-cols-2 gap-1 text-[11px] pt-1">
-                  <div className={`flex items-center gap-1.5 ${hasLength ? 'text-emerald-400' : 'text-ivory-400'}`}>
-                    {hasLength ? <FaCheck size={9} /> : <FaTimes size={9} />}
-                    <span>{t('auth.reqLength', '8+ characters')}</span>
-                  </div>
-                  <div className={`flex items-center gap-1.5 ${hasUpper ? 'text-emerald-400' : 'text-ivory-400'}`}>
-                    {hasUpper ? <FaCheck size={9} /> : <FaTimes size={9} />}
-                    <span>{t('auth.reqUppercase', 'Uppercase letter')}</span>
-                  </div>
-                  <div className={`flex items-center gap-1.5 ${hasLower ? 'text-emerald-400' : 'text-ivory-400'}`}>
-                    {hasLower ? <FaCheck size={9} /> : <FaTimes size={9} />}
-                    <span>{t('auth.reqLowercase', 'Lowercase letter')}</span>
-                  </div>
-                  <div className={`flex items-center gap-1.5 ${hasDigit ? 'text-emerald-400' : 'text-ivory-400'}`}>
-                    {hasDigit ? <FaCheck size={9} /> : <FaTimes size={9} />}
-                    <span>{t('auth.reqNumber', 'Number (0-9)')}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-caption text-gold-500 font-medium mb-1.5 uppercase tracking-[1px] text-[11px]">
-              {t('auth.confirmPassword', 'Confirm New Password')}
-            </label>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ivory-400">
-                <FaLock size={14} />
-              </span>
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="••••••••••••"
+                icon={FaLock}
                 required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder={t('auth.confirmPasswordPlaceholder', 'Confirm new password')}
-                className="w-full p-3 pl-10 pr-10 rounded-xl bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-gold-500 outline-none transition-all text-[14px]"
+                autoComplete="new-password"
+                disabled={isLoading}
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ivory-400 hover:text-gold-500 transition-colors"
-                aria-label="Toggle confirm password visibility"
-              >
-                {showConfirmPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
-              </button>
+              <PasswordStrengthMeter password={newPassword} showRules={true} />
             </div>
-            {confirmPassword && newPassword !== confirmPassword && (
-              <p className="text-[11px] text-red-400 mt-1">{t('auth.passwordsDoNotMatch', 'Passwords do not match.')}</p>
-            )}
-          </div>
 
-          <Button
-            variant="gold-glow"
-            type="submit"
-            className="w-full py-3.5 font-bold uppercase tracking-[1.5px] text-[13px] mt-4 flex justify-center items-center"
-            disabled={isLoading || !isPasswordValid || newPassword !== confirmPassword}
+            <AuthFormField
+              id="reset-confirm-password"
+              name="confirmPassword"
+              label={t('auth.confirmPassword', 'Confirm New Password')}
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="••••••••••••"
+              icon={FaLock}
+              required
+              autoComplete="new-password"
+              disabled={isLoading}
+              error={
+                confirmPassword && newPassword !== confirmPassword
+                  ? t('auth.passwordsDoNotMatch', 'Passwords do not match')
+                  : undefined
+              }
+            />
+
+            <button
+              type="submit"
+              disabled={isLoading || !isFormValid}
+              className="w-full mt-2 py-3.5 px-4 rounded-xl font-bold uppercase tracking-[1.5px] text-xs transition-all duration-300 flex items-center justify-center gap-2 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              style={{
+                background: 'linear-gradient(135deg, #F5A623 0%, #C07D0A 100%)',
+                color: '#0C1C48',
+              }}
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-[#0C1C48] border-t-transparent rounded-full animate-spin" />
+                  <span>{t('common.loading', 'Updating Password...')}</span>
+                </div>
+              ) : (
+                <span>{t('auth.updatePasswordBtn', 'Update Password')}</span>
+              )}
+            </button>
+          </form>
+        )}
+
+        {/* Back to sign in link */}
+        <div className="mt-7 text-center border-t border-white/10 pt-5">
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-2 text-gold-400 hover:text-gold-300 text-xs font-bold transition-colors"
           >
-            {isLoading ? (
-              <div className="w-5 h-5 border-2 border-obsidian-900 border-t-transparent rounded-full animate-spin"></div>
-            ) : (
-              t('auth.updatePasswordBtn', 'Update Password')
-            )}
-          </Button>
-        </form>
-
-        <div className="mt-8 text-center border-t border-[rgba(201,162,39,0.1)] pt-6">
-          <Link to="/login" className="text-gold-500 font-semibold hover:underline text-body-sm">
-            ← {t('auth.backToSignIn', 'Back to Sign In')}
+            <BackArrowIcon size={11} />
+            <span>{t('auth.backToSignIn', 'Back to Sign In')}</span>
           </Link>
         </div>
       </div>

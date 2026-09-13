@@ -6160,5 +6160,22 @@
   "auth.accountCreatedVerification": "¡Cuenta creada! Revisa tu correo para verificar.",
   "home.destSectionDesc": "Descubra los destinos de lujo más deslumbrantes y encantadores, con paquetes y excursiones diseñados minuciosamente para ofrecerle una experiencia de viaje extraordinaria.",
   "destination.explore": "Explorar Destino",
-  "destination.viewGuide": "Guía del Destino"
+  "destination.viewGuide": "Guía del Destino",
+  "auth.resendCodeNow": "Reenviar código ahora",
+  "auth.checkYourEmail": "Revisa tu correo electrónico",
+  "auth.tryAnotherEmail": "Probar con otro correo electrónico",
+  "auth.reqUpperLower": "Mayúsculas y minúsculas",
+  "auth.reqNumberSymbol": "Números / símbolos",
+  "auth.reqUnpredictable": "No predecible",
+  "auth.passwordUpdated": "¡Contraseña actualizada!",
+  "auth.verifyEmailSuccessBooking": "¡Cuenta activada! Reanudando la reserva de tu viaje...",
+  "auth.enterOtpHeading": "Introduce el código de verificación",
+  "auth.otpSentDesc": "Hemos enviado un código de confirmación de 6 dígitos a tu correo electrónico",
+  "auth.otpRequired": "Por favor, introduce los 6 dígitos del código de verificación.",
+  "auth.submitVerificationCode": "Confirmar código y activar",
+  "auth.didntReceiveCode": "¿No has recibido el código?",
+  "auth.resendIn": "Reenviar en",
+  "nav.selectLanguage": "Seleccionar idioma",
+  "nav.languages": "Idiomas",
+  "auth.authenticationTabs": "Opciones de autenticación"
 }

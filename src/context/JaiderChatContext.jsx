@@ -91,7 +91,13 @@ export const JaiderChatProvider = ({ children }) => {
   const [leadFormState, setLeadFormState] = useState({ required: false, fields: [] });
   const [handoffState, setHandoffState] = useState({ requested: false, status: null });
   const [personas, setPersonas] = useState([]);
-  const [isInChatBookingEnabled, setIsInChatBookingEnabled] = useState(true);
+  const [isInChatBookingEnabled, setIsInChatBookingEnabled] = useState(false);
+  const [guiderAvailability, setGuiderAvailability] = useState({
+    enabled: true,
+    status: 'ACTIVE',
+    message: null,
+    loaded: false,
+  });
   const [selectedPersona, setSelectedPersona] = useState(() => {
     if (typeof window === 'undefined') return 'luxury_concierge';
     return localStorage.getItem('jaider_selected_persona') || 'luxury_concierge';
@@ -108,12 +114,13 @@ export const JaiderChatProvider = ({ children }) => {
     return 'en';
   };
 
-  // Fetch active AI Personas and Chat Config
+  // Fetch active AI Personas, Chat Config, and Availability Status
   const fetchChatConfigAndPersonas = useCallback(async (lang) => {
     try {
-      const [personasRes, configRes] = await Promise.all([
+      const [personasRes, configRes, statusRes] = await Promise.all([
         api.get(`/ai/chat/personas?locale=${lang || 'en'}`).catch(() => null),
         api.get(`/ai/chat/config?locale=${lang || 'en'}`).catch(() => null),
+        api.get('/ai/chat/status').catch(() => null),
       ]);
 
       if (Array.isArray(personasRes)) {
@@ -129,8 +136,25 @@ export const JaiderChatProvider = ({ children }) => {
       if (configRes && typeof configRes.isInChatBookingEnabled === 'boolean') {
         setIsInChatBookingEnabled(configRes.isInChatBookingEnabled);
       }
+
+      const effectiveStatus = statusRes || configRes?.availability;
+      if (effectiveStatus) {
+        const isEnabled = Boolean(effectiveStatus.enabled);
+        setGuiderAvailability({
+          enabled: isEnabled,
+          status: effectiveStatus.status || (isEnabled ? 'ACTIVE' : 'DISABLED'),
+          message: effectiveStatus.message || null,
+          loaded: true,
+        });
+        if (!isEnabled) {
+          setIsOpen(false);
+        }
+      } else {
+        setGuiderAvailability((prev) => ({ ...prev, loaded: true }));
+      }
     } catch (err) {
       console.warn('Could not fetch AI personas or config:', err);
+      setGuiderAvailability((prev) => ({ ...prev, loaded: true }));
     }
   }, []);
 
@@ -150,35 +174,63 @@ export const JaiderChatProvider = ({ children }) => {
   const sanitizeTours = (toursList) => {
     if (!Array.isArray(toursList)) return [];
     return toursList
-      .filter((t) => t && typeof t === 'object' && t.title)
-      .map((t) => ({
-        ...t,
-        price: 0,
-        basePriceUsd: 0,
-      }));
+      .filter((t) => t && typeof t === 'object' && (t.title || t.name))
+      .map((t) => {
+        const rawPrice = t.price !== undefined && t.price !== null
+          ? t.price
+          : (t.basePriceUsd !== undefined && t.basePriceUsd !== null ? t.basePriceUsd : 0);
+        const parsedPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice);
+        const validPrice = !isNaN(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0;
+
+        return {
+          ...t,
+          id: t.id || t.slug || '',
+          slug: t.slug || t.id || '',
+          title: t.title || t.name || '',
+          price: validPrice,
+          basePriceUsd: validPrice,
+          currency: t.currency || 'USD',
+          durationDays: Number(t.durationDays || t.duration || 1),
+          rating: typeof t.rating === 'number' ? t.rating : (parseFloat(t.rating) || 4.9),
+          highlights: Array.isArray(t.highlights) ? t.highlights : [],
+          ctaUrl: t.ctaUrl || (t.slug ? `/tours/${t.slug}` : '/tours'),
+        };
+      });
   };
 
   const sanitizeProposal = (p) => {
-    if (!p) return null;
+    if (!p || typeof p !== 'object') return null;
+    const rawPrice = p.estimatedPricePerPerson !== undefined && p.estimatedPricePerPerson !== null
+      ? p.estimatedPricePerPerson
+      : (p.price || 0);
+    const parsedPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice);
+    const validPrice = !isNaN(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0;
+
     return {
       ...p,
-      estimatedPricePerPerson: 0,
+      title: p.title || 'Custom Luxury Itinerary',
+      estimatedPricePerPerson: validPrice,
+      currency: p.currency || 'USD',
+      days: Array.isArray(p.days) ? p.days : [],
+      highlights: Array.isArray(p.highlights) ? p.highlights : [],
     };
   };
 
   const sanitizeComparison = (c) => {
-    if (!c) return null;
+    if (!c || typeof c !== 'object') return null;
     return {
       ...c,
-      tours: Array.isArray(c.tours) ? c.tours.map((t) => ({ ...t, price: 0 })) : [],
-      differences: Array.isArray(c.differences)
-        ? c.differences.map((d) => {
-            if (d.aspect && (d.aspect.includes('سعر') || d.aspect.toLowerCase().includes('price'))) {
-              return { ...d, tourAValue: '$0 USD', tourBValue: '$0 USD' };
-            }
-            return d;
+      tours: Array.isArray(c.tours)
+        ? c.tours.map((t) => {
+            const rawPrice = t.price !== undefined && t.price !== null ? t.price : 0;
+            const parsedPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice);
+            return {
+              ...t,
+              price: !isNaN(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0,
+            };
           })
-        : c.differences,
+        : [],
+      differences: Array.isArray(c.differences) ? c.differences : [],
     };
   };
 
@@ -246,6 +298,10 @@ export const JaiderChatProvider = ({ children }) => {
 
   const handleSetIsOpen = (open) => {
     const nextOpen = typeof open === 'function' ? open(isOpen) : open;
+    if (nextOpen && guiderAvailability.loaded && !guiderAvailability.enabled) {
+      setIsOpen(false);
+      return;
+    }
     setIsOpen(nextOpen);
     if (nextOpen && messages.length === 0) {
       const activeLang = i18n.language ? i18n.language.split('-')[0] : 'en';
@@ -548,54 +604,14 @@ export const JaiderChatProvider = ({ children }) => {
   };
 
   const bookTourInChat = async (bookingPayload) => {
-    try {
-      setIsTyping(true);
-      const res = await api.post('/ai/chat/book', {
-        sessionId,
-        locale: i18n.language,
-        ...bookingPayload,
-      });
-
-      if (res && res.referenceCode) {
-        const isAr = (i18n.language || '').startsWith('ar');
-        const confirmationMsg = {
-          id: `booking-conf-${Date.now()}`,
-          sender: 'jaider',
-          text: isAr
-            ? `🎉 تم تأكيد طلب حجزك بنجاح برقم مرجعي: **${res.referenceCode}**`
-            : `🎉 Booking reservation confirmed with Reference: **${res.referenceCode}**`,
-          timestamp: new Date(),
-          booking: res,
-          structuredContent: {
-            type: 'booking_confirmation',
-            booking: res,
-          },
-        };
-
-        setMessages((prev) => [...prev, confirmationMsg]);
-        return { success: true, booking: res };
-      }
-      return { success: false, error: 'Unexpected response from booking engine' };
-    } catch (err) {
-      console.error('In-chat booking failed:', err);
-      const isAr = (i18n.language || '').startsWith('ar');
-      const errorText = isAr
-        ? 'عذراً، حدث خطأ أثناء إتمام الحجز. يرجى مراجعة البيانات والمحاولة مجدداً أو التواصل مع خدمة العملاء.'
-        : 'Sorry, an error occurred while processing your booking. Please try again or reach out to customer support.';
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `booking-err-${Date.now()}`,
-          sender: 'jaider',
-          text: errorText,
-          timestamp: new Date(),
-          isError: true,
-        },
-      ]);
-      return { success: false, error: err.message };
-    } finally {
-      setIsTyping(false);
+    // In accordance with Decision #1: GuideR must not book trips directly.
+    // GuideR directs travelers to the official tour page to customize dates and reserve.
+    const tourSlug = bookingPayload?.tourSlug || bookingPayload?.tourId;
+    const targetUrl = tourSlug ? `/tours/${tourSlug}` : '/tours';
+    if (typeof window !== 'undefined') {
+      window.location.href = targetUrl;
     }
+    return { success: true, redirectUrl: targetUrl };
   };
 
   const submitCustomTripInquiry = async (customTripData) => {
@@ -804,6 +820,8 @@ export const JaiderChatProvider = ({ children }) => {
         bookTourInChat,
         submitCustomTripInquiry,
         isInChatBookingEnabled,
+        guiderAvailability,
+        isAvailable: guiderAvailability.enabled,
       }}
     >
       {children}

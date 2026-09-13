@@ -6169,5 +6169,21 @@
   "auth.signInShort": "تسجيل الدخول",
   "home.destSectionDesc": "استكشف أكثر الوجهات الفاخرة سحراً وجمالاً، مع باقات وجولات سياحية صممت بعناية لتمنحك تجربة سفر استثنائية.",
   "destination.explore": "استكشف الوجهة",
-  "destination.viewGuide": "دليل الوجهة"
+  "destination.viewGuide": "دليل الوجهة",
+  "auth.resendCodeNow": "إعادة إرسال الرمز الآن",
+  "auth.checkYourEmail": "تحقق من بريدك الإلكتروني",
+  "auth.tryAnotherEmail": "جرب عنوان بريد إلكتروني آخر",
+  "auth.reqUpperLower": "أحرف كبيرة وصغيرة",
+  "auth.reqNumberSymbol": "أرقام أو رموز",
+  "auth.reqUnpredictable": "غير متوقعة",
+  "auth.passwordUpdated": "تم تحديث كلمة المرور!",
+  "auth.enterOtpHeading": "أدخل رمز التحقق",
+  "auth.otpSentDesc": "أرسلنا رمز تأكيد مكون من 6 أرقام إلى بريدك الإلكتروني",
+  "auth.otpRequired": "يرجى إدخال جميع الأرقام الستة لرمز التحقق.",
+  "auth.submitVerificationCode": "تأكيد الرمز وتفعيل الحساب",
+  "auth.didntReceiveCode": "لم تستلم الرمز؟",
+  "auth.resendIn": "إعادة الإرسال خلال",
+  "nav.selectLanguage": "اختر اللغة",
+  "nav.languages": "اللغات",
+  "auth.authenticationTabs": "خيارات تسجيل الدخول"
 }

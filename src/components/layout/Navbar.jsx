@@ -1,16 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaGlobe, FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
+import { FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import LoginModal from '../auth/LoginModal';
 import Logo from '../ui/Logo';
 import CurrencySelector from '../ui/CurrencySelector';
+import LanguageSelector from '../ui/LanguageSelector';
 import CustomerNotificationBell from '../ui/CustomerNotificationBell';
 import { useActiveLocales } from '../../hooks/useActiveLocales';
 import { syncDocumentDirection } from '../../i18n';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -24,14 +26,19 @@ const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileActiveDropdown, setMobileActiveDropdown] = useState(null);
   const [mobileActiveSubDropdown, setMobileActiveSubDropdown] = useState(null);
-  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { activeLanguages } = useActiveLocales();
   const isRtl = i18n.dir() === 'rtl';
+
+  useClickOutside(profileDropdownRef, () => setProfileDropdownOpen(false), {
+    enabled: profileDropdownOpen,
+    escapeKey: true,
+  });
 
   const handleLogout = async () => {
     setProfileDropdownOpen(false);
@@ -42,9 +49,12 @@ const Navbar = () => {
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
-    localStorage.setItem('i18nextLng', lng);
+    try {
+      localStorage.setItem('i18nextLng', lng);
+    } catch {
+      // safe fallback
+    }
     syncDocumentDirection(lng);
-    setLangDropdownOpen(false);
   };
 
   useEffect(() => {
@@ -187,23 +197,95 @@ const Navbar = () => {
                 {theme === 'dark' ? <FaSun size={10} className="text-[#F5A623]" /> : <FaMoon size={10} className="text-[#F5A623]" />}
               </button>
 
-              <div className="relative">
+              <div ref={profileDropdownRef} className="relative">
                 {user ? (
-                  <button
-                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    aria-label="User profile options"
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110"
-                  >
-                    <span className="font-bold text-[10px] text-[#F5A623]">{user.avatar || user.name?.charAt(0)?.toUpperCase() || 'U'}</span>
-                  </button>
+                  <>
+                    <button
+                      onClick={() => setProfileDropdownOpen((prev) => !prev)}
+                      aria-expanded={profileDropdownOpen}
+                      aria-haspopup="menu"
+                      aria-label={t('nav.profile', 'User profile options')}
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/50 transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gold-500/70 cursor-pointer"
+                    >
+                      <span className="font-bold text-[10px] text-[#F5A623]">
+                        {user.avatar || user.name?.charAt(0)?.toUpperCase() || 'U'}
+                      </span>
+                    </button>
+
+                    {/* Profile Dropdown directly anchored to its button */}
+                    <AnimatePresence>
+                      {profileDropdownOpen && (
+                        <motion.div
+                          variants={dropdownVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="exit"
+                          role="menu"
+                          aria-label={t('nav.profile', 'User Profile')}
+                          className={`absolute top-full ${isRtl ? 'left-0' : 'right-0'} mt-2 w-52 bg-white dark:bg-obsidian-900 border border-obsidian-200 dark:border-gold-500/30 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 z-[10000] text-start`}
+                        >
+                          <div className="px-4 py-3 border-b border-obsidian-100 dark:border-obsidian-800 bg-obsidian-50/50 dark:bg-obsidian-800/50">
+                            <p className="text-xs font-bold text-obsidian-900 dark:text-ivory-50 truncate">
+                              {user.name}
+                            </p>
+                            <p className="text-[10px] text-obsidian-400 dark:text-ivory-400 truncate">
+                              {user.email}
+                            </p>
+                          </div>
+                          <div className="p-1">
+                            <Link
+                              to="/dashboard"
+                              role="menuitem"
+                              onClick={() => setProfileDropdownOpen(false)}
+                              className="w-full px-3 py-2 text-xs font-semibold text-obsidian-800 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-amber-50 dark:hover:bg-gold-500/10 rounded-xl transition-colors flex items-center gap-2.5"
+                            >
+                              <FaUserCircle className="text-gold-500 shrink-0" size={14} />
+                              <span>{t('user.tabOverview', 'My Dashboard')}</span>
+                            </Link>
+                            <Link
+                              to="/profile"
+                              role="menuitem"
+                              onClick={() => setProfileDropdownOpen(false)}
+                              className="w-full px-3 py-2 text-xs font-semibold text-obsidian-800 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-amber-50 dark:hover:bg-gold-500/10 rounded-xl transition-colors flex items-center gap-2.5"
+                            >
+                              <FaUserCircle className="text-gold-500 shrink-0" size={14} />
+                              <span>{t('nav.myProfile', 'My Profile')}</span>
+                            </Link>
+                            <Link
+                              to="/bookings"
+                              role="menuitem"
+                              onClick={() => setProfileDropdownOpen(false)}
+                              className="w-full px-3 py-2 text-xs font-semibold text-obsidian-800 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-amber-50 dark:hover:bg-gold-500/10 rounded-xl transition-colors flex items-center gap-2.5"
+                            >
+                              <FaBookmark className="text-gold-500 shrink-0" size={14} />
+                              <span>{t('nav.myBookings', 'My Bookings')}</span>
+                            </Link>
+                            <div className="my-1 border-t border-obsidian-100 dark:border-obsidian-800" />
+                            <button
+                              type="button"
+                              role="menuitem"
+                              onClick={handleLogout}
+                              className="w-full px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/15 rounded-xl transition-colors flex items-center gap-2.5 cursor-pointer"
+                            >
+                              <FaSignOutAlt className="shrink-0" size={13} />
+                              <span>{t('nav.logout', 'Logout')}</span>
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </>
                 ) : (
                   <button
                     type="button"
                     onClick={() => setIsLoginModalOpen(true)}
-                    aria-label="Sign in"
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110"
+                    aria-label={t('auth.signIn', 'Sign in or register')}
+                    className="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full flex items-center justify-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/50 transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gold-500/70 cursor-pointer"
                   >
-                    <FaUserCircle size={14} className="text-[#F5A623]" />
+                    <FaUserCircle size={13} className="text-[#F5A623]" />
+                    <span className="hidden md:inline text-[11px] font-bold text-white tracking-wide">
+                      {t('auth.logInTab', 'Sign In')}
+                    </span>
                   </button>
                 )}
               </div>
@@ -216,47 +298,8 @@ const Navbar = () => {
                 <CurrencySelector />
               </div>
 
-              {/* Lang */}
-              <div className="relative">
-                <button
-                  onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                  aria-label="Select language"
-                  className="h-7 sm:h-8 rounded-full flex items-center justify-center gap-1 px-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-105"
-                >
-                  <FaGlobe size={9} className="text-[#F5A623]" />
-                  <span className="text-[9px] font-bold uppercase text-white tracking-wider">
-                    {i18n.language === 'ar' ? 'ع' :
-                      i18n.language === 'es' ? 'es' :
-                        i18n.language === 'pt' ? 'pt' :
-                          i18n.language === 'it' ? 'it' : 'en'}
-                  </span>
-                </button>
-                <AnimatePresence>
-                  {langDropdownOpen && (
-                    <motion.div
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      style={{ backgroundColor: 'white' }}
-                      className={`absolute top-full ${isRtl ? 'left-0' : 'right-0'} mt-1 w-36 backdrop-blur-xl border border-gray-200 rounded-xl overflow-hidden shadow-2xl z-[10000]`}
-                    >
-                      {activeLanguages.map(lang => (
-                        <button
-                          key={lang.code}
-                          onClick={() => changeLanguage(lang.code)}
-                          className={`w-full ${isRtl ? 'text-right' : 'text-left'} px-3 py-2.5 flex items-center justify-between text-sm border-b border-gray-200 last:border-0 transition-colors ${i18n.language === lang.code ? 'text-amber-600 font-extrabold bg-amber-50' : 'text-black font-bold hover:text-amber-600 hover:bg-amber-50'}`}
-                        >
-                          <span className={`flex items-center gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
-                            <span className="text-base">{lang.flag}</span>
-                            <span>{lang.label}</span>
-                          </span>
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              {/* Language Selector */}
+              <LanguageSelector />
             </div>
           </div>
         </div>
@@ -624,36 +667,6 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Global Profile Dropdown (shared between desktop & mobile) */}
-        <AnimatePresence>
-          {profileDropdownOpen && user && (
-            <motion.div
-              variants={dropdownVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              className={`absolute top-full ${isRtl ? 'left-1' : 'right-1'} mt-5 w-48 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-xl overflow-hidden shadow-xl z-[10000]`}
-            >
-              <div className="px-4 py-3 border-b border-obsidian-100 dark:border-obsidian-700">
-                <p className="text-caption text-black dark:text-white font-extrabold">{user.name}</p>
-                <p className="text-[10px] text-gray-600 dark:text-ivory-400 truncate font-semibold">{user.email}</p>
-              </div>
-              <Link to="/dashboard" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-black dark:text-white font-bold hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
-                <FaUserCircle className="text-amber-500" size={15} /> {t('user.tabOverview', 'My Dashboard')}
-              </Link>
-              <Link to="/profile" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-black dark:text-white font-bold hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
-                <FaUserCircle className="text-amber-500" size={15} /> {t('nav.myProfile', 'My Profile')}
-              </Link>
-              <Link to="/bookings" onClick={() => setProfileDropdownOpen(false)} className="w-full text-left px-4 py-3 text-black dark:text-white font-bold hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 flex items-center gap-2">
-                <FaBookmark className="text-amber-500" size={15} /> {t('nav.myBookings', 'My Bookings')}
-              </Link>
-              <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-red-600 dark:text-red-400 font-bold hover:text-white hover:bg-red-500 transition-colors text-base flex items-center gap-2">
-                <FaSignOutAlt size={15} /> {t('nav.logout', 'Logout')}
-              </button>
             </motion.div>
           )}
         </AnimatePresence>
