@@ -598,3 +598,93 @@
   color: var(--primary-color);
   transform: scale(1.15);
 }
+
+/* --- RTL / Arabic Hero Typography & Layout Overrides --- */
+.rtl .slider-section .hero_content h1,
+[dir="rtl"] .slider-section .hero_content h1 {
+  font-family: "Cairo", "Tajawal", "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 135px;
+  line-height: 135px;
+}
+
+.rtl .slider-section .hero_content h1 img.dunas-logo,
+[dir="rtl"] .slider-section .hero_content h1 img.dunas-logo {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.rtl .slider-section .hero_content .slider-contect-des,
+[dir="rtl"] .slider-section .hero_content .slider-contect-des {
+  width: 50%;
+  text-align: right;
+}
+
+.rtl .circle__video,
+[dir="rtl"] .circle__video {
+  right: auto;
+  left: 38%;
+}
+
+@media only screen and (max-width: 1600px) {
+  .rtl .slider-section .hero_content h1,
+  [dir="rtl"] .slider-section .hero_content h1 {
+    font-size: 115px;
+    line-height: 115px;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .rtl .slider-section .hero_content h1,
+  [dir="rtl"] .slider-section .hero_content h1 {
+    font-size: 90px;
+    line-height: 95px;
+  }
+  .rtl .circle__video,
+  [dir="rtl"] .circle__video {
+    left: 42%;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .rtl .slider-section .hero_content h1,
+  [dir="rtl"] .slider-section .hero_content h1 {
+    font-size: 72px;
+    line-height: 76px;
+  }
+  .rtl .slider-section .hero_content .slider-contect-des,
+  [dir="rtl"] .slider-section .hero_content .slider-contect-des {
+    width: 80%;
+  }
+  .rtl .circle__video,
+  [dir="rtl"] .circle__video {
+    right: 24px !important;
+    left: auto !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .rtl .slider-section .hero_content h1,
+  [dir="rtl"] .slider-section .hero_content h1 {
+    font-size: 48px;
+    line-height: 52px;
+  }
+  .rtl .slider-section .hero_content .slider-contect-des,
+  [dir="rtl"] .slider-section .hero_content .slider-contect-des {
+    width: 92%;
+  }
+  .rtl .circle__video,
+  [dir="rtl"] .circle__video {
+    right: 20px !important;
+    left: auto !important;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .rtl .slider-section .hero_content h1,
+  [dir="rtl"] .slider-section .hero_content h1 {
+    font-size: 38px;
+    line-height: 42px;
+  }
+}
+

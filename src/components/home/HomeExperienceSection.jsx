@@ -44,6 +44,8 @@ import {
   FaEnvelope,
   FaChevronLeft,
   FaChevronRight,
+  FaSearch,
+  FaChevronDown,
 } from "react-icons/fa";
 
 
@@ -1223,77 +1225,102 @@ const HomeExperienceSection = () => {
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           {/* Search Form */}
           <div className="w-full max-w-5xl">
-            <div className="bg-black/20 backdrop-blur-xs rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4 sm:p-5 md:p-6 lg:p-8 border border-white/30">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+            <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.5)] p-5 sm:p-6 md:p-8 border border-white/25">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 items-end">
                 {/* Destination */}
-                <div className="col-span-2 md:col-span-1">
-                  <label htmlFor="search-dest-input" className="block text-[10px] sm:text-caption text-gold-400 uppercase tracking-wider mb-1 font-semibold">
+                <div className="col-span-1">
+                  <label htmlFor="search-dest-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
+                    <FaMapMarkerAlt className="text-amber-400 text-xs" />
                     {t('home.searchDest', 'Destination')}
                   </label>
-                  <select
-                    id="search-dest-input"
-                    value={searchDest}
-                    onChange={(e) => { setSearchDest(e.target.value); setSearchTour(""); }}
-                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-black/30 backdrop-blur-xs text-white text-[13px] sm:text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] appearance-none cursor-pointer [&>option]:text-obsidian-900 [&>option]:dark:text-ivory-100 [&>option]:dark:bg-obsidian-800"
-                  >
-                    <option value="all" className="text-obsidian-900 dark:text-ivory-100 dark:bg-obsidian-800">{t('home.searchAllDest', 'All Destinations')}</option>
-                    {destinations.map((d) => (
-                      <option key={d.id} value={d.id} className="text-obsidian-900 dark:text-ivory-100 dark:bg-obsidian-800">{d.label}</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      id="search-dest-input"
+                      value={searchDest}
+                      onChange={(e) => { setSearchDest(e.target.value); setSearchTour(""); }}
+                      className="w-full px-3.5 py-3 rounded-xl border border-white/30 bg-black/40 backdrop-blur-md text-white font-medium text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 appearance-none cursor-pointer pr-9 rtl:pr-3.5 rtl:pl-9 shadow-inner transition-all hover:border-amber-400/70"
+                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)', color: '#FFFFFF' }}
+                    >
+                      <option value="all" style={{ backgroundColor: '#0B132B', color: '#FFFFFF' }}>
+                        {t('home.searchAllDest', 'All Destinations')}
+                      </option>
+                      {destinations.map((d) => (
+                        <option key={d.id} value={d.id} style={{ backgroundColor: '#0B132B', color: '#FFFFFF' }}>
+                          {d.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 rtl:right-auto rtl:left-0 flex items-center px-3 text-amber-400">
+                      <FaChevronDown className="text-xs" />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Tour */}
-                <div className="col-span-2 md:col-span-1">
-                  <label htmlFor="search-tour-input" className="block text-[10px] sm:text-caption text-gold-400 uppercase tracking-wider mb-1 font-semibold">
+                <div className="col-span-1">
+                  <label htmlFor="search-tour-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
+                    <FaSuitcase className="text-amber-400 text-xs" />
                     {t('home.searchTour', 'Tour / Program')}
                   </label>
-                  <select
-                    id="search-tour-input"
-                    value={searchTour}
-                    onChange={(e) => {
-                      const selectedVal = e.target.value;
-                      setSearchTour(selectedVal);
-                      if (selectedVal) {
-                        const found = destTours.find((tour) => tour.id === selectedVal);
-                        if (found?.url) {
-                          navigate(found.url);
+                  <div className="relative">
+                    <select
+                      id="search-tour-input"
+                      value={searchTour}
+                      onChange={(e) => {
+                        const selectedVal = e.target.value;
+                        setSearchTour(selectedVal);
+                        if (selectedVal) {
+                          const found = destTours.find((tour) => tour.id === selectedVal);
+                          if (found?.url) {
+                            navigate(found.url);
+                          }
                         }
-                      }
-                    }}
-                    disabled={!searchDest || searchDest === "all"}
-                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-black/30 backdrop-blur-xs text-white text-[13px] sm:text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed [&>option]:text-obsidian-900 [&>option]:dark:text-ivory-100 [&>option]:dark:bg-obsidian-800"
-                  >
-                    <option value="" className="text-obsidian-900 dark:text-ivory-100 dark:bg-obsidian-800">
-                      {searchDest === "all" ? t('home.selectDestFirst', 'Select a destination first') : t('home.searchAllTours', 'All Tours')}
-                    </option>
-                    {searchDest && searchDest !== "all" && destTours.map((item) => (
-                      <option key={item.id} value={item.id} className="text-obsidian-900 dark:text-ivory-100 dark:bg-obsidian-800">{item.label}</option>
-                    ))}
-                  </select>
+                      }}
+                      disabled={!searchDest || searchDest === "all"}
+                      className="w-full px-3.5 py-3 rounded-xl border border-white/30 bg-black/40 backdrop-blur-md text-white font-medium text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 appearance-none cursor-pointer pr-9 rtl:pr-3.5 rtl:pl-9 shadow-inner transition-all hover:border-amber-400/70 disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)', color: '#FFFFFF' }}
+                    >
+                      <option value="" style={{ backgroundColor: '#0B132B', color: '#FFFFFF' }}>
+                        {searchDest === "all" ? t('home.selectDestFirst', 'Select a destination first') : t('home.searchAllTours', 'All Tours')}
+                      </option>
+                      {searchDest && searchDest !== "all" && destTours.map((item) => (
+                        <option key={item.id} value={item.id} style={{ backgroundColor: '#0B132B', color: '#FFFFFF' }}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 rtl:right-auto rtl:left-0 flex items-center px-3 text-amber-400">
+                      <FaChevronDown className="text-xs" />
+                    </div>
+                  </div>
                 </div>
 
                 {/* People + Search */}
-                <div className="col-span-2 md:col-span-1">
-                  <label htmlFor="search-people-input" className="block text-[10px] sm:text-caption text-gold-400 uppercase tracking-wider mb-1 font-semibold">
+                <div className="col-span-1">
+                  <label htmlFor="search-people-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
+                    <FaUsers className="text-amber-400 text-xs" />
                     {t('home.searchPeople', 'People')}
                   </label>
-                  <div className="flex gap-1.5 sm:gap-2">
-                    <input
-                      id="search-people-input"
-                      type="number"
-                      min="1"
-                      max="50"
-                      value={searchPeople}
-                      onChange={(e) => setSearchPeople(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-16 sm:w-20 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-black/30 backdrop-blur-xs text-white text-[13px] sm:text-body-sm text-center focus:outline-none focus:ring-2 focus:ring-[#FF6B35] [color-scheme:dark]"
-                    />
+                  <div className="flex gap-2">
+                    <div className="relative w-24 shrink-0">
+                      <input
+                        id="search-people-input"
+                        type="number"
+                        min="1"
+                        max="50"
+                        value={searchPeople}
+                        onChange={(e) => setSearchPeople(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="w-full px-3 py-3 rounded-xl border border-white/30 bg-black/40 backdrop-blur-md text-white font-bold text-base text-center focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 shadow-inner [color-scheme:dark]"
+                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)', color: '#FFFFFF' }}
+                      />
+                    </div>
                     <button
                       onClick={handleSearch}
-                      className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 font-semibold rounded-lg transition-all text-[13px] sm:text-body-sm whitespace-nowrap text-white"
-                      style={{ background: 'linear-gradient(135deg, #FF6B35, #1E3A8A)' }}
+                      className="flex-1 flex items-center justify-center gap-2 px-5 py-3 font-bold rounded-xl transition-all duration-200 text-base text-white shadow-lg hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      style={{ background: 'linear-gradient(135deg, #FF6B35 0%, #D93800 50%, #1E3A8A 100%)' }}
                     >
-                      {t('home.searchBtn', 'Search')}
+                      <FaSearch className="text-sm" />
+                      <span>{t('home.searchBtn', 'Search')}</span>
                     </button>
                   </div>
                 </div>
@@ -1306,22 +1333,22 @@ const HomeExperienceSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="mt-5 sm:mt-6 text-center w-full max-w-5xl"
+            className="mt-6 text-center w-full max-w-5xl"
           >
-            <p className="text-gold-400 text-[10px] sm:text-caption uppercase tracking-widest mb-2 sm:mb-3 font-semibold drop-shadow-lg">
+            <p className="text-amber-400 text-xs sm:text-sm uppercase tracking-widest mb-3 font-bold drop-shadow-md">
               {t('home.popularDests', 'Popular Destinations')}
             </p>
-            <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {destinations.map((d) => (
                 <Link
                   key={d.id}
                   to={`/destinations/${d.id}`}
-                  className="group flex items-center gap-1.5 sm:gap-2 bg-black/30 hover:bg-black/50 backdrop-blur-xs border border-white/30 hover:border-[#FF6B35] rounded-full px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 transition-all shadow-lg"
+                  className="group flex items-center gap-2 bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/25 hover:border-amber-400 rounded-full px-3.5 sm:px-4 py-1.5 sm:py-2 transition-all shadow-lg hover:scale-105"
                 >
-                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden shrink-0 ring-2 ring-white/50 shadow-md">
+                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden shrink-0 ring-2 ring-amber-400/60 shadow-md">
                     <img src={getThumbnailUrl(d.img, 48)} alt="" className="w-full h-full object-cover" width="24" height="24" loading="lazy" decoding="async" />
                   </span>
-                  <span className="text-white text-[11px] sm:text-body-sm font-semibold drop-shadow-lg group-hover:text-[#FF6B35] transition-colors">
+                  <span className="text-white text-xs sm:text-sm font-bold group-hover:text-amber-400 transition-colors drop-shadow-sm">
                     {d.label}
                   </span>
                 </Link>
@@ -1396,8 +1423,27 @@ const HomeExperienceSection = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="w-full lg:w-1/2"
+              className="w-full lg:w-1/2 relative"
             >
+              {/* Floating Airplane Overlay */}
+              <div className="absolute top-2 right-4 sm:top-3 sm:right-6 md:top-4 md:right-8 z-20 pointer-events-none select-none">
+                <style>{`
+                  @keyframes planeHoverFloat {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(-6px) rotate(-1.5deg); }
+                  }
+                `}</style>
+                <div style={{ animation: 'planeHoverFloat 4s ease-in-out infinite' }}>
+                  <img
+                    src="/images/plane-icon.png"
+                    alt="Dunas Travel Jet"
+                    className="w-20 sm:w-28 md:w-36 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
+                    width="160"
+                    height="80"
+                  />
+                </div>
+              </div>
+
               <img
                 src="/images/cairo-night-photo.webp"
                 onError={(e) => { e.currentTarget.src = "/images/cairo-night-photo.webp"; }}

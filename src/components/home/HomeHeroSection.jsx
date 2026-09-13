@@ -59,11 +59,13 @@ const SWIPER_AUTOPLAY_CONFIG = {
 const SWIPER_FADE_EFFECT = { crossFade: true };
 
 export default function HomeHeroSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const swiperRef = useRef(null);
   const containerRef = useRef(null);
+
+  const isRtl = i18n.language === 'ar' || (i18n.dir && i18n.dir() === 'rtl');
 
   // Bulletproof autoplay watchdog: ensures autoplay is always active and advancing continuously
   useEffect(() => {
@@ -213,6 +215,10 @@ export default function HomeHeroSection() {
 
   // Helper to split word into animated character spans
   const renderAnimatedWord = (word) => {
+    if (!word) return null;
+    if (isRtl) {
+      return <span className="char ar-word">{word}</span>;
+    }
     return word.split("").map((char, index) => (
       <span key={index} className="char">
         {char === " " ? "\u00A0" : char}
@@ -221,7 +227,12 @@ export default function HomeHeroSection() {
   };
 
   return (
-    <div className="boxed ltr" dir="ltr" style={{ direction: 'ltr', textAlign: 'left' }} ref={containerRef}>
+    <div
+      className={`boxed ${isRtl ? "rtl" : "ltr"}`}
+      dir={isRtl ? "rtl" : "ltr"}
+      style={{ direction: isRtl ? "rtl" : "ltr", textAlign: isRtl ? "right" : "left" }}
+      ref={containerRef}
+    >
       <div className="main-slider-wrpper">
         <Swiper
           ref={swiperRef}
@@ -298,7 +309,11 @@ export default function HomeHeroSection() {
                   </div>
                 </div>
 
-                <div className="circle__video">
+                <div
+                  className="circle__video"
+                  onClick={() => setIsVideoOpen(true)}
+                  style={{ cursor: "pointer" }}
+                >
                   <svg viewBox="0 0 200 200">
                     <defs>
                       <path
@@ -318,7 +333,10 @@ export default function HomeHeroSection() {
                   <button
                     type="button"
                     className="circle-vide_btn popup-video"
-                    onClick={() => setIsVideoOpen(true)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsVideoOpen(true);
+                    }}
                     aria-label="Play Video"
                   >
                     <span className="play-now">
@@ -362,13 +380,13 @@ export default function HomeHeroSection() {
             >
               <FaTimes />
             </button>
-            <iframe
-              src="https://www.youtube.com/embed/COLrJumJeK0?autoplay=1"
-              title="Dunas Travel Video"
-              className="w-full h-full border-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            <video
+              src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.webm"
+              controls
+              autoPlay
+              playsInline
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
           </div>
         </div>
       )}
