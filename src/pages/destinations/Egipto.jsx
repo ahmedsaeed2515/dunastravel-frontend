@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Button from '../../components/ui/Button';
 import TourCard from '../../components/tour/TourCard';
 import tours from '../../data/tours.js';
@@ -28,6 +29,8 @@ const itemVariants = {
 
 export default function Egipto() {
   const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'en';
+  const isRtl = lang.startsWith('ar');
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = React.useState('all');
   const { tours: liveTours = [] } = useTours({ destination: 'egypt', limit: 50 });
@@ -164,41 +167,51 @@ export default function Egipto() {
           {/* Card 1: Classic Program (برنامج مصر الكلاسيكي) */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
           >
-            <Link to="/programs/classic/classic-program" className="block relative h-[240px] overflow-hidden">
-              <img
-                src="https://res.cloudinary.com/degbrq3ck/image/upload/w_600,h_450,c_fill,q_60,f_webp/v1783029636/Classic_Program_gfal0s.jpg"
-                alt="Classic Program"
-                className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
-                loading="lazy"
-              />
-            </Link>
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="about-sp">
+              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
+                <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
+                <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+              </svg>
+            </div>
+            <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
+              <Link to="/programs/classic/classic-program" className="block w-full h-full overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/degbrq3ck/image/upload/w_600,h_450,c_fill,q_60,f_webp/v1783029636/Classic_Program_gfal0s.jpg"
+                  alt="Classic Program"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </Link>
+            </div>
+            <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
               <Link to="/programs/classic/classic-program">
                 <h3
-                  className="text-display-md text-black dark:text-black font-bold mt-1 mb-3 hover:text-blue-600 transition-colors line-clamp-2 font-display"
-                  style={{ fontFamily: "'Playfair Display', serif", color: '#000000' }}
+                  className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
+                  style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
                 >
                   {t('classic.title', 'برنامج مصر الكلاسيكي')}
                 </h3>
               </Link>
-              <p 
-                className="text-body-sm text-black dark:text-black font-bold line-clamp-3 mb-4 flex-grow leading-relaxed"
-                style={{ color: '#000000' }}
-              >
+              <p className="text-gray-600 dark:text-slate-100 font-medium text-[14px] leading-relaxed line-clamp-3 mb-4 flex-grow">
                 {t(
                   'classic.shortDesc',
                   'تجربة كلاسيكية متكاملة تغطي القاهرة، الأهرامات، والأقصر وأسوان عبر أفخم الفنادق العائمة.'
                 )}
               </p>
-              <div className="flex items-center justify-end pt-4 border-t border-gold-500/20 mt-auto">
-                <Link to="/programs/classic/classic-program">
-                  <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2 border border-gold-500 bg-transparent hover:bg-gold-500/10">
-                    <span className="text-blue-600 font-bold">{t('tourCard.viewDetails', 'View Details')}</span>{' '}
-                    <span className="rtl-flip text-blue-600 font-bold">→</span>
-                  </Button>
-                </Link>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
+                <div className="populer-btn defult-btn shrink-0">
+                  <Link to="/programs/classic/classic-program" className="group/btn">
+                    <span>{t('tourCard.viewDetails', 'View Details')}</span>
+                    {isRtl ? (
+                      <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
+                    ) : (
+                      <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+                    )}
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -206,41 +219,51 @@ export default function Egipto() {
           {/* Card 2: Honeymooners Program (شهر العسل في مصر) */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
           >
-            <Link to="/programs/honeymooners" className="block relative h-[240px] overflow-hidden">
-              <img
-                src="https://hl-tourism.com/media/typecms/Honeymoon_Planning_Guide_2025_Complete_Resource.webp"
-                alt="Honeymoon in Egypt"
-                className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
-                loading="lazy"
-              />
-            </Link>
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="about-sp">
+              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
+                <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
+                <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+              </svg>
+            </div>
+            <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
+              <Link to="/programs/honeymooners" className="block w-full h-full overflow-hidden">
+                <img
+                  src="https://hl-tourism.com/media/typecms/Honeymoon_Planning_Guide_2025_Complete_Resource.webp"
+                  alt="Honeymoon in Egypt"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </Link>
+            </div>
+            <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
               <Link to="/programs/honeymooners">
                 <h3
-                  className="text-display-md text-black dark:text-black font-bold mt-1 mb-3 hover:text-blue-600 transition-colors line-clamp-2 font-display"
-                  style={{ fontFamily: "'Playfair Display', serif", color: '#000000' }}
+                  className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
+                  style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
                 >
                   {t('honeymooners.egyptTitle', 'شهر العسل في مصر')}
                 </h3>
               </Link>
-              <p 
-                className="text-body-sm text-black dark:text-black font-bold line-clamp-3 mb-4 flex-grow leading-relaxed"
-                style={{ color: '#000000' }}
-              >
+              <p className="text-gray-600 dark:text-slate-100 font-medium text-[14px] leading-relaxed line-clamp-3 mb-4 flex-grow">
                 {t(
                   'dest.egypt.honeymoonersDesc',
                   'احتفل بحبك مع عشاء رومانسي على ضفاف النيل، وجولات يخوت خاصة، وإقامات فاخرة غير مسبوقة.'
                 )}
               </p>
-              <div className="flex items-center justify-end pt-4 border-t border-gold-500/20 mt-auto">
-                <Link to="/programs/honeymooners">
-                  <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2 border border-gold-500 bg-transparent hover:bg-gold-500/10">
-                    <span className="text-blue-600 font-bold">{t('tourCard.viewDetails', 'View Details')}</span>{' '}
-                    <span className="rtl-flip text-blue-600 font-bold">→</span>
-                  </Button>
-                </Link>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
+                <div className="populer-btn defult-btn shrink-0">
+                  <Link to="/programs/honeymooners" className="group/btn">
+                    <span>{t('tourCard.viewDetails', 'View Details')}</span>
+                    {isRtl ? (
+                      <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
+                    ) : (
+                      <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+                    )}
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -248,42 +271,51 @@ export default function Egipto() {
           {/* Card 3: Religious / Holy Family Program (رحلة العائلة المقدسة) */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
           >
-            <Link to="/programs/religious" className="block relative h-[240px] overflow-hidden">
-              <img
-                src="https://sft-nationaltours.com/wp-content/uploads/2024/11/holy-family-egypt_tg_1397-870x555.jpg"
-                alt="Holy Family Journey"
-                className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
-                loading="lazy"
-              />
-            </Link>
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="about-sp">
+              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
+                <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
+                <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+              </svg>
+            </div>
+            <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
+              <Link to="/programs/religious" className="block w-full h-full overflow-hidden">
+                <img
+                  src="https://sft-nationaltours.com/wp-content/uploads/2024/11/holy-family-egypt_tg_1397-870x555.jpg"
+                  alt="Holy Family Journey"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </Link>
+            </div>
+            <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
               <Link to="/programs/religious">
                 <h3
-                  className="text-display-md text-black dark:text-black font-bold mt-1 mb-3 hover:text-blue-600 transition-colors line-clamp-2 font-display"
-                  style={{ fontFamily: "'Playfair Display', serif", color: '#000000' }}
+                  className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
+                  style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
                 >
                   {t('tour_jordan_title', 'رحلة العائلة المقدسة (مسار العائلة المقدسة في مصر)')}
                 </h3>
               </Link>
-              <p 
-                className="text-body-sm text-black dark:text-black font-bold line-clamp-3 mb-4 flex-grow leading-relaxed"
-                style={{ color: '#000000' }}
-              >
+              <p className="text-gray-600 dark:text-slate-100 font-medium text-[14px] leading-relaxed line-clamp-3 mb-4 flex-grow">
                 {t(
                   'dest.egypt.religiousDesc',
                   'رحلة روحانية عميقة تتبع خطى العائلة المقدسة عبر أديرة وكنائس مصر القديمة والآثار الروحانية.'
                 )}
               </p>
-              
-              <div className="flex items-center justify-end pt-4 border-t border-gold-500/20 mt-auto">
-                <Link to="/programs/religious">
-                  <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2 border border-gold-500 bg-transparent hover:bg-gold-500/10">
-                    <span className="text-blue-600 font-bold">{t('tourCard.viewDetails', 'View Details')}</span>{' '}
-                    <span className="rtl-flip text-blue-600 font-bold">→</span>
-                  </Button>
-                </Link>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
+                <div className="populer-btn defult-btn shrink-0">
+                  <Link to="/programs/religious" className="group/btn">
+                    <span>{t('tourCard.viewDetails', 'View Details')}</span>
+                    {isRtl ? (
+                      <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
+                    ) : (
+                      <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+                    )}
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -291,42 +323,51 @@ export default function Egipto() {
           {/* Card 4: Multi-Country Tours Program (جولات متعددة الدول - 9 رحلات) */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
           >
-            <Link to="/programs/multi-country" className="block relative h-[240px] overflow-hidden">
-              <img
-                src="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030113/Gemini_Generated_Image_cb2enncb2enncb2e_wvyejn.jpg"
-                alt="Multi-Country Tours"
-                className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
-                loading="lazy"
-              />
-            </Link>
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="about-sp">
+              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
+                <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
+                <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+              </svg>
+            </div>
+            <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
+              <Link to="/programs/multi-country" className="block w-full h-full overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030113/Gemini_Generated_Image_cb2enncb2enncb2e_wvyejn.jpg"
+                  alt="Multi-Country Tours"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </Link>
+            </div>
+            <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
               <Link to="/programs/multi-country">
                 <h3
-                  className="text-display-md text-black dark:text-black font-bold mt-1 mb-3 hover:text-blue-600 transition-colors line-clamp-2 font-display"
-                  style={{ fontFamily: "'Playfair Display', serif", color: '#000000' }}
+                  className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
+                  style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
                 >
                   {t('nav.multiCountry', 'جولات متعددة الدول (9 رحلات دولية)')}
                 </h3>
               </Link>
-              <p 
-                className="text-body-sm text-black dark:text-black font-bold line-clamp-3 mb-4 flex-grow leading-relaxed"
-                style={{ color: '#000000' }}
-              >
+              <p className="text-gray-600 dark:text-slate-100 font-medium text-[14px] leading-relaxed line-clamp-3 mb-4 flex-grow">
                 {t(
                   'dest.egypt.multiCountryDesc',
                   'برامج مجمعة تشمل مصر مع الأردن، المغرب، تونس، دبي، تركيا، واليونان بـ 9 رحلات دولية فريدة.'
                 )}
               </p>
-
-              <div className="flex items-center justify-end pt-4 border-t border-gold-500/20 mt-auto">
-                <Link to="/programs/multi-country">
-                  <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2 border border-gold-500 bg-transparent hover:bg-gold-500/10">
-                    <span className="text-blue-600 font-bold">{t('tourCard.viewDetails', 'عرض الـ 9 رحلات')}</span>{' '}
-                    <span className="rtl-flip text-blue-600 font-bold">→</span>
-                  </Button>
-                </Link>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
+                <div className="populer-btn defult-btn shrink-0">
+                  <Link to="/programs/multi-country" className="group/btn">
+                    <span>{t('tourCard.viewDetails', 'عرض الـ 9 رحلات')}</span>
+                    {isRtl ? (
+                      <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
+                    ) : (
+                      <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+                    )}
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -334,42 +375,51 @@ export default function Egipto() {
           {/* Card 5: Egypt Extensions (رحلات الاستجمام والملحقات) */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-[#151728] rounded-xl overflow-hidden flex flex-col h-full group shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gold-500/30 dark:border-obsidian-800 hover:shadow-[0_12px_32px_rgba(245,166,35,0.25)] hover:border-gold-500 hover:-translate-y-2 transition-all duration-300 ease-out z-10 hover:z-20 relative"
+            className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
           >
-            <Link to="/programs/extension" className="block relative h-[240px] overflow-hidden">
-              <img
-                src="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030445/Gemini_Generated_Image_kenvzkkenvzkkenv_h9kz07.png"
-                alt="Egypt Extensions"
-                className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
-                loading="lazy"
-              />
-            </Link>
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="about-sp">
+              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
+                <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
+                <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+              </svg>
+            </div>
+            <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
+              <Link to="/programs/extension" className="block w-full h-full overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030445/Gemini_Generated_Image_kenvzkkenvzkkenv_h9kz07.png"
+                  alt="Egypt Extensions"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </Link>
+            </div>
+            <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
               <Link to="/programs/extension">
                 <h3
-                  className="text-display-md text-black dark:text-black font-bold mt-1 mb-3 hover:text-blue-600 transition-colors line-clamp-2 font-display"
-                  style={{ fontFamily: "'Playfair Display', serif", color: '#000000' }}
+                  className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
+                  style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
                 >
                   {t('dest.egypt.extensionTitle', 'رحلات الاستجمام والملحقات')}
                 </h3>
               </Link>
-              <p 
-                className="text-body-sm text-black dark:text-black font-bold line-clamp-3 mb-4 flex-grow leading-relaxed"
-                style={{ color: '#000000' }}
-              >
+              <p className="text-gray-600 dark:text-slate-100 font-medium text-[14px] leading-relaxed line-clamp-3 mb-4 flex-grow">
                 {t(
                   'dest.egypt.extensionDesc',
                   'مدد إقامتك في مصر مع رحلات شاطئية وصحراوية تشمل الغردقة، شرم الشيخ، أو واحة سيوة والإسكندرية.'
                 )}
               </p>
-
-              <div className="flex items-center justify-end pt-4 border-t border-gold-500/20 mt-auto">
-                <Link to="/programs/extension">
-                  <Button as="span" variant="outline-gold" className="px-6 py-2 flex items-center gap-2 border border-gold-500 bg-transparent hover:bg-gold-500/10">
-                    <span className="text-blue-600 font-bold">{t('tourCard.viewDetails', 'View Details')}</span>{' '}
-                    <span className="rtl-flip text-blue-600 font-bold">→</span>
-                  </Button>
-                </Link>
+              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
+                <div className="populer-btn defult-btn shrink-0">
+                  <Link to="/programs/extension" className="group/btn">
+                    <span>{t('tourCard.viewDetails', 'View Details')}</span>
+                    {isRtl ? (
+                      <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
+                    ) : (
+                      <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+                    )}
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
