@@ -45,10 +45,11 @@ const Destinations = () => {
       ) : (
         <div className="flex flex-col gap-24">
           {destinations.map((destination) => {
-            // The backend returns exactly the visible relations for this
-            // interface, so the cards and count can never be based on a
-            // truncated global catalogue or an inferred country name.
             const destTours = destination.tours;
+            const destSlug = String(destination.slug || destination.id || '').toLowerCase();
+            const cardImage = (destSlug === 'egypt' || destSlug === 'egipto') 
+              ? '/imgs/egyothero.webp' 
+              : (destination.image || destination.heroImageUrl || '/imgs/egyothero.webp');
 
             return (
               <motion.article 
@@ -60,15 +61,11 @@ const Destinations = () => {
               >
                 {/* Destination Card / Header */}
                 <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden mb-12 shadow-card group">
-                  {destination.image ? (
-                    <img 
-                      src={destination.image} 
-                      alt={destination.name} 
-                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-obsidian-800" />
-                  )}
+                  <img 
+                    src={cardImage} 
+                    alt={destination.name} 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/30 to-transparent flex flex-col justify-end p-8 md:p-12">
                     <span className="text-gold-500 uppercase tracking-widest text-caption mb-2">
                       {destination.toursCount} {t('destinations.tours', 'Tours')}

@@ -938,9 +938,30 @@ html[dir="rtl"] .dropdown-item:hover {
   transition: color 0.4s ease, transform 0.4s ease;
 }
 
+.dark .populer-single-box.style-classic,
+.dark .populer-single-box.style-classic .populer-contnet {
+  background: linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%) !important;
+}
+
+.dark .populer-single-box.style-classic .popular-title {
+  color: #ffffff !important;
+}
+
 .populer-single-box.style-classic:hover .popular-title {
   color: #f5a623 !important;
   transform: translateX(4px);
+}
+
+.dark .populer-single-box.style-classic:hover .popular-title {
+  color: #f5a623 !important;
+}
+
+.dark .populer-single-box.style-classic p {
+  color: #f8fafc !important;
+}
+
+.dark .populer-single-box.style-classic .popular-ratting span {
+  color: #000000 !important;
 }
 
 [dir="rtl"] .populer-single-box.style-classic:hover .popular-title {
@@ -994,7 +1015,13 @@ html[dir="rtl"] .dropdown-item:hover {
 }
 
 .dark .populer-single-box.style-classic .populer-btn a {
-  color: #f5a623;
+  color: #f5a623 !important;
+  border-color: rgba(245, 166, 35, 0.5);
+  background: rgba(245, 166, 35, 0.12);
+}
+
+.dark .populer-single-box.style-classic .populer-btn a span {
+  color: #f5a623 !important;
 }
 
 .populer-single-box.style-classic .populer-btn a::before {
@@ -1023,6 +1050,15 @@ html[dir="rtl"] .dropdown-item:hover {
   border-color: #f5a623;
   letter-spacing: 2.5px;
   box-shadow: 0 4px 18px rgba(245, 166, 35, 0.4);
+}
+
+.dark .populer-single-box.style-classic .populer-btn a:hover {
+  color: #0c1c48 !important;
+  background: #f5a623 !important;
+}
+
+.dark .populer-single-box.style-classic .populer-btn a:hover span {
+  color: #0c1c48 !important;
 }
 
 

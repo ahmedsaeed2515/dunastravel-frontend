@@ -1174,16 +1174,16 @@ const HomeExperienceSection = () => {
 
       {/* Search Section */}
       <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-0">
-        {/* Background Image with Subtle Motion & Glow */}
+        {/* Background Image with Dynamic Pulsing Motion & Rich Glow */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.img
             src="/images/pyramids-search-bg.jpg"
             alt="Search tours and holiday packages background"
             className="w-full h-full object-cover object-center"
             initial={{ scale: 1 }}
-            animate={{ scale: [1, 1.07, 1] }}
+            animate={{ scale: [1, 1.1, 1], y: [0, -12, 0] }}
             transition={{
-              duration: 18,
+              duration: 16,
               repeat: Infinity,
               repeatType: "reverse",
               ease: "easeInOut"
@@ -1194,38 +1194,49 @@ const HomeExperienceSection = () => {
             width="1440"
             height="600"
           />
-          {/* Ambient animated light blobs */}
+          {/* Ambient animated floating light blobs */}
           <motion.div
-            className="absolute -top-24 -left-24 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"
+            className="absolute -top-20 -left-20 w-[450px] h-[450px] bg-amber-500/30 rounded-full blur-[110px] pointer-events-none"
             animate={{
-              x: [0, 60, 0],
-              y: [0, 40, 0],
-              opacity: [0.3, 0.6, 0.3],
+              x: [-20, 80, -20],
+              y: [-20, 50, -20],
+              scale: [1, 1.25, 1],
+              opacity: [0.35, 0.75, 0.35],
             }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div
-            className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"
+            className="absolute -bottom-20 -right-20 w-[450px] h-[450px] bg-blue-600/30 rounded-full blur-[110px] pointer-events-none"
             animate={{
-              x: [0, -60, 0],
-              y: [0, -40, 0],
-              opacity: [0.3, 0.6, 0.3],
+              x: [0, -80, 0],
+              y: [0, -50, 0],
+              scale: [1, 1.3, 1],
+              opacity: [0.35, 0.75, 0.35],
             }}
-            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-obsidian-900/40 via-obsidian-900/25 to-obsidian-900/55"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-obsidian-950/60 via-obsidian-950/40 to-obsidian-950/75" />
         </div>
 
-        {/* Search Content (overlay on image) */}
+        {/* Search Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
-          {/* Search Form */}
-          <div className="w-full max-w-5xl">
-            <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.5)] p-5 sm:p-6 md:p-8 border border-white/25">
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-3 sm:gap-4 items-end">
+          {/* Search Form Box */}
+          <motion.div 
+            initial={{ opacity: 0, y: 45, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-5xl"
+          >
+            <div className="bg-black/50 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 md:p-10 border border-amber-400/40 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_40px_rgba(245,166,35,0.2)] hover:border-amber-400/80 hover:shadow-[0_25px_70px_rgba(0,0,0,0.7),0_0_60px_rgba(245,166,35,0.35)] transition-all duration-500 relative overflow-hidden group/box">
+              {/* Subtle top border illumination ray */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/80 to-transparent" />
+
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 sm:gap-5 items-end">
                 {/* Destination */}
                 <div className="col-span-1 md:col-span-2">
-                  <label htmlFor="search-dest-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
-                    <FaMapMarkerAlt className="text-amber-400 text-xs" />
+                  <label htmlFor="search-dest-input" className="flex items-center gap-2 text-xs sm:text-sm text-amber-300 uppercase tracking-widest mb-2 font-extrabold drop-shadow-md">
+                    <FaMapMarkerAlt className="text-amber-400 text-xs animate-bounce" style={{ animationDuration: '2.5s' }} />
                     {t('home.searchDest', 'Destination')}
                   </label>
                   <div className="relative">
@@ -1233,8 +1244,8 @@ const HomeExperienceSection = () => {
                       id="search-dest-input"
                       value={searchDest}
                       onChange={(e) => { setSearchDest(e.target.value); setSearchTour(""); }}
-                      className="w-full px-3.5 py-3 rounded-xl border border-white/30 bg-black/40 backdrop-blur-md text-white font-medium text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 appearance-none cursor-pointer pr-9 rtl:pr-3.5 rtl:pl-9 shadow-inner transition-all hover:border-amber-400/70"
-                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)', color: '#FFFFFF' }}
+                      className="w-full px-4 py-3.5 rounded-2xl border border-white/30 bg-black/50 backdrop-blur-md text-white font-bold text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 appearance-none cursor-pointer pr-10 rtl:pr-4 rtl:pl-10 shadow-inner transition-all hover:border-amber-400/80 hover:bg-black/70"
+                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.45)', color: '#FFFFFF' }}
                     >
                       <option value="all" style={{ backgroundColor: '#0B132B', color: '#FFFFFF' }}>
                         {t('home.searchAllDest', 'All Destinations')}
@@ -1245,15 +1256,15 @@ const HomeExperienceSection = () => {
                         </option>
                       ))}
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 rtl:right-auto rtl:left-0 flex items-center px-3 text-amber-400">
-                      <FaChevronDown className="text-xs" />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 rtl:right-auto rtl:left-0 flex items-center px-3.5 text-amber-400">
+                      <FaChevronDown className="text-xs transition-transform duration-300" />
                     </div>
                   </div>
                 </div>
 
                 {/* Tour */}
                 <div className="col-span-1 md:col-span-2">
-                  <label htmlFor="search-tour-input" className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 uppercase tracking-wider mb-2 font-bold drop-shadow-md">
+                  <label htmlFor="search-tour-input" className="flex items-center gap-2 text-xs sm:text-sm text-amber-300 uppercase tracking-widest mb-2 font-extrabold drop-shadow-md">
                     <FaSuitcase className="text-amber-400 text-xs" />
                     {t('home.searchTour', 'Tour / Program')}
                   </label>
@@ -1272,8 +1283,8 @@ const HomeExperienceSection = () => {
                         }
                       }}
                       disabled={!searchDest || searchDest === "all"}
-                      className="w-full px-3.5 py-3 rounded-xl border border-white/30 bg-black/40 backdrop-blur-md text-white font-medium text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 appearance-none cursor-pointer pr-9 rtl:pr-3.5 rtl:pl-9 shadow-inner transition-all hover:border-amber-400/70 disabled:opacity-50 disabled:cursor-not-allowed"
-                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)', color: '#FFFFFF' }}
+                      className="w-full px-4 py-3.5 rounded-2xl border border-white/30 bg-black/50 backdrop-blur-md text-white font-bold text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 appearance-none cursor-pointer pr-10 rtl:pr-4 rtl:pl-10 shadow-inner transition-all hover:border-amber-400/80 hover:bg-black/70 disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.45)', color: '#FFFFFF' }}
                     >
                       <option value="" style={{ backgroundColor: '#0B132B', color: '#FFFFFF' }}>
                         {searchDest === "all" ? t('home.selectDestFirst', 'Select a destination first') : t('home.searchAllTours', 'All Tours')}
@@ -1284,79 +1295,101 @@ const HomeExperienceSection = () => {
                         </option>
                       ))}
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 rtl:right-auto rtl:left-0 flex items-center px-3 text-amber-400">
-                      <FaChevronDown className="text-xs" />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 rtl:right-auto rtl:left-0 flex items-center px-3.5 text-amber-400">
+                      <FaChevronDown className="text-xs transition-transform duration-300" />
                     </div>
                   </div>
                 </div>
 
                 {/* Search Button */}
                 <div className="col-span-1 md:col-span-1">
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.06, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     onClick={handleSearch}
-                    className="w-full flex items-center justify-center gap-2 px-5 py-3 font-bold rounded-xl transition-all duration-200 text-base text-white shadow-lg hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-95 cursor-pointer h-[50px] sm:h-[52px]"
+                    className="group/btn relative overflow-hidden w-full flex items-center justify-center gap-2 px-6 py-3.5 font-black rounded-2xl transition-all duration-300 text-base sm:text-lg text-white shadow-[0_8px_30px_rgba(255,107,53,0.5)] hover:shadow-[0_12px_40px_rgba(255,107,53,0.85)] cursor-pointer h-[52px] sm:h-[56px]"
                     style={{ background: 'linear-gradient(135deg, #FF6B35 0%, #D93800 50%, #1E3A8A 100%)' }}
                   >
-                    <FaSearch className="text-sm" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+                    <FaSearch className="text-sm sm:text-base group-hover/btn:rotate-12 group-hover/btn:scale-125 transition-transform duration-300 text-amber-300" />
                     <span>{t('home.searchBtn', 'Search')}</span>
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Popular Destinations */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mt-6 text-center w-full max-w-5xl"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-20px' }}
+            transition={{ delay: 0.25, duration: 0.7 }}
+            className="mt-8 text-center w-full max-w-5xl"
           >
-            <p className="text-amber-400 text-xs sm:text-sm uppercase tracking-widest mb-3 font-bold drop-shadow-md">
+            <p className="text-amber-400 text-xs sm:text-sm uppercase tracking-widest mb-4 font-black drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
               {t('home.popularDests', 'Popular Destinations')}
             </p>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-              {destinations.map((d) => (
-                <Link
+            <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3.5">
+              {destinations.map((d, idx) => (
+                <motion.div
                   key={d.id}
-                  to={`/destinations/${d.id}`}
-                  className="group flex items-center gap-2 bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/25 hover:border-amber-400 rounded-full px-3.5 sm:px-4 py-1.5 sm:py-2 transition-all shadow-lg hover:scale-105"
+                  initial={{ opacity: 0, scale: 0.85, y: 15 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + idx * 0.05, duration: 0.4 }}
+                  whileHover={{ scale: 1.1, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden shrink-0 ring-2 ring-amber-400/60 shadow-md">
-                    <img src={getThumbnailUrl(d.img, 48)} alt="" className="w-full h-full object-cover" width="24" height="24" loading="lazy" decoding="async" />
-                  </span>
-                  <span className="text-white text-xs sm:text-sm font-bold group-hover:text-amber-400 transition-colors drop-shadow-sm">
-                    {d.label}
-                  </span>
-                </Link>
+                  <Link
+                    to={`/destinations/${d.id}`}
+                    className="group flex items-center gap-2.5 bg-black/50 hover:bg-black/80 backdrop-blur-xl border border-white/30 hover:border-amber-400 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_0_25px_rgba(245,166,35,0.75)]"
+                  >
+                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden shrink-0 ring-2 ring-amber-400/80 shadow-md group-hover:scale-110 transition-transform duration-300">
+                      <img src={getThumbnailUrl(d.img, 48)} alt="" className="w-full h-full object-cover" width="24" height="24" loading="lazy" decoding="async" />
+                    </span>
+                    <span className="text-white text-xs sm:text-sm font-black group-hover:text-amber-300 transition-colors drop-shadow-sm">
+                      {d.label}
+                    </span>
+                  </Link>
+                </motion.div>
               ))}
             </div>
 
             {/* Customize & Contact Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-4 sm:mt-5 flex flex-wrap justify-center gap-3"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.55, duration: 0.6 }}
+              className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-4"
             >
-              <Link
-                to="/tailor-a-tour"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F5A623] to-[#C07D0A] text-[#1A1A2E] font-bold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-3.5 rounded-full shadow-[0_0_20px_rgba(245,166,35,0.6)] hover:shadow-[0_0_30px_rgba(245,166,35,0.9)] hover:scale-105 transition-all duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                {t('home.customize', 'Customize Your Trip')}
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F5A623] to-[#C07D0A] text-[#1A1A2E] font-bold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-3.5 rounded-full shadow-[0_0_20px_rgba(245,166,35,0.6)] hover:shadow-[0_0_30px_rgba(245,166,35,0.9)] hover:scale-105 transition-all duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                {t('nav.contact', 'Contact Us')}
-              </Link>
+              <motion.div whileHover={{ scale: 1.08, y: -3 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 350, damping: 15 }}>
+                <Link
+                  to="/tailor-a-tour"
+                  className="relative overflow-hidden group inline-flex items-center gap-2.5 bg-gradient-to-r from-[#F5A623] via-[#FFC857] to-[#D97706] text-[#0C1120] font-black text-sm sm:text-base px-7 sm:px-9 py-3.5 sm:py-4 rounded-full shadow-[0_0_25px_rgba(245,166,35,0.7)] hover:shadow-[0_0_40px_rgba(245,166,35,1)] transition-all duration-300"
+                >
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  {t('home.customize', 'Customize Your Trip')}
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.08, y: -3 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 350, damping: 15 }}>
+                <Link
+                  to="/contact"
+                  className="relative overflow-hidden group inline-flex items-center gap-2.5 bg-black/60 hover:bg-amber-500/20 backdrop-blur-xl border border-amber-400/70 hover:border-amber-400 text-amber-300 hover:text-white font-black text-sm sm:text-base px-7 sm:px-9 py-3.5 sm:py-4 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_35px_rgba(245,166,35,0.7)] transition-all duration-300"
+                >
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  {t('nav.contact', 'Contact Us')}
+                </Link>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>

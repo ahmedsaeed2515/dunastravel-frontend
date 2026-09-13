@@ -4,7 +4,7 @@ import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
 
 const staticDestinations = [
-  { id: 'egypt', slug: 'egypt', title: 'Egypt', name: 'Egypt', toursCount: 9 },
+  { id: 'egypt', slug: 'egypt', title: 'Egypt', name: 'Egypt', toursCount: 9, image: '/imgs/egyothero.webp' },
   { id: 'turkey', slug: 'turkey', title: 'Turkey', name: 'Turkey', toursCount: 15 },
   { id: 'dubai', slug: 'dubai', title: 'Dubai', name: 'Dubai', toursCount: 9 },
   { id: 'jordan', slug: 'jordan', title: 'Jordan', name: 'Jordan', toursCount: 7 },

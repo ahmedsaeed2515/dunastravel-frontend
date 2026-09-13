@@ -295,7 +295,7 @@ export default function Egipto() {
           >
             <Link to="/programs/multi-country" className="block relative h-[240px] overflow-hidden">
               <img
-                src="/imgs/multicountryhero.jpg"
+                src="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030113/Gemini_Generated_Image_cb2enncb2enncb2e_wvyejn.jpg"
                 alt="Multi-Country Tours"
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.06] transition-transform duration-700"
                 loading="lazy"

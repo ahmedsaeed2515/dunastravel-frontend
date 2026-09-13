@@ -122,8 +122,18 @@ const TourCard = ({
     it: 'PRENOTA ORA',
     en: 'BOOK NOW',
   };
+
+  const perPersonLabels = {
+    ar: 'للشخص',
+    es: 'por persona',
+    pt: 'por pessoa',
+    it: 'a persona',
+    en: 'per person',
+  };
+
   const langKey = (lang || 'en').substring(0, 2).toLowerCase();
   const bookNowText = t('tourCard.btnBookNow', bookNowLabels[langKey] || 'BOOK NOW');
+  const perPersonText = t('tourCard.perPerson', perPersonLabels[langKey] || 'per person');
 
   const handleCardClick = () => {
     trackEvent('tour_card_click', {
@@ -142,7 +152,7 @@ const TourCard = ({
   return (
     <motion.div
       onClick={handleCardClick}
-      className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#121829] border border-primary-500/20 dark:border-white/10 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
+      className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
       variants={cardVariants}
       initial="hidden"
       whileInView="visible"
@@ -158,35 +168,35 @@ const TourCard = ({
       </div>
 
       {/* Dunas Thumbnail (.populer-thumb) */}
-      <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-obsidian-900 dunas-img-container overflow-hidden rounded-t-2xl">
+      <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
         {/* Wishlist Button */}
         <button
           type="button"
           onClick={handleWishlistToggle}
           aria-label="Toggle wishlist"
-          className="absolute top-3.5 right-3.5 rtl:right-auto rtl:left-3.5 z-20 w-10 h-10 rounded-full bg-primary-950/80 backdrop-blur-md flex items-center justify-center border border-gold-500/40 text-gold-400 hover:scale-110 active:scale-95 hover:bg-gold-500 hover:text-primary-950 transition-all duration-300 shadow-lg cursor-pointer"
+          className="absolute top-3.5 right-3.5 rtl:right-auto rtl:left-3.5 z-20 w-10 h-10 rounded-full bg-primary-950/80 dark:bg-black/80 backdrop-blur-md flex items-center justify-center border border-gold-500/40 text-gold-400 hover:scale-110 active:scale-95 hover:bg-gold-500 hover:text-primary-950 transition-all duration-300 shadow-lg cursor-pointer"
         >
           {fav ? <FaHeart className="text-red-500" size={16} /> : <FaRegHeart size={16} />}
         </button>
 
         {/* Duration Badge */}
         {durationLabel && (
-          <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-primary-950/90 backdrop-blur-md text-white text-[12px] font-extrabold px-3.5 py-1.5 rounded-full border border-gold-500/50 shadow-md flex items-center gap-1.5 transition-transform group-hover:scale-105">
+          <div className="absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-primary-950/90 dark:bg-black/85 backdrop-blur-md text-white dark:text-white text-[12px] font-extrabold px-3.5 py-1.5 rounded-full border border-gold-500/50 shadow-md flex items-center gap-1.5 transition-transform group-hover:scale-105">
             <FaClock className="text-gold-400 text-xs" />
-            <span className="text-white font-extrabold">{durationLabel}</span>
+            <span className="text-white dark:text-white font-extrabold">{durationLabel}</span>
           </div>
         )}
 
         {/* Custom Badge */}
         {tour.badge && (
-          <div className="absolute top-14 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500 text-primary-950 text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+          <div className="absolute top-14 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500 dark:bg-gold-500 text-primary-950 dark:text-primary-950 text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
             {resolveLocalizedText(tour.badge, t, lang)}
           </div>
         )}
 
         {/* Market Flag */}
         {tour.market && (
-          <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-20 bg-primary-950/60 backdrop-blur-md text-xs px-2.5 py-1 rounded-full border border-white/10 shadow-md select-none">
+          <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-20 bg-primary-950/70 dark:bg-black/80 backdrop-blur-md text-white dark:text-gold-300 text-xs px-2.5 py-1 rounded-full border border-gold-500/40 shadow-md select-none font-bold">
             {marketFlag(tour.market)}
           </div>
         )}
@@ -217,7 +227,7 @@ const TourCard = ({
 
       {/* Dunas Content Section (.populer-contnet) */}
       <motion.div 
-        className="populer-contnet flex flex-col flex-grow bg-white dark:bg-[#121829]"
+        className="populer-contnet flex flex-col flex-grow bg-white dark:bg-transparent"
         variants={contentStaggerVariants}
         initial="hidden"
         whileInView="visible"
@@ -226,8 +236,8 @@ const TourCard = ({
         {/* Title */}
         <Link to={detailUrl}>
           <h3 
-            className="popular-title text-black dark:text-ivory-50 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5" 
-            style={{ fontFamily: "'Playfair Display', 'Cairo', serif", color: '#000000' }}
+            className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300" 
+            style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
           >
             {title}
           </h3>
@@ -235,19 +245,17 @@ const TourCard = ({
 
         {/* Location */}
         <div className="populer-list mb-2">
-          <span className="flex items-center gap-2 text-black dark:text-ivory-200 font-bold text-[14px]">
-            <FaMapMarkerAlt className="text-gold-500 text-sm flex-shrink-0 animate-bounce" style={{ animationDuration: '2s' }} />
-            <span className="truncate text-black dark:text-ivory-100">{destinationText}</span>
+          <span className="flex items-center gap-2 text-gray-800 dark:text-white font-bold text-[14px]">
+            <FaMapMarkerAlt className="text-gold-500 dark:text-gold-400 text-sm flex-shrink-0 animate-bounce" style={{ animationDuration: '2s' }} />
+            <span className="truncate text-gray-900 dark:text-gold-300 font-extrabold">{destinationText}</span>
           </span>
         </div>
 
         {/* Overview Paragraph */}
         <p 
-          className="text-black dark:text-ivory-200 font-bold text-[14px] leading-relaxed line-clamp-2 mb-4 flex-grow" 
+          className="text-gray-600 dark:text-slate-100 font-bold text-[14px] leading-relaxed line-clamp-2 mb-4 flex-grow" 
           style={{ 
-            color: '#000000',
             opacity: 1,
-            fontWeight: 700,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -261,36 +269,40 @@ const TourCard = ({
         </p>
 
         {/* Days & Ratings */}
-        <div className="flex items-center justify-between bg-gray-100/90 dark:bg-primary-950/60 rounded-xl px-3.5 py-2.5 mb-5 border border-gray-300/60 dark:border-white/5 transition-colors group-hover:border-gold-500/40">
+        <div className="flex items-center justify-between bg-gray-100/90 dark:bg-primary-950/80 rounded-xl px-3.5 py-2.5 mb-5 border border-gray-300/60 dark:border-gold-500/30 transition-colors group-hover:border-gold-500/50">
           {/* Rating */}
           <div className="popular-ratting flex items-center gap-1.5">
             <ul className="flex items-center gap-1">
-              <li className="text-[#FF974D] text-xs flex gap-0.5"><FaStar/><FaStar/><FaStar/><FaStar/><FaStar/></li>
-              <li><span className="text-[14px] font-extrabold text-black dark:text-gold-400 ml-1 rtl:mr-1">({ratingValue.toFixed(1)})</span></li>
+              <li className="text-[#FF974D] dark:text-gold-400 text-xs flex gap-0.5"><FaStar/><FaStar/><FaStar/><FaStar/><FaStar/></li>
+              <li>
+                <span className="text-[13px] font-black bg-gold-400 dark:bg-gold-500 text-black dark:text-black px-2 py-0.5 rounded-md ml-1 rtl:mr-1 shadow-sm border border-gold-600/30">
+                  ({ratingValue.toFixed(1)})
+                </span>
+              </li>
             </ul>
           </div>
 
           {/* Pax / Group Tag */}
-          <div className="populer-days flex items-center gap-1.5 text-[12px] font-bold text-black dark:text-gold-300">
-            <FaUsers className="text-gold-500" />
-            <span className="text-black dark:text-gold-300">{minPaxText || (isRtl ? 'شخصين فأكثر' : 'Min 2 Pax')}</span>
+          <div className="populer-days flex items-center gap-1.5 text-[13px] font-black text-gold-500 dark:text-gold-400 tracking-wide">
+            <FaUsers className="text-gold-500 dark:text-gold-400 text-sm flex-shrink-0" />
+            <span className="text-gold-600 dark:text-gold-400 font-black tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
+              {minPaxText || (isRtl ? 'شخصين فأكثر' : 'Min 2 Pax')}
+            </span>
           </div>
         </div>
 
         {/* Footer CTA & Price Section (.populer-btn-and-days) */}
-        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-white/10 mt-auto flex items-center justify-between gap-3">
+        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-between gap-3">
           {/* Price - Displayed on the right side in RTL, opposite to Book Now button */}
           <div className="flex flex-col text-start">
-            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <span className="text-[10px] font-extrabold text-gray-500 dark:text-gold-300/90 uppercase tracking-wider">
               {t('tourCard.startingFrom', 'يبدأ من')}
             </span>
-            <div className="flex items-baseline gap-1 text-[#D97706] dark:text-gold-400 font-extrabold text-lg md:text-xl">
-              <span>{displayPrice > 0 ? formatPrice(displayPrice) : t('tourCard.onRequest', 'On Request')}</span>
-              {displayPrice > 0 && (
-                <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400">
-                  / {t('tourCard.perPerson', 'للشخص')}
-                </span>
-              )}
+            <div className="flex items-baseline gap-1 text-[#D97706] dark:text-gold-400 font-black text-lg md:text-xl">
+              <span className="dark:text-gold-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] font-black">{formatPrice(displayPrice || 0)}</span>
+              <span className="text-[11px] font-bold text-gray-500 dark:text-slate-200">
+                / {perPersonText}
+              </span>
             </div>
           </div>
 

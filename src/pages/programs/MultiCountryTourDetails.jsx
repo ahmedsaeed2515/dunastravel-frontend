@@ -76,7 +76,7 @@ export default function MultiCountryTourDetails() {
         badge={t('programs.multiCountryBadge', '🌍 Multi-Country Tours')}
         title={title}
         subtitle={subtitle || duration}
-        bgImage="/imgs/multicountryhero.jpg"
+        bgImage="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030113/Gemini_Generated_Image_cb2enncb2enncb2e_wvyejn.jpg"
         onImageClick={() => setIsLightboxOpen(true)}
         breadcrumbs={
           <div className="flex flex-wrap items-center justify-center gap-2 text-caption text-gold-400 mb-2 uppercase tracking-wider text-xs font-semibold">

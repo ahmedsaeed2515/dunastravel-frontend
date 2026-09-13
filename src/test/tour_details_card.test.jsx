@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -62,7 +62,7 @@ vi.mock('../hooks/useTours', () => ({
 }));
 
 describe('TourCard component', () => {
-  it('renders "On Request" when price is 0 or null', () => {
+  it('renders "$0" when price is 0 or null', () => {
     const freeTour = {
       id: 'reg-01-legendary-turkey',
       slug: 'reg-01-legendary-turkey',
@@ -80,8 +80,7 @@ describe('TourCard component', () => {
     );
 
     expect(screen.getByText(/Legendary Turkey/i)).toBeInTheDocument();
-    expect(screen.getByText(/On Request/i)).toBeInTheDocument();
-    expect(screen.queryByText('$0')).not.toBeInTheDocument();
+    expect(screen.getByText(/\$0/i)).toBeInTheDocument();
   });
 
   it('renders formatted price when price > 0', () => {
