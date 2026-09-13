@@ -238,6 +238,12 @@ html[data-scroll-locked] {
   .dark .about-page .hero .sub {
     color: #e8d5b0 !important;
   }
+  .dark .about-page #growth .eyebrow,
+  .dark .about-page #growth h2,
+  .dark .about-page #growth h2 *,
+  .dark .about-page #growth p {
+    color: #ffffff !important;
+  }
   .dark .about-page .hero-stats .lbl {
     color: rgba(232, 228, 224, 0.5) !important;
   }
