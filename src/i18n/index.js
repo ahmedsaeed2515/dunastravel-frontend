@@ -69,32 +69,28 @@ export const initI18n = async () => {
 
       syncDocumentDirection(lng);
 
-      // Defer fallback 'en' loading to idle time so initial paint is not blocked
-      if (lng !== 'en') {
-        const loadFallback = async () => {
+      // Preload all supported locales in the background so language switching is instant and reactive
+      supportedLngs.forEach(async (l) => {
+        if (!i18n.hasResourceBundle(l, 'translation')) {
           try {
-            if (!i18n.hasResourceBundle('en', 'translation')) {
-              const enData = await loadLocaleResource('en');
-              i18n.addResourceBundle('en', 'translation', enData, true, false);
-            }
+            const data = await loadLocaleResource(l);
+            i18n.addResourceBundle(l, 'translation', data, true, true);
           } catch (e) {
-            console.warn('Deferred English fallback load warning:', e);
+            console.warn(`Failed to preload locale ${l}:`, e);
           }
-        };
-
-        if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-          window.requestIdleCallback(loadFallback, { timeout: 2500 });
-        } else {
-          setTimeout(loadFallback, 1500);
         }
-      }
+      });
 
       i18n.on('languageChanged', async (newLng) => {
         syncDocumentDirection(newLng);
         const lang = newLng.split('-')[0];
-        if (supportedLngs.includes(lang) && !i18n.hasResourceBundle(lang, 'translation')) {
-          const data = await loadLocaleResource(lang);
-          i18n.addResourceBundle(lang, 'translation', data, true, true);
+        if (supportedLngs.includes(lang)) {
+          if (!i18n.hasResourceBundle(lang, 'translation')) {
+            const data = await loadLocaleResource(lang);
+            i18n.addResourceBundle(lang, 'translation', data, true, true);
+          }
+          // Notify react-i18next to force re-render components with newly loaded translations
+          i18n.emit('loaded');
         }
       });
     } catch (err) {

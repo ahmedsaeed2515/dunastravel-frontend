@@ -1207,13 +1207,7 @@ const HomeExperienceSection = () => {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="https://res.cloudinary.com/degbrq3ck/image/upload/w_640,h_400,c_fill,q_40,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp"
-            srcSet="
-              https://res.cloudinary.com/degbrq3ck/image/upload/w_640,h_400,c_fill,q_40,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp 640w,
-              https://res.cloudinary.com/degbrq3ck/image/upload/w_1024,h_500,c_fill,q_40,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp 1024w,
-              https://res.cloudinary.com/degbrq3ck/image/upload/w_1440,h_600,c_fill,q_40,f_webp/v1783067135/grand_tour_of_turkey_lxb1f4.webp 1440w
-            "
-            sizes="100vw"
+            src="/images/pyramids-search-bg.jpg"
             alt="Search tours and holiday packages background"
             className="w-full h-full object-cover object-center"
             fetchPriority="high"
@@ -1229,7 +1223,7 @@ const HomeExperienceSection = () => {
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           {/* Search Form */}
           <div className="w-full max-w-5xl">
-            <div className="bg-white/10 backdrop-blur-2xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4 sm:p-5 md:p-6 lg:p-8 border border-white/20">
+            <div className="bg-black/20 backdrop-blur-xs rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4 sm:p-5 md:p-6 lg:p-8 border border-white/30">
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
                 {/* Destination */}
                 <div className="col-span-2 md:col-span-1">
@@ -1240,7 +1234,7 @@ const HomeExperienceSection = () => {
                     id="search-dest-input"
                     value={searchDest}
                     onChange={(e) => { setSearchDest(e.target.value); setSearchTour(""); }}
-                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-white text-[13px] sm:text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] appearance-none cursor-pointer [&>option]:text-obsidian-900 [&>option]:dark:text-ivory-100 [&>option]:dark:bg-obsidian-800"
+                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-black/30 backdrop-blur-xs text-white text-[13px] sm:text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] appearance-none cursor-pointer [&>option]:text-obsidian-900 [&>option]:dark:text-ivory-100 [&>option]:dark:bg-obsidian-800"
                   >
                     <option value="all" className="text-obsidian-900 dark:text-ivory-100 dark:bg-obsidian-800">{t('home.searchAllDest', 'All Destinations')}</option>
                     {destinations.map((d) => (
@@ -1268,7 +1262,7 @@ const HomeExperienceSection = () => {
                       }
                     }}
                     disabled={!searchDest || searchDest === "all"}
-                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-white text-[13px] sm:text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed [&>option]:text-obsidian-900 [&>option]:dark:text-ivory-100 [&>option]:dark:bg-obsidian-800"
+                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-black/30 backdrop-blur-xs text-white text-[13px] sm:text-body-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed [&>option]:text-obsidian-900 [&>option]:dark:text-ivory-100 [&>option]:dark:bg-obsidian-800"
                   >
                     <option value="" className="text-obsidian-900 dark:text-ivory-100 dark:bg-obsidian-800">
                       {searchDest === "all" ? t('home.selectDestFirst', 'Select a destination first') : t('home.searchAllTours', 'All Tours')}
@@ -1292,7 +1286,7 @@ const HomeExperienceSection = () => {
                       max="50"
                       value={searchPeople}
                       onChange={(e) => setSearchPeople(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-16 sm:w-20 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-white text-[13px] sm:text-body-sm text-center focus:outline-none focus:ring-2 focus:ring-[#FF6B35] [color-scheme:dark]"
+                      className="w-16 sm:w-20 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg border border-white/30 bg-black/30 backdrop-blur-xs text-white text-[13px] sm:text-body-sm text-center focus:outline-none focus:ring-2 focus:ring-[#FF6B35] [color-scheme:dark]"
                     />
                     <button
                       onClick={handleSearch}
@@ -1322,7 +1316,7 @@ const HomeExperienceSection = () => {
                 <Link
                   key={d.id}
                   to={`/destinations/${d.id}`}
-                  className="group flex items-center gap-1.5 sm:gap-2 bg-white/25 hover:bg-white/40 backdrop-blur-md border border-white/30 hover:border-[#FF6B35] rounded-full px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 transition-all shadow-lg"
+                  className="group flex items-center gap-1.5 sm:gap-2 bg-black/30 hover:bg-black/50 backdrop-blur-xs border border-white/30 hover:border-[#FF6B35] rounded-full px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 transition-all shadow-lg"
                 >
                   <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden shrink-0 ring-2 ring-white/50 shadow-md">
                     <img src={getThumbnailUrl(d.img, 48)} alt="" className="w-full h-full object-cover" width="24" height="24" loading="lazy" decoding="async" />
@@ -1382,8 +1376,8 @@ const HomeExperienceSection = () => {
                 {t("home.aboutTitle", "Experiencias exclusivas, diseñadas a medida")}
               </h2>
               <p 
-                className="text-body-lg text-black font-bold mb-8 leading-relaxed"
-                style={{ color: '#000000', fontWeight: 700 }}
+                className="text-body-lg text-black dark:text-white font-bold mb-8 leading-relaxed"
+                style={{ fontWeight: 700 }}
               >
                 {t(
                   "home.aboutDesc",

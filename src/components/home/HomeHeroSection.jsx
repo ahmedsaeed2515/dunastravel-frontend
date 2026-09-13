@@ -261,7 +261,7 @@ export default function HomeHeroSection() {
                     <div className="col-lg-12">
                       <div className="hero_content">
                         <h1 className="text-anime-3 hero-heading-1">
-                          {renderAnimatedWord(slide.titlePart1)}
+                          {renderAnimatedWord(t("home.heroTitle1", slide.titlePart1))}
                         </h1>
                         <h1 className="text-anime-3 hero-heading-2">
                           <img
@@ -271,12 +271,12 @@ export default function HomeHeroSection() {
                             height="100"
                             className="dunas-logo"
                           />
-                          {renderAnimatedWord(slide.titlePart2)}
+                          {renderAnimatedWord(t("home.heroTitle2", slide.titlePart2))}
                         </h1>
-                        <p className="slider-contect-des">{slide.desc}</p>
+                        <p className="slider-contect-des">{t("home.heroDesc", slide.desc)}</p>
                         <div className="hero-btn defult-btn">
                           <a href={slide.btnLink}>
-                            {slide.btnText}
+                            {t("home.heroBtnText", slide.btnText)}
                             <svg
                               width="16"
                               height="12"
@@ -309,7 +309,7 @@ export default function HomeHeroSection() {
                     <g className="rotate-text" style={{ transformOrigin: "100px 100px" }}>
                       <text>
                         <textPath href={`#circlePath-${slide.id}`} startOffset="0%">
-                          WATCH VIDEO &nbsp; WATCH VIDEO &nbsp; WATCH VIDEO &nbsp;
+                          {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp;
                         </textPath>
                       </text>
                     </g>
