@@ -1922,7 +1922,7 @@ const HomeExperienceSection = () => {
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-600 dark:text-gold-400 text-caption font-bold uppercase tracking-widest mb-3 shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-[#F5A623] dark:text-[#F5A623] text-caption font-bold uppercase tracking-widest mb-3 shadow-sm"
             >
               <span>✨</span> {t("home.packageTripsSub", "تجارب مصممة بعناية فائقة لتلبي أعلى تطلعات عشاق الفخامة والتميز")}
             </motion.span>
