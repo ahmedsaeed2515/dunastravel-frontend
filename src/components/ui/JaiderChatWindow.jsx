@@ -231,7 +231,7 @@ const JaiderChatWindow = () => {
       {isOpen && (
         <div
           onClick={handleOutsideClick}
-          className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-[9999] flex flex-col items-end"
+          className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end justify-end pointer-events-none"
           dir={isRtl ? 'rtl' : 'ltr'}
           role="dialog"
           aria-modal="true"
@@ -239,12 +239,12 @@ const JaiderChatWindow = () => {
         >
           <motion.div
             ref={chatWindowRef}
-            style={{ transformOrigin: 'bottom right' }}
-            initial={{ opacity: 0, scale: 0.88, y: 24 }}
+            style={{ transformOrigin: isRtl ? 'bottom left' : 'bottom right' }}
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.88, y: 24 }}
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ type: 'spring', damping: 26, stiffness: 320 }}
-            className="w-[94vw] sm:w-[440px] md:w-[480px] h-[640px] max-h-[86vh] bg-slate-950/95 backdrop-blur-2xl border border-gold-500/35 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.65)] flex flex-col overflow-hidden text-slate-100 font-sans"
+            className="pointer-events-auto w-full sm:w-[440px] md:w-[480px] h-[100dvh] sm:h-[650px] sm:max-h-[86vh] bg-slate-950/95 backdrop-blur-2xl border-0 sm:border sm:border-gold-500/35 rounded-none sm:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.65)] flex flex-col overflow-hidden text-slate-100 font-sans"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-obsidian-900 via-slate-900 to-obsidian-900 p-4 border-b border-gold-500/20 flex items-center justify-between relative select-none">
@@ -695,8 +695,9 @@ const JaiderChatWindow = () => {
                           </div>
                         )}
 
-                        {/* Grounded Tour Recommendation Cards (Only shown when explicitly relevant) */}
-                        {msg.tours && msg.tours.filter((tItem) => tItem && typeof tItem === 'object' && tItem.title).length > 0 && (
+                        {/* Grounded Tour Recommendation Cards (Only shown when explicitly relevant, never on pure informational text) */}
+                        {((msg.responseType === 'recommendation' || msg.responseType === 'itinerary' || msg.structuredContent?.type === 'recommendation' || msg.structuredContent?.type === 'itinerary_proposal' || (!msg.responseType && msg.tours?.length > 0)) && msg.responseType !== 'text') &&
+                          msg.tours && msg.tours.filter((tItem) => tItem && typeof tItem === 'object' && tItem.title).length > 0 && (
                           <div className="flex flex-col gap-2.5 pt-1">
                             <span className="text-[11px] font-bold uppercase tracking-wider text-gold-400 flex items-center gap-1.5">
                               <FaTag size={10} />
@@ -909,14 +910,24 @@ const JaiderChatWindow = () => {
 
             {/* Lead Capture Form */}
             {leadFormState.required && (
-              <form onSubmit={handleLeadSubmit} className="p-3.5 bg-slate-900/95 border-t border-gold-500/30 flex flex-col gap-2">
-                <span className="text-xs font-bold text-gold-300 flex items-center gap-1.5">
-                  <FaCrown size={12} className="text-gold-400" />
-                  {isRtl ? '✨ احصل على عرض أسعار رسمي واستشارة VIP:' : '✨ Receive official quote & VIP consultation:'}
-                </span>
+              <form onSubmit={handleLeadSubmit} className="p-3.5 bg-slate-900/95 border-t border-gold-500/30 flex flex-col gap-2 relative">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-gold-300 flex items-center gap-1.5">
+                    <FaCrown size={12} className="text-gold-400" />
+                    {isRtl ? '✨ احصل على عرض أسعار رسمي واستشارة VIP:' : '✨ Receive official quote & VIP consultation:'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setLeadFormState({ required: false, fields: [] })}
+                    className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+                    title={isRtl ? 'إغلاق' : 'Dismiss'}
+                  >
+                    <FaTimes size={11} />
+                  </button>
+                </div>
                 <input
                   type="text"
-                  placeholder={isRtl ? 'الاسم الكريم' : 'Full Name *'}
+                  placeholder={isRtl ? 'الاسم بالكامل *' : 'Full Name *'}
                   required
                   value={leadName}
                   onChange={(e) => setLeadName(e.target.value)}
@@ -924,7 +935,7 @@ const JaiderChatWindow = () => {
                 />
                 <input
                   type="email"
-                  placeholder={isRtl ? 'البريد الإلكتروني' : 'Email Address *'}
+                  placeholder={isRtl ? 'البريد الإلكتروني *' : 'Email Address *'}
                   required
                   value={leadEmail}
                   onChange={(e) => setLeadEmail(e.target.value)}

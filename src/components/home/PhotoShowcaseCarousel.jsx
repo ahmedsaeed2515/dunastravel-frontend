@@ -1,8 +1,6 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Keyboard, A11y } from 'swiper/modules';
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -14,20 +12,13 @@ import {
   FaSearchMinus,
 } from 'react-icons/fa';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-
 export default function PhotoShowcaseCarousel({ photos = [], loading = false }) {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
 
-  const [swiperInstance, setSwiperInstance] = useState(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [zoomScale, setZoomScale] = useState(1);
-
-  const prevBtnRef = useRef(null);
-  const nextBtnRef = useRef(null);
 
   // Check prefers-reduced-motion
   const prefersReducedMotion = useMemo(() => {
@@ -38,48 +29,33 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
   // Autoplay State Machine: tab visibility listener
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (!swiperInstance?.autoplay) return;
       if (document.hidden) {
-        swiperInstance.autoplay.stop();
         setIsPlaying(false);
       } else {
         if (!lightboxIndex && !prefersReducedMotion) {
-          swiperInstance.autoplay.start();
           setIsPlaying(true);
         }
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [swiperInstance, lightboxIndex, prefersReducedMotion]);
+  }, [lightboxIndex, prefersReducedMotion]);
 
   // Pause / Resume toggler
   const togglePlayPause = () => {
-    if (!swiperInstance?.autoplay) return;
-    if (isPlaying) {
-      swiperInstance.autoplay.stop();
-      setIsPlaying(false);
-    } else {
-      swiperInstance.autoplay.start();
-      setIsPlaying(true);
-    }
+    setIsPlaying((prev) => !prev);
   };
 
   // Lightbox handlers
   const openLightbox = (index) => {
     setLightboxIndex(index);
     setZoomScale(1);
-    if (swiperInstance?.autoplay) {
-      swiperInstance.autoplay.stop();
-      setIsPlaying(false);
-    }
   };
 
   const closeLightbox = () => {
     setLightboxIndex(null);
     setZoomScale(1);
-    if (swiperInstance?.autoplay && !prefersReducedMotion) {
-      swiperInstance.autoplay.start();
+    if (!prefersReducedMotion) {
       setIsPlaying(true);
     }
   };
@@ -102,6 +78,21 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
     return () => window.removeEventListener('keydown', handleKey);
   }, [lightboxIndex, photos.length]);
 
+  // Build seamless infinite marquee items
+  const infinitePhotos = useMemo(() => {
+    if (!photos || photos.length === 0) return [];
+    let base = [...photos];
+    while (base.length < 6 && photos.length > 0) {
+      base = [...base, ...photos];
+    }
+    return [
+      ...base.map((p, i) => ({ ...p, _origIdx: i % photos.length, _key: `m1-${p.id || i}-${i}` })),
+      ...base.map((p, i) => ({ ...p, _origIdx: i % photos.length, _key: `m2-${p.id || i}-${i}` })),
+      ...base.map((p, i) => ({ ...p, _origIdx: i % photos.length, _key: `m3-${p.id || i}-${i}` })),
+      ...base.map((p, i) => ({ ...p, _origIdx: i % photos.length, _key: `m4-${p.id || i}-${i}` })),
+    ];
+  }, [photos]);
+
   if (loading && photos.length === 0) {
     return (
       <section className="py-20 bg-[#070D19] border-t border-white/5" aria-busy="true">
@@ -122,8 +113,6 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
     return null;
   }
 
-  const shouldLoop = photos.length > 3;
-
   return (
     <section
       className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-[#070D19] via-[#0B1528] to-[#070D19] border-t border-white/10 text-white select-none"
@@ -131,6 +120,26 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
       aria-roledescription="carousel"
       aria-label={t('home.photoCarouselLabel', 'A Glimpse of Your Journey')}
     >
+      <style>{`
+        @keyframes photoShowcaseContinuous {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+        .photo-showcase-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: photoShowcaseContinuous 55s linear infinite;
+          will-change: transform;
+        }
+        .photo-showcase-marquee-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       {/* Section Header */}
       <div className="container mx-auto px-6 mb-10 relative z-10 text-center">
         <motion.div
@@ -154,83 +163,56 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
         </motion.div>
       </div>
 
-      {/* Carousel Container */}
-      <div className="container mx-auto px-4 md:px-8 relative">
-        <Swiper
-          key={`swiper-photo-${isRtl ? 'rtl' : 'ltr'}`}
-          dir={isRtl ? 'rtl' : 'ltr'}
-          modules={[Autoplay, Navigation, Keyboard, A11y]}
-          loop={shouldLoop}
-          speed={prefersReducedMotion ? 100 : 700}
-          autoplay={
-            prefersReducedMotion
-              ? false
-              : {
-                  delay: 5000,
-                  disableOnInteraction: false,
-                  pauseOnMouseEnter: true,
-                }
-          }
-          keyboard={{ enabled: true }}
-          navigation={{
-            prevEl: prevBtnRef.current,
-            nextEl: nextBtnRef.current,
-          }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevBtnRef.current;
-            swiper.params.navigation.nextEl = nextBtnRef.current;
-          }}
-          onSwiper={setSwiperInstance}
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 24,
-            },
-            1280: {
-              slidesPerView: 3,
-              spaceBetween: 28,
-            },
-          }}
-          className="rounded-3xl !overflow-hidden py-4"
-        >
-          {photos.map((photo, index) => {
-            const photoUrl = photo.optimizedUrl || photo.secureUrl || photo.url;
-            const isRawFilename = (str) => {
-              if (!str || typeof str !== 'string') return true;
-              return /\.(jpe?g|png|webp|gif|svg|bmp)$/i.test(str) ||
-                     /\d{4}[-_]\d{2}[-_]\d{2}/i.test(str) ||
-                     /_at_\d+/i.test(str) ||
-                     /^[a-f0-9]{16,}/i.test(str);
-            };
+      {/* Marquee Container with Left & Right Gradient Masks */}
+      <div className="relative w-full overflow-hidden">
+        {/* Cinematic Edge Gradient Overlays */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 md:w-44 bg-gradient-to-r from-[#070D19] via-[#070D19]/80 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 md:w-44 bg-gradient-to-l from-[#070D19] via-[#070D19]/80 to-transparent z-20" />
 
-            const rawTitle = photo.title || photo.altText || photo.alt || '';
-            const photoTitle = isRawFilename(rawTitle) ? '' : rawTitle;
+        {/* Continuous Right-to-Left Infinite Marquee Track */}
+        <div className="w-full overflow-hidden relative py-4" dir="ltr">
+          <div
+            className="photo-showcase-marquee-track flex gap-6 px-4"
+            style={{
+              animationPlayState: !isPlaying || prefersReducedMotion ? 'paused' : undefined,
+              animation: prefersReducedMotion ? 'none' : undefined,
+            }}
+          >
+            {infinitePhotos.map((photo, index) => {
+              const photoUrl = photo.optimizedUrl || photo.secureUrl || photo.url;
+              const isRawFilename = (str) => {
+                if (!str || typeof str !== 'string') return true;
+                return (
+                  /\.(jpe?g|png|webp|gif|svg|bmp)$/i.test(str) ||
+                  /\d{4}[-_]\d{2}[-_]\d{2}/i.test(str) ||
+                  /_at_\d+/i.test(str) ||
+                  /^[a-f0-9]{16,}/i.test(str)
+                );
+              };
 
-            return (
-              <SwiperSlide key={photo.id || `photo-${index}`}>
+              const rawTitle = photo.title || photo.altText || photo.alt || '';
+              const photoTitle = isRawFilename(rawTitle) ? '' : rawTitle;
+              const originalIndex = photo._origIdx;
+
+              return (
                 <div
-                  onClick={() => openLightbox(index)}
+                  key={photo._key || `photo-${index}`}
+                  onClick={() => openLightbox(originalIndex)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      openLightbox(index);
+                      openLightbox(originalIndex);
                     }
                   }}
                   tabIndex={0}
                   role="button"
                   aria-label={`${photo.category ? `${String(photo.category).toUpperCase()} / ` : ''}${photoTitle ? `${photoTitle} / ` : ''}${t('home.viewPhoto', 'Explore Photo')} (${t('home.viewLarger', 'View larger photo')})`}
-                  className="group relative h-[380px] sm:h-[420px] md:h-[460px] rounded-3xl overflow-hidden border border-white/10 hover:border-[#0CB2DB]/80 bg-[#0E1726] shadow-2xl transition-all duration-500 hover:scale-[1.02] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0CB2DB]"
+                  className="group relative w-[300px] sm:w-[350px] md:w-[390px] lg:w-[420px] h-[380px] sm:h-[420px] md:h-[460px] shrink-0 rounded-3xl overflow-hidden border border-white/10 hover:border-[#0CB2DB]/80 bg-[#0E1726] shadow-2xl transition-all duration-500 hover:scale-[1.03] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0CB2DB]"
                 >
                   <img
                     src={photoUrl}
                     alt={photoTitle || 'Dunas Travel'}
-                    loading={index < 4 ? 'eager' : 'lazy'}
+                    loading={index < 6 ? 'eager' : 'lazy'}
                     decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -255,55 +237,28 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
                     </div>
                   </div>
                 </div>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-
-        {/* Carousel Navigation Arrows */}
-        <button
-          ref={prevBtnRef}
-          type="button"
-          aria-label={t('home.prevSlide', 'Previous Slide')}
-          className="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 md:w-13 md:h-13 rounded-full bg-black/70 hover:bg-[#0CB2DB] hover:text-slate-950 border border-white/20 hover:border-[#0CB2DB] text-white flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0CB2DB]"
-        >
-          {isRtl ? (
-            <FaChevronRight className="w-4 h-4 md:w-5 md:h-5" />
-          ) : (
-            <FaChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
-          )}
-        </button>
-
-        <button
-          ref={nextBtnRef}
-          type="button"
-          aria-label={t('home.nextSlide', 'Next Slide')}
-          className="absolute -right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 md:w-13 md:h-13 rounded-full bg-black/70 hover:bg-[#0CB2DB] hover:text-slate-950 border border-white/20 hover:border-[#0CB2DB] text-white flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0CB2DB]"
-        >
-          {isRtl ? (
-            <FaChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
-          ) : (
-            <FaChevronRight className="w-4 h-4 md:w-5 md:h-5" />
-          )}
-        </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Autoplay Play/Pause & Counter Bar */}
+      {/* Autoplay Play/Pause Control Bar */}
       <div className="container mx-auto px-6 mt-8 flex items-center justify-center gap-4">
         <button
           type="button"
           onClick={togglePlayPause}
           aria-label={isPlaying ? t('home.pauseCarousel', 'Pause Autoplay') : t('home.playCarousel', 'Start Autoplay')}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/15 text-white/80 hover:text-white transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0CB2DB]"
+          className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-xs md:text-sm font-bold bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#0CB2DB]/50 text-white/80 hover:text-white transition-all shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0CB2DB]"
         >
           {isPlaying ? (
             <>
-              <FaPause className="w-2.5 h-2.5 text-[#0CB2DB]" />
+              <FaPause className="w-3 h-3 text-[#0CB2DB]" />
               <span>{t('home.pause', 'Pause')}</span>
             </>
           ) : (
             <>
-              <FaPlay className="w-2.5 h-2.5 text-[#0CB2DB]" />
+              <FaPlay className="w-3 h-3 text-[#0CB2DB]" />
               <span>{t('home.play', 'Autoplay')}</span>
             </>
           )}

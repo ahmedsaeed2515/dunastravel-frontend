@@ -18,12 +18,17 @@ const renderInlineFormatted = (text) => {
       const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (match) {
         const [, linkText, linkUrl] = match;
+        const trimmedUrl = (linkUrl || '').trim();
+        const isSafeUrl = /^(https?:\/\/|\/|mailto:|tel:)/i.test(trimmedUrl);
+        if (!isSafeUrl) {
+          return <span key={index} style={{ unicodeBidi: 'plaintext' }}>{linkText}</span>;
+        }
         return (
           <a
             key={index}
-            href={linkUrl}
-            target={linkUrl.startsWith('http') ? '_blank' : '_self'}
-            rel="noreferrer"
+            href={trimmedUrl}
+            target={trimmedUrl.startsWith('http') ? '_blank' : '_self'}
+            rel="noreferrer noopener"
             className="text-gold-400 hover:text-gold-300 underline underline-offset-2 font-medium transition-colors"
           >
             <bdi>{linkText}</bdi>

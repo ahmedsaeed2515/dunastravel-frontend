@@ -11,8 +11,8 @@ const WELCOME_MESSAGES = {
   es: "¡Hola! 👋 Soy GuideR, tu conserje de viajes de lujo para Dunas Travel. ¿Cómo puedo ayudarte a planificar tu viaje soñado hoy?",
   pt: "Olá! 👋 Sou o GuideR, seu concierge de viagens de luxo da Dunas Travel. Como posso ajudar a planejar a sua viagem dos sonhos hoje?",
   it: "Ciao! 👋 Sono GuideR, il tuo concierge di viaggio di lusso per Dunas Travel. Come posso aiutarti a pianificare il tuo viaggio ideale oggi?",
-  ar: "أهلاً بك! 👋 أنا جايدر (GuideR)، مستشارك السياحي الذكي في دوناس ترافيل. كيف يمكنني مساعدتك في التخطيط لرحلتك الفاخرة اليوم؟",
-  'ar-eg': "أهلاً بيك يا فندم! 👋 أنا جايدر (GuideR)، مستشارك السياحي الذكي في دوناس ترافيل. تؤمرني بإيه النهارده عشان نخطط لأحلى رحلة؟"
+  ar: "أهلاً بك! 👋 أنا جايدر (GuideR)، مستشارك السياحي في دوناس ترافيل. كيف يمكنني مساعدتك في التخطيط لرحلتك القادمة؟",
+  'ar-eg': "أهلاً بيك! 👋 أنا جايدر (GuideR)، مستشارك السياحي في دوناس ترافيل. إزاي أقدر أساعدك في تخطيط رحلتك القادمة؟"
 };
 
 const _FALLBACK_MESSAGES = {
@@ -21,7 +21,7 @@ const _FALLBACK_MESSAGES = {
   pt: "Terei todo o prazer em ajudar! Pode explorar os nossos pacotes turísticos, solicitar um itinerário personalizado ou falar com os nossos especialistas.",
   it: "Sarò lieto di aiutarti! Puoi esplorare i nostri pacchetti turistici, richiedere un itinerario personalizzato o contattare i nostri specialisti.",
   ar: "يسعدني جداً مساعدتك! يمكنك استعراض باقات رحلاتنا الفاخرة، أو طلب تصميم برنامج مخصص لعائلتك، أو التواصل المباشر مع خبراء المبيعات لدينا.",
-  'ar-eg': "تحت أمرك يا فندم! تقدر تشوف رحلاتنا المميزة، أو نصمملك برنامج مخصوص لحضرتك ولعيلتك، أو تكلم فريق المبيعات مباشرة."
+  'ar-eg': "يسعدني جداً مساعدتك! تقدر تستكشف رحلاتنا الفاخرة، أو نجهّز برنامج مخصص على ذوقك، أو تتواصل مباشرة مع مستشارينا السياحيين."
 };
 
 const SUGGESTIONS = {
@@ -56,10 +56,10 @@ const SUGGESTIONS = {
     "ما الفرق بين الإبحار بالدهبية النيلية الفاخرة والكروز الكبير؟"
   ],
   'ar-eg': [
-    "عايز أحسن رحلة نايل كروز فاخرة 5 نجوم في مصر",
-    "صمملي برنامج 7 أيام ممتع وفخم في القاهرة والأقصر",
-    "عايز رحلة عائلية مميزة ومريحة لكل العيلة",
-    "إيه الفرق بين الدهبية النيلية الخاصة والكروز العادي؟"
+    "اقترح علي رحلة نايل كروز فاخرة 5 نجوم في مصر",
+    "برنامج 7 أيام بين القاهرة والأقصر",
+    "تصميم رحلة عائلية خاصة ومريحة",
+    "ما الفرق بين الدهبية النيلية الفاخرة والكروز الكبير؟"
   ]
 };
 
@@ -250,6 +250,8 @@ export const JaiderChatProvider = ({ children }) => {
             id: m.id,
             sender: m.role === 'user' ? 'user' : (m.role === 'staff' ? 'staff' : 'jaider'),
             text: m.content,
+            responseType: m.structuredContent?.responseType || (cleanTours.length > 0 ? 'recommendation' : 'text'),
+            intent: m.structuredContent?.intent || 'general_chat',
             structuredContent: m.structuredContent,
             timestamp: new Date(m.createdAt),
             tours: cleanTours,
@@ -366,6 +368,8 @@ export const JaiderChatProvider = ({ children }) => {
     const baseUrl = api.defaults?.baseURL || (typeof window !== 'undefined' ? '/api' : 'https://dunastravel-backend-seven.vercel.app/api');
     const streamUrl = `${String(baseUrl).replace(/\/+$/, '')}/ai/chat/stream`;
 
+    const idempotencyKey = `idem-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
     let streamSucceeded = false;
     let accumulatedText = '';
 
@@ -380,6 +384,7 @@ export const JaiderChatProvider = ({ children }) => {
           sessionId,
           locale: activeLang,
           personaCode: selectedPersona,
+          idempotencyKey,
           pageContext: {
             pathname: typeof window !== 'undefined' ? window.location.pathname : '/',
           },
@@ -485,6 +490,9 @@ export const JaiderChatProvider = ({ children }) => {
                         ...m,
                         id: parsedData.message?.id || botMsgId,
                         text: finalText,
+                        responseType: parsedData.responseType || parsedData.message?.structuredContent?.responseType || (cleanTours.length > 0 ? 'recommendation' : 'text'),
+                        intent: parsedData.intent || parsedData.message?.structuredContent?.intent || 'general_chat',
+                        structuredContent: parsedData.message?.structuredContent || null,
                         tours: cleanTours,
                         destinations,
                         proposal,
@@ -514,15 +522,16 @@ export const JaiderChatProvider = ({ children }) => {
         return;
       }
 
-      // If stream didn't produce tokens, fallback to standard POST /ai/chat/message
-      if (!streamSucceeded || !accumulatedText) {
-        console.warn('GuideR SSE streaming failed, falling back to message endpoint:', err);
+      // If stream didn't produce any tokens, fallback to standard POST /ai/chat/message
+      if (!streamSucceeded && !accumulatedText) {
+        console.warn('GuideR SSE streaming failed before tokens received, falling back to message endpoint:', err);
         try {
           const response = await api.post('/ai/chat/message', {
             message: cleanText,
             sessionId,
             locale: activeLang,
             personaCode: selectedPersona,
+            idempotencyKey,
             pageContext: {
               pathname: typeof window !== 'undefined' ? window.location.pathname : '/',
             },
@@ -548,6 +557,9 @@ export const JaiderChatProvider = ({ children }) => {
                     ...m,
                     id: data?.message?.id || botMsgId,
                     text: assistantText,
+                    responseType: data?.responseType || data?.message?.structuredContent?.responseType || (cleanTours.length > 0 ? 'recommendation' : 'text'),
+                    intent: data?.intent || data?.message?.structuredContent?.intent || 'general_chat',
+                    structuredContent: data?.message?.structuredContent || null,
                     tours: cleanTours,
                     destinations: data?.recommendations?.destinations || [],
                     proposal: sanitizeProposal(data?.recommendations?.proposal || null),

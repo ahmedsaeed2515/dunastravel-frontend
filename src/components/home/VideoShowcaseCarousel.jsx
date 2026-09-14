@@ -1,11 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Keyboard, A11y } from 'swiper/modules';
 import {
-  FaChevronLeft,
-  FaChevronRight,
   FaPlay,
   FaPause,
   FaTimes,
@@ -14,9 +10,6 @@ import {
   FaVolumeUp,
   FaVideo,
 } from 'react-icons/fa';
-
-import 'swiper/css';
-import 'swiper/css/navigation';
 
 function getEmbedInfo(url) {
   if (!url) return null;
@@ -45,13 +38,10 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
   const { t, i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
 
-  const [swiperInstance, setSwiperInstance] = useState(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [activeVideo, setActiveVideo] = useState(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  const prevBtnRef = useRef(null);
-  const nextBtnRef = useRef(null);
   const videoPlayerRef = useRef(null);
 
   const prefersReducedMotion = useMemo(() => {
@@ -70,45 +60,21 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
   // Tab visibility listener
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (!swiperInstance?.autoplay) return;
       if (document.hidden) {
-        swiperInstance.autoplay.stop();
         setIsPlaying(false);
       } else {
         if (!activeVideo && !prefersReducedMotion) {
-          swiperInstance.autoplay.start();
           setIsPlaying(true);
         }
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [swiperInstance, activeVideo, prefersReducedMotion]);
-
-  // Pause carousel when modal video opens
-  useEffect(() => {
-    if (!swiperInstance?.autoplay) return;
-    if (activeVideo) {
-      swiperInstance.autoplay.stop();
-      setIsPlaying(false);
-    } else {
-      if (!prefersReducedMotion) {
-        swiperInstance.autoplay.start();
-        setIsPlaying(true);
-      }
-    }
-  }, [activeVideo, swiperInstance, prefersReducedMotion]);
+  }, [activeVideo, prefersReducedMotion]);
 
   // Toggle Play / Pause Carousel
   const togglePlayPause = () => {
-    if (!swiperInstance?.autoplay) return;
-    if (isPlaying) {
-      swiperInstance.autoplay.stop();
-      setIsPlaying(false);
-    } else {
-      swiperInstance.autoplay.start();
-      setIsPlaying(true);
-    }
+    setIsPlaying((prev) => !prev);
   };
 
   // Open / Close Video Modal
@@ -122,13 +88,13 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
       videoPlayerRef.current.pause();
     }
     setActiveVideo(null);
+    if (!prefersReducedMotion) {
+      setIsPlaying(true);
+    }
   };
 
-  // When video playback ends, advance to next slide and resume
+  // When video playback ends, close video and resume
   const handleVideoEnded = () => {
-    if (swiperInstance) {
-      swiperInstance.slideNext();
-    }
     closeVideo();
   };
 
@@ -141,6 +107,21 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [activeVideo]);
+
+  // Build seamless infinite marquee items
+  const infiniteVideos = useMemo(() => {
+    if (!videos || videos.length === 0) return [];
+    let base = [...videos];
+    while (base.length < 6 && videos.length > 0) {
+      base = [...base, ...videos];
+    }
+    return [
+      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v1-${v.id || i}-${i}` })),
+      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v2-${v.id || i}-${i}` })),
+      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v3-${v.id || i}-${i}` })),
+      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v4-${v.id || i}-${i}` })),
+    ];
+  }, [videos]);
 
   if (loading && videos.length === 0) {
     return (
@@ -162,8 +143,6 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
     return null;
   }
 
-  const shouldLoop = videos.length > 3;
-
   return (
     <section
       className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-[#050A14] via-[#081224] to-[#050A14] border-t border-white/10 text-white select-none"
@@ -171,6 +150,26 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
       aria-roledescription="carousel"
       aria-label={t('home.videoCarouselLabel', 'Travel Stories & Videos')}
     >
+      <style>{`
+        @keyframes videoShowcaseContinuous {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+        .video-showcase-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: videoShowcaseContinuous 60s linear infinite;
+          will-change: transform;
+        }
+        .video-showcase-marquee-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       {/* Section Header */}
       <div className="container mx-auto px-6 mb-10 relative z-10 text-center">
         <motion.div
@@ -194,59 +193,29 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
         </motion.div>
       </div>
 
-      {/* Video Swiper Carousel */}
-      <div className="container mx-auto px-4 md:px-8 relative">
-        <Swiper
-          key={`swiper-video-${isRtl ? 'rtl' : 'ltr'}`}
-          dir={isRtl ? 'rtl' : 'ltr'}
-          modules={[Autoplay, Navigation, Keyboard, A11y]}
-          loop={shouldLoop}
-          speed={prefersReducedMotion ? 100 : 700}
-          autoplay={
-            prefersReducedMotion
-              ? false
-              : {
-                  delay: 6000,
-                  disableOnInteraction: false,
-                  pauseOnMouseEnter: true,
-                }
-          }
-          keyboard={{ enabled: true }}
-          navigation={{
-            prevEl: prevBtnRef.current,
-            nextEl: nextBtnRef.current,
-          }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevBtnRef.current;
-            swiper.params.navigation.nextEl = nextBtnRef.current;
-          }}
-          onSwiper={setSwiperInstance}
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 24,
-            },
-            1280: {
-              slidesPerView: 3,
-              spaceBetween: 28,
-            },
-          }}
-          className="rounded-3xl !overflow-hidden py-4"
-        >
-          {videos.map((video, index) => {
-            const embed = getEmbedInfo(video.url || video.videoUrl || video.secureUrl);
-            const poster = video.posterUrl || video.thumbnailUrl || embed?.thumbnailUrl || video.url;
-            const videoTitle = video.title || video.alt || 'Dunas Travel Video';
+      {/* Marquee Container with Left & Right Gradient Masks */}
+      <div className="relative w-full overflow-hidden">
+        {/* Cinematic Edge Gradient Overlays */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 md:w-44 bg-gradient-to-r from-[#050A14] via-[#050A14]/80 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 md:w-44 bg-gradient-to-l from-[#050A14] via-[#050A14]/80 to-transparent z-20" />
 
-            return (
-              <SwiperSlide key={video.id || `video-${index}`}>
+        {/* Continuous Right-to-Left Infinite Marquee Track */}
+        <div className="w-full overflow-hidden relative py-4" dir="ltr">
+          <div
+            className="video-showcase-marquee-track flex gap-6 px-4"
+            style={{
+              animationPlayState: !isPlaying || activeVideo || prefersReducedMotion ? 'paused' : undefined,
+              animation: prefersReducedMotion ? 'none' : undefined,
+            }}
+          >
+            {infiniteVideos.map((video, index) => {
+              const embed = getEmbedInfo(video.url || video.videoUrl || video.secureUrl);
+              const poster = video.posterUrl || video.thumbnailUrl || embed?.thumbnailUrl || video.url;
+              const videoTitle = video.title || video.alt || 'Dunas Travel Video';
+
+              return (
                 <div
+                  key={video._key || `video-${index}`}
                   onClick={() => openVideo(video)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -257,7 +226,7 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
                   tabIndex={0}
                   role="button"
                   aria-label={`${t('home.playVideo', 'Play video clip of')} ${videoTitle}`}
-                  className="group relative h-[250px] sm:h-[280px] md:h-[320px] rounded-3xl overflow-hidden border border-white/10 hover:border-[#F5A623]/80 bg-[#0E1726] shadow-2xl transition-all duration-500 hover:scale-[1.02] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
+                  className="group relative w-[320px] sm:w-[380px] md:w-[420px] lg:w-[460px] h-[250px] sm:h-[280px] md:h-[320px] shrink-0 rounded-3xl overflow-hidden border border-white/10 hover:border-[#F5A623]/80 bg-[#0E1726] shadow-2xl transition-all duration-500 hover:scale-[1.03] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
                 >
                   <img
                     src={poster}
@@ -292,37 +261,10 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
                     </div>
                   </div>
                 </div>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-
-        {/* Navigation Arrows */}
-        <button
-          ref={prevBtnRef}
-          type="button"
-          aria-label={t('home.prevSlide', 'Previous Slide')}
-          className="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 md:w-13 md:h-13 rounded-full bg-black/70 hover:bg-[#F5A623] hover:text-slate-950 border border-white/20 hover:border-[#F5A623] text-white flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
-        >
-          {isRtl ? (
-            <FaChevronRight className="w-4 h-4 md:w-5 md:h-5" />
-          ) : (
-            <FaChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
-          )}
-        </button>
-
-        <button
-          ref={nextBtnRef}
-          type="button"
-          aria-label={t('home.nextSlide', 'Next Slide')}
-          className="absolute -right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 md:w-13 md:h-13 rounded-full bg-black/70 hover:bg-[#F5A623] hover:text-slate-950 border border-white/20 hover:border-[#F5A623] text-white flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
-        >
-          {isRtl ? (
-            <FaChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
-          ) : (
-            <FaChevronRight className="w-4 h-4 md:w-5 md:h-5" />
-          )}
-        </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Autoplay Play/Pause Bar */}
@@ -331,16 +273,16 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
           type="button"
           onClick={togglePlayPause}
           aria-label={isPlaying ? t('home.pauseCarousel', 'Pause Autoplay') : t('home.playCarousel', 'Start Autoplay')}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/15 text-white/80 hover:text-white transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
+          className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-xs md:text-sm font-bold bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#F5A623]/50 text-white/80 hover:text-white transition-all shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
         >
           {isPlaying ? (
             <>
-              <FaPause className="w-2.5 h-2.5 text-[#F5A623]" />
+              <FaPause className="w-3 h-3 text-[#F5A623]" />
               <span>{t('home.pause', 'Pause')}</span>
             </>
           ) : (
             <>
-              <FaPlay className="w-2.5 h-2.5 text-[#F5A623]" />
+              <FaPlay className="w-3 h-3 text-[#F5A623]" />
               <span>{t('home.play', 'Autoplay')}</span>
             </>
           )}
