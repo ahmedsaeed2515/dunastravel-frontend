@@ -18,7 +18,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
-  const [headerVisible, setHeaderVisible] = useState(true);
   const lastScrollYRef = useRef(0);
   const tickingRef = useRef(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -67,17 +66,8 @@ const Navbar = () => {
       tickingRef.current = true;
       requestAnimationFrame(() => {
         const currentScrollY = window.scrollY;
-        const threshold = location.pathname === '/' ? 550 : 50;
-        const isScrolled = currentScrollY > threshold;
+        const isScrolled = currentScrollY > 30;
         setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
-
-        if (mobileMenuRef.current) {
-          setHeaderVisible((prev) => (!prev ? true : prev));
-        } else if (currentScrollY > 100 && currentScrollY > lastScrollYRef.current) {
-          setHeaderVisible((prev) => (prev ? false : prev));
-        } else {
-          setHeaderVisible((prev) => (!prev ? true : prev));
-        }
         lastScrollYRef.current = currentScrollY;
         tickingRef.current = false;
       });
@@ -86,7 +76,7 @@ const Navbar = () => {
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
+  }, []);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -163,25 +153,25 @@ const Navbar = () => {
   return (
     <>
       {/* Top Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-500 ${headerVisible ? 'translate-y-0' : '-translate-y-full'}`} style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}>
+      <div className="fixed top-0 left-0 right-0 z-[9999] transition-all duration-300" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}>
         {/* Subtle shine overlay */}
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%)' }} />
         {/* Gold accent border */}
         <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
         <div className="w-full px-4 sm:px-6 relative">
-          <div className="flex items-center justify-between h-10 sm:h-11 text-white text-[11px] sm:text-xs font-semibold">
+          <div className="flex items-center justify-between h-8 sm:h-9 text-white text-[10px] sm:text-[11px] font-semibold">
             {/* Left: Contact Info */}
-            <div className="flex items-center gap-2 sm:gap-5 overflow-hidden">
+            <div className="flex items-center gap-2 sm:gap-4 overflow-hidden">
               <a href="mailto:info@dunas-travel.com" aria-label="Email us at info@dunas-travel.com" className="group flex items-center gap-1.5 hover:text-[#F5A623] transition-all duration-300 whitespace-nowrap">
-                <span className="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-[#F5A623]/25 group-hover:scale-110 transition-all duration-300">
-                  <FaEnvelope size={10} className="text-[#F5A623]" />
+                <span className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-[#F5A623]/25 group-hover:scale-110 transition-all duration-300">
+                  <FaEnvelope size={9} className="text-[#F5A623]" />
                 </span>
                 <span className="hidden sm:inline font-semibold tracking-wide">info@dunas-travel.com</span>
               </a>
-              <span className="w-px h-4 bg-gradient-to-b from-transparent via-white/30 to-transparent hidden sm:block" />
+              <span className="w-px h-3.5 bg-gradient-to-b from-transparent via-white/30 to-transparent hidden sm:block" />
               <a href="https://wa.me/201149401111" aria-label="Chat with us on WhatsApp" target="_blank" rel="noopener noreferrer" className="group items-center gap-1.5 hover:text-[#F5A623] transition-all duration-300 whitespace-nowrap flex">
-                <span className="w-6 h-6 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:bg-[#25D366]/35 group-hover:scale-110 transition-all duration-300">
-                  <FaWhatsapp size={10} className="text-[#25D366]" />
+                <span className="w-5 h-5 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:bg-[#25D366]/35 group-hover:scale-110 transition-all duration-300">
+                  <FaWhatsapp size={9} className="text-[#25D366]" />
                 </span>
                 <span className="hidden sm:inline font-semibold tracking-wide">+20 114 940 1111</span>
               </a>
@@ -191,10 +181,10 @@ const Navbar = () => {
             <div className="flex items-center gap-1 sm:gap-1.5">
               <button
                 onClick={toggleTheme}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110"
+                className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110"
                 aria-label="Toggle theme"
               >
-                {theme === 'dark' ? <FaSun size={10} className="text-[#F5A623]" /> : <FaMoon size={10} className="text-[#F5A623]" />}
+                {theme === 'dark' ? <FaSun size={9} className="text-[#F5A623]" /> : <FaMoon size={9} className="text-[#F5A623]" />}
               </button>
 
               <div ref={profileDropdownRef} className="relative">
@@ -205,9 +195,9 @@ const Navbar = () => {
                       aria-expanded={profileDropdownOpen}
                       aria-haspopup="menu"
                       aria-label={t('nav.profile', 'User profile options')}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/50 transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gold-500/70 cursor-pointer"
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/50 transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gold-500/70 cursor-pointer"
                     >
-                      <span className="font-bold text-[10px] text-[#F5A623]">
+                      <span className="font-bold text-[9px] text-[#F5A623]">
                         {user.avatar || user.name?.charAt(0)?.toUpperCase() || 'U'}
                       </span>
                     </button>
@@ -280,10 +270,10 @@ const Navbar = () => {
                     to="/login"
                     state={{ from: location.pathname }}
                     aria-label={t('auth.signIn', 'Sign in or register')}
-                    className="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full flex items-center justify-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/50 transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gold-500/70 cursor-pointer"
+                    className="h-6 sm:h-7 px-2 sm:px-2.5 rounded-full flex items-center justify-center gap-1 bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/50 transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gold-500/70 cursor-pointer"
                   >
-                    <FaUserCircle size={13} className="text-[#F5A623]" />
-                    <span className="hidden md:inline text-[11px] font-bold text-white tracking-wide">
+                    <FaUserCircle size={11} className="text-[#F5A623]" />
+                    <span className="hidden md:inline text-[10px] font-bold text-white tracking-wide">
                       {t('auth.logInTab', 'Sign In')}
                     </span>
                   </Link>
@@ -307,16 +297,16 @@ const Navbar = () => {
 
       {/* Main Header */}
       <header
-        className={`fixed top-[40px] sm:top-[44px] left-0 right-0 z-[9998] transition-all duration-300 h-16 lg:h-20 flex items-center ${headerVisible ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'bg-white/95 dark:bg-obsidian-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/80 dark:border-gold-500/20' : 'bg-transparent border-none shadow-none'}`}
+        className={`fixed top-8 sm:top-9 left-0 right-0 z-[9998] transition-all duration-300 h-14 lg:h-16 flex items-center ${scrolled ? 'bg-white/95 dark:bg-obsidian-900/95 backdrop-blur-md shadow-md border-b border-gray-200/80 dark:border-gold-500/20' : 'bg-transparent border-none shadow-none'}`}
       >
-        <div className="container mx-auto px-6 h-full flex justify-between items-center relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 h-full flex justify-between items-center relative z-10">
           {/* Logo */}
           <Link to="/" className="flex items-center z-50 transition-all duration-300" onClick={() => setMobileMenuOpen(false)}>
-            <Logo theme="dark" height={60} />
+            <Logo theme="dark" height={38} />
           </Link>
 
           {/* Desktop Nav (Hover) */}
-          <nav className="hidden lg:flex items-center gap-8 flex-shrink-0 min-h-[40px]">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 flex-shrink-0 min-h-[36px]">
             {navLinks.map((link) => (
               <div
                 key={link.name}
@@ -325,11 +315,11 @@ const Navbar = () => {
                 onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
               >
                 {link.dropdown ? (
-                  <button className={`flex items-center gap-1.5 ${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0`}>
-                    {link.name} <FaChevronDown className={`text-xs transition-transform duration-200 ${activeDropdown === link.name ? 'rotate-180' : ''}`} />
+                  <button className={`flex items-center gap-1.5 ${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-[13px] xl:text-sm font-bold py-1.5 whitespace-nowrap flex-shrink-0`}>
+                    {link.name} <FaChevronDown className={`text-[10px] transition-transform duration-200 ${activeDropdown === link.name ? 'rotate-180' : ''}`} />
                   </button>
                 ) : (
-                  <Link to={link.path} className={`${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-base font-extrabold py-2 whitespace-nowrap flex-shrink-0`}>
+                  <Link to={link.path} className={`${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-[13px] xl:text-sm font-bold py-1.5 whitespace-nowrap flex-shrink-0`}>
                     {link.name}
                   </Link>
                 )}
@@ -342,11 +332,11 @@ const Navbar = () => {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className={`absolute top-full left-0 mt-2 ${link.name === t('nav.services') ? 'w-72 p-5' : 'w-56'} bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-xl`}
+                      className={`absolute top-full left-0 mt-2 ${link.name === t('nav.services') ? 'w-64 p-4' : 'w-52'} bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-xl`}
                     >
                       {link.name === t('nav.services') ? (
                         <>
-                          <h4 className="text-caption text-amber-700 dark:text-gold-400 uppercase tracking-widest mb-4 px-1 font-extrabold">
+                          <h4 className="text-caption text-amber-700 dark:text-gold-400 uppercase tracking-widest mb-3 px-1 font-extrabold text-xs">
                             {link.name}
                           </h4>
                           <div className="flex flex-col gap-1">
@@ -354,7 +344,7 @@ const Navbar = () => {
                               <Link
                                 key={item.name}
                                 to={item.path}
-                                className="px-4 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base rounded-lg"
+                                className="px-3.5 py-2 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg"
                               >
                                 {item.name}
                               </Link>
@@ -368,17 +358,17 @@ const Navbar = () => {
                               <>
                                 <Link
                                   to={item.path}
-                                  className="px-4 py-3 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 flex justify-between items-center w-full"
+                                  className="px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 flex justify-between items-center w-full"
                                 >
                                   <span>{item.name}</span>
-                                  <FaChevronDown className="-rotate-90 text-[10px] opacity-60 group-hover/sub:text-[#F5A623] group-hover/sub:rotate-0 transition-transform duration-200" />
+                                  <FaChevronDown className="-rotate-90 text-[9px] opacity-60 group-hover/sub:text-[#F5A623] group-hover/sub:rotate-0 transition-transform duration-200" />
                                 </Link>
-                                <div className={`absolute ${isRtl ? 'right-full mr-0.5' : 'left-full ml-0.5'} top-0 hidden group-hover/sub:block w-56 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-2xl z-[9999]`}>
+                                <div className={`absolute ${isRtl ? 'right-full mr-0.5' : 'left-full ml-0.5'} top-0 hidden group-hover/sub:block w-52 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-2xl z-[9999]`}>
                                   {item.subItems.map((sub) => (
                                     <Link
                                       key={sub.name}
                                       to={sub.path}
-                                      className="block px-4 py-3 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                      className="block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
                                     >
                                       {sub.name}
                                     </Link>
@@ -388,7 +378,7 @@ const Navbar = () => {
                             ) : (
                               <Link
                                 to={item.path}
-                                className="group/link block px-4 py-3 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-base border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                className="group/link block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
                               >
                                 <span className="flex items-center gap-2">
                                   <FaPlane className="text-[10px] opacity-0 -ml-1 group-hover/link:opacity-100 group-hover/link:ml-0 transition-all duration-200 text-[#F5A623]" />
@@ -410,7 +400,7 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-3 z-50">
             <Link
               to="/tailor-a-tour"
-              className="group relative px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-500 shadow-lg hover:shadow-xl overflow-hidden"
+              className="group relative px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-500 shadow-md hover:shadow-lg overflow-hidden"
               style={{
                 background: 'linear-gradient(135deg, #FF6B35, rgb(6, 29, 93))',
                 color: '#fff'
@@ -418,7 +408,7 @@ const Navbar = () => {
               onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(135deg, #e85d2a, rgb(8, 39, 125))'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(135deg, #FF6B35, rgb(6, 29, 93))'}
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center gap-1.5">
                 <span className="inline-block group-hover:animate-bounce">✈</span>
                 Tailor a Tour
               </span>
@@ -430,7 +420,7 @@ const Navbar = () => {
           <div className="lg:hidden flex items-center gap-1.5 z-50">
             <Link
               to="/tailor-a-tour"
-              className="h-7 min-w-[70px] inline-flex items-center justify-center px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-all duration-300 shadow-lg whitespace-nowrap text-center"
+              className="h-7 min-w-[65px] inline-flex items-center justify-center px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-all duration-300 shadow-md whitespace-nowrap text-center"
               style={{
                 background: 'linear-gradient(135deg, #FF6B35, rgb(6, 29, 93))',
                 color: '#fff'
@@ -439,10 +429,10 @@ const Navbar = () => {
               ✈ Tailor
             </Link>
             <button
-              className={`relative group w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 shadow-sm z-50 select-none cursor-pointer outline-none overflow-hidden shrink-0 ${
+              className={`relative group w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 shadow-sm z-50 select-none cursor-pointer outline-none overflow-hidden shrink-0 ${
                 mobileMenuOpen
-                  ? "bg-linear-to-br from-amber-500/25 via-amber-500/15 to-amber-500/30 border-amber-500 shadow-[0_0_25px_rgba(245,158,11,0.65)] text-amber-500 dark:text-amber-400"
-                  : "bg-white/90 dark:bg-obsidian-800/90 border-amber-500/50 text-amber-500 dark:text-amber-400 hover:border-amber-500 hover:text-amber-500 hover:shadow-[0_0_22px_rgba(245,158,11,0.5)] hover:scale-105 active:scale-95"
+                  ? "bg-linear-to-br from-amber-500/25 via-amber-500/15 to-amber-500/30 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.65)] text-amber-500 dark:text-amber-400"
+                  : "bg-white/90 dark:bg-obsidian-800/90 border-amber-500/50 text-amber-500 dark:text-amber-400 hover:border-amber-500 hover:text-amber-500 hover:shadow-[0_0_18px_rgba(245,158,11,0.5)] hover:scale-105 active:scale-95"
               }`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
@@ -454,7 +444,7 @@ const Navbar = () => {
 
               {/* 3 Horizontal Lines inside Circle */}
               <svg
-                className="w-5 h-5 relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(245,158,11,0.9)]"
+                className="w-4 h-4 relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(245,158,11,0.9)]"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -486,7 +476,7 @@ const Navbar = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: isRtl ? '-100%' : '100%' }}
               transition={{ type: 'tween', duration: 0.35, ease: 'easeInOut' }}
-              className="fixed inset-0 bg-white dark:bg-obsidian-900 z-40 flex flex-col px-8 pt-24 pb-8 overflow-y-auto lg:hidden h-screen w-screen"
+              className="fixed inset-0 bg-white dark:bg-obsidian-900 z-40 flex flex-col px-8 pt-20 pb-8 overflow-y-auto lg:hidden h-screen w-screen"
             >
               <div className="flex flex-col gap-6 w-full max-w-md mx-auto">
                 {navLinks.map((link) => (

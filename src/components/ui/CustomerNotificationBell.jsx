@@ -112,9 +112,9 @@ export default function CustomerNotificationBell() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Notifications"
-        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110 relative"
+        className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110 relative"
       >
-        <FaBell size={11} className="text-[#F5A623]" />
+        <FaBell size={10} className="text-[#F5A623]" />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 min-w-[15px] h-[15px] px-1 bg-amber-500 text-white font-bold text-[9px] rounded-full flex items-center justify-center animate-pulse border border-white">
             {unreadCount > 9 ? '9+' : unreadCount}

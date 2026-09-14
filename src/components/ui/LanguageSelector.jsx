@@ -128,19 +128,19 @@ const LanguageSelector = ({ light = false, className = '', showFullLabel = false
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label={t('nav.selectLanguage', 'Select language')}
-        className={`h-7 sm:h-8 rounded-full flex items-center justify-center gap-1.5 px-2.5 transition-all duration-300 select-none outline-none ${
+        className={`h-6 sm:h-7 rounded-full flex items-center justify-center gap-1 sm:gap-1.5 px-2 transition-all duration-300 select-none outline-none ${
           light
             ? 'bg-obsidian-100/80 hover:bg-obsidian-200/80 text-obsidian-800 border border-obsidian-200'
             : 'bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-gold-500/50 text-white'
         } focus-visible:ring-2 focus-visible:ring-gold-500/70`}
       >
-        <CountryFlag code={currentLang.code} fallbackEmoji={currentLang.flag} className="w-5 h-3.5 shadow-sm" />
+        <CountryFlag code={currentLang.code} fallbackEmoji={currentLang.flag} className="w-4.5 h-3 shadow-sm" />
         {showFullLabel ? (
           <span className="text-xs font-bold tracking-wide">
             {currentLang.label}
           </span>
         ) : (
-          <span className="text-[11px] font-bold uppercase tracking-wider">
+          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">
             {currentLang.code}
           </span>
         )}
