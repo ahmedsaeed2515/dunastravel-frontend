@@ -134,13 +134,15 @@ const TailorTour = () => {
     });
   };
 
-  // Auto-verify restored partner code on initial mount
   useEffect(() => {
+    let isSubscribed = true;
     if (initialDraft?.partnerCode && initialDraft.partnerCode.length === 8) {
-      setPartnerVerificationState('verifying');
       import('../utils/api').then(({ default: api }) => {
+        if (!isSubscribed) return;
+        setPartnerVerificationState('verifying');
         api.get(`/agencies/verify-partner/${initialDraft.partnerCode}`)
           .then((res) => {
+            if (!isSubscribed) return;
             if (res.data?.valid && res.data?.company) {
               setPartnerVerificationState('verified');
               setVerifiedPartnerCompany(res.data.company);
@@ -150,12 +152,14 @@ const TailorTour = () => {
             }
           })
           .catch((err) => {
+            if (!isSubscribed) return;
             setPartnerVerificationState('unverified');
             setPartnerVerificationError(err?.response?.data?.message || '');
           });
       });
     }
-  }, []);
+    return () => { isSubscribed = false; };
+  }, [initialDraft?.partnerCode]);
 
   // Auto-save draft to localStorage whenever fields change
   useEffect(() => {
@@ -570,7 +574,7 @@ const DEFAULT_DESTINATIONS = [
     nameEs: 'Turquía (Estambul y Capadocia)',
     namePt: 'Turquia (Istambul e Capadócia)',
     nameIt: 'Turchia (Istanbul e Cappadocia)',
-    img: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
     flag: '🇹🇷',
   },
   {
@@ -580,7 +584,7 @@ const DEFAULT_DESTINATIONS = [
     nameEs: 'Jordania (Petra y Mar Muerto)',
     namePt: 'Jordânia (Petra e Mar Morto)',
     nameIt: 'Giordania (Petra e Mar Morto)',
-    img: 'https://images.unsplash.com/photo-1579606032822-e42718e24483?auto=format&fit=crop&w=800&q=80',
+    img: 'https://pport.com/wp-content/uploads/2020/05/jordan-88.jpg',
     flag: '🇯🇴',
   },
   {
@@ -590,7 +594,7 @@ const DEFAULT_DESTINATIONS = [
     nameEs: 'Dubái y Emiratos de Lujo',
     namePt: 'Dubai e Emirados Árabes',
     nameIt: 'Dubai ed Emirati Arabi',
-    img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
     flag: '🇦🇪',
   },
   {
@@ -600,7 +604,7 @@ const DEFAULT_DESTINATIONS = [
     nameEs: 'Marruecos (Marrakech)',
     namePt: 'Marrocos (Marrakech)',
     nameIt: 'Marocco (Marrakech)',
-    img: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
     flag: '🇲🇦',
   },
   {
@@ -610,7 +614,7 @@ const DEFAULT_DESTINATIONS = [
     nameEs: 'Grecia (Atenas y Santorini)',
     namePt: 'Grécia (Atenas e Santorini)',
     nameIt: 'Grecia (Atene e Santorini)',
-    img: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80',
+    img: 'https://static.arrajol.com/styles/800x533/public/2020/11/14/287336-80888809099.jpg',
     flag: '🇬🇷',
   },
   {
@@ -637,11 +641,20 @@ const DEFAULT_DESTINATIONS = [
 
   const langKey = (i18n.language || 'en').toLowerCase().split('-')[0];
   const destinations = (publishedDestinations && publishedDestinations.length > 0)
-    ? publishedDestinations.map((destination) => ({
-        id: destination.slug || destination.id,
-        name: destination.title || destination.name,
-        img: destination.heroImageUrl || destination.image || 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg',
-      }))
+    ? publishedDestinations.map((destination) => {
+        const destId = destination.slug || destination.id;
+        const matchingDefault = DEFAULT_DESTINATIONS.find((d) => d.id === destId);
+        let img = destination.heroImageUrl || destination.image;
+        if (!img || typeof img !== 'string' || img.includes('/imgs/destinations/')) {
+          img = matchingDefault?.img || 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg';
+        }
+        return {
+          id: destId,
+          name: destination.title || destination.name || (matchingDefault ? (matchingDefault[`name${langKey === 'ar' ? 'Ar' : langKey === 'es' ? 'Es' : langKey === 'pt' ? 'Pt' : langKey === 'it' ? 'It' : 'En'}`] || matchingDefault.nameEn) : destId),
+          img,
+          flag: matchingDefault?.flag || '🌍',
+        };
+      })
     : DEFAULT_DESTINATIONS.map((d) => ({
         id: d.id,
         name: d[`name${langKey === 'ar' ? 'Ar' : langKey === 'es' ? 'Es' : langKey === 'pt' ? 'Pt' : langKey === 'it' ? 'It' : 'En'}`] || d.nameEn,
@@ -1152,6 +1165,10 @@ const DEFAULT_DESTINATIONS = [
                             alt={dest.name}
                             draggable="false"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 brightness-[0.88] group-hover:brightness-100"
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg';
+                            }}
                           />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent flex flex-col justify-end p-4">
                             {dest.flag && (

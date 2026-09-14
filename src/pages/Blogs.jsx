@@ -123,7 +123,7 @@ const Blogs = () => {
                   )}
 
                   <img
-                    src={blog.img || blog.coverImage || "/imgs/hero.png"}
+                    src={blog.img || blog.coverImage || "/images/hero.webp"}
                     alt={t(`blogs.${blog.title}`, blog.title)}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"

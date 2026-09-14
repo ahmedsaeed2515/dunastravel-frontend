@@ -60,7 +60,7 @@ const Services = () => {
           ) : service === 'cruises' ? (
             <>
               <img
-                src="/imgs/italy/Nile and Red Sea with Hurghada - Classic Version.jpg"
+                src="/imgs/italy/Nile and Red Sea with Hurghada.jpg"
                 alt="Nile River Cruise Luxury Egypt Sunset"
                 className="w-full h-full object-cover object-center"
                 loading="lazy"

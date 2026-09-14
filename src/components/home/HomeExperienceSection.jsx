@@ -56,43 +56,43 @@ const _destinationsData = [
     id: "egypt",
     nameKey: "home.destEgypt",
     descKey: "home.destEgyptDesc",
-    image: "/imgs/egyothero.webp",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg",
   },
   {
     id: "turkey",
     nameKey: "home.destTurkey",
     descKey: "home.destTurkeyDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783023877/2ec72126-709b-4c8d-8f7b-a592d212cc3b_czpoig.webp",
+    image: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80",
   },
   {
     id: "dubai",
     nameKey: "home.destDubai",
     descKey: "home.destDubaiDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783023865/80f6f47a-4938-4684-aaf1-b1e61d44dab6_n8vdtl.webp",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80",
   },
   {
     id: "jordan",
     nameKey: "home.destJordan",
     descKey: "home.destJordanDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783023927/dad14822-455c-419c-8627-32b3daebef90_akfw3l.webp",
+    image: "https://pport.com/wp-content/uploads/2020/05/jordan-88.jpg",
   },
   {
     id: "morocco",
     nameKey: "home.destMorocco",
     descKey: "home.destMoroccoDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783024003/d34eeca3-6bc8-4a19-aa18-bf13404bb11b_n0f8zn.webp",
+    image: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80",
   },
   {
     id: "tunisia",
     nameKey: "home.destTunisia",
     descKey: "home.destTunisiaDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783024062/071f261a-2ab6-48b5-a370-c47ad7889be3_immde1.webp",
+    image: "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=80",
   },
   {
     id: "greece",
     nameKey: "home.destGreece",
     descKey: "home.destGreeceDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783024053/66dc2b5e-f90d-424f-b9a7-4164b52f4e5a_eoqd3p.webp",
+    image: "https://static.arrajol.com/styles/800x533/public/2020/11/14/287336-80888809099.jpg",
   },
   {
     id: "holy-land",
@@ -557,7 +557,7 @@ const HomeExperienceSection = () => {
       destination: "multi-country",
       rating: 4.91,
       reviewCount: 198,
-      images: ["/imgs/Marvels of Dubai and Turkey.png"],
+      images: ["/imgs/multicountryhero.jpg"],
       link: "/programs/multi-country/marvels-of-dubai-and-turkey-14-days"
     },
     {
@@ -571,7 +571,7 @@ const HomeExperienceSection = () => {
       destination: "multi-country",
       rating: 4.92,
       reviewCount: 278,
-      images: ["/imgs/Essences of Egypt and Turkey .png"],
+      images: ["/imgs/multicountryhero.jpg"],
       link: "/programs/multi-country/essences-of-egypt-and-turkey-15-days"
     },
     {
@@ -585,7 +585,7 @@ const HomeExperienceSection = () => {
       destination: "multi-country",
       rating: 4.87,
       reviewCount: 132,
-      images: ["/imgs/Treasures of Egypt and Tunisia.png"],
+      images: ["/imgs/multicountryhero.jpg"],
       link: "/programs/multi-country/treasures-of-egypt-and-tunisia-16-days"
     },
     {
@@ -599,7 +599,7 @@ const HomeExperienceSection = () => {
       destination: "multi-country",
       rating: 4.89,
       reviewCount: 175,
-      images: ["/imgs/Egypt and Dubai.png"],
+      images: ["/imgs/multicountryhero.jpg"],
       link: "/programs/multi-country/egypt-and-dubai-13-days"
     },
 

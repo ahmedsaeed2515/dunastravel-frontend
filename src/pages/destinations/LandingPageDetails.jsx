@@ -44,18 +44,18 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'From the rose-red Siq of Petra to the peaceful Dead Sea and luxury glamping under Wadi Rum stars.',
     tags: ['dest.jordan.tag1', 'dest.jordan.tag2', 'dest.jordan.tag3'],
     tagsDefault: ['🏛️ VIP Petra Entry & Guided Tour', '🌌 Luxury Bubble Camps in Wadi Rum', '🌊 Dead Sea Luxury Wellness Resorts'],
-    heroImage: '/images/jordan-petra.webp',
+    heroImage: 'https://pport.com/wp-content/uploads/2020/05/jordan-88.jpg',
     hotelCities: ['amman', 'petra', 'wadiRum', 'aqaba', 'deadSea'],
   },
   turkey: {
     badge: 'dest.turkey.badge',
     badgeDefault: '✨ Bosphorus Magic & Cappadocia Wonders',
     headline: 'dest.turkey.headline',
-    headlineDefault: 'Turkey: Anatolian Jewel & Luxury Bosphorus Heritage',
+    headlineDefault: 'تركيا.. جوهرة الأناضول والتاريخ البسفوري الفاخر',
     subtitle: 'dest.turkey.subtitle',
-    subtitleDefault: 'Turkey: Where East meets West in ultimate luxury.',
+    subtitleDefault: 'جوهرة البسفور وسحر مناطيد كابادوكيا',
     desc: 'dest.turkey.desc',
-    descDefault: 'Discover the blend of Eastern culture and Western elegance across Istanbul, Cappadocia, and Antalya.',
+    descDefault: 'استمتع بجولات القصور العثمانية في إسطنبول، وركوب المناطيد فوق مداخن كابادوكيا، والاستجمام في منتجعات الريفيرا التركية.',
     tags: ['dest.turkey.tag1', 'dest.turkey.tag2', 'dest.turkey.tag3'],
     tagsDefault: ['🎈 Private Cappadocia Hot Air Balloon Flights', '🛥️ Private Luxury Yacht Cruises on the Bosphorus', '🏰 Royal Cave Hotel Stays'],
     heroImage: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
@@ -110,7 +110,33 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'Savor sunsets in Santorini and explore ancient temples in Athens on luxury cruises.',
     tags: ['dest.greece.tag1', 'dest.greece.tag2', 'dest.greece.tag3'],
     tagsDefault: ['🌅 Luxury Private Pool Suites in Santorini', '🏛️ VIP Acropolis & Ancient Ruins Tours', '🛥️ Private Yacht Cruises in Mykonos & Crete'],
-    heroImage: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1920&q=80',
+    heroImage: 'https://static.arrajol.com/styles/800x533/public/2020/11/14/287336-80888809099.jpg',
+  },
+  egypt: {
+    badge: 'dest.egypt.badge',
+    badgeDefault: '🏛️ 7000 Years of Eternal History & Pure Luxury',
+    headline: 'dest.egypt.headline',
+    headlineDefault: 'Egypt: Where Eternal History Meets Pure Luxury',
+    subtitle: 'dest.egypt.subtitle',
+    subtitleDefault: 'Egypt: Legendary Pyramids & 5-Star Deluxe Nile Cruises',
+    desc: 'dest.egypt.desc',
+    descDefault: 'Embark on a legendary journey through time across Cairo, Luxor, Aswan, and Red Sea luxury resorts.',
+    tags: ['dest.egypt.tag1', 'dest.egypt.tag2', 'dest.egypt.tag3'],
+    tagsDefault: ['🚢 5-Star Deluxe Nile Cruises', '👑 Private Egyptologist Guides', '🐫 Luxury Desert Safaris'],
+    heroImage: '/imgs/egyothero.webp',
+  },
+  egipto: {
+    badge: 'dest.egypt.badge',
+    badgeDefault: '🏛️ 7000 Years of Eternal History & Pure Luxury',
+    headline: 'dest.egypt.headline',
+    headlineDefault: 'Egypt: Where Eternal History Meets Pure Luxury',
+    subtitle: 'dest.egypt.subtitle',
+    subtitleDefault: 'Egypt: Legendary Pyramids & 5-Star Deluxe Nile Cruises',
+    desc: 'dest.egypt.desc',
+    descDefault: 'Embark on a legendary journey through time across Cairo, Luxor, Aswan, and Red Sea luxury resorts.',
+    tags: ['dest.egypt.tag1', 'dest.egypt.tag2', 'dest.egypt.tag3'],
+    tagsDefault: ['🚢 5-Star Deluxe Nile Cruises', '👑 Private Egyptologist Guides', '🐫 Luxury Desert Safaris'],
+    heroImage: '/imgs/egyothero.webp',
   },
   'multi-country': {
     badge: 'nav.multiCountry',
@@ -262,7 +288,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   const heroHighlights = config.tags
     ? config.tags.map((tagKey, idx) => t(tagKey, config.tagsDefault?.[idx] || ''))
     : [];
-  const heroImage = effectiveLandingPage.heroImageUrl || config.heroImage || '/imgs/egyothero.webp';
+  const heroImage = config.heroImage || effectiveLandingPage?.heroImageUrl || '/imgs/destinations/egypt.webp';
 
   // Jordan specific matrices
   const isJordan = slug === 'jordan';

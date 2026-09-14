@@ -56,7 +56,7 @@ const baseTours = [
     "price": 0,
     "rating": 4.8,
     "reviewCount": 198,
-    "images": ["/imgs/Brazil/Cairo Express with Alexandria.jpeg"],
+    "images": ["/imgs/Brazil/Cairo Express.webp"],
     "highlights": [
       "Pirâmides de Giza e Esfinge",
       "Catacumbas de Kom El Shoqafa",
@@ -349,7 +349,7 @@ const baseTours = [
     "price": 0,
     "rating": 5.0,
     "reviewCount": 178,
-    "images": ["/imgs/Brazil/The Great Ramses.png"],
+    "images": ["/imgs/Brazil/egito-classico-cairo-cruzeiro-no-nilo.webp"],
     "highlights": [
       "Noite exclusiva em Abu Simbel",
       "Show de Luzes e Som nos Templos de Ramsés II",

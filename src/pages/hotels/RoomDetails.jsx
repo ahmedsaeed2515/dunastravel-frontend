@@ -310,7 +310,7 @@ const RoomDetails = () => {
     } catch (err) {
       console.warn('Booking API error, using safe fallback:', err);
       setConfirmedBooking({
-        referenceCode: `HTL-REQ-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+        referenceCode: `HTL-REQ-FBK1`,
         summary: {
           hotelName: apiHotel?.name || 'Sol Pyramid Hotel',
           roomName: room.name,

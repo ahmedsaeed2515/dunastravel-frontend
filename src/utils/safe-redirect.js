@@ -1,35 +1,37 @@
 /**
- * Sanitizes and validates post-login or post-action redirect paths.
- * Enforces strict local relative routing only, eliminating open-redirect attacks.
- *
- * @param {string|null|undefined} rawUrl - The candidate redirect path.
- * @param {string} [fallback='/dashboard'] - The safe fallback route if validation fails.
- * @returns {string} The validated relative URL path.
+ * Open Redirect Defense Utility
+ * Validates redirect URLs to prevent open redirect vulnerabilities.
  */
-export function getSafeRedirectUrl(rawUrl, fallback = '/dashboard') {
-  if (!rawUrl || typeof rawUrl !== 'string') {
+export function getSafeRedirectUrl(url, fallback = '/dashboard') {
+  if (!url || typeof url !== 'string') {
     return fallback;
   }
 
-  const trimmed = rawUrl.trim();
+  // Remove whitespace
+  const trimmed = url.trim();
 
-  // Reject empty strings or control characters
-  if (!trimmed || /[\r\n\t\0]/.test(trimmed)) {
+  // Reject control characters like \r, \n, etc.
+  if (/[\r\n\0-\x1F]/.test(trimmed)) {
     return fallback;
   }
 
-  // Must begin with single forward slash, and NOT protocol-relative (//) or backslash (/\)
-  if (!trimmed.startsWith('/') || trimmed.startsWith('//') || trimmed.startsWith('/\\') || trimmed.startsWith('\\')) {
+  // Reject absolute URLs with protocols (e.g., http://, https://, javascript:, data:)
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
     return fallback;
   }
 
-  // Reject URL scheme injection (javascript:, data:, vbscript:, http:, https:, etc.)
-  if (/^\/+[a-z0-9+.-]+:/i.test(trimmed)) {
+  // Reject protocol-relative URLs (//) or backslash tricks (/\, \\)
+  if (/^(\/\/|\\|\/\\)/.test(trimmed)) {
     return fallback;
   }
 
-  // Reject encoded double slashes, backslashes or dangerous protocol schemes
-  if (trimmed.includes('\\') || /%2f%2f/i.test(trimmed) || /%5c/i.test(trimmed)) {
+  // Reject paths containing javascript: or other pseudo-protocols even if prefixed by slash
+  if (/^\/[a-zA-Z0-9+.-]*:/.test(trimmed)) {
+    return fallback;
+  }
+
+  // Ensure it starts with a single slash '/'
+  if (!trimmed.startsWith('/')) {
     return fallback;
   }
 

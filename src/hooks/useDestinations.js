@@ -3,15 +3,28 @@ import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
 
+const DEST_FALLBACK_IMAGES = {
+  egypt: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg',
+  egipto: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg',
+  turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
+  dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
+  jordan: 'https://pport.com/wp-content/uploads/2020/05/jordan-88.jpg',
+  morocco: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
+  tunisia: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=80',
+  greece: 'https://static.arrajol.com/styles/800x533/public/2020/11/14/287336-80888809099.jpg',
+  'holy-land': 'https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg',
+  holyland: 'https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg',
+};
+
 const staticDestinations = [
-  { id: 'egypt', slug: 'egypt', title: 'Egypt', name: 'Egypt', toursCount: 9, image: '/imgs/egyothero.webp' },
-  { id: 'turkey', slug: 'turkey', title: 'Turkey', name: 'Turkey', toursCount: 15 },
-  { id: 'dubai', slug: 'dubai', title: 'Dubai', name: 'Dubai', toursCount: 9 },
-  { id: 'jordan', slug: 'jordan', title: 'Jordan', name: 'Jordan', toursCount: 7 },
-  { id: 'morocco', slug: 'morocco', title: 'Morocco', name: 'Morocco', toursCount: 1 },
-  { id: 'tunisia', slug: 'tunisia', title: 'Tunisia', name: 'Tunisia', toursCount: 1 },
-  { id: 'greece', slug: 'greece', title: 'Greece', name: 'Greece', toursCount: 1 },
-  { id: 'holy-land', slug: 'holy-land', title: 'Holy Land', name: 'Holy Land', toursCount: 0 },
+  { id: 'egypt', slug: 'egypt', title: 'Egypt', name: 'Egypt', toursCount: 9, image: DEST_FALLBACK_IMAGES.egypt, heroImageUrl: DEST_FALLBACK_IMAGES.egypt },
+  { id: 'turkey', slug: 'turkey', title: 'Turkey', name: 'Turkey', toursCount: 15, image: DEST_FALLBACK_IMAGES.turkey, heroImageUrl: DEST_FALLBACK_IMAGES.turkey },
+  { id: 'dubai', slug: 'dubai', title: 'Dubai', name: 'Dubai', toursCount: 9, image: DEST_FALLBACK_IMAGES.dubai, heroImageUrl: DEST_FALLBACK_IMAGES.dubai },
+  { id: 'jordan', slug: 'jordan', title: 'Jordan', name: 'Jordan', toursCount: 7, image: DEST_FALLBACK_IMAGES.jordan, heroImageUrl: DEST_FALLBACK_IMAGES.jordan },
+  { id: 'morocco', slug: 'morocco', title: 'Morocco', name: 'Morocco', toursCount: 1, image: DEST_FALLBACK_IMAGES.morocco, heroImageUrl: DEST_FALLBACK_IMAGES.morocco },
+  { id: 'tunisia', slug: 'tunisia', title: 'Tunisia', name: 'Tunisia', toursCount: 1, image: DEST_FALLBACK_IMAGES.tunisia, heroImageUrl: DEST_FALLBACK_IMAGES.tunisia },
+  { id: 'greece', slug: 'greece', title: 'Greece', name: 'Greece', toursCount: 1, image: DEST_FALLBACK_IMAGES.greece, heroImageUrl: DEST_FALLBACK_IMAGES.greece },
+  { id: 'holy-land', slug: 'holy-land', title: 'Holy Land', name: 'Holy Land', toursCount: 0, image: DEST_FALLBACK_IMAGES['holy-land'], heroImageUrl: DEST_FALLBACK_IMAGES['holy-land'] },
 ];
 
 function readDestinations(response) {
@@ -24,16 +37,18 @@ function readDestinations(response) {
         : [];
   return items.map((item) => {
     if (!item || typeof item !== 'object') return null;
-    const slug = item.slug || item.id;
+    const slug = String(item.slug || item.id || '').toLowerCase();
     if (!slug) return null;
     const toursCount = Number(item.toursCount || (Array.isArray(item.tours) ? item.tours.length : 0));
+    const image = item.heroImageUrl || item.image || DEST_FALLBACK_IMAGES[slug] || DEST_FALLBACK_IMAGES.egypt;
     return {
       ...item,
       id: item.id || slug,
       slug,
       title: item.title || item.name || slug,
       name: item.title || item.name || slug,
-      image: item.heroImageUrl || item.image || null,
+      image,
+      heroImageUrl: image,
       toursCount: Number.isFinite(toursCount) ? Math.max(0, Math.round(toursCount)) : 0,
       tours: Array.isArray(item.tours) ? item.tours : [],
     };

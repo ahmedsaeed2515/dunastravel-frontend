@@ -62,9 +62,9 @@ export default function LuxuryHeroSection({
           initial={{ scale: 1 }}
           animate={{ scale: zoomScale }}
           transition={{ duration: zoomDuration, ease: ease, repeat: Infinity, repeatType: 'reverse' }}
-          src={bgImage || 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920/v1783023886/3776ecde-249e-4183-9840-e9fd900ad96b_xvmumu.jpg'}
+          src={bgImage || '/imgs/destinations/egypt.webp'}
           onError={(e) => {
-            e.currentTarget.src = 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920/v1783023886/3776ecde-249e-4183-9840-e9fd900ad96b_xvmumu.jpg';
+            e.currentTarget.src = bgImage || '/imgs/destinations/egypt.webp';
           }}
           alt={title}
           style={{ willChange: 'transform' }}

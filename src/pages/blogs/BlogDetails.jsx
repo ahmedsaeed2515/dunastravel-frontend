@@ -163,7 +163,7 @@ const BlogDetails = () => {
       {/* 2. Hero Image — Tours Style */}
       <section className="relative w-full h-[50vh] lg:h-[70vh] overflow-hidden">
         <img
-          src={blog.img || blog.coverImage || "/imgs/hero.png"}
+          src={blog.img || blog.coverImage || "/images/hero.webp"}
           alt={t(`blogs.${blog.title}`, blog.title)}
           className="w-full h-full object-cover"
           loading="eager"
@@ -279,7 +279,7 @@ const BlogDetails = () => {
                       {t(`blogs.cat.${relBlog.category}`, relBlog.category)}
                     </div>
                     <img
-                      src={relBlog.img || relBlog.coverImage || "/imgs/hero.png"}
+                      src={relBlog.img || relBlog.coverImage || "/images/hero.webp"}
                       alt={t(`blogs.${relBlog.title}`, relBlog.title)}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"

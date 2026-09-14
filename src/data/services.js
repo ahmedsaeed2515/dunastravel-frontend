@@ -56,7 +56,7 @@ export const services = [
     location: 'Cairo, Nile Cruise & Sea',
     price: 2400,
     rating: 5.0,
-    images: ['/imgs/gallery/15.jpeg', '/imgs/gallery/16.jpeg'],
+    images: ['/imgs/slider-pyramids.webp', '/imgs/slider-karnak.webp'],
     shortDesc: 'Celebrate your love with intimate candlelit dinners, private yacht cruises, and unmatched romantic luxury.',
     overview: [
       "Designed exclusively for newlyweds, our Honeymooners Package curates unforgettable, romantic moments amidst the majestic landscapes of the Middle East.",

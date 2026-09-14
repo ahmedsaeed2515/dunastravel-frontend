@@ -46,10 +46,7 @@ const Destinations = () => {
         <div className="flex flex-col gap-24">
           {destinations.map((destination) => {
             const destTours = destination.tours;
-            const destSlug = String(destination.slug || destination.id || '').toLowerCase();
-            const cardImage = (destSlug === 'egypt' || destSlug === 'egipto') 
-              ? '/imgs/egyothero.webp' 
-              : (destination.image || destination.heroImageUrl || '/imgs/egyothero.webp');
+            const cardImage = destination.heroImageUrl || destination.image || '/imgs/egyothero.webp';
 
             return (
               <motion.article 

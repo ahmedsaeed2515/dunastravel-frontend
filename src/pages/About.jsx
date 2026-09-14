@@ -192,7 +192,7 @@ const styles = `
   }
   .about-page .section-dark { position: relative; }
   .about-page #growth {
-    background: url('/imgs/egypt.jpg.jpeg') center / cover no-repeat;
+    background: url('/imgs/egyothero.webp') center / cover no-repeat;
   }
   .about-page .section-dark::before {
     content: '';
