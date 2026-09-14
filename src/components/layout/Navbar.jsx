@@ -124,6 +124,7 @@ const Navbar = () => {
     {
       name: t('nav.destinations'),
       dropdown: [
+        { name: t('nav.allDestinations', { defaultValue: 'All Destinations' }), path: '/destinations' },
         { name: t('nav.egypt'), path: '/destinations/egypt' },
         { name: t('nav.turkey'), path: '/destinations/turkey' },
         { name: t('nav.dubai'), path: '/destinations/dubai' },
