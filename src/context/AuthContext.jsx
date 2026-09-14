@@ -50,6 +50,9 @@ export const AuthProvider = ({ children }) => {
       return data;
     } catch (err) {
       setUser(null);
+      if (err?.status === 401) {
+        return null;
+      }
       throw err;
     }
   }, []);

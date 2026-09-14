@@ -9,7 +9,7 @@ const CurrencySelector = ({ light }) => {
         type="button"
         onClick={() => setCurrency('USD')}
         title="US Dollar (Base Currency)"
-        aria-label="Switch display currency to US Dollar"
+        aria-label="$ USD, Switch display currency to US Dollar"
         className={`currency-btn px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider transition-all duration-300 ${
           currency === 'USD'
             ? 'bg-gold-500 text-obsidian-900 shadow-sm'
@@ -24,7 +24,7 @@ const CurrencySelector = ({ light }) => {
         type="button"
         onClick={() => setCurrency('EUR')}
         title={isFallbackRate ? 'Euro (≈ Estimated Daily Rate)' : 'Euro (Live Exchange Rate)'}
-        aria-label="Switch display currency to Euro"
+        aria-label="€ EUR, Switch display currency to Euro"
         className={`currency-btn px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider transition-all duration-300 relative ${
           currency === 'EUR'
             ? 'bg-gold-500 text-obsidian-900 shadow-sm'

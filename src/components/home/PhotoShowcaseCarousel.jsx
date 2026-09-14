@@ -224,7 +224,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
                   }}
                   tabIndex={0}
                   role="button"
-                  aria-label={`${t('home.viewLarger', 'View larger photo')}${photoTitle ? `: ${photoTitle}` : ''}`}
+                  aria-label={`${photo.category ? `${String(photo.category).toUpperCase()} / ` : ''}${photoTitle ? `${photoTitle} / ` : ''}${t('home.viewPhoto', 'Explore Photo')} (${t('home.viewLarger', 'View larger photo')})`}
                   className="group relative h-[380px] sm:h-[420px] md:h-[460px] rounded-3xl overflow-hidden border border-white/10 hover:border-[#0CB2DB]/80 bg-[#0E1726] shadow-2xl transition-all duration-500 hover:scale-[1.02] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0CB2DB]"
                 >
                   <img

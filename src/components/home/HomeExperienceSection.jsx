@@ -289,7 +289,7 @@ const _newDestinationsList = [
 const getOptimizedImageUrl = (url, width = 400, height = 450) => {
   if (!url) return url;
   if (url.includes('cloudinary.com')) {
-    return url.replace('/image/upload/', `/image/upload/w_${width},h_${height},c_fill,q_auto,f_auto/`);
+    return url.replace('/image/upload/', `/image/upload/w_${width},h_${height},c_fill,q_auto:eco,f_auto/`);
   }
   return url;
 };
@@ -1661,7 +1661,7 @@ const HomeExperienceSection = () => {
       <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 500px' }}>
         <div className="container mx-auto px-6">
           <div className="text-center mb-10 max-w-3xl mx-auto">
-            <span className="text-[#F5A623] dark:text-[#F5A623] uppercase tracking-widest text-caption block mb-2 font-bold">
+            <span className="text-[#B45309] dark:text-[#F5A623] uppercase tracking-widest text-caption block mb-2 font-bold">
               {t("home.destToursBadge", isAr ? "تجارب مصممة بعناية فائقة عبر جميع وجهاتنا الساحرة" : "Meticulously crafted experiences across all our destinations")}
             </span>
             <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -1957,7 +1957,7 @@ const HomeExperienceSection = () => {
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-[#F5A623] dark:text-[#F5A623] text-caption font-bold uppercase tracking-widest mb-3 shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-[#B45309] dark:text-[#F5A623] text-caption font-bold uppercase tracking-widest mb-3 shadow-sm"
             >
               <span>✨</span> {t("home.packageTripsSub", "تجارب مصممة بعناية فائقة لتلبي أعلى تطلعات عشاق الفخامة والتميز")}
             </motion.span>

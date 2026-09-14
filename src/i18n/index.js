@@ -69,17 +69,7 @@ export const initI18n = async () => {
 
       syncDocumentDirection(lng);
 
-      // Preload all supported locales in the background so language switching is instant and reactive
-      supportedLngs.forEach(async (l) => {
-        if (!i18n.hasResourceBundle(l, 'translation')) {
-          try {
-            const data = await loadLocaleResource(l);
-            i18n.addResourceBundle(l, 'translation', data, true, true);
-          } catch (e) {
-            console.warn(`Failed to preload locale ${l}:`, e);
-          }
-        }
-      });
+      // Load locales lazily on-demand when switched
 
       i18n.on('languageChanged', async (newLng) => {
         syncDocumentDirection(newLng);

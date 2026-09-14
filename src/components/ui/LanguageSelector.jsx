@@ -127,7 +127,7 @@ const LanguageSelector = ({ light = false, className = '', showFullLabel = false
         onClick={() => setIsOpen((prev) => !prev)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-label={t('nav.selectLanguage', 'Select language')}
+        aria-label={`${showFullLabel ? currentLang.label : (currentLang.code || 'en').toUpperCase()}, ${t('nav.selectLanguage', 'Select language')}`}
         className={`h-6 sm:h-7 rounded-full flex items-center justify-center gap-1 sm:gap-1.5 px-2 transition-all duration-300 select-none outline-none ${
           light
             ? 'bg-obsidian-100/80 hover:bg-obsidian-200/80 text-obsidian-800 border border-obsidian-200'
