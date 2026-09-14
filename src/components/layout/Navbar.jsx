@@ -301,8 +301,8 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4 sm:px-6 h-full flex justify-between items-center relative z-10">
           {/* Logo */}
-          <Link to="/" className="flex items-center z-50 transition-all duration-300" onClick={() => setMobileMenuOpen(false)}>
-            <Logo theme="dark" height={38} />
+          <Link to="/" className="flex items-center z-50 transition-all duration-300 hover:scale-105" onClick={() => setMobileMenuOpen(false)}>
+            <Logo theme="dark" height={48} />
           </Link>
 
           {/* Desktop Nav (Hover) */}
