@@ -50,20 +50,18 @@ export default function DubaiProgramDetails() {
     const el = carouselRef.current;
     if (!el) return;
     const interval = setInterval(() => {
-      requestAnimationFrame(() => {
-        const item = el.querySelector('.related-carousel-item');
-        const itemWidth = (item ? item.offsetWidth : 300) + 24;
-        const currentScroll = el.scrollLeft;
-        const visibleWidth = el.clientWidth;
-        const totalWidth = el.scrollWidth;
-        const isEnd = currentScroll + visibleWidth >= totalWidth - 10;
+      const item = el.querySelector('.related-carousel-item');
+      const itemWidth = (item ? item.offsetWidth : 300) + 24;
+      const currentScroll = el.scrollLeft;
+      const visibleWidth = el.clientWidth;
+      const totalWidth = el.scrollWidth;
+      const isEnd = currentScroll + visibleWidth >= totalWidth - 10;
 
-        if (isEnd) {
-          el.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          el.scrollBy({ left: itemWidth, behavior: 'smooth' });
-        }
-      });
+      if (isEnd) {
+        el.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        el.scrollBy({ left: itemWidth, behavior: 'smooth' });
+      }
     }, 3500);
     return () => clearInterval(interval);
   }, []);

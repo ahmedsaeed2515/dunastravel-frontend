@@ -360,6 +360,16 @@ const HomeExperienceSection = () => {
     let animId;
     let lastTime = performance.now();
     const speed = 25; // 25px/sec for slow elegant continuous movement
+    let cachedHalfWidth = 0;
+
+    const updateCachedWidth = () => {
+      if (destMarqueeRef.current) {
+        cachedHalfWidth = destMarqueeRef.current.scrollWidth / 2;
+      }
+    };
+
+    updateCachedWidth();
+    window.addEventListener('resize', updateCachedWidth, { passive: true });
 
     const animate = (now) => {
       const delta = (now - lastTime) / 1000;
@@ -367,11 +377,13 @@ const HomeExperienceSection = () => {
 
       if (destMarqueeRef.current && !destHoveredRef.current) {
         const el = destMarqueeRef.current;
-        const halfWidth = el.scrollWidth / 2;
-        if (halfWidth > 0) {
+        if (cachedHalfWidth === 0) {
+          cachedHalfWidth = el.scrollWidth / 2;
+        }
+        if (cachedHalfWidth > 0) {
           el.scrollLeft += speed * delta;
-          if (el.scrollLeft >= halfWidth) {
-            el.scrollLeft -= halfWidth;
+          if (el.scrollLeft >= cachedHalfWidth) {
+            el.scrollLeft -= cachedHalfWidth;
           }
         }
       }
@@ -379,7 +391,10 @@ const HomeExperienceSection = () => {
     };
 
     animId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animId);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', updateCachedWidth);
+    };
   }, []);
 
   // Continuous smooth auto-scroll for Package Trips marquee (slow & seamless)
@@ -387,6 +402,16 @@ const HomeExperienceSection = () => {
     let animId;
     let lastTime = performance.now();
     const speed = 25; // 25px/sec for slow elegant continuous movement
+    let cachedHalfWidth = 0;
+
+    const updateCachedWidth = () => {
+      if (pkgMarqueeRef.current) {
+        cachedHalfWidth = pkgMarqueeRef.current.scrollWidth / 2;
+      }
+    };
+
+    updateCachedWidth();
+    window.addEventListener('resize', updateCachedWidth, { passive: true });
 
     const animate = (now) => {
       const delta = (now - lastTime) / 1000;
@@ -394,11 +419,13 @@ const HomeExperienceSection = () => {
 
       if (pkgMarqueeRef.current && !pkgHoveredRef.current) {
         const el = pkgMarqueeRef.current;
-        const halfWidth = el.scrollWidth / 2;
-        if (halfWidth > 0) {
+        if (cachedHalfWidth === 0) {
+          cachedHalfWidth = el.scrollWidth / 2;
+        }
+        if (cachedHalfWidth > 0) {
           el.scrollLeft += speed * delta;
-          if (el.scrollLeft >= halfWidth) {
-            el.scrollLeft -= halfWidth;
+          if (el.scrollLeft >= cachedHalfWidth) {
+            el.scrollLeft -= cachedHalfWidth;
           }
         }
       }
@@ -406,7 +433,10 @@ const HomeExperienceSection = () => {
     };
 
     animId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animId);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', updateCachedWidth);
+    };
   }, []);
 
   const handleMarqueeScroll = (ref, direction) => {

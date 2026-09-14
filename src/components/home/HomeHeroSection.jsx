@@ -68,6 +68,8 @@ export default function HomeHeroSection() {
 
   const isRtl = i18n.language === 'ar' || (i18n.dir && i18n.dir() === 'rtl');
 
+  const isInitialMount = useRef(true);
+
   // Bulletproof autoplay watchdog: ensures autoplay is always active and advancing continuously
   useEffect(() => {
     const watchdogTimer = setInterval(() => {
@@ -77,7 +79,7 @@ export default function HomeHeroSection() {
           swiper.autoplay.start();
         }
       }
-    }, 2000);
+    }, 3000);
 
     return () => clearInterval(watchdogTimer);
   }, []);
@@ -86,28 +88,28 @@ export default function HomeHeroSection() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Reset non-active slides text/logo/desc/btn to hidden and reset background animation
+    const isFirst = isInitialMount.current;
+    if (isFirst) {
+      isInitialMount.current = false;
+    }
+
+    const activeSlideEl = containerRef.current.querySelector(".swiper-slide-active");
+
+    // Reset non-active slides
     const allSlides = containerRef.current.querySelectorAll(".swiper-slide");
     allSlides.forEach((slideEl) => {
-      if (!slideEl.classList.contains("swiper-slide-active")) {
-        const heading1 = slideEl.querySelector(".hero-heading-1");
-        const heading2 = slideEl.querySelector(".hero-heading-2");
-        const logo = slideEl.querySelector(".dunas-logo");
-        const desc = slideEl.querySelector(".slider-contect-des");
-        const btn = slideEl.querySelector(".defult-btn a");
-        const bg = slideEl.querySelector(".slider-bg");
-
-        const elsToReset = [heading1, heading2, logo, desc, btn].filter(Boolean);
+      if (slideEl !== activeSlideEl) {
+        const elsToReset = slideEl.querySelectorAll(".hero-heading-1, .hero-heading-2, .dunas-logo, .slider-contect-des, .defult-btn a");
         if (elsToReset.length > 0) {
           gsap.set(elsToReset, { opacity: 0, y: 0 });
         }
+        const bg = slideEl.querySelector(".slider-bg");
         if (bg) {
           bg.style.animation = "none";
         }
       }
     });
 
-    const activeSlideEl = containerRef.current.querySelector(".swiper-slide-active");
     if (!activeSlideEl) return;
 
     // Force re-trigger CSS zoom animation on active slide background without forced reflow
@@ -129,6 +131,12 @@ export default function HomeHeroSection() {
 
     const allActiveElements = [heading1, heading2, logo, desc, btn].filter(Boolean);
     gsap.killTweensOf(allActiveElements);
+
+    // On initial mount, ensure immediate full opacity for LCP score, then run slide transition animations on subsequent changes
+    if (isFirst) {
+      gsap.set(allActiveElements, { opacity: 1, y: 0 });
+      return;
+    }
 
     // 1. First Heading line ("LUXURY"): Smoothly glides down from top (-65px)
     if (heading1) {
