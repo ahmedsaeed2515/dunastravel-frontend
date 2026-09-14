@@ -70,7 +70,7 @@ const DEST_FALLBACK_DATA = {
     desc: 'dest.dubai.desc',
     descDefault: 'عِش تجربة سياحية لا تُضاهى بين أطول ناطحات السحاب في العالم، والجزر الاصطناعية المذهلة، والتسوق الفاخر، إلى جانب سفاري الصحراء الملكي وتجارب اليخوت الخاصة.',
     tags: ['dest.dubai.tag1', 'dest.dubai.tag2', 'dest.dubai.tag3'],
-    tagsDefault: ['🏙️ تذاكر برج خليفة والمنصات VIP', '🏎️ سيارات فاخرة ويخوت خاصة', '🏜️ سفاري صحراوي ملكي مع عشاء VIP'],
+    tagsDefault: ['🏙️ تذاكر برج خليفة والمنصات VIP', '🏎️ سيارة فاخرة ويخت خاص', '🏜️ سفاري صحراوي ملكي مع عشاء VIP'],
     heroImage: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
   },
   morocco: {

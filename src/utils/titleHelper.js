@@ -125,12 +125,26 @@ const TAG_FALLBACK_DICTIONARY = {
     pt: 'Guia turístico privativo multilíngue',
     it: 'Guida turistica privata multilingue'
   },
-  'dest.egypt.tag3': {
-    ar: 'تجارب سفاري وحصريات الصحراء',
-    en: 'Desert Safaris & Exclusive Experiences',
-    es: 'Safaris por el desierto y experiencias exclusivas',
-    pt: 'Safáris no deserto e experiências exclusivas',
-    it: 'Safari nel deserto ed esperienze esclusive'
+  'dest.dubai.tag1': {
+    ar: '🏙️ تذاكر برج خليفة والمنصات VIP',
+    en: '🏙️ VIP Burj Khalifa & Observation Decks Tickets',
+    es: '🏙️ Entradas VIP para Burj Khalifa y plataformas de observación',
+    pt: '🏙️ Ingressos VIP para o Burj Khalifa e plataformas de observação',
+    it: '🏙️ Biglietti VIP per il Burj Khalifa e piattaforme panoramiche'
+  },
+  'dest.dubai.tag2': {
+    ar: '🏎️ سيارة فاخرة ويخت خاص',
+    en: '🏎️ Luxury Car & Private Yacht',
+    es: '🏎️ Coche de lujo y yate privado',
+    pt: '🏎️ Carro de luxo e iate privado',
+    it: '🏎️ Auto di lusso e yacht privato'
+  },
+  'dest.dubai.tag3': {
+    ar: '🏜️ سفاري صحراوي ملكي مع عشاء VIP',
+    en: '🏜️ Royal Desert Safari with VIP Dinner',
+    es: '🏜️ Safari real por el desierto con cena VIP',
+    pt: '🏜️ Safári no deserto real com jantar VIP',
+    it: '🏜️ Safari nel deserto reale con cena VIP'
   },
   // Dubai & UAE Tour Title / Badge / Duration Multilingual Dictionary
   'Stop Over Dubai': { ar: 'التوقف في دبي', en: 'Stop Over Dubai', es: 'Stop Over Dubai', pt: 'Stop Over Dubai', it: 'Stop Over Dubai' },
