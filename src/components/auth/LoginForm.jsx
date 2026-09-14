@@ -184,15 +184,19 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, onForgotPassword }) => {
         )}
       </button>
 
-      {/* Footer Switcher */}
-      <div className="mt-5 text-center text-xs text-ivory-300/80">
-        <span>{t('auth.noAccount', "Don't have an account?")} </span>
+      {/* Prominent Create Account Section */}
+      <div className="mt-6 pt-5 border-t border-white/10 text-center">
+        <p className="text-xs text-ivory-300/80 mb-2.5">
+          {t('auth.noAccountYet', "Don't have an account yet?")}
+        </p>
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="text-gold-400 hover:text-gold-300 font-bold underline transition-colors cursor-pointer"
+          className="w-full py-3 px-4 rounded-xl border border-gold-500/50 bg-gradient-to-r from-gold-500/10 via-gold-500/15 to-gold-500/10 hover:from-gold-500/20 hover:to-gold-500/25 text-gold-400 hover:text-gold-300 font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-gold-500/20 hover:scale-[1.01] cursor-pointer flex items-center justify-center gap-2"
         >
-          {t('auth.registerTab', 'Register')}
+          <span>✦</span>
+          <span>{t('auth.createAccountHighlight', 'Create a New Account')}</span>
+          <span>✦</span>
         </button>
       </div>
     </form>

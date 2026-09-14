@@ -1,28 +1,28 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  FaArrowLeft,
-  FaArrowRight,
   FaShieldAlt,
   FaStar,
-  FaHeadset,
   FaWhatsapp,
 } from 'react-icons/fa';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import LanguageSelector from '../ui/LanguageSelector';
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 /**
  * Split-screen Luxury Authentication Page for Dunas Travel.
+ * Unified for:
+ * - Login (/login)
+ * - Register (/register)
+ * - Forgot Password (/forgot-password)
  * Features:
- * - 50/50 responsive split: interactive form on one half, cinematic visual hero on the other.
+ * - 50/50 responsive split: perfectly centered interactive form on one half, cinematic visual hero on the other.
  * - Dynamic RTL / LTR layout mirroring.
- * - Country Flag language switcher with instant locale change.
- * - Tab switching between Sign In and Register.
- * - Floating glassmorphism luxury accolades and social proof stats.
+ * - Prominent high-contrast "Create Account" and "Sign In" highlights.
+ * - Clean integration beneath the global fixed Navbar with zero duplication.
  */
 const AuthSplitScreen = ({ initialTab = 'login' }) => {
   const { t, i18n } = useTranslation();
@@ -37,75 +37,59 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
   }
 
   const isRtl = i18n.dir() === 'rtl';
-  const BackArrow = isRtl ? FaArrowRight : FaArrowLeft;
 
   const handleSuccess = () => {
     const destination = location.state?.from || '/dashboard';
     navigate(destination, { replace: true });
   };
 
-  const handleForgotPassword = () => {
-    navigate('/forgot-password');
+  const titles = {
+    login: {
+      seoTitle: t('auth.loginTitle', 'Login | Dunas Travel'),
+      title: t('auth.welcomeBack', 'Welcome Back'),
+      desc: t(
+        'auth.signInDesc',
+        'Sign in to access your bespoke luxury itineraries and reservations across Egypt & beyond.'
+      ),
+    },
+    register: {
+      seoTitle: t('auth.registerTitle', 'Register | Dunas Travel'),
+      title: t('auth.createAccount', 'Create Your Account'),
+      desc: t(
+        'auth.registerDesc',
+        'Join Dunas Travel to curate and unlock exclusive, private journeys across ancient wonders.'
+      ),
+    },
+    'forgot-password': {
+      seoTitle: t('auth.forgotPasswordTitle', 'Forgot Password | Dunas Travel'),
+      title: t('auth.forgotPassword', 'Forgot Password?'),
+      desc: t(
+        'auth.forgotPasswordDesc',
+        'Enter your email address and we will send you instructions to reset your password.'
+      ),
+    },
   };
+
+  const currentMeta = titles[activeTab] || titles.login;
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#060D23] text-white selection:bg-gold-500/30 selection:text-gold-200 overflow-x-hidden font-body">
       <Helmet>
-        <title>
-          {activeTab === 'login'
-            ? t('auth.loginTitle', 'Login | Dunas Travel')
-            : t('auth.registerTitle', 'Register | Dunas Travel')}
-        </title>
+        <title>{currentMeta.seoTitle}</title>
       </Helmet>
 
       {/* ========================================================================= */}
-      {/* HALF 1: AUTH FORM PANEL                                                   */}
+      {/* HALF 1: AUTH FORM PANEL (Centered)                                        */}
       {/* ========================================================================= */}
-      <div className="w-full lg:w-[50%] xl:w-[48%] 2xl:w-[44%] min-h-screen flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-14 bg-gradient-to-b from-[#081330] via-[#060F26] to-[#040A1A] border-e border-gold-500/20 relative z-20">
+      <div className="w-full lg:w-[50%] xl:w-[48%] 2xl:w-[44%] min-h-screen flex flex-col justify-between px-6 sm:px-10 lg:px-12 xl:px-14 pt-28 sm:pt-32 pb-8 bg-gradient-to-b from-[#081330] via-[#060F26] to-[#040A1A] border-e border-gold-500/20 relative z-20">
         {/* Ambient Top Glow */}
         <div
-          className="absolute top-0 start-1/4 w-72 h-40 bg-gold-500/10 blur-[90px] pointer-events-none"
+          className="absolute top-1/4 start-1/4 w-80 h-80 bg-gold-500/10 blur-[100px] pointer-events-none"
           aria-hidden="true"
         />
 
-        {/* Top Navigation Bar inside Form */}
-        <header className="flex items-center justify-between gap-4 pb-6 border-b border-white/10 relative z-30">
-          {/* Brand Logo */}
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 group transition-transform hover:scale-[1.02]"
-            aria-label="Dunas Travel Home"
-          >
-            <img
-              src="/dunas-travel-logo.webp"
-              alt="Dunas Travel"
-              width="150"
-              height="60"
-              className="h-10 sm:h-11 w-auto object-contain drop-shadow-md"
-            />
-          </Link>
-
-          {/* Action Utilities (Language Selector + Back to Home) */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language Selector with Country Flags */}
-            <div className="relative">
-              <LanguageSelector showFullLabel={true} />
-            </div>
-
-            {/* Back to Home Button */}
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-ivory-300 hover:text-gold-400 py-1.5 px-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-gold-500/40 transition-all duration-200 select-none"
-              title={t('nav.home', 'Home')}
-            >
-              <BackArrow size={11} className="text-gold-400" />
-              <span className="hidden sm:inline">{t('nav.home', 'Home')}</span>
-            </Link>
-          </div>
-        </header>
-
-        {/* Central Content Area */}
-        <main className="my-auto py-8 sm:py-10 max-w-lg w-full mx-auto relative z-20">
+        {/* Central Content Area - Form Vertically & Horizontally Centered */}
+        <main className="my-auto py-6 max-w-md w-full mx-auto relative z-20 flex flex-col justify-center">
           {/* Welcoming Header */}
           <div className="text-start mb-6">
             <motion.div
@@ -118,90 +102,22 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
                 ✦ DUNAS LUXURY ODYSSEYS ✦
               </span>
               <h1 className="text-2xl sm:text-3xl xl:text-4xl font-display font-extrabold text-ivory-50 tracking-tight leading-tight">
-                {activeTab === 'login'
-                  ? t('auth.welcomeBack', 'Welcome Back')
-                  : t('auth.createAccount', 'Create Your Account')}
+                {currentMeta.title}
               </h1>
               <p className="text-xs sm:text-sm text-ivory-300/80 mt-2 font-normal leading-relaxed">
-                {activeTab === 'login'
-                  ? t(
-                      'auth.signInDesc',
-                      'Sign in to access your bespoke luxury itineraries and reservations across Egypt & beyond.'
-                    )
-                  : t(
-                      'auth.registerDesc',
-                      'Join Dunas Travel to curate and unlock exclusive, private journeys across ancient wonders.'
-                    )}
+                {currentMeta.desc}
               </p>
             </motion.div>
-
-            {/* Segmented Tab Switcher */}
-            <div
-              role="tablist"
-              aria-label={t('auth.authenticationTabs', 'Authentication options')}
-              className="mt-6 flex p-1.5 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md"
-            >
-              <button
-                type="button"
-                role="tab"
-                id="tab-login"
-                aria-selected={activeTab === 'login'}
-                aria-controls="panel-login"
-                onClick={() => setActiveTab('login')}
-                className={`flex-1 py-2.5 px-4 text-xs font-bold rounded-xl transition-all duration-300 relative cursor-pointer ${
-                  activeTab === 'login'
-                    ? 'text-obsidian-950 font-extrabold shadow-lg shadow-gold-500/20'
-                    : 'text-ivory-300 hover:text-white'
-                }`}
-              >
-                {activeTab === 'login' && (
-                  <motion.div
-                    layoutId="activeTabBadge"
-                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-amber-500"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">
-                  {t('auth.loginButton', 'Sign In')}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                role="tab"
-                id="tab-register"
-                aria-selected={activeTab === 'register'}
-                aria-controls="panel-register"
-                onClick={() => setActiveTab('register')}
-                className={`flex-1 py-2.5 px-4 text-xs font-bold rounded-xl transition-all duration-300 relative cursor-pointer ${
-                  activeTab === 'register'
-                    ? 'text-obsidian-950 font-extrabold shadow-lg shadow-gold-500/20'
-                    : 'text-ivory-300 hover:text-white'
-                }`}
-              >
-                {activeTab === 'register' && (
-                  <motion.div
-                    layoutId="activeTabBadge"
-                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-amber-500"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">
-                  {t('auth.createAccount', 'Register')}
-                </span>
-              </button>
-            </div>
           </div>
 
           {/* Form Panes */}
           <div className="relative">
             <AnimatePresence mode="wait">
-              {activeTab === 'login' ? (
+              {activeTab === 'login' && (
                 <motion.div
                   key="login-form-panel"
-                  role="tabpanel"
-                  id="panel-login"
-                  aria-labelledby="tab-login"
+                  role="region"
+                  aria-label="Login Form"
                   initial={{ opacity: 0, x: isRtl ? 15 : -15 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: isRtl ? -15 : 15 }}
@@ -209,16 +125,17 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
                 >
                   <LoginForm
                     onSuccess={handleSuccess}
-                    onSwitchToRegister={() => setActiveTab('register')}
-                    onForgotPassword={handleForgotPassword}
+                    onSwitchToRegister={() => navigate('/register')}
+                    onForgotPassword={() => navigate('/forgot-password')}
                   />
                 </motion.div>
-              ) : (
+              )}
+
+              {activeTab === 'register' && (
                 <motion.div
                   key="register-form-panel"
-                  role="tabpanel"
-                  id="panel-register"
-                  aria-labelledby="tab-register"
+                  role="region"
+                  aria-label="Register Form"
                   initial={{ opacity: 0, x: isRtl ? -15 : 15 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: isRtl ? 15 : -15 }}
@@ -226,8 +143,25 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
                 >
                   <RegisterForm
                     onSuccess={handleSuccess}
-                    onSwitchToLogin={() => setActiveTab('login')}
+                    onSwitchToLogin={() => navigate('/login')}
                     onTermsClick={() => {}}
+                  />
+                </motion.div>
+              )}
+
+              {activeTab === 'forgot-password' && (
+                <motion.div
+                  key="forgot-password-panel"
+                  role="region"
+                  aria-label="Forgot Password Form"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <ForgotPasswordForm
+                    onSwitchToLogin={() => navigate('/login')}
+                    onSwitchToRegister={() => navigate('/register')}
                   />
                 </motion.div>
               )}
@@ -255,9 +189,9 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
       </div>
 
       {/* ========================================================================= */}
-      {/* HALF 2: CINEMATIC VISUAL HERO PANEL (Hidden on mobile, visible on desktop) */}
+      {/* HALF 2: CINEMATIC VISUAL HERO PANEL (Desktop)                             */}
       {/* ========================================================================= */}
-      <div className="hidden lg:flex lg:w-[50%] xl:w-[52%] 2xl:w-[56%] min-h-screen relative overflow-hidden flex-col justify-between p-12 xl:p-16 select-none bg-black">
+      <div className="hidden lg:flex lg:w-[50%] xl:w-[52%] 2xl:w-[56%] min-h-screen relative overflow-hidden flex-col justify-between p-12 xl:p-16 pt-32 select-none bg-black">
         {/* Cinematic Background Image with Subtle Breathing Zoom Animation */}
         <motion.div
           animate={{ scale: [1, 1.05, 1] }}
@@ -291,16 +225,11 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
           aria-hidden="true"
         />
 
-        {/* Top Eyebrow Tag */}
-        <div className="relative z-20 flex items-center justify-between">
-          <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-black/40 backdrop-blur-md border border-gold-500/30 text-[11px] font-bold text-gold-300 uppercase tracking-widest shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-gold-400 animate-ping" />
-            <span>Exclusive Access</span>
-          </div>
-
-          <div className="flex items-center gap-1 text-gold-400 text-xs">
+        {/* Top Accolades / Rating */}
+        <div className="relative z-20 flex items-center justify-end">
+          <div className="flex items-center gap-1 text-gold-400 text-xs px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-gold-500/20 shadow-lg">
             {[...Array(5)].map((_, i) => (
-              <FaStar key={i} size={13} className="fill-gold-400 drop-shadow" />
+              <FaStar key={i} size={12} className="fill-gold-400 drop-shadow" />
             ))}
             <span className="ms-1.5 font-bold text-white text-xs">5.0</span>
           </div>

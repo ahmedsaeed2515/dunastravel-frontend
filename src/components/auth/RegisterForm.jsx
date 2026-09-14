@@ -254,15 +254,17 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, onTermsClick }) => {
         )}
       </button>
 
-      {/* Footer Switcher */}
-      <div className="mt-5 text-center text-xs text-ivory-300/80">
-        <span>{t('auth.alreadyHaveAccount', 'Already have an account?')} </span>
+      {/* Prominent Log In Section */}
+      <div className="mt-6 pt-5 border-t border-white/10 text-center">
+        <p className="text-xs text-ivory-300/80 mb-2.5">
+          {t('auth.alreadyHaveAccount', 'Already have an account?')}
+        </p>
         <button
           type="button"
           onClick={onSwitchToLogin}
-          className="text-gold-400 hover:text-gold-300 font-bold underline transition-colors cursor-pointer"
+          className="w-full py-3 px-4 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-ivory-100 hover:text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:scale-[1.01] cursor-pointer flex items-center justify-center gap-2"
         >
-          {t('auth.logInTab', 'Log In')}
+          <span>{t('auth.loginButton', 'Sign In to Your Account')}</span>
         </button>
       </div>
     </form>
