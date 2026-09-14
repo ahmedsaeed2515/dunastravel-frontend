@@ -1,29 +1,11 @@
-import { useNavigate, useLocation } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { useTranslation } from 'react-i18next';
-import LoginModal from '../../components/auth/LoginModal';
+import React from 'react';
+import AuthSplitScreen from '../../components/auth/AuthSplitScreen';
 
+/**
+ * Dedicated Full Split-Screen Registration Page for Dunas Travel.
+ */
 const Register = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const handleClose = () => {
-    if (location.key !== 'default') {
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-white">
-      <Helmet>
-        <title>{t('auth.registerTitle', 'Register | Dunas Travel')}</title>
-      </Helmet>
-      <LoginModal isOpen={true} onClose={handleClose} initialTab="register" />
-    </div>
-  );
+  return <AuthSplitScreen initialTab="register" />;
 };
 
 export default Register;

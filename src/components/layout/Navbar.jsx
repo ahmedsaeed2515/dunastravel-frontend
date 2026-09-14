@@ -276,9 +276,9 @@ const Navbar = () => {
                     </AnimatePresence>
                   </>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => setIsLoginModalOpen(true)}
+                  <Link
+                    to="/login"
+                    state={{ from: location.pathname }}
                     aria-label={t('auth.signIn', 'Sign in or register')}
                     className="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full flex items-center justify-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/50 transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gold-500/70 cursor-pointer"
                   >
@@ -286,7 +286,7 @@ const Navbar = () => {
                     <span className="hidden md:inline text-[11px] font-bold text-white tracking-wide">
                       {t('auth.logInTab', 'Sign In')}
                     </span>
-                  </button>
+                  </Link>
                 )}
               </div>
 
@@ -654,16 +654,14 @@ const Navbar = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col gap-3 mt-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        setIsLoginModalOpen(true);
-                      }}
+                    <Link
+                      to="/login"
+                      state={{ from: location.pathname }}
+                      onClick={() => setMobileMenuOpen(false)}
                       className="w-full py-3.5 px-4 bg-gradient-to-r from-gold-500/20 to-gold-600/20 text-gold-500 rounded-xl text-lg font-semibold flex items-center justify-center gap-2 border border-gold-500/30 hover:bg-gold-500/30 transition-all text-center"
                     >
                       <FaUserCircle size={18} /> {t('auth.signIn', 'Sign In / Register')}
-                    </button>
+                    </Link>
                   </div>
                 )}
               </div>

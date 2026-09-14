@@ -5,6 +5,7 @@ import { FaChevronDown, FaCheck } from 'react-icons/fa';
 import { useActiveLocales } from '../../hooks/useActiveLocales';
 import { syncDocumentDirection } from '../../i18n';
 import { useClickOutside } from '../../hooks/useClickOutside';
+import CountryFlag from './CountryFlag';
 
 const dropdownVariants = {
   hidden: { opacity: 0, y: 8, scale: 0.96 },
@@ -22,7 +23,7 @@ const dropdownVariants = {
   }
 };
 
-const LanguageSelector = ({ light = false, className = '' }) => {
+const LanguageSelector = ({ light = false, className = '', showFullLabel = false }) => {
   const { t, i18n } = useTranslation();
   const { activeLanguages } = useActiveLocales();
   const [isOpen, setIsOpen] = useState(false);
@@ -133,12 +134,16 @@ const LanguageSelector = ({ light = false, className = '' }) => {
             : 'bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-gold-500/50 text-white'
         } focus-visible:ring-2 focus-visible:ring-gold-500/70`}
       >
-        <span className="text-sm leading-none" aria-hidden="true">
-          {currentLang.flag}
-        </span>
-        <span className="text-[11px] font-bold uppercase tracking-wider">
-          {currentLang.code}
-        </span>
+        <CountryFlag code={currentLang.code} fallbackEmoji={currentLang.flag} className="w-5 h-3.5 shadow-sm" />
+        {showFullLabel ? (
+          <span className="text-xs font-bold tracking-wide">
+            {currentLang.label}
+          </span>
+        ) : (
+          <span className="text-[11px] font-bold uppercase tracking-wider">
+            {currentLang.code}
+          </span>
+        )}
         <FaChevronDown
           size={8}
           className={`text-gold-400 transition-transform duration-200 ${
@@ -163,7 +168,7 @@ const LanguageSelector = ({ light = false, className = '' }) => {
               focusedIndex >= 0 ? `lang-opt-${activeLanguages[focusedIndex]?.code}` : undefined
             }
             tabIndex={-1}
-            className={`absolute top-full mt-2 w-44 rounded-2xl p-1.5 backdrop-blur-xl shadow-2xl border transition-colors z-[10000] ${
+            className={`absolute top-full mt-2 w-48 rounded-2xl p-1.5 backdrop-blur-xl shadow-2xl border transition-colors z-[10000] ${
               isRtl ? 'left-0' : 'right-0'
             } ${
               light
@@ -196,9 +201,7 @@ const LanguageSelector = ({ light = false, className = '' }) => {
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="text-base leading-none" aria-hidden="true">
-                      {lang.flag}
-                    </span>
+                    <CountryFlag code={lang.code} fallbackEmoji={lang.flag} className="w-5 h-3.5 shadow-sm" />
                     <div className="flex flex-col text-start">
                       <span className="leading-tight">{lang.label}</span>
                       <span className="text-[9px] uppercase tracking-wider opacity-60">
