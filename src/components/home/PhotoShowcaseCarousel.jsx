@@ -125,6 +125,26 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
+      <style>{`
+        @keyframes photoShowcaseContinuous {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+        .photo-showcase-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: photoShowcaseContinuous 35s linear infinite !important;
+          will-change: transform;
+        }
+        .photo-showcase-marquee-track:hover {
+          animation-play-state: paused !important;
+        }
+      `}</style>
+
       {/* Section Header */}
       <div className="container mx-auto px-6 mb-10 relative z-10 text-center">
         <motion.div
@@ -159,9 +179,8 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
         {/* Marquee Track */}
         <div dir="ltr" className="w-full relative overflow-hidden py-8 z-10">
           <div
-            className="flex w-max"
+            className="photo-showcase-marquee-track flex"
             style={{
-              animation: "tourMarquee 75s linear infinite",
               gap: "20px",
               paddingLeft: "20px",
             }}

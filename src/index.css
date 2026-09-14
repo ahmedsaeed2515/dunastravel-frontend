@@ -1081,12 +1081,6 @@ html[dir="rtl"] .dropdown-item:hover {
     animation: none !important;
   }
 
-  div[style*="tourMarquee"],
-  div[style*="marqueeVideo"],
-  div[style*="scrollStrip"] {
-    animation: none !important;
-    overflow-x: auto !important;
-  }
 }
 
 /* Off-screen rendering optimization: skips rendering work until scrolled into view */
