@@ -1177,7 +1177,7 @@ const HomeExperienceSection = () => {
         {/* Background Image with Dynamic Pulsing Motion & Rich Glow */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.img
-            src="/images/pyramids-search-bg.jpg"
+            src="/images/pyramids-search-bg.webp"
             alt="Search tours and holiday packages background"
             className="w-full h-full object-cover object-center"
             initial={{ scale: 1 }}
@@ -1445,7 +1445,7 @@ const HomeExperienceSection = () => {
                 `}</style>
                 <div style={{ animation: 'planeHoverFloat 4s ease-in-out infinite' }}>
                   <img
-                    src="/images/plane-icon.png"
+                    src="/images/plane-icon.webp"
                     alt="Dunas Travel Jet"
                     className="w-20 sm:w-28 md:w-36 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
                     width="160"
