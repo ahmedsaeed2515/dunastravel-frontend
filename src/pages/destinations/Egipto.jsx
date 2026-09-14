@@ -335,7 +335,7 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/multi-country" className="block w-full h-full overflow-hidden">
                 <img
-                  src="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030113/Gemini_Generated_Image_cb2enncb2enncb2e_wvyejn.jpg"
+                  src="https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg"
                   alt="Multi-Country Tours"
                   className="w-full h-full object-cover"
                   loading="lazy"

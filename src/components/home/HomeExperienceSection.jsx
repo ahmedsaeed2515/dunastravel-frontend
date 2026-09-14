@@ -171,7 +171,7 @@ const _packagesData = [
     tag2Key: "egyptPackages.multiCountry.tag2",
     tag3Key: "egyptPackages.multiCountry.tag3",
     price: 2450,
-    image: "/imgs/multicountryhero.jpg",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg",
     link: "/programs/multi-country",
     featured: false,
   },
@@ -1812,8 +1812,12 @@ const HomeExperienceSection = () => {
                       {/* Top Floating Badges */}
                       <div className="relative z-10 p-6 sm:p-8 flex items-center justify-between gap-4">
                         {pkg.badge && (
-                          <span className="package-badge-text inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 font-bold text-caption uppercase tracking-wider shadow-lg backdrop-blur-md">
-                            <span className="package-badge-text">★</span> {pkg.badge}
+                          <span 
+                            className="package-badge-text inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 text-caption uppercase tracking-wider shadow-lg backdrop-blur-md"
+                            style={{ color: '#000000', fontWeight: 900 }}
+                          >
+                            <span className="package-badge-text" style={{ color: '#000000', fontWeight: 900 }}>★</span>
+                            <span style={{ color: '#000000', fontWeight: 900 }}>{pkg.badge}</span>
                           </span>
                         )}
                         {pkg.duration && (

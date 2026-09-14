@@ -42,7 +42,7 @@ export default function MultiCountryTours() {
           text: t('programs.multiSecondaryCta', 'طلب برنامج مخصص للجموع'),
           link: '/tailor-tour'
         }}
-        bgImage="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030113/Gemini_Generated_Image_cb2enncb2enncb2e_wvyejn.jpg"
+        bgImage="https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg"
       />
 
       {/* Breadcrumb Header */}

@@ -123,7 +123,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'استكشف مسارات مدمجة تجمع بين سحر مصر، عراقة الأردن، فخامة دبي، وجزر اليونان في باقة متكاملة لا تُنسى.',
     tags: ['dest.starsMiddleEast', 'dest.egyptGreece', 'dest.egyptTurkey'],
     tagsDefault: ['🌟 نجوم الشرق الأوسط (19 يومًا)', '🏛️ مصر واليونان (11 يومًا)', '✨ مصر وتركيا (15 يومًا)'],
-    heroImage: 'https://res.cloudinary.com/degbrq3ck/image/upload/v1783030113/Gemini_Generated_Image_cb2enncb2enncb2e_wvyejn.jpg',
+    heroImage: 'https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg',
   },
   religious: {
     badge: 'nav.religious',

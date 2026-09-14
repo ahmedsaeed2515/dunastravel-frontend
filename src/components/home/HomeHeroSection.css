@@ -695,15 +695,17 @@
   }
 }
 
-/* Package Badge Text Color - Black in Light Mode, White in Dark Mode */
-.package-badge-text {
-  color: #000000 !important;
-}
-
+/* Package Badge Text Color - Strong Black in both Light and Dark Modes */
+.package-badge-text,
+.package-badge-text *,
 html.dark .package-badge-text,
+html.dark .package-badge-text *,
 .dark .package-badge-text,
-[data-theme="dark"] .package-badge-text {
-  color: #ffffff !important;
+.dark .package-badge-text *,
+[data-theme="dark"] .package-badge-text,
+[data-theme="dark"] .package-badge-text * {
+  color: #000000 !important;
+  font-weight: 800 !important;
 }
 
 /* Our Brands Section Background - Pure White in Both Light and Dark Mode */
