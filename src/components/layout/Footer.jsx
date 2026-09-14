@@ -5,12 +5,45 @@ import { FaFacebook, FaInstagram, FaPhone, FaEnvelope, FaWhatsapp, FaMapMarkerAl
 import Logo from '../ui/Logo';
 import TiT0Chat from '../ui/TiT0Chat';
 import { useJaiderChat } from '../../context/JaiderChatContext';
+import './Footer.css';
 
 const Footer = () => {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
   const { isOpen, setIsOpen } = useJaiderChat();
+
+  useEffect(() => {
+    const word = "DUNAS TRAVEL";
+    let charIndex = 0;
+    let isDeleting = false;
+    let timeoutId = null;
+
+    function typeEffect() {
+      const currentText = word.substring(0, charIndex);
+      setDisplayedText(currentText || "\u00A0");
+
+      let typeSpeed = isDeleting ? 130 : 250;
+
+      if (!isDeleting && charIndex === word.length) {
+        typeSpeed = 2200;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        typeSpeed = 600;
+      }
+
+      charIndex += isDeleting ? -1 : 1;
+      timeoutId = setTimeout(typeEffect, typeSpeed);
+    }
+
+    typeEffect();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -170,6 +203,14 @@ const Footer = () => {
             </ul>
           </div>
 
+        </div>
+
+        {/* Typing Animation Title */}
+        <div className="footer-automation-title my-6">
+          <div className="typing-wrapper">
+            <span className="typing">{displayedText}</span>
+            <span className="cursor-blink"></span>
+          </div>
         </div>
 
         {/* Credits */}

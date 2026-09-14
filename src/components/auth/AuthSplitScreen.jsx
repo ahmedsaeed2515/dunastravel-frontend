@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaShieldAlt,
-  FaStar,
   FaWhatsapp,
 } from 'react-icons/fa';
 import LoginForm from './LoginForm';
@@ -186,12 +185,10 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
             <span>VIP Concierge Support</span>
           </a>
         </footer>
-      </div>
-
+      </div>      {/* ========================================================================= */}
+      {/* HALF 2: CINEMATIC VISUAL HERO PANEL (Visible on all devices)              */}
       {/* ========================================================================= */}
-      {/* HALF 2: CINEMATIC VISUAL HERO PANEL (Desktop)                             */}
-      {/* ========================================================================= */}
-      <div className="hidden lg:flex lg:w-[50%] xl:w-[52%] 2xl:w-[56%] min-h-screen relative overflow-hidden flex-col justify-between p-12 xl:p-16 pt-32 select-none bg-black">
+      <div className="flex w-full lg:w-[50%] xl:w-[52%] 2xl:w-[56%] min-h-screen relative overflow-hidden flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 pt-12 lg:pt-32 pb-12 select-none bg-black">
         {/* Cinematic Background Image with Subtle Breathing Zoom Animation */}
         <motion.div
           animate={{ scale: [1, 1.05, 1] }}
@@ -225,16 +222,6 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
           aria-hidden="true"
         />
 
-        {/* Top Accolades / Rating */}
-        <div className="relative z-20 flex items-center justify-end">
-          <div className="flex items-center gap-1 text-gold-400 text-xs px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-gold-500/20 shadow-lg">
-            {[...Array(5)].map((_, i) => (
-              <FaStar key={i} size={12} className="fill-gold-400 drop-shadow" />
-            ))}
-            <span className="ms-1.5 font-bold text-white text-xs">5.0</span>
-          </div>
-        </div>
-
         {/* Center Brand Statement & Traveler Accolade Card */}
         <div className="relative z-20 my-auto max-w-xl">
           <motion.div
@@ -244,7 +231,7 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
             className="space-y-6"
           >
             {/* Inspiring Headline */}
-            <h2 className="text-3xl xl:text-4xl 2xl:text-5xl font-display font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
+            <h2 className="text-2xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-display font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
               {isRtl ? (
                 <>
                   رحلتك الاستثنائية إلى{' '}
@@ -265,54 +252,16 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
             </h2>
 
             {/* Traveler Quote Glassmorphism Card */}
-            <div className="p-6 rounded-3xl bg-black/45 backdrop-blur-xl border border-gold-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
+            <div className="p-5 sm:p-6 rounded-3xl bg-black/45 backdrop-blur-xl border border-gold-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
               <div className="absolute top-0 start-0 w-1.5 h-full bg-gradient-to-b from-gold-400 to-amber-600" />
-              <p className="text-sm xl:text-base text-ivory-100 font-medium italic leading-relaxed">
-                {isRtl
-                  ? '«تجربة لا تُضاهى بكل المقاييس. الدخول الخاص للأهرامات فجراً والاهتمام الدقيق بكل تفصيلة جعلت الرحلة سحراً حقيقياً لن ننساه.»'
-                  : '"An extraordinary bespoke journey beyond imagination. Private sunrise access to the Pyramids and unmatched concierge attention made it truly unforgettable."'}
+              <p className="text-xs sm:text-sm xl:text-base text-ivory-100 font-medium italic leading-relaxed">
+                «{t('auth.quoteCardText', 'مغامرة لا تُنسى وذكريات حقيقية تُبنى وتُخلّد، وأحلام تتحقق في عالم ساحر خلاب مليء بالمغامرة مع دوناس ترافل.. تعال واجعل الخيال واقعاً حقيقياً وملموساً.')}»
               </p>
-              <div className="mt-4 flex items-center justify-between pt-3 border-t border-white/10 text-xs">
-                <span className="font-bold text-gold-300">
-                  {isRtl ? 'الليدي إليانور س. — رحلة القاهرة والأقصر' : 'Lady Eleanor S. — Cairo & Nile Private Odyssey'}
-                </span>
-                <span className="text-ivory-400/80">Verified Traveler</span>
-              </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Bottom Social Proof Stats Bar */}
-        <div className="relative z-20 pt-6 border-t border-white/15">
-          <div className="grid grid-cols-3 gap-4 text-start">
-            <div className="space-y-1">
-              <span className="block text-2xl xl:text-3xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-amber-300">
-                50,000+
-              </span>
-              <span className="block text-[11px] text-ivory-300 font-medium">
-                {isRtl ? 'مسافر نخبوي حول العالم' : 'Discerning Global Travelers'}
-              </span>
-            </div>
 
-            <div className="space-y-1 border-s border-white/15 ps-4">
-              <span className="block text-2xl xl:text-3xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-amber-300">
-                99.4%
-              </span>
-              <span className="block text-[11px] text-ivory-300 font-medium">
-                {isRtl ? 'معدل التميز والرضا' : 'Excellence Satisfaction'}
-              </span>
-            </div>
-
-            <div className="space-y-1 border-s border-white/15 ps-4">
-              <span className="block text-2xl xl:text-3xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-amber-300">
-                24/7
-              </span>
-              <span className="block text-[11px] text-ivory-300 font-medium">
-                {isRtl ? 'كونسيرج خاص VIP' : 'Bespoke VIP Concierge'}
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

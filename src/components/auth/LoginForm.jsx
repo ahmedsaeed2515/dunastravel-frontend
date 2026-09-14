@@ -192,11 +192,12 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, onForgotPassword }) => {
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="w-full py-3 px-4 rounded-xl border border-gold-500/50 bg-gradient-to-r from-gold-500/10 via-gold-500/15 to-gold-500/10 hover:from-gold-500/20 hover:to-gold-500/25 text-gold-400 hover:text-gold-300 font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-gold-500/20 hover:scale-[1.01] cursor-pointer flex items-center justify-center gap-2"
+          className="w-full py-3 px-4 rounded-xl border border-gold-500/50 bg-gradient-to-r from-gold-500/10 via-gold-500/15 to-gold-500/10 hover:from-gold-500/20 hover:to-gold-500/25 font-extrabold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-gold-500/20 hover:scale-[1.01] cursor-pointer flex items-center justify-center gap-2"
+          style={{ color: '#FFFFFF' }}
         >
-          <span>✦</span>
-          <span>{t('auth.createAccountHighlight', 'Create a New Account')}</span>
-          <span>✦</span>
+          <span style={{ color: '#FFFFFF' }}>✦</span>
+          <span style={{ color: '#FFFFFF' }}>{t('auth.createAccountHighlight', 'Create a New Account')}</span>
+          <span style={{ color: '#FFFFFF' }}>✦</span>
         </button>
       </div>
     </form>
