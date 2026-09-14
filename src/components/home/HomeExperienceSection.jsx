@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useRef, useMemo, useEffect, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,8 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { useTours } from "../../hooks/useTours";
 import { useMediaShowcase } from "../../hooks/useMedia";
-import PhotoShowcaseCarousel from "./PhotoShowcaseCarousel";
-import VideoShowcaseCarousel from "./VideoShowcaseCarousel";
+const PhotoShowcaseCarousel = lazy(() => import("./PhotoShowcaseCarousel"));
+const VideoShowcaseCarousel = lazy(() => import("./VideoShowcaseCarousel"));
 import { useDestinations } from "../../hooks/useDestinations";
 import { useServices } from "../../hooks/useServices";
 import { transportation as fallbackTransportation } from "../../data/transportation";
@@ -2358,10 +2358,14 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* 2. Photo Showcase Carousel */}
-      <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
+      <Suspense fallback={<div className="py-16 text-center text-slate-400">Loading gallery...</div>}>
+        <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
+      </Suspense>
 
       {/* 3. Video Showcase Carousel */}
-      <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
+      <Suspense fallback={<div className="py-16 text-center text-slate-400">Loading videos...</div>}>
+        <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
+      </Suspense>
 
       {/* Contact Info Section */}
       <section 

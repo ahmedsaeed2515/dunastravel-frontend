@@ -139,6 +139,8 @@ export default defineConfig(({ mode }) => {
             if (id.includes('node_modules/react/') || id.includes('node_modules/scheduler')) return 'vendor-react';
             if (id.includes('node_modules/react-router')) return 'vendor-router';
             if (id.includes('node_modules/framer-motion')) return 'vendor-motion';
+            if (id.includes('node_modules/swiper')) return 'vendor-swiper';
+            if (id.includes('node_modules/gsap')) return 'vendor-gsap';
             if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next') || id.includes('node_modules/i18next-browser-languagedetector')) return 'vendor-i18n';
             if (id.includes('node_modules/react-icons/fa') || id.includes('node_modules/react-icons/fa6')) return 'vendor-icons-fa';
             if (id.includes('node_modules/react-icons')) return 'vendor-icons';

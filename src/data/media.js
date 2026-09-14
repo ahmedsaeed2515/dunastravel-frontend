@@ -1,4 +1,6 @@
-export const galleryImages = [
+import { getOptimizedCloudinaryUrl } from '../utils/cloudinary';
+
+const rawGalleryImages = [
   { src: "https://res.cloudinary.com/degbrq3ck/image/upload/v1783023886/3776ecde-249e-4183-9840-e9fd900ad96b_xvmumu.jpg", dest: "Gallery", tag: "Photo" },
   { src: "https://res.cloudinary.com/degbrq3ck/image/upload/v1783023877/2ec72126-709b-4c8d-8f7b-a592d212cc3b_czpoig.jpg", dest: "Gallery", tag: "Photo" },
   { src: "https://res.cloudinary.com/degbrq3ck/image/upload/v1783023865/80f6f47a-4938-4684-aaf1-b1e61d44dab6_n8vdtl.jpg", dest: "Gallery", tag: "Photo" },
@@ -27,6 +29,11 @@ export const galleryImages = [
   { src: "https://res.cloudinary.com/degbrq3ck/image/upload/v1783026775/22_gywthx.jpg", dest: "Gallery", tag: "Photo" },
   { src: "https://res.cloudinary.com/degbrq3ck/image/upload/v1783026775/3_rbjrys.jpg", dest: "Gallery", tag: "Photo" },
 ];
+
+export const galleryImages = rawGalleryImages.map((img) => ({
+  ...img,
+  src: getOptimizedCloudinaryUrl(img.src, { width: 800 }),
+}));
 
 export const videos = [
   {

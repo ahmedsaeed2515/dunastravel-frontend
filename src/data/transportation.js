@@ -131,7 +131,9 @@ export const transportation = [
   }
 ];
 
-export const transportationGallery = [
+import { getOptimizedCloudinaryUrl } from '../utils/cloudinary';
+
+const rawTransportationGallery = [
   'https://res.cloudinary.com/degbrq3ck/image/upload/v1787786856/232e5d06-8225-4823-8862-404f65c89ceb_cvji7q.jpg',
   'https://res.cloudinary.com/degbrq3ck/image/upload/v1787786846/f2b61bac-4413-42e1-b7fc-68d70d11074e_mavxqo.jpg',
   'https://res.cloudinary.com/degbrq3ck/image/upload/v1787786837/9a9e5b5b-9fe8-429f-b13f-093ce19e8f6e_rkix7o.jpg',
@@ -142,4 +144,8 @@ export const transportationGallery = [
   'https://res.cloudinary.com/degbrq3ck/image/upload/v1787786785/7173bba6-bc2f-4ea0-84db-905374545128_esjlwd.jpg',
   'https://res.cloudinary.com/degbrq3ck/image/upload/v1788181792/1bd432d4-0505-4463-9f12-382981466137_meqrmm.jpg'
 ];
+
+export const transportationGallery = rawTransportationGallery.map((url) =>
+  getOptimizedCloudinaryUrl(url, { width: 800 })
+);
 

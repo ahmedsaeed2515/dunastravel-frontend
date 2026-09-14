@@ -21,7 +21,30 @@
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Initial SSR Fallback Skeleton for Instant Paint & Zero LCP Render Delay -->
+    <div style="min-height: 100vh; background-color: #122327; color: #ffffff; font-family: sans-serif; display: flex; flex-direction: column;">
+      <header style="height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; background: rgba(18, 35, 39, 0.9);">
+        <img src="/dunas-travel-logo.webp" alt="DUNAS TRAVEL" width="184" height="90" style="height: 48px; width: auto; aspect-ratio: 184/90; object-fit: contain;" />
+        <nav style="display: flex; gap: 1.5rem; opacity: 0.8; font-size: 0.9rem;">
+          <span>HOME</span>
+          <span>DESTINATIONS</span>
+          <span>PACKAGES</span>
+          <span>CONTACT</span>
+        </nav>
+      </header>
+      <main style="flex: 1; display: flex; align-items: center; padding: 0 2rem; max-width: 1470px; margin: 0 auto; width: 100%; box-sizing: border-box;">
+        <div style="max-width: 700px;">
+          <p style="color: #0CB2DB; font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 0.5rem; text-transform: uppercase;">DUNAS TRAVEL EGYPT</p>
+          <h1 style="font-size: 4.5rem; line-height: 1; margin: 0; font-weight: 700; color: #ffffff;">LUXURY JOURNEY</h1>
+          <p class="slider-contect-des" style="font-size: 1.1rem; color: #909DA1; margin-top: 1rem; line-height: 1.6; max-width: 580px;">Discover the magic of Egypt and its historical monuments with the help of Experts</p>
+          <div style="margin-top: 2rem;">
+            <span style="display: inline-block; background: #0CB2DB; color: #fff; padding: 14px 32px; border-radius: 4px; font-weight: 600; letter-spacing: 1px;">SEE DESTINATION</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
