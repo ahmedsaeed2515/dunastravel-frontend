@@ -387,7 +387,7 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/extension" className="block w-full h-full overflow-hidden">
                 <img
-                  src="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030445/Gemini_Generated_Image_kenvzkkenvzkkenv_h9kz07.png"
+                  src="https://ar.scoopempire.com/wp-content/uploads/sites/4/2026/03/pexels-vika-glitter-392079-18895967-scaled-1.jpg"
                   alt="Egypt Extensions"
                   className="w-full h-full object-cover"
                   loading="lazy"

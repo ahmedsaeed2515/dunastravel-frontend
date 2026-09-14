@@ -88,7 +88,7 @@ export default function ExtensionTours() {
           text: t('extensions.ctaSecondary', 'إضافة أيام لرحلتك الحالية'),
           link: '/tailor-tour'
         }}
-        bgImage="https://res.cloudinary.com/degbrq3ck/image/upload/v1783030445/Gemini_Generated_Image_kenvzkkenvzkkenv_h9kz07.png"
+        bgImage="https://ar.scoopempire.com/wp-content/uploads/sites/4/2026/03/pexels-vika-glitter-392079-18895967-scaled-1.jpg"
       />
 
       {/* Breadcrumb Navigation */}
