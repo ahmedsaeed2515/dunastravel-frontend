@@ -250,6 +250,9 @@ export default function HomeHeroSection() {
           fadeEffect={SWIPER_FADE_EFFECT}
           loop={true}
           speed={1200}
+          observer={false}
+          observeParents={false}
+          resizeObserver={false}
           autoplay={SWIPER_AUTOPLAY_CONFIG}
           onSwiper={(swiper) => {
             if (swiper && swiper.autoplay) {

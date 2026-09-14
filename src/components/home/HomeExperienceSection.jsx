@@ -62,37 +62,37 @@ const _destinationsData = [
     id: "turkey",
     nameKey: "home.destTurkey",
     descKey: "home.destTurkeyDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600,c_fill/v1783023877/2ec72126-709b-4c8d-8f7b-a592d212cc3b_czpoig.jpg",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783023877/2ec72126-709b-4c8d-8f7b-a592d212cc3b_czpoig.webp",
   },
   {
     id: "dubai",
     nameKey: "home.destDubai",
     descKey: "home.destDubaiDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600,c_fill/v1783023865/80f6f47a-4938-4684-aaf1-b1e61d44dab6_n8vdtl.jpg",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783023865/80f6f47a-4938-4684-aaf1-b1e61d44dab6_n8vdtl.webp",
   },
   {
     id: "jordan",
     nameKey: "home.destJordan",
     descKey: "home.destJordanDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600,c_fill/v1783023927/dad14822-455c-419c-8627-32b3daebef90_akfw3l.jpg",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783023927/dad14822-455c-419c-8627-32b3daebef90_akfw3l.webp",
   },
   {
     id: "morocco",
     nameKey: "home.destMorocco",
     descKey: "home.destMoroccoDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600,c_fill/v1783024003/d34eeca3-6bc8-4a19-aa18-bf13404bb11b_n0f8zn.jpg",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783024003/d34eeca3-6bc8-4a19-aa18-bf13404bb11b_n0f8zn.webp",
   },
   {
     id: "tunisia",
     nameKey: "home.destTunisia",
     descKey: "home.destTunisiaDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600,c_fill/v1783024062/071f261a-2ab6-48b5-a370-c47ad7889be3_immde1.jpg",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783024062/071f261a-2ab6-48b5-a370-c47ad7889be3_immde1.webp",
   },
   {
     id: "greece",
     nameKey: "home.destGreece",
     descKey: "home.destGreeceDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600,c_fill/v1783024053/66dc2b5e-f90d-424f-b9a7-4164b52f4e5a_eoqd3p.jpg",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto:eco,w_600,c_fill/v1783024053/66dc2b5e-f90d-424f-b9a7-4164b52f4e5a_eoqd3p.webp",
   },
   {
     id: "holy-land",
@@ -354,90 +354,6 @@ const HomeExperienceSection = () => {
   const destMarqueeRef = useRef(null);
   const pkgHoveredRef = useRef(false);
   const destHoveredRef = useRef(false);
-
-  // Continuous smooth auto-scroll for Destination Tours marquee (slow & seamless)
-  useEffect(() => {
-    let animId;
-    let lastTime = performance.now();
-    const speed = 25; // 25px/sec for slow elegant continuous movement
-    let cachedHalfWidth = 0;
-
-    const updateCachedWidth = () => {
-      if (destMarqueeRef.current) {
-        cachedHalfWidth = destMarqueeRef.current.scrollWidth / 2;
-      }
-    };
-
-    updateCachedWidth();
-    window.addEventListener('resize', updateCachedWidth, { passive: true });
-
-    const animate = (now) => {
-      const delta = (now - lastTime) / 1000;
-      lastTime = now;
-
-      if (destMarqueeRef.current && !destHoveredRef.current) {
-        const el = destMarqueeRef.current;
-        if (cachedHalfWidth === 0) {
-          cachedHalfWidth = el.scrollWidth / 2;
-        }
-        if (cachedHalfWidth > 0) {
-          el.scrollLeft += speed * delta;
-          if (el.scrollLeft >= cachedHalfWidth) {
-            el.scrollLeft -= cachedHalfWidth;
-          }
-        }
-      }
-      animId = requestAnimationFrame(animate);
-    };
-
-    animId = requestAnimationFrame(animate);
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', updateCachedWidth);
-    };
-  }, []);
-
-  // Continuous smooth auto-scroll for Package Trips marquee (slow & seamless)
-  useEffect(() => {
-    let animId;
-    let lastTime = performance.now();
-    const speed = 25; // 25px/sec for slow elegant continuous movement
-    let cachedHalfWidth = 0;
-
-    const updateCachedWidth = () => {
-      if (pkgMarqueeRef.current) {
-        cachedHalfWidth = pkgMarqueeRef.current.scrollWidth / 2;
-      }
-    };
-
-    updateCachedWidth();
-    window.addEventListener('resize', updateCachedWidth, { passive: true });
-
-    const animate = (now) => {
-      const delta = (now - lastTime) / 1000;
-      lastTime = now;
-
-      if (pkgMarqueeRef.current && !pkgHoveredRef.current) {
-        const el = pkgMarqueeRef.current;
-        if (cachedHalfWidth === 0) {
-          cachedHalfWidth = el.scrollWidth / 2;
-        }
-        if (cachedHalfWidth > 0) {
-          el.scrollLeft += speed * delta;
-          if (el.scrollLeft >= cachedHalfWidth) {
-            el.scrollLeft -= cachedHalfWidth;
-          }
-        }
-      }
-      animId = requestAnimationFrame(animate);
-    };
-
-    animId = requestAnimationFrame(animate);
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', updateCachedWidth);
-    };
-  }, []);
 
   const handleMarqueeScroll = (ref, direction) => {
     if (!ref.current) return;
