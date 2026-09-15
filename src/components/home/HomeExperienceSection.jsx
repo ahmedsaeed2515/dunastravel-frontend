@@ -1805,13 +1805,13 @@ const HomeExperienceSection = () => {
                           <Link 
                             to={pkg.link} 
                             onClick={(e) => e.stopPropagation()}
-                            className="explore-program-btn inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 font-extrabold px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 text-xs border border-gold-400"
-                            style={{ color: '#ffffff' }}
+                            className="explore-program-btn inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 font-black px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 text-xs border border-gold-400"
+                            style={{ color: '#000000' }}
                           >
-                            <span className="font-extrabold tracking-wider" style={{ color: '#ffffff' }}>
+                            <span className="font-black tracking-wider" style={{ color: '#000000', fontWeight: 900 }}>
                               {t("home.explorePackage", "Explore Program")}
                             </span>
-                            <span className="rtl-flip font-extrabold" style={{ color: '#ffffff' }}>→</span>
+                            <span className="rtl-flip font-black" style={{ color: '#000000', fontWeight: 900 }}>→</span>
                           </Link>
                         </div>
                       </div>

@@ -198,7 +198,8 @@ html[data-scroll-locked] {
   .dark .explore-program-btn *,
   .explore-program-btn,
   .explore-program-btn * {
-    color: #ffffff !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
   }
 
 
