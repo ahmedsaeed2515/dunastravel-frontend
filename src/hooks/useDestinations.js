@@ -17,14 +17,14 @@ const DEST_FALLBACK_IMAGES = {
 };
 
 const staticDestinations = [
-  { id: 'egypt', slug: 'egypt', title: 'Egypt', name: 'Egypt', toursCount: 9, image: DEST_FALLBACK_IMAGES.egypt, heroImageUrl: DEST_FALLBACK_IMAGES.egypt },
-  { id: 'turkey', slug: 'turkey', title: 'Turkey', name: 'Turkey', toursCount: 15, image: DEST_FALLBACK_IMAGES.turkey, heroImageUrl: DEST_FALLBACK_IMAGES.turkey },
-  { id: 'dubai', slug: 'dubai', title: 'Dubai', name: 'Dubai', toursCount: 9, image: DEST_FALLBACK_IMAGES.dubai, heroImageUrl: DEST_FALLBACK_IMAGES.dubai },
-  { id: 'jordan', slug: 'jordan', title: 'Jordan', name: 'Jordan', toursCount: 7, image: DEST_FALLBACK_IMAGES.jordan, heroImageUrl: DEST_FALLBACK_IMAGES.jordan },
-  { id: 'morocco', slug: 'morocco', title: 'Morocco', name: 'Morocco', toursCount: 1, image: DEST_FALLBACK_IMAGES.morocco, heroImageUrl: DEST_FALLBACK_IMAGES.morocco },
-  { id: 'tunisia', slug: 'tunisia', title: 'Tunisia', name: 'Tunisia', toursCount: 1, image: DEST_FALLBACK_IMAGES.tunisia, heroImageUrl: DEST_FALLBACK_IMAGES.tunisia },
-  { id: 'greece', slug: 'greece', title: 'Greece', name: 'Greece', toursCount: 1, image: DEST_FALLBACK_IMAGES.greece, heroImageUrl: DEST_FALLBACK_IMAGES.greece },
-  { id: 'holy-land', slug: 'holy-land', title: 'Holy Land', name: 'Holy Land', toursCount: 0, image: DEST_FALLBACK_IMAGES['holy-land'], heroImageUrl: DEST_FALLBACK_IMAGES['holy-land'] },
+  { id: 'egypt', slug: 'egypt', title: 'Egypt', name: 'Egypt', toursCount: 9, image: DEST_FALLBACK_IMAGES.egypt, heroImageUrl: DEST_FALLBACK_IMAGES.egypt, tours: [] },
+  { id: 'turkey', slug: 'turkey', title: 'Turkey', name: 'Turkey', toursCount: 15, image: DEST_FALLBACK_IMAGES.turkey, heroImageUrl: DEST_FALLBACK_IMAGES.turkey, tours: [] },
+  { id: 'dubai', slug: 'dubai', title: 'Dubai', name: 'Dubai', toursCount: 9, image: DEST_FALLBACK_IMAGES.dubai, heroImageUrl: DEST_FALLBACK_IMAGES.dubai, tours: [] },
+  { id: 'jordan', slug: 'jordan', title: 'Jordan', name: 'Jordan', toursCount: 7, image: DEST_FALLBACK_IMAGES.jordan, heroImageUrl: DEST_FALLBACK_IMAGES.jordan, tours: [] },
+  { id: 'morocco', slug: 'morocco', title: 'Morocco', name: 'Morocco', toursCount: 1, image: DEST_FALLBACK_IMAGES.morocco, heroImageUrl: DEST_FALLBACK_IMAGES.morocco, tours: [] },
+  { id: 'tunisia', slug: 'tunisia', title: 'Tunisia', name: 'Tunisia', toursCount: 1, image: DEST_FALLBACK_IMAGES.tunisia, heroImageUrl: DEST_FALLBACK_IMAGES.tunisia, tours: [] },
+  { id: 'greece', slug: 'greece', title: 'Greece', name: 'Greece', toursCount: 1, image: DEST_FALLBACK_IMAGES.greece, heroImageUrl: DEST_FALLBACK_IMAGES.greece, tours: [] },
+  { id: 'holy-land', slug: 'holy-land', title: 'Holy Land', name: 'Holy Land', toursCount: 0, image: DEST_FALLBACK_IMAGES['holy-land'], heroImageUrl: DEST_FALLBACK_IMAGES['holy-land'], tours: [] },
 ];
 
 function readDestinations(response) {

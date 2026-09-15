@@ -11,6 +11,7 @@ const Destinations = () => {
   const { t } = useTranslation();
   const { destinations, loading: destsLoading, error } = useDestinations();
   const loading = destsLoading;
+  const destinationsList = Array.isArray(destinations) ? destinations : [];
 
   return <main className="min-h-screen bg-obsidian-50 pb-24">
     <Helmet>
@@ -38,15 +39,18 @@ const Destinations = () => {
         <div className="mx-auto max-w-2xl rounded-2xl border border-red-300 bg-red-50 p-6 text-center text-red-800">
           {t('destinations.loadError', 'Destinations could not be loaded. Please try again later.')}
         </div>
-      ) : destinations.length === 0 ? (
+      ) : destinationsList.length === 0 ? (
         <div className="mx-auto max-w-2xl rounded-2xl border border-obsidian-200 bg-white p-8 text-center text-obsidian-600">
           {t('destinations.empty', 'No destinations are currently available.')}
         </div>
       ) : (
         <div className="flex flex-col gap-24">
-          {destinations.map((destination) => {
-            const destTours = destination.tours;
-            const cardImage = destination.heroImageUrl || destination.image || '/imgs/egyothero.webp';
+          {destinationsList.map((destination) => {
+            const destTours = Array.isArray(destination?.tours) ? destination.tours : [];
+            const destSlug = String(destination?.slug || destination?.id || '').toLowerCase();
+            const cardImage = (destSlug === 'egypt' || destSlug === 'egipto') 
+              ? '/imgs/egyothero.webp' 
+              : (destination.heroImageUrl || destination.image || '/imgs/egyothero.webp');
 
             return (
               <motion.article 

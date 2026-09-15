@@ -24,9 +24,16 @@ const BackgroundMusic = () => {
   const hasInteractedRef = useRef(hasInteracted);
 
   useEffect(() => {
+    let ticking = false;
+    const threshold = isHomePage ? 550 : 80;
     const handleScroll = () => {
-      const threshold = isHomePage ? 550 : 80;
-      setShowMusicIcon(window.scrollY > threshold);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const isOver = window.scrollY > threshold;
+        setShowMusicIcon((prev) => (prev !== isOver ? isOver : prev));
+        ticking = false;
+      });
     };
 
     handleScroll();
@@ -198,15 +205,11 @@ const BackgroundMusic = () => {
 
         const cleanup = () => {
           window.removeEventListener('click', handleFirstInteraction);
-          window.removeEventListener('scroll', handleFirstInteraction);
           window.removeEventListener('keydown', handleFirstInteraction);
-          window.removeEventListener('touchstart', handleFirstInteraction);
         };
 
         window.addEventListener('click', handleFirstInteraction, { once: true });
-        window.addEventListener('scroll', handleFirstInteraction, { once: true });
         window.addEventListener('keydown', handleFirstInteraction, { once: true });
-        window.addEventListener('touchstart', handleFirstInteraction, { once: true });
 
         return cleanup;
       }
@@ -232,27 +235,14 @@ const BackgroundMusic = () => {
           100% { transform: rotate(360deg); }
         }
 
-        @keyframes music-glow-pulse {
-          0% {
-            box-shadow: 0 0 15px rgba(245, 166, 35, 0.6), 0 0 30px rgba(245, 166, 35, 0.3);
-            border-color: rgba(245, 166, 35, 0.8);
-          }
-          50% {
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.95), 0 0 45px rgba(245, 166, 35, 0.6);
-            border-color: rgba(255, 215, 0, 1);
-          }
-          100% {
-            box-shadow: 0 0 15px rgba(245, 166, 35, 0.6), 0 0 30px rgba(245, 166, 35, 0.3);
-            border-color: rgba(245, 166, 35, 0.8);
-          }
-        }
-
         .music-svg-spin {
           animation: music-spin 3s linear infinite;
         }
 
         .music-glowing-glow {
-          animation: music-glow-pulse 1.8s infinite alternate ease-in-out;
+          box-shadow: 0 0 20px rgba(245, 166, 35, 0.75);
+          border-color: rgba(245, 166, 35, 0.9);
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
       ` }} />
 

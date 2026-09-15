@@ -1140,9 +1140,9 @@ const HomeExperienceSection = () => {
             width="1440"
             height="600"
           />
-          {/* Ambient animated floating light blobs */}
+          {/* Ambient animated floating light blobs (hidden on mobile to prevent GPU fill-rate exhaustion) */}
           <motion.div
-            className="absolute -top-20 -left-20 w-[450px] h-[450px] bg-amber-500/30 rounded-full blur-[110px] pointer-events-none"
+            className="hidden md:block absolute -top-20 -left-20 w-[450px] h-[450px] bg-amber-500/30 rounded-full blur-[110px] pointer-events-none"
             animate={{
               x: [-20, 80, -20],
               y: [-20, 50, -20],
@@ -1152,7 +1152,7 @@ const HomeExperienceSection = () => {
             transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div
-            className="absolute -bottom-20 -right-20 w-[450px] h-[450px] bg-blue-600/30 rounded-full blur-[110px] pointer-events-none"
+            className="hidden md:block absolute -bottom-20 -right-20 w-[450px] h-[450px] bg-blue-600/30 rounded-full blur-[110px] pointer-events-none"
             animate={{
               x: [0, -80, 0],
               y: [0, -50, 0],
@@ -1574,7 +1574,7 @@ const HomeExperienceSection = () => {
       </section>
 
 {/* Destination Tours Marquee Section */}
-      <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 500px' }}>
+      <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative">
         <div className="container mx-auto px-6">
           <div className="text-center mb-10 max-w-3xl mx-auto">
             <span className="text-[#B45309] dark:text-[#F5A623] uppercase tracking-widest text-caption block mb-2 font-bold">
@@ -1592,7 +1592,7 @@ const HomeExperienceSection = () => {
           <div 
             dir="ltr" 
             ref={destMarqueeRef} 
-            className="overflow-hidden w-full relative py-4"
+            className="overflow-x-auto md:overflow-hidden w-full relative py-4 scrollbar-none snap-x snap-mandatory md:snap-none"
           >
             <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left">
             {(() => {
@@ -1610,7 +1610,7 @@ const HomeExperienceSection = () => {
                     to={tData.link || `/tours/${tData.slug || tData.id}`}
                     tabIndex={tData.isDuplicate ? -1 : undefined}
                     aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] block border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    className={`min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500 ${tData.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
                   >
                     <img
                       src={getOptimizedImageUrl(imageUrl, 300, 355)}
@@ -1895,7 +1895,7 @@ const HomeExperienceSection = () => {
           <div 
             dir="ltr" 
             ref={pkgMarqueeRef} 
-            className="overflow-hidden w-full relative py-4"
+            className="overflow-x-auto md:overflow-hidden w-full relative py-4 scrollbar-none snap-x snap-mandatory md:snap-none"
           >
             <div className="flex w-max gap-5 px-5 animate-continuous-marquee-right">
             {(() => {
@@ -1916,7 +1916,7 @@ const HomeExperienceSection = () => {
                     to={tData.link || "/tours"}
                     tabIndex={tData.isDuplicate ? -1 : undefined}
                     aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] block border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    className={`min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500 ${tData.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
                   >
                     <img
                       src={getOptimizedImageUrl(tourImg, 300, 355)}
@@ -2031,13 +2031,12 @@ const HomeExperienceSection = () => {
           </div>
 
           {/* Vehicles Strip: Infinite Marquee */}
-          <div dir="ltr" className="w-full relative overflow-hidden py-4">
+          <div dir="ltr" className="w-full relative overflow-x-auto md:overflow-hidden py-4 scrollbar-none snap-x snap-mandatory md:snap-none">
             <div
-              className="flex w-max"
+              className="tour-marquee-track flex w-max"
               style={{
                 gap: "16px",
                 paddingLeft: "16px",
-                animation: "tourMarquee 75s linear infinite",
               }}
               onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
               onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
@@ -2047,7 +2046,7 @@ const HomeExperienceSection = () => {
                 return repeatedList.map((vehicle, idx) => (
                   <div
                     key={`veh-${vehicle.id}-${idx}`}
-                    className="flex-shrink-0 flex flex-col rounded-[16px] overflow-hidden group relative w-[280px] h-[360px] md:h-[380px] transition-all duration-[350ms] ease-out hover:scale-[1.05] hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(245,166,35,0.35)] hover:z-10 border border-obsidian-700/50 hover:border-gold-500 bg-obsidian-900"
+                    className={`flex-shrink-0 flex flex-col rounded-[16px] overflow-hidden group relative w-[280px] h-[360px] md:h-[380px] transition-all duration-[350ms] ease-out hover:scale-[1.05] hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(245,166,35,0.35)] hover:z-10 border border-obsidian-700/50 hover:border-gold-500 bg-obsidian-900 ${vehicle.isDuplicate ? 'hidden md:flex' : 'snap-start'}`}
                   >
                     <img
                       src={vehicle.heroImage || vehicle.image}
