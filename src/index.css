@@ -186,6 +186,14 @@ html[data-scroll-locked] {
     background-color: #d4921e !important;
     color: #1a1a2e !important;
   }
+  .dark .tailor-fixed .dest-card-black-text,
+  .dark .tailor-fixed .dest-card-black-text * {
+    color: #000000 !important;
+  }
+  .dark .tailor-fixed .dest-card-white-text,
+  .dark .tailor-fixed .dest-card-white-text * {
+    color: #ffffff !important;
+  }
 
 
 

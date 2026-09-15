@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { supportedLocale } from '../utils/locale';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlane, FaWhatsapp, FaPhone, FaFacebookF, FaInstagram } from 'react-icons/fa';
+import { FaPlane, FaWhatsapp, FaPhone, FaFacebookF, FaInstagram, FaCompass } from 'react-icons/fa';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
 import { useDestinations } from '../hooks/useDestinations';
+import { useTours } from '../hooks/useTours';
 import { useToast } from '../context/ToastContext';
 
 const TailorTour = () => {
@@ -14,6 +15,7 @@ const TailorTour = () => {
   const toast = useToast();
   const { user } = useAuth();
   const { destinations: publishedDestinations } = useDestinations();
+  const { tours: allLiveTours } = useTours();
   const isRtl = i18n.dir() === 'rtl';
 
   const [step, setStep] = useState(1);
@@ -556,111 +558,77 @@ const TailorTour = () => {
 
   const isFlying = animationState === 'flying-forward' || animationState === 'flying-backward';
 
-const DEFAULT_DESTINATIONS = [
-  {
-    id: 'egypt',
-    nameAr: 'مصر (القاهرة، الأهرامات والنيل)',
-    nameEn: 'Egypt (Cairo, Pyramids & Nile)',
-    nameEs: 'Egipto (El Cairo y Nilo)',
-    namePt: 'Egito (Cairo e Nilo)',
-    nameIt: 'Egitto (Cairo e Nilo)',
-    img: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg',
-    flag: '🇪🇬',
-  },
-  {
-    id: 'turkey',
-    nameAr: 'تركيا (إسطنبول وكابادوكيا)',
-    nameEn: 'Turkey (Istanbul & Cappadocia)',
-    nameEs: 'Turquía (Estambul y Capadocia)',
-    namePt: 'Turquia (Istambul e Capadócia)',
-    nameIt: 'Turchia (Istanbul e Cappadocia)',
-    img: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
-    flag: '🇹🇷',
-  },
-  {
-    id: 'jordan',
-    nameAr: 'الأردن (البتراء والبحر الميت)',
-    nameEn: 'Jordan (Petra & Dead Sea)',
-    nameEs: 'Jordania (Petra y Mar Muerto)',
-    namePt: 'Jordânia (Petra e Mar Morto)',
-    nameIt: 'Giordania (Petra e Mar Morto)',
-    img: 'https://pport.com/wp-content/uploads/2020/05/jordan-88.jpg',
-    flag: '🇯🇴',
-  },
-  {
-    id: 'dubai',
-    nameAr: 'دبي والإمارات الفاخرة',
-    nameEn: 'Dubai & UAE Luxury',
-    nameEs: 'Dubái y Emiratos de Lujo',
-    namePt: 'Dubai e Emirados Árabes',
-    nameIt: 'Dubai ed Emirati Arabi',
-    img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
-    flag: '🇦🇪',
-  },
-  {
-    id: 'morocco',
-    nameAr: 'المغرب (مراكش والمدن العتيقة)',
-    nameEn: 'Morocco (Marrakech & Imperial Cities)',
-    nameEs: 'Marruecos (Marrakech)',
-    namePt: 'Marrocos (Marrakech)',
-    nameIt: 'Marocco (Marrakech)',
-    img: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
-    flag: '🇲🇦',
-  },
-  {
-    id: 'greece',
-    nameAr: 'اليونان (أثينا وسانتوريني)',
-    nameEn: 'Greece (Athens & Santorini)',
-    nameEs: 'Grecia (Atenas y Santorini)',
-    namePt: 'Grécia (Atenas e Santorini)',
-    nameIt: 'Grecia (Atene e Santorini)',
-    img: 'https://static.arrajol.com/styles/800x533/public/2020/11/14/287336-80888809099.jpg',
-    flag: '🇬🇷',
-  },
-  {
-    id: 'tunisia',
-    nameAr: 'تونس (الصحراء والواحات)',
-    nameEn: 'Tunisia (Heritage & Oasis)',
-    nameEs: 'Túnez (Patrimonio y Desierto)',
-    namePt: 'Tunísia (História e Deserto)',
-    nameIt: 'Tunisia (Oasi e Sahara)',
-    img: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=800&q=80',
-    flag: '🇹🇳',
-  },
-  {
-    id: 'multi-country',
-    nameAr: 'برامج سياحية مشتركة (متعددة الوجهات)',
-    nameEn: 'Multi-Country Combined Grand Tours',
-    nameEs: 'Grandes Tours Multipaís Combinados',
-    namePt: 'Grandes Roteiros Multi-Países',
-    nameIt: 'Grandi Tour Combinati Multi-Paese',
-    img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80',
-    flag: '🌍',
-  },
-];
+  const DEST_HERO_MAP = {
+    egypt: '/imgs/egyothero.webp',
+    turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    jordan: '/images/jordan-petra.webp',
+    dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    morocco: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    tunisia: 'https://images.unsplash.com/photo-1580502304784-8985b7eb7260?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    'holy-land': 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    holyland: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+  };
 
-  const langKey = (i18n.language || 'en').toLowerCase().split('-')[0];
-  const destinations = (publishedDestinations && publishedDestinations.length > 0)
-    ? publishedDestinations.map((destination) => {
-        const destId = destination.slug || destination.id;
-        const matchingDefault = DEFAULT_DESTINATIONS.find((d) => d.id === destId);
-        let img = destination.heroImageUrl || destination.image;
-        if (!img || typeof img !== 'string' || img.includes('/imgs/destinations/')) {
-          img = matchingDefault?.img || 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg';
-        }
-        return {
-          id: destId,
-          name: destination.title || destination.name || (matchingDefault ? (matchingDefault[`name${langKey === 'ar' ? 'Ar' : langKey === 'es' ? 'Es' : langKey === 'pt' ? 'Pt' : langKey === 'it' ? 'It' : 'En'}`] || matchingDefault.nameEn) : destId),
-          img,
-          flag: matchingDefault?.flag || '🌍',
-        };
-      })
-    : DEFAULT_DESTINATIONS.map((d) => ({
-        id: d.id,
-        name: d[`name${langKey === 'ar' ? 'Ar' : langKey === 'es' ? 'Es' : langKey === 'pt' ? 'Pt' : langKey === 'it' ? 'It' : 'En'}`] || d.nameEn,
-        img: d.img,
-        flag: d.flag,
-      }));
+  const DEST_TOUR_COUNTS = {
+    egypt: 9,
+    turkey: 15,
+    jordan: 7,
+    dubai: 9,
+    morocco: 1,
+    greece: 1,
+    tunisia: 1,
+    'holy-land': 0,
+    holyland: 0,
+  };
+
+  const liveDestinationCards = useMemo(() => {
+    const cardMap = new Map();
+
+    (publishedDestinations || []).forEach((destination) => {
+      const slug = destination.slug || destination.id;
+      const heroImg = DEST_HERO_MAP[slug] || destination.heroImageUrl || destination.image;
+      const dynamicCount = (allLiveTours || []).filter(t => t && (t.destination === slug || (slug.includes('holy') && (t.destination === 'holy-land' || t.destination === 'holyland')))).length;
+      const exactCount = DEST_TOUR_COUNTS[slug] !== undefined ? DEST_TOUR_COUNTS[slug] : destination.toursCount;
+      const toursCount = exactCount !== undefined ? exactCount : dynamicCount;
+      const navKey = (slug === 'holy-land' || slug === 'holyland') ? 'holyland' : slug;
+
+      const name = t(`nav.${navKey}`, destination.title || destination.name);
+      const subtitle = t(`dest.${navKey}.subtitle`, destination.subtitle || destination.description || '');
+
+      const key = (slug === 'holyland' || slug === 'holy-land') ? 'holy-land' : slug;
+
+      cardMap.set(key, {
+        id: slug === 'holy-land' ? 'holyland' : slug,
+        name,
+        description: subtitle,
+        subtitle,
+        image: heroImg,
+        toursCount: toursCount,
+      });
+    });
+
+    const DESIRED_ORDER = ['egypt', 'turkey', 'dubai', 'jordan', 'morocco', 'tunisia', 'greece', 'holy-land'];
+
+    const result = [];
+    DESIRED_ORDER.forEach((key) => {
+      if (cardMap.has(key)) {
+        result.push(cardMap.get(key));
+      } else {
+        const navKey = key === 'holy-land' ? 'holyland' : key;
+        result.push({
+          id: key === 'holy-land' ? 'holyland' : key,
+          name: t(`nav.${navKey}`, key.charAt(0).toUpperCase() + key.slice(1)),
+          description: t(`dest.${navKey}.subtitle`, ''),
+          subtitle: t(`dest.${navKey}.subtitle`, ''),
+          image: DEST_HERO_MAP[key] || 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+          toursCount: DEST_TOUR_COUNTS[key] !== undefined ? DEST_TOUR_COUNTS[key] : 0,
+        });
+      }
+    });
+
+    return result;
+  }, [publishedDestinations, allLiveTours, t]);
 
   const totalPassengers = adults + children + infants;
 
@@ -1051,7 +1019,7 @@ const DEFAULT_DESTINATIONS = [
       </section>
 
       {/* Content Form Section */}
-      <section className="container mx-auto px-6 py-12 -mt-16 relative z-20 max-w-5xl">
+      <section className="container mx-auto px-6 py-12 -mt-16 relative z-20 max-w-6xl">
         <div className="tailor-fixed bg-[#faf9f6] rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.08)] p-6 md:p-12 border border-obsidian-900/5">
           {/* Stepper Header */}
           <div className="stepper-container">
@@ -1144,49 +1112,91 @@ const DEFAULT_DESTINATIONS = [
                     {t('tailor.step1Title', 'Where would you like to travel? (You can choose more than one)')}
                   </h3>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mb-8">
-                    {destinations.map((dest) => {
-                      const isSelected = selectedDestinations.includes(dest.id);
+                  {/* Destination Cards Grid - Exact Travolo Replica matching Home page section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+                    {liveDestinationCards.map((dest, index) => {
+                      const isSelected = selectedDestinations.includes(dest.id) || (dest.id === 'holyland' && selectedDestinations.includes('holy-land'));
+                      const tourCount = dest.toursCount;
+
                       return (
-                        <button
-                          type="button"
+                        <motion.div
                           key={dest.id}
+                          initial={{ opacity: 0, y: 35 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: index * 0.08 }}
                           onClick={() => handleDestinationToggle(dest.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              handleDestinationToggle(dest.id);
+                            }
+                          }}
+                          role="button"
+                          tabIndex={0}
                           aria-pressed={isSelected}
-                          aria-label={`${isSelected ? t('tailor.unselect', 'Unselect') : t('home.select', 'Select')} ${dest.name}`}
-                          className={`relative h-[220px] rounded-2xl overflow-hidden cursor-pointer group border-2 bg-slate-900 p-0 text-left transition-all duration-300 transform hover:-translate-y-1 ${
+                          aria-label={`${isSelected ? t('tailor.unselect', 'إلغاء تحديد') : t('home.select', 'تحديد')} ${dest.name}`}
+                          className={`dest-card-container group relative h-[480px] sm:h-[520px] rounded-[24px] overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2.5 cursor-pointer focus:outline-none flex flex-col justify-between ${
                             isSelected
-                              ? 'border-amber-500 shadow-xl ring-2 ring-amber-500/50 scale-[1.02]'
-                              : 'border-obsidian-900/10 hover:border-amber-500/70 hover:shadow-lg'
+                              ? 'border-2 border-[#F5A623] shadow-[0_0_35px_rgba(245,166,35,0.75)] ring-4 ring-[#F5A623]/60 scale-[1.02]'
+                              : 'border border-white/15 hover:border-[#F5A623]/80'
                           }`}
                         >
+                          {/* Full Background Cover Photo */}
                           <img
-                            src={dest.img}
+                            src={dest.image}
+                            srcSet={dest.image && dest.image.includes('images.unsplash.com') ? `
+                              ${dest.image.replace(/w=\d+&h=\d+/, 'w=1000&q=90')} 1000w
+                            ` : undefined}
+                            sizes="(max-width: 768px) 600px, 1000px"
                             alt={dest.name}
-                            draggable="false"
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 brightness-[0.88] group-hover:brightness-100"
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg';
-                            }}
+                            width="1000"
+                            height="800"
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                            loading="lazy"
+                            decoding="async"
                           />
-                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent flex flex-col justify-end p-4">
-                            {dest.flag && (
-                              <span className="text-xl mb-1 drop-shadow">{dest.flag}</span>
-                            )}
-                            <span className="text-white font-extrabold text-base leading-snug drop-shadow-md">
-                              {dest.name}
-                            </span>
-                          </div>
+
+                          {/* Gradient Overlay for photo contrast */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#041446]/85 via-transparent to-transparent pointer-events-none" />
+
+                          {/* Selection Indicator Checkmark */}
                           {isSelected && (
-                            <span
-                              className="pointer-events-none absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-slate-950 font-black shadow-lg text-sm"
-                              aria-hidden="true"
-                            >
+                            <div className="absolute top-4 ltr:left-5 rtl:right-5 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-[#FFE082] via-[#F5A623] to-[#B38728] text-black font-black shadow-[0_0_25px_rgba(245,166,35,0.9)] text-xl border-2 border-white">
                               ✓
-                            </span>
+                            </div>
                           )}
-                        </button>
+
+                          {/* Top Badge: Country Name in Ultra-Luxury Gold Box with Bold Black Text */}
+                          <div className="absolute top-0 ltr:right-8 rtl:left-8 z-20">
+                            <div 
+                              className="px-7 py-3 rounded-b-2xl font-extrabold text-2xl sm:text-3xl font-serif shadow-[0_8px_25px_rgba(245,166,35,0.45)] flex items-center justify-center tracking-wide border-b-2 border-x-2 border-[#B38728]/70 hover:brightness-110 transition-all duration-300"
+                              style={{ background: 'linear-gradient(135deg, #FFE082 0%, #F5A623 45%, #D4AF37 80%, #B38728 100%)' }}
+                            >
+                              <span className="dest-card-black-text font-extrabold tracking-wider" style={{ color: '#000000' }}>
+                                {dest.name}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Bottom Translucent Strip Overlay: Royal Blue Background & Pure White Text Above Line */}
+                          <div className={`absolute bottom-6 left-6 right-6 z-20 rounded-[20px] p-4 sm:p-5 shadow-2xl backdrop-blur-md transition-all duration-300 bg-[#041446]/90 border ${
+                            isSelected ? 'border-2 border-[#F5A623] bg-[#041446]' : 'border border-[#F5A623]/40 group-hover:bg-[#041446] group-hover:border-[#F5A623]/80'
+                          }`}>
+                            {/* Description (Text above line: Pure Crisp White) */}
+                            <p className="dest-card-white-text text-sm sm:text-base font-bold leading-relaxed line-clamp-2 mb-3 text-white tracking-wide" style={{ color: '#FFFFFF' }}>
+                              {dest.description || t("destination.luxuryGuide", "Explore Sea & Get Relax")}
+                            </p>
+
+                            {/* Tour Count (Text below line) */}
+                            <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-[#F5A623] pt-2.5 border-t border-white/20">
+                              <FaCompass className="text-[#F5A623]" size={16} />
+                              <span className="dest-card-white-text font-extrabold" style={{ color: '#FFFFFF' }}>
+                                {tourCount} {t("home.toursAvailable", "رحلة متوفرة")}
+                              </span>
+                            </div>
+                          </div>
+                        </motion.div>
                       );
                     })}
                   </div>
