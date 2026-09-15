@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe } from 'react-icons/fa';
 import { useCmsBlock } from '../hooks/useCmsBlock';
 import AnimatedCounter from '../components/common/AnimatedCounter';
+import TeamSection from '../components/about/TeamSection';
 
 const styles = `
   :root {
@@ -559,134 +560,7 @@ const styles = `
     .about-page .services-grid,
     .about-page .values-row { grid-template-columns: repeat(2, 1fr); }
   }
-  :root { --avatar-size: 168px; }
-  .about-page .team-badge {
-    display: inline-block;
-    margin-bottom: 20px;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    letter-spacing: .28em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 7px 20px;
-    background: rgba(201, 162, 39, 0.06);
-  }
-  .about-page .team-lead {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin: 0 auto 96px;
-  }
-  .about-page .team-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    column-gap: 64px;
-    row-gap: 56px;
-    max-width: 1020px;
-    margin: 0 auto;
-  }
-  .about-page .team-card {
-    width: 208px;
-    text-align: center;
-    margin-top: var(--offset, 0px);
-  }
-  .about-page .avatar-frame {
-    position: relative;
-    width: var(--avatar-size);
-    height: var(--avatar-size);
-    margin: 0 auto 28px;
-    border-radius: 50%;
-    cursor: pointer;
-    animation: floatY 5.2s ease-in-out infinite;
-  }
-  @keyframes floatY {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-7px); }
-  }
-  @media(prefers-reduced-motion:reduce) {
-    .about-page .avatar-frame { animation: none; }
-  }
-  .about-page .avatar-ring {
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    border: 1px solid var(--gold);
-    opacity: .55;
-    transition: opacity .4s ease, transform .4s ease;
-  }
-  .about-page .avatar-frame:hover .avatar-ring {
-    opacity: 1;
-    transform: scale(1.04);
-  }
-  .about-page .avatar {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: linear-gradient(160deg, var(--navy-mid), var(--navy-deep));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    box-shadow: 0 30px 60px -25px rgba(0, 0, 0, .6);
-  }
-  .about-page .avatar img { width: 100%; height: 100%; object-fit: cover; display: none; }
-  .about-page .avatar.has-photo img { display: block; }
-  .about-page .avatar.has-photo .initials,
-  .about-page .avatar.has-photo .plus { display: none; }
-  .about-page .initials {
-    font-family: var(--display);
-    font-size: 44px;
-    color: var(--gold-light);
-    letter-spacing: .04em;
-  }
-  .about-page .plus {
-    position: absolute;
-    bottom: 4px;
-    right: 4px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--gold);
-    color: var(--navy-deep);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 17px;
-    font-weight: 700;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, .4);
-    border: 2px solid var(--navy-deep);
-  }
-  .about-page input[type="file"] { display: none; }
-  .about-page .member-name {
-    font-family: var(--display);
-    font-size: 21px;
-    font-weight: 600;
-    color: var(--ivory);
-    margin: 0 0 6px;
-  }
-  .about-page .lead-name { font-size: 28px; }
-  .about-page .member-role {
-    font-size: 11px;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: rgba(248, 243, 230, .62);
-  }
-  .about-page .member-role em { color: var(--gold-light); font-style: normal; }
-  .about-page .member-country {
-    font-size: 11.5px;
-    color: rgba(248, 243, 230, .5);
-    margin-top: 9px;
-  }
-  @media(max-width:760px) {
-    :root { --avatar-size: 128px; }
-    .about-page .team-card { width: 150px; margin-top: calc(var(--offset, 0px) * .4); }
-    .about-page .team-grid { column-gap: 36px; row-gap: 42px; }
-  }
+
   .about-page .tradeshow-row { display: flex; flex-wrap: wrap; gap: 12px; }
   .about-page .tradeshow-chip {
     border: 1px solid rgba(14, 42, 82, .18);
@@ -767,21 +641,7 @@ const About = () => {
     const chart = el.querySelector('.chart');
     if (chart) chartIo.observe(chart);
 
-    const avatarFrames = el.querySelectorAll('#team .avatar-frame');
-    avatarFrames.forEach(frame => {
-      const input = frame.querySelector('input[type="file"]');
-      const avatar = frame.querySelector('.avatar');
-      const img = avatar.querySelector('img');
-      if (input) {
-        frame.addEventListener('click', () => input.click());
-        input.addEventListener('change', (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          img.src = URL.createObjectURL(file);
-          avatar.classList.add('has-photo');
-        });
-      }
-    });
+
 
     return () => {
       io.disconnect();
@@ -1047,51 +907,8 @@ const About = () => {
         </div>
       </section>
 
-      <section className="section-dark" id="team">
-        <div className="section-head reveal" style={{ marginBottom: 80 }}>
-          <span className="eyebrow">{t('about.teamEyebrow')}</span>
-          <h2 dangerouslySetInnerHTML={{ __html: t('about.teamTitle') }} />
-          <div className="rule"></div>
-          <p style={{ marginTop: 24, fontSize: '13.5px', color: 'rgba(248,243,230,.6)', fontWeight: 300, lineHeight: 1.8, maxWidth: 520 }}>
-            {t('about.teamDesc')}
-          </p>
-        </div>
-        <div className="team-lead reveal">
-          <span className="team-badge">{'🇪🇬'} {t('about.teamLeadBadge')}</span>
-          <div className="avatar-frame">
-            <div className="avatar-ring"></div>
-            <div className="avatar has-photo"><span className="initials" style={{display:'none'}}>AY</span><img src="https://res.cloudinary.com/tibx70zb/image/upload/v1783625666/9014b7ab-2eb3-4158-bc0b-246329a06c9b_n48ymc.jpg" alt="Attia Yamany" /></div>
-          </div>
-          <p className="member-name lead-name">{t('about.leadName')}</p>
-          <p className="member-role" dangerouslySetInnerHTML={{ __html: t('about.leadRole') }} />
-        </div>
-        <div className="team-grid">
-          {[
-            { initials: 'MS', name: 'Miguel Selma', roleKey: 'about.roleGeneralDirector', country: '\uD83C\uDDEA\uD83C\uDDF8 Spain', offset: '0px', delay: '.05s' },
-            { initials: 'GF', name: 'Giovanni Fiore', roleKey: 'about.roleCommercialDirector', country: '\uD83C\uDDEE\uD83C\uDDF9 Italy', offset: '38px', delay: '.1s', img: 'https://res.cloudinary.com/tibx70zb/image/upload/v1783333028/WhatsApp_Image_2026-07-01_at_12.03.27_AM_rj6uko.jpg' },
-            { initials: 'VB', name: 'Vinicius Barcellos', roleKey: 'about.roleCommercialDirector', country: '\uD83C\uDDE7\uD83C\uDDF7 Brazil', offset: '8px', delay: '.15s' },
-            { initials: 'SM', name: 'Sonia Melo', roleKey: 'about.roleSalesDirector', country: '\uD83C\uDDE7\uD83C\uDDF7 Brazil', offset: '46px', delay: '.2s', img: 'https://res.cloudinary.com/tibx70zb/image/upload/v1783409905/24b2188b-b23a-41ba-9321-dd9ac33de3cd_iylkgt.jpg' },
-            { initials: 'LR', name: 'Luciana Rovaroto', roleKey: 'about.roleCustomerService', country: '\uD83C\uDDE7\uD83C\uDDF7 Brazil', offset: '2px', delay: '.25s', img: 'https://res.cloudinary.com/tibx70zb/image/upload/v1783332881/WhatsApp_Image_2026-07-01_at_12.03.27_AM_1_i6suvb.jpg' },
-            { initials: 'RP', name: 'Ramiro Poggi', roleKey: 'about.roleCommercialDirector', country: '\uD83C\uDDE6\uD83C\uDDF7 Argentina', offset: '32px', delay: '.3s' },
-            { initials: 'EC', name: 'Edgar Ca\u00F1\u00F3n', roleKey: 'about.roleCommercialDirector', country: '\uD83C\uDDE8\uD83C\uDDF4 Colombia', offset: '14px', delay: '.35s' },
-          ].map((m, i) => (
-            <div className="team-card reveal" key={i} style={{ '--offset': m.offset, transitionDelay: m.delay }}>
-              <div className="avatar-frame">
-                <div className="avatar-ring"></div>
-                <div className={`avatar${m.img ? ' has-photo' : ''}`}>
-                  <span className="initials" style={m.img ? { display: 'none' } : {}}>{m.initials}</span>
-                  {m.img ? <img src={m.img} alt={m.name} /> : <img alt="" />}
-                  {!m.img && <span className="plus">+</span>}
-                </div>
-                {!m.img && <input type="file" accept="image/*" />}
-              </div>
-              <p className="member-name">{m.name}</p>
-              <p className="member-role" dangerouslySetInnerHTML={{ __html: t(m.roleKey) }} />
-              <p className="member-country">{m.country}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Team Section */}
+      <TeamSection />
     </div>
   );
 };
