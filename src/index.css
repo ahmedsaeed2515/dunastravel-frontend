@@ -194,6 +194,10 @@ html[data-scroll-locked] {
   .dark .tailor-fixed .dest-card-white-text * {
     color: #ffffff !important;
   }
+  .dark .explore-program-btn,
+  .dark .explore-program-btn * {
+    color: #ffffff !important;
+  }
 
 
 
