@@ -195,7 +195,9 @@ html[data-scroll-locked] {
     color: #ffffff !important;
   }
   .dark .explore-program-btn,
-  .dark .explore-program-btn * {
+  .dark .explore-program-btn *,
+  .explore-program-btn,
+  .explore-program-btn * {
     color: #ffffff !important;
   }
 
