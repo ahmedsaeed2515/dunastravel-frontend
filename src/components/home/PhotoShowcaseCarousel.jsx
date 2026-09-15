@@ -134,14 +134,16 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
             transform: translate3d(-50%, 0, 0);
           }
         }
-        .photo-showcase-marquee-track {
-          display: flex;
-          width: max-content;
-          animation: photoShowcaseContinuous 35s linear infinite !important;
-          will-change: transform;
-        }
-        .photo-showcase-marquee-track:hover {
-          animation-play-state: paused !important;
+        @media (min-width: 768px) {
+          .photo-showcase-marquee-track {
+            display: flex;
+            width: max-content;
+            animation: photoShowcaseContinuous 35s linear infinite !important;
+            will-change: transform;
+          }
+          .photo-showcase-marquee-track:hover {
+            animation-play-state: paused !important;
+          }
         }
       `}</style>
 
@@ -177,7 +179,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
         </div>
 
         {/* Marquee Track */}
-        <div dir="ltr" className="w-full relative overflow-hidden py-8 z-10">
+        <div dir="ltr" className="w-full relative overflow-x-auto md:overflow-hidden py-8 z-10 scrollbar-none snap-x snap-mandatory md:snap-none">
           <div
             className="photo-showcase-marquee-track flex"
             style={{
@@ -194,7 +196,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
                 return (
                   <div
                     key={img.uKey || `gal-${idx}`}
-                    className="flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.04] hover:z-30 border border-white/20 hover:border-[#0CB2DB] bg-slate-900/50 shadow-2xl"
+                    className={`flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.04] hover:z-30 border border-white/20 hover:border-[#0CB2DB] bg-slate-900/50 shadow-2xl ${img.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
                     onClick={() => openLightbox(originalIndex)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {

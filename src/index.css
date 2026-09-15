@@ -1083,10 +1083,17 @@ html[dir="rtl"] .dropdown-item:hover {
 
 }
 
-/* Off-screen rendering optimization: skips rendering work until scrolled into view */
+/* Off-screen rendering optimization: skips rendering work until scrolled into view (desktop only to prevent mobile scroll layout thrashing) */
 .content-auto {
   content-visibility: auto;
   contain-intrinsic-size: 1px 600px;
+}
+
+@media (max-width: 768px) {
+  .content-auto {
+    content-visibility: visible !important;
+    contain-intrinsic-size: none !important;
+  }
 }
 
 /* ── Continuous GPU Marquee Animations ────────────────────────────── */
@@ -1121,6 +1128,24 @@ html[dir="rtl"] .dropdown-item:hover {
 .animate-continuous-marquee-left:hover,
 .animate-continuous-marquee-right:hover {
   animation-play-state: paused;
+}
+
+.tour-marquee-track {
+  animation: tourMarquee 75s linear infinite;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .animate-continuous-marquee-left,
+  .animate-continuous-marquee-right,
+  .photo-showcase-marquee-track,
+  .video-showcase-marquee-track,
+  .marquee-track,
+  .tour-marquee-track {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
 }
 
 /* ── Travelik index-3dark Hero Section Signature Styles & Animations ───── */

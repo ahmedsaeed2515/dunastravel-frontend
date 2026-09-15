@@ -4,114 +4,11 @@ import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
 import { resolveDestinationSlug } from '../utils/destinationHelper';
 
-import canonicalDb from '../data/database/unified_52_tours.json';
-import { dubaiTours } from '../data/dubaiTours';
-import { homeTurkeyPreviewTours, homeJordanPreviewTours, homeDubaiPreviewTours } from '../data/homePreviewTours';
-
-const allStaticTours = canonicalDb.tours || [];
-
-const slugify = (text) => String(text || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-
-export function getFallbackTour(slug, lang = 'en') {
-  if (!slug) return null;
-  const lowerSlug = String(slug).toLowerCase();
-  
-  let match = allStaticTours.find(
-    (t) => String(t.slug || '').toLowerCase() === lowerSlug
-      || String(t.id || '').toLowerCase() === lowerSlug
-      || String(t.code?.en || t.code?.ar || t.code || '').toLowerCase() === lowerSlug,
-  );
-
-  if (!match) {
-    const additionalDatasets = [
-      ...(dubaiTours || []),
-      ...(homeDubaiPreviewTours || []),
-      ...(homeTurkeyPreviewTours || []),
-      ...(homeJordanPreviewTours || []),
-    ];
-
-    match = additionalDatasets.find((t) => {
-      const idStr = String(t.id || '').toLowerCase();
-      const slugStr = String(t.slug || '').toLowerCase();
-      const enTitle = typeof t.name === 'object' ? (t.name.en || t.name.ar || '') : String(t.name || t.title || '');
-      const genSlug = slugify(`${t.id || ''}-${enTitle}`).toLowerCase();
-      const codeStr = typeof t.code === 'object' ? (t.code.en || t.code.ar || '') : String(t.code || '');
-
-      return lowerSlug === idStr
-        || lowerSlug === slugStr
-        || lowerSlug === genSlug
-        || (codeStr && lowerSlug === codeStr.toLowerCase());
-    });
-  }
-
-  if (!match) return null;
-
-  const resolveText = (val) => (typeof val === 'object' && val !== null ? (val[lang] || val.en || val.ar || val.es || Object.values(val)[0]) : (val || ''));
-  
-  const resolveList = (val) => {
-    if (!val) return [];
-    if (Array.isArray(val)) {
-      return val.map(item => {
-        if (typeof item === 'object' && item !== null) {
-          return item[lang] || item.en || item.ar || item.es || Object.values(item)[0] || '';
-        }
-        return String(item || '');
-      }).filter(Boolean);
-    }
-    if (typeof val === 'object' && val !== null) {
-      const list = val[lang] || val.en || val.ar || val.es || Object.values(val)[0];
-      if (Array.isArray(list)) return list.map(item => String(item || '')).filter(Boolean);
-    }
-    return [];
-  };
-
-  const rawPrice = match.price || match.basePriceUsd || match.pricing?.winter?.[0]?.dbl || match.pricing?.summer?.[0]?.dbl || 490;
-  const price = Number(rawPrice);
-  const images = Array.isArray(match.images) && match.images.length > 0
-    ? match.images
-    : (match.heroImage ? [match.heroImage] : ['https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80']);
-
-  const rawItinerary = Array.isArray(match.days)
-    ? match.days
-    : Array.isArray(match.itinerary)
-      ? match.itinerary
-      : (match.itinerary?.[lang] || match.itinerary?.en || match.itinerary?.ar || []);
-
-  const itinerary = rawItinerary.map((item, index) => ({
-    id: `day-${item.day || index + 1}`,
-    day: item.day || index + 1,
-    title: resolveText(item.title) || (lang === 'ar' ? `اليوم ${item.day || index + 1}` : `Day ${item.day || index + 1}`),
-    description: resolveText(item.description || item.desc),
-    meals: resolveText(item.meals),
-  }));
-
-  const destName = match.destination || match.country || (String(match.id).startsWith('REG-') || String(match.id).startsWith('HM') ? 'dubai' : 'egypt');
-
-  return {
-    ...match,
-    id: match.id || match.slug,
-    slug: match.slug || slug,
-    title: resolveText(match.title || match.name),
-    overview: resolveText(match.overview),
-    duration: resolveText(match.duration),
-    country: match.country || (destName === 'dubai' ? 'United Arab Emirates' : 'Egypt'),
-    destination: resolveDestinationSlug(destName),
-    images,
-    heroImage: images[0] || '',
-    price,
-    basePriceUsd: price,
-    included: resolveList(match.included || match.includes),
-    excluded: resolveList(match.excluded || match.excludes),
-    highlights: resolveList(match.highlights),
-    minPax: resolveText(match.minPax),
-    code: resolveText(match.code),
-    pricing: match.pricing || null,
-    itinerary,
-    currency: 'USD',
-  };
+export function getFallbackTour() {
+  return null;
 }
 
-function normalizeTour(data, lang = 'en') {
+function normalizeTour(data, lang = 'en', fallback = null) {
   const id = data?.id || data?.slug;
   const slug = data?.slug || data?.id;
   const title = typeof data?.title === 'object' ? (data.title[lang] || data.title.en || data.title.ar) : (data?.title || slug);
@@ -123,8 +20,6 @@ function normalizeTour(data, lang = 'en') {
   if (!Number.isFinite(price) || price < 0) {
     throw new Error(`Invalid tour price for ${data.slug}`);
   }
-
-  const fallback = getFallbackTour(data.slug, lang);
 
   const backendImages = Array.isArray(data.images) && data.images.length > 0
     ? data.images.map((image) => (typeof image === 'string' ? image : image?.imageUrl || image?.url || '')).filter(Boolean)
@@ -240,15 +135,9 @@ export function useTour(slug) {
         }
       } catch (requestError) {
         if (isMounted) {
-          const fallback = getFallbackTour(slug, lang);
-          if (fallback) {
-            setTour(fallback);
-            setError(null);
-          } else {
-            const errorMsg = requestError?.response?.data?.message || requestError?.message || 'Tour not found';
-            setError(typeof errorMsg === 'string' ? errorMsg : String(errorMsg));
-            setTour(null);
-          }
+          const errorMsg = requestError?.response?.data?.message || requestError?.message || 'Tour not found';
+          setError(typeof errorMsg === 'string' ? errorMsg : String(errorMsg));
+          setTour(null);
         }
       } finally {
         if (isMounted) setLoading(false);

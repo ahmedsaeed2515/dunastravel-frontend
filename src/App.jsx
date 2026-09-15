@@ -175,10 +175,9 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const PageTransition = ({ children }) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -20 }}
-    transition={{ duration: 0.3 }}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.15, ease: 'easeOut' }}
   >
     {children}
   </motion.div>
@@ -229,25 +228,11 @@ const ScrollProgressBar = React.memo(function ScrollProgressBar() {
 
   React.useEffect(() => {
     let ticking = false;
-    let docHeight = 0;
-
-    const measureHeight = () => {
-      docHeight = (document.documentElement.scrollHeight || document.body.scrollHeight) - window.innerHeight;
-    };
-
-    measureHeight();
-
-    let resizeObserver = null;
-    if (typeof ResizeObserver !== 'undefined' && document.body) {
-      resizeObserver = new ResizeObserver(() => {
-        measureHeight();
-      });
-      resizeObserver.observe(document.body);
-    }
 
     const updateProgress = () => {
       if (!barRef.current) return;
       const scrollY = window.scrollY || window.pageYOffset;
+      const docHeight = (document.documentElement.scrollHeight || document.body.scrollHeight) - window.innerHeight;
       const progress = docHeight > 0 ? Math.min(Math.max(scrollY / docHeight, 0), 1) : 0;
       barRef.current.style.transform = `scaleX(${progress})`;
       ticking = false;
@@ -261,11 +246,8 @@ const ScrollProgressBar = React.memo(function ScrollProgressBar() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', measureHeight, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', measureHeight);
-      if (resizeObserver) resizeObserver.disconnect();
     };
   }, []);
 
@@ -304,8 +286,7 @@ function App() {
       <ScrollProgressBar />
 
       <Suspense fallback={<FallbackLoader />}>
-        <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
+        <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Layout />}>
                 <Route
                   index
@@ -719,7 +700,6 @@ function App() {
                 />
               </Route>
             </Routes>
-          </AnimatePresence>
         </Suspense>
     </ErrorBoundary>
   );
