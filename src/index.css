@@ -194,12 +194,19 @@ html[data-scroll-locked] {
   .dark .tailor-fixed .dest-card-white-text * {
     color: #ffffff !important;
   }
+  /* High contrast Explore Program button styling - overriding parent group-hover color rules */
+  .explore-program-btn,
+  .explore-program-btn *,
   .dark .explore-program-btn,
   .dark .explore-program-btn *,
-  .explore-program-btn,
-  .explore-program-btn * {
+  .group:hover .explore-program-btn,
+  .group:hover .explore-program-btn *,
+  .group:hover .explore-program-btn span,
+  a.explore-program-btn,
+  a.explore-program-btn span {
     color: #000000 !important;
     font-weight: 900 !important;
+    -webkit-text-fill-color: #000000 !important;
   }
 
 
