@@ -2,7 +2,7 @@
 const buttonVariants = {
   'gold-glow': `
     bg-gradient-to-r from-[#C9A227] to-[#E8C97A]
-    text-obsidian-900 font-semibold tracking-widest uppercase text-xs
+    text-black font-black tracking-widest uppercase text-xs
     px-8 py-4 rounded-full
     shadow-[0_0_20px_rgba(201,162,39,0.4)]
     hover:shadow-[0_0_36px_rgba(201,162,39,0.6)]

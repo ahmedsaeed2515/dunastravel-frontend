@@ -1853,10 +1853,15 @@ const HomeExperienceSection = () => {
                     </div>
 
                     <div className="flex justify-center mt-10">
-                      <Link to={livePackageCards.find(p => p.id === activePackage)?.link || "/tours"}>
-                        <Button variant="gold-glow" className="px-8 py-3 font-bold">
-                          {t("home.explorePackage", "Explore Full Program")} →
-                        </Button>
+                      <Link 
+                        to={livePackageCards.find(p => p.id === activePackage)?.link || "/tours"}
+                        className="explore-program-btn inline-flex items-center gap-2 px-8 py-3.5 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-2xl hover:scale-105 transition-all duration-300 text-xs font-black border-2 border-white/80 cursor-pointer"
+                        style={{ background: 'linear-gradient(135deg, #FFE082 0%, #F5A623 50%, #D4AF37 100%)', color: '#000000' }}
+                      >
+                        <span className="font-black tracking-wider text-black" style={{ color: '#000000', fontWeight: 900 }}>
+                          {t("home.explorePackage", "Explore Full Program")}
+                        </span>
+                        <span className="rtl-flip font-black text-black" style={{ color: '#000000', fontWeight: 900 }}>→</span>
                       </Link>
                     </div>
                   </motion.div>
