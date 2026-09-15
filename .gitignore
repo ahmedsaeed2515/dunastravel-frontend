@@ -35,3 +35,7 @@ dist-ssr
 
 # server configuration
 server.cjs
+
+# Lighthouse audit outputs
+lighthouse_*.json
+

@@ -47,6 +47,31 @@
   align-items: center;
 }
 
+.slider-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.slider-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(18, 35, 39, 0.75) 0%, rgba(18, 35, 39, 0.35) 50%, rgba(18, 35, 39, 0.2) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.zoom-active {
+  animation: heroZoomSequence 6.5s cubic-bezier(0.37, 0, 0.63, 1) forwards;
+}
+
 .slider-bg {
   background: url('/imgs/slider-abu-simbel.webp');
   background-repeat: no-repeat;
@@ -149,17 +174,9 @@
     -webkit-transform: scale(1);
     transform: scale(1);
   }
-  35% {
-    -webkit-transform: scale(2.15);
-    transform: scale(2.15);
-  }
   50% {
-    -webkit-transform: scale(2.30);
-    transform: scale(2.30);
-  }
-  85% {
-    -webkit-transform: scale(1.15);
-    transform: scale(1.15);
+    -webkit-transform: scale(1.06);
+    transform: scale(1.06);
   }
   100% {
     -webkit-transform: scale(1);
@@ -172,17 +189,9 @@
     -webkit-transform: scale(1);
     transform: scale(1);
   }
-  35% {
-    -webkit-transform: scale(2.15);
-    transform: scale(2.15);
-  }
   50% {
-    -webkit-transform: scale(2.30);
-    transform: scale(2.30);
-  }
-  85% {
-    -webkit-transform: scale(1.15);
-    transform: scale(1.15);
+    -webkit-transform: scale(1.06);
+    transform: scale(1.06);
   }
   100% {
     -webkit-transform: scale(1);
@@ -459,6 +468,14 @@
   /* Center right background alignment so monuments shine on portrait screens */
   .slider-bg {
     background-position: 75% center !important;
+  }
+
+  .slider-bg-img {
+    object-position: 75% center !important;
+  }
+
+  .slider-overlay {
+    background: linear-gradient(to top, rgba(18, 35, 39, 0.9) 0%, rgba(18, 35, 39, 0.45) 60%, rgba(18, 35, 39, 0.25) 100%) !important;
   }
   
   .slider-section .hero_content h1 {

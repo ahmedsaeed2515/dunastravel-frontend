@@ -188,32 +188,9 @@ const BackgroundMusic = () => {
     }
   };
 
-  // Auto-play on home page on first user interaction (click / scroll / touch / key)
+  // Manage playback state across route changes
   useEffect(() => {
-    const explicitlyPaused = sessionStorage.getItem('userExplicitlyPaused') === 'true';
-
-    if (isHomePage) {
-      if (!explicitlyPaused && !autoPlayAttempted.current) {
-        autoPlayAttempted.current = true;
-
-        const handleFirstInteraction = () => {
-          if (!isPlayingRef.current) {
-            playMusic();
-          }
-          cleanup();
-        };
-
-        const cleanup = () => {
-          window.removeEventListener('click', handleFirstInteraction);
-          window.removeEventListener('keydown', handleFirstInteraction);
-        };
-
-        window.addEventListener('click', handleFirstInteraction, { once: true });
-        window.addEventListener('keydown', handleFirstInteraction, { once: true });
-
-        return cleanup;
-      }
-    } else {
+    if (!isHomePage) {
       const manualNonHomePlay = sessionStorage.getItem('userManualPlayNonHome') === 'true';
       if (!manualNonHomePlay && isPlayingRef.current) {
         pauseMusic();

@@ -272,13 +272,28 @@ function App() {
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
-    trackEvent('page_view', { pathname: location.pathname });
+
+    let idleId;
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(() => {
+        trackEvent('page_view', { pathname: location.pathname });
+      }, { timeout: 3000 });
+    } else {
+      setTimeout(() => {
+        trackEvent('page_view', { pathname: location.pathname });
+      }, 1500);
+    }
 
     const interval = setInterval(() => {
       trackEvent('heartbeat', { pathname: window.location.pathname });
     }, 25000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (idleId && typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+    };
   }, [location.pathname]);
 
   return (

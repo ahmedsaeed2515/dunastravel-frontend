@@ -159,24 +159,10 @@ export const JaiderChatProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (!isOpen) return;
     const activeLang = i18n.language ? i18n.language.split('-')[0] : 'en';
-    if (isOpen) {
-      fetchChatConfigAndPersonas(activeLang);
-      return;
-    }
-
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const handle = window.requestIdleCallback(() => {
-        fetchChatConfigAndPersonas(activeLang);
-      }, { timeout: 3000 });
-      return () => window.cancelIdleCallback(handle);
-    } else {
-      const timer = setTimeout(() => {
-        fetchChatConfigAndPersonas(activeLang);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [i18n.language, isOpen, fetchChatConfigAndPersonas]);
+    fetchChatConfigAndPersonas(activeLang);
+  }, [isOpen, i18n.language, fetchChatConfigAndPersonas]);
 
   const changePersona = (personaCode) => {
     if (!personaCode || personaCode === selectedPersona) return;
@@ -308,10 +294,9 @@ export const JaiderChatProvider = ({ children }) => {
   }, [i18n.language]);
 
   useEffect(() => {
-    if (!sessionId) return undefined;
-    const restoreTimer = setTimeout(() => restoreConversationHistory(sessionId), 0);
-    return () => clearTimeout(restoreTimer);
-  }, [sessionId, restoreConversationHistory]);
+    if (!isOpen || !sessionId) return;
+    restoreConversationHistory(sessionId);
+  }, [isOpen, sessionId, restoreConversationHistory]);
 
   const handleSetIsOpen = (open) => {
     const nextOpen = typeof open === 'function' ? open(isOpen) : open;

@@ -2,46 +2,80 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { JaiderChatProvider } from '../../context/JaiderChatContext';
+import { JaiderChatProvider, useJaiderChat } from '../../context/JaiderChatContext';
 
 const FloatingContact = lazy(() => import('./FloatingContact'));
 const BackgroundMusic = lazy(() => import('../ui/BackgroundMusic'));
 const FloatingGuideR = lazy(() => import('../ui/FloatingGuideR'));
 const JaiderChatWindow = lazy(() => import('../ui/JaiderChatWindow'));
 
-const Layout = () => {
+const ChatWindowWrapper = () => {
+  const { isOpen } = useJaiderChat();
+  if (!isOpen) return null;
+  return (
+    <Suspense fallback={null}>
+      <JaiderChatWindow />
+    </Suspense>
+  );
+};
+
+const LayoutContent = () => {
   const [loadWidgets, setLoadWidgets] = useState(false);
 
   useEffect(() => {
+    const load = () => setLoadWidgets(true);
+    const events = ['scroll', 'touchstart', 'mousemove'];
+    const onInteract = () => {
+      load();
+      events.forEach((e) => window.removeEventListener(e, onInteract));
+    };
+    events.forEach((e) => window.addEventListener(e, onInteract, { passive: true, once: true }));
+
+    let idleId;
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const handle = window.requestIdleCallback(() => setLoadWidgets(true), { timeout: 1500 });
-      return () => window.cancelIdleCallback(handle);
+      idleId = window.requestIdleCallback(load, { timeout: 12000 });
     } else {
-      const timer = setTimeout(() => setLoadWidgets(true), 800);
-      return () => clearTimeout(timer);
+      const timer = setTimeout(load, 8000);
+      return () => {
+        events.forEach((e) => window.removeEventListener(e, onInteract));
+        clearTimeout(timer);
+      };
     }
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, onInteract));
+      if (idleId && typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+    };
   }, []);
 
   return (
-    <JaiderChatProvider>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
-          <Outlet />
-        </main>
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
 
-        <Footer />
-        {loadWidgets && (
-          <Suspense fallback={null}>
-            <FloatingContact />
-            <BackgroundMusic />
-            <FloatingGuideR />
-            <JaiderChatWindow />
-          </Suspense>
-        )}
-      </div>
+      <Footer />
+      {loadWidgets && (
+        <Suspense fallback={null}>
+          <FloatingContact />
+          <BackgroundMusic />
+          <FloatingGuideR />
+        </Suspense>
+      )}
+      <ChatWindowWrapper />
+    </div>
+  );
+};
+
+const Layout = () => {
+  return (
+    <JaiderChatProvider>
+      <LayoutContent />
     </JaiderChatProvider>
   );
 };
 
 export default Layout;
+

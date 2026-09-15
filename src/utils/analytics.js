@@ -58,6 +58,12 @@ export async function trackEvent(eventName, payload = {}) {
       properties: payload.properties,
     };
 
+    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+      const blob = new Blob([JSON.stringify(body)], { type: 'application/json' });
+      navigator.sendBeacon('/api/analytics/events', blob);
+      return;
+    }
+
     await api.post('/analytics/events', body).catch(() => {});
   } catch (err) {
     // Non-blocking catch

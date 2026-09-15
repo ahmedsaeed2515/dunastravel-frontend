@@ -12,7 +12,7 @@ import { useDestinations } from "../../hooks/useDestinations";
 import { useServices } from "../../hooks/useServices";
 import { transportation as fallbackTransportation } from "../../data/transportation";
 import AnimatedCounter from "../common/AnimatedCounter";
-import HomeHeroSection from "./HomeHeroSection";
+import LazyViewportSection from "../common/LazyViewportSection";
 import { useCurrency } from "../../context/CurrencyContext";
 import api from "../../utils/api";
 import {
@@ -1115,10 +1115,8 @@ const HomeExperienceSection = () => {
         <meta property="og:image" content="/dunas-travel-logo.webp" />
       </Helmet>
 
-      {/* Yacht Dark Hero Section */}
-      <HomeHeroSection />
-
       {/* Search Section */}
+      <LazyViewportSection minHeight="500px">
       <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-0">
         {/* Background Image with Dynamic Pulsing Motion & Rich Glow */}
         <div className="absolute inset-0 overflow-hidden">
@@ -1134,9 +1132,8 @@ const HomeExperienceSection = () => {
               repeatType: "reverse",
               ease: "easeInOut"
             }}
-            fetchPriority="high"
-            loading="eager"
-            decoding="sync"
+            loading="lazy"
+            decoding="async"
             width="1440"
             height="600"
           />
@@ -1257,201 +1254,161 @@ const HomeExperienceSection = () => {
                     className="group/btn relative overflow-hidden w-full flex items-center justify-center gap-2 px-6 py-3.5 font-black rounded-2xl transition-all duration-300 text-base sm:text-lg text-white shadow-[0_8px_30px_rgba(255,107,53,0.5)] hover:shadow-[0_12px_40px_rgba(255,107,53,0.85)] cursor-pointer h-[52px] sm:h-[56px]"
                     style={{ background: 'linear-gradient(135deg, #FF6B35 0%, #D93800 50%, #1E3A8A 100%)' }}
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
-                    <FaSearch className="text-sm sm:text-base group-hover/btn:rotate-12 group-hover/btn:scale-125 transition-transform duration-300 text-amber-300" />
-                    <span>{t('home.searchBtn', 'Search')}</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+                    <FaSearch className="text-white group-hover/btn:rotate-12 transition-transform duration-300" />
+                    <span>{t('home.searchAction', 'Search')}</span>
                   </motion.button>
                 </div>
               </div>
             </div>
-          </motion.div>
 
-          {/* Popular Destinations */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-20px' }}
-            transition={{ delay: 0.25, duration: 0.7 }}
-            className="mt-8 text-center w-full max-w-5xl"
-          >
-            <p className="text-amber-400 text-xs sm:text-sm uppercase tracking-widest mb-4 font-black drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-              {t('home.popularDests', 'Popular Destinations')}
-            </p>
-            <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3.5">
-              {destinations.map((d, idx) => (
+            {/* Quick Country Pills Row */}
+            <div className="mt-8 flex flex-wrap justify-center gap-2.5 sm:gap-3 max-w-4xl mx-auto px-2">
+              {destinations.map((d, index) => (
                 <motion.div
                   key={d.id}
-                  initial={{ opacity: 0, scale: 0.85, y: 15 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.3 + idx * 0.05, duration: 0.4 }}
-                  whileHover={{ scale: 1.1, y: -4 }}
+                  transition={{ delay: index * 0.05, duration: 0.4 }}
+                  whileHover={{ scale: 1.08, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Link
                     to={`/destinations/${d.id}`}
-                    className="group flex items-center gap-2.5 bg-black/50 hover:bg-black/80 backdrop-blur-xl border border-white/30 hover:border-amber-400 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_0_25px_rgba(245,166,35,0.75)]"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-xl border font-bold text-xs sm:text-sm tracking-wide transition-all shadow-md bg-obsidian-900/80 border-amber-400/30 text-white hover:border-amber-400 hover:text-amber-300 hover:shadow-[0_0_15px_rgba(245,166,35,0.4)]"
                   >
-                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden shrink-0 ring-2 ring-amber-400/80 shadow-md group-hover:scale-110 transition-transform duration-300">
-                      <img src={getThumbnailUrl(d.img, 48)} alt="" className="w-full h-full object-cover" width="24" height="24" loading="lazy" decoding="async" />
-                    </span>
-                    <span className="text-white text-xs sm:text-sm font-black group-hover:text-amber-300 transition-colors drop-shadow-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                    <span>
                       {d.label}
                     </span>
                   </Link>
                 </motion.div>
               ))}
             </div>
-
-            {/* Customize & Contact Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.55, duration: 0.6 }}
-              className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-4"
-            >
-              <motion.div whileHover={{ scale: 1.08, y: -3 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 350, damping: 15 }}>
-                <Link
-                  to="/tailor-a-tour"
-                  className="relative overflow-hidden group inline-flex items-center gap-2.5 bg-gradient-to-r from-[#F5A623] via-[#FFC857] to-[#D97706] text-[#0C1120] font-black text-sm sm:text-base px-7 sm:px-9 py-3.5 sm:py-4 rounded-full shadow-[0_0_25px_rgba(245,166,35,0.7)] hover:shadow-[0_0_40px_rgba(245,166,35,1)] transition-all duration-300"
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                  {t('home.customize', 'Customize Your Trip')}
-                </Link>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.08, y: -3 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 350, damping: 15 }}>
-                <Link
-                  to="/contact"
-                  className="relative overflow-hidden group inline-flex items-center gap-2.5 bg-black/60 hover:bg-amber-500/20 backdrop-blur-xl border border-amber-400/70 hover:border-amber-400 text-amber-300 hover:text-white font-black text-sm sm:text-base px-7 sm:px-9 py-3.5 sm:py-4 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_35px_rgba(245,166,35,0.7)] transition-all duration-300"
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  {t('nav.contact', 'Contact Us')}
-                </Link>
-              </motion.div>
-            </motion.div>
           </motion.div>
         </div>
       </section>
+      </LazyViewportSection>
 
       {/* About the Company */}
-      <section className="py-12 bg-ivory-50">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <motion.div
-              initial={{ opacity: 0, x: isRtl ? 30 : -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="w-full lg:w-1/2"
-            >
-              <span className="text-gold-500 uppercase tracking-widest text-caption block mb-4">
-                {t("home.whoWeAre", "QUIÉNES SOMOS")}
-              </span>
-              <h2 className="text-display-lg text-obsidian-900 mb-6">
-                {t("home.aboutTitle", "Experiencias exclusivas, diseñadas a medida")}
-              </h2>
-              <p 
-                className="text-body-lg text-black dark:text-white font-bold mb-8 leading-relaxed"
-                style={{ fontWeight: 700 }}
+      <LazyViewportSection minHeight="450px">
+        <section className="py-12 bg-ivory-50">
+          <div className="container mx-auto px-6">
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+              <motion.div
+                initial={{ opacity: 0, x: isRtl ? 30 : -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="w-full lg:w-1/2"
               >
-                {t(
-                  "home.aboutDesc",
-                  "En Dunas Travel diseñamos experiencias exclusivas por los destinos más fascinantes de Oriente Medio y el Mediterráneo. Con un profundo conocimiento de cada destino y una cuidada selección de hoteles, cruceros boutique y experiencias privadas, creamos itinerarios a medida donde la excelencia, la autenticidad y la atención personalizada convierten cada viaje en una experiencia verdaderamente inolvidable."
-                )}
-              </p>
-              <Link to="/about">
-                <Button variant="outline-gold" className="px-8 py-3">
-                  {t("home.learnMore", "Learn More About Us")}
-                </Button>
-              </Link>
-            </motion.div>
+                <span className="text-gold-500 uppercase tracking-widest text-caption block mb-4">
+                  {t("home.whoWeAre", "QUIÉNES SOMOS")}
+                </span>
+                <h2 className="text-display-lg text-obsidian-900 mb-6">
+                  {t("home.aboutTitle", "Experiencias exclusivas, diseñadas a medida")}
+                </h2>
+                <p 
+                  className="text-body-lg text-black dark:text-white font-bold mb-8 leading-relaxed"
+                  style={{ fontWeight: 700 }}
+                >
+                  {t(
+                    "home.aboutDesc",
+                    "En Dunas Travel diseñamos experiencias exclusivas por los destinos más fascinantes de Oriente Medio y el Mediterráneo. Con un profundo conocimiento de cada destino y una cuidada selección de hoteles, cruceros boutique y experiencias privadas, creamos itinerarios a medida donde la excelencia, la autenticidad y la atención personalizada convierten cada viaje en una experiencia verdaderamente inolvidable."
+                  )}
+                </p>
+                <Link to="/about">
+                  <Button variant="outline-gold" className="px-8 py-3">
+                    {t("home.learnMore", "Learn More About Us")}
+                  </Button>
+                </Link>
+              </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: isRtl ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="w-full lg:w-1/2 relative"
-            >
-              {/* Floating Airplane Overlay */}
-              <div className="absolute top-2 right-4 sm:top-3 sm:right-6 md:top-4 md:right-8 z-20 pointer-events-none select-none">
-                <style>{`
-                  @keyframes planeHoverFloat {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    50% { transform: translateY(-6px) rotate(-1.5deg); }
-                  }
-                `}</style>
-                <div style={{ animation: 'planeHoverFloat 4s ease-in-out infinite' }}>
-                  <img
-                    src="/images/plane-icon.webp"
-                    alt="Dunas Travel Jet"
-                    className="w-20 sm:w-28 md:w-36 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
-                    width="160"
-                    height="80"
-                  />
+              <motion.div
+                initial={{ opacity: 0, x: isRtl ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="w-full lg:w-1/2 relative"
+              >
+                {/* Floating Airplane Overlay */}
+                <div className="absolute top-2 right-4 sm:top-3 sm:right-6 md:top-4 md:right-8 z-20 pointer-events-none select-none">
+                  <style>{`
+                    @keyframes planeHoverFloat {
+                      0%, 100% { transform: translateY(0px) rotate(0deg); }
+                      50% { transform: translateY(-6px) rotate(-1.5deg); }
+                    }
+                  `}</style>
+                  <div style={{ animation: 'planeHoverFloat 4s ease-in-out infinite' }}>
+                    <img
+                      src="/images/plane-icon.webp"
+                      alt="Dunas Travel Jet"
+                      className="w-20 sm:w-28 md:w-36 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
+                      width="160"
+                      height="80"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <img
-                src="/images/cairo-night-photo.webp"
-                onError={(e) => { e.currentTarget.src = "/images/cairo-night-photo.webp"; }}
-                alt="Cairo Night Photography - Crafting Luxury Journeys"
-                className="w-full h-[300px] lg:h-[480px] object-cover rounded-[16px] shadow-[0_0_40px_rgba(245,166,35,0.25)] transition-transform duration-400 ease hover:-translate-y-[8px]"
-                width="600"
-                height="480"
-                loading="lazy"
-                decoding="async"
-              />
-            </motion.div>
+                <img
+                  src="/images/cairo-night-photo.webp"
+                  onError={(e) => { e.currentTarget.src = "/images/cairo-night-photo.webp"; }}
+                  alt="Cairo Night Photography - Crafting Luxury Journeys"
+                  className="w-full h-[300px] lg:h-[480px] object-cover rounded-[16px] shadow-[0_0_40px_rgba(245,166,35,0.25)] transition-transform duration-400 ease hover:-translate-y-[8px]"
+                  width="600"
+                  height="480"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </LazyViewportSection>
 
       {/* Stats Counter Section */}
-      <section className="relative py-16 md:py-20 overflow-hidden bg-white dark:bg-obsidian-950 border-y border-gray-100 dark:border-white/5">
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23d4a843\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'}}></div>
-        <div className="relative z-10 container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4">
-            {[
-              { count: 17, suffix: '+', icon: FaCalendarAlt, labelKey: 'about.heroStatsYears' },
-              { count: 95654, suffix: '+', icon: FaSuitcase, labelKey: 'about.heroStatsTravelers' },
-              { count: 438, suffix: '+', icon: FaUsers, labelKey: 'about.heroStatsEmployees' },
-              { count: 182, suffix: '+', icon: FaMapMarkedAlt, labelKey: 'about.heroStatsGuides' },
-              { count: 5, suffix: '', icon: FaGlobe, labelKey: 'about.heroStatsOffices' },
-            ].map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="flex flex-col items-center text-center group"
-              >
-                <div className="w-16 h-16 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:scale-110 transition-all duration-300 shadow-sm">
-                  <s.icon className="text-gold-600 dark:text-gold-400 text-2xl group-hover:text-obsidian-950 transition-colors" />
-                </div>
-                <div className="text-4xl md:text-5xl font-bold text-obsidian-900 dark:text-white font-display">
-                  <AnimatedCounter value={s.count} suffix={s.suffix} />
-                </div>
-                <div className="text-black dark:text-white text-sm mt-2 tracking-wide uppercase font-bold">
-                  {t(s.labelKey)}
-                </div>
-              </motion.div>
-            ))}
+      <LazyViewportSection minHeight="250px">
+        <section className="relative py-16 md:py-20 overflow-hidden bg-white dark:bg-obsidian-950 border-y border-gray-100 dark:border-white/5">
+          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23d4a843\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'}}></div>
+          <div className="relative z-10 container mx-auto px-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4">
+              {[
+                { count: 17, suffix: '+', icon: FaCalendarAlt, labelKey: 'about.heroStatsYears' },
+                { count: 95654, suffix: '+', icon: FaSuitcase, labelKey: 'about.heroStatsTravelers' },
+                { count: 438, suffix: '+', icon: FaUsers, labelKey: 'about.heroStatsEmployees' },
+                { count: 182, suffix: '+', icon: FaMapMarkedAlt, labelKey: 'about.heroStatsGuides' },
+                { count: 5, suffix: '', icon: FaGlobe, labelKey: 'about.heroStatsOffices' },
+              ].map((s, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="flex flex-col items-center text-center group"
+                >
+                  <div className="w-16 h-16 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:scale-110 transition-all duration-300 shadow-sm">
+                    <s.icon className="text-gold-600 dark:text-gold-400 text-2xl group-hover:text-obsidian-950 transition-colors" />
+                  </div>
+                  <div className="text-4xl md:text-5xl font-bold text-obsidian-900 dark:text-white font-display">
+                    <AnimatedCounter value={s.count} suffix={s.suffix} />
+                  </div>
+                  <div className="text-black dark:text-white text-sm mt-2 tracking-wide uppercase font-bold">
+                    {t(s.labelKey)}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </LazyViewportSection>
 
       {/* Destinations & Their Tours - Travolo Style Replica */}
-      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #041446 0%, #061d5d 50%, #020b26 100%)' }}>
+      <LazyViewportSection minHeight="600px">
+        <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #041446 0%, #061d5d 50%, #020b26 100%)' }}>
         {/* Ambient Royal Blue & Gold Glow Elements */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#F5A623]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#041446]/80 rounded-full blur-3xl pointer-events-none" />
@@ -1572,9 +1529,11 @@ const HomeExperienceSection = () => {
 
         </div>
       </section>
+      </LazyViewportSection>
 
 {/* Destination Tours Marquee Section */}
-      <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative">
+      <LazyViewportSection minHeight="500px">
+        <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative">
         <div className="container mx-auto px-6">
           <div className="text-center mb-10 max-w-3xl mx-auto">
             <span className="text-[#B45309] dark:text-[#F5A623] uppercase tracking-widest text-caption block mb-2 font-bold">
@@ -1674,9 +1633,11 @@ const HomeExperienceSection = () => {
           </Link>
         </div>
       </section>
+      </LazyViewportSection>
 
       {/* Packages Section — 5 Egypt Packages Ultra Luxury Bento Grid */}
-      <section className="py-16 md:py-24 relative overflow-hidden bg-ivory-50 dark:bg-obsidian-950">
+      <LazyViewportSection minHeight="550px">
+        <section className="py-16 md:py-24 relative overflow-hidden bg-ivory-50 dark:bg-obsidian-950">
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           {/* Container Card with Top Header Background & Royal Gold Accents */}
           <div 
@@ -1871,10 +1832,11 @@ const HomeExperienceSection = () => {
           </div>
         </div>
       </section>
-
+      </LazyViewportSection>
 
       {/* Packages Tours Marquee */}
-      <section className="py-16 md:py-20 relative overflow-hidden bg-ivory-100 dark:bg-obsidian-950 content-auto">
+      <LazyViewportSection minHeight="500px">
+        <section className="py-16 md:py-20 relative overflow-hidden bg-ivory-100 dark:bg-obsidian-950 content-auto">
         <div className="container mx-auto px-6 mb-10">
           <div className="text-center max-w-4xl mx-auto">
             <motion.span 
@@ -1990,8 +1952,10 @@ const HomeExperienceSection = () => {
           </Link>
         </div>
       </section>
+      </LazyViewportSection>
 
       {/* Transportation & Transfers (Vehicles Marquee Slider Only) */}
+      <LazyViewportSection minHeight="450px">
       <section className="py-12 bg-ivory-50 dark:bg-obsidian-950 relative overflow-hidden content-auto">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
@@ -2120,8 +2084,10 @@ const HomeExperienceSection = () => {
           </div>
         </div>
       </section>
+      </LazyViewportSection>
 
       {/* Services Section */}
+      <LazyViewportSection minHeight="450px">
       <section className="py-20 lg:py-28 relative overflow-hidden bg-white dark:bg-obsidian-950 border-t border-gray-100 dark:border-white/5 content-auto">
         {/* Decorative backdrop elements */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03]" 
@@ -2165,11 +2131,14 @@ const HomeExperienceSection = () => {
             >
               <Link to="/services" className="absolute inset-0 z-20" aria-label={t('nav.hotelsTab', 'Hotels')} />
               {/* Background Image with Muted Overlay */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
-                style={{
-                  backgroundImage: "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80')"
-                }}
+              <img
+                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=75"
+                alt={t('nav.hotelsTab', 'Hotels')}
+                width="600"
+                height="400"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
               
@@ -2224,11 +2193,14 @@ const HomeExperienceSection = () => {
               className="relative flex-1 md:hover:grow-[1.4] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group rounded-3xl overflow-hidden cursor-pointer shadow-card hover:shadow-card-lg border border-gold-200/20 flex flex-col justify-end"
             >
               {/* Background Image with Muted Overlay */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
-                style={{
-                  backgroundImage: "url('https://res.cloudinary.com/degbrq3ck/image/upload/w_800,c_limit,q_auto:good,f_webp/v1783071610/bus1_lprkiy.jpg')"
-                }}
+              <img
+                src="https://res.cloudinary.com/degbrq3ck/image/upload/w_600,c_limit,q_auto:good,f_webp/v1783071610/bus1_lprkiy.jpg"
+                alt="Transportation"
+                width="600"
+                height="400"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
               
@@ -2279,18 +2251,24 @@ const HomeExperienceSection = () => {
           </div>
         </div>
       </section>
+      </LazyViewportSection>
 
       {/* 2. Photo Showcase Carousel */}
+      <LazyViewportSection minHeight="450px">
       <Suspense fallback={<div className="py-16 text-center text-slate-400">Loading gallery...</div>}>
         <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
       </Suspense>
+      </LazyViewportSection>
 
       {/* 3. Video Showcase Carousel */}
+      <LazyViewportSection minHeight="450px">
       <Suspense fallback={<div className="py-16 text-center text-slate-400">Loading videos...</div>}>
         <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
       </Suspense>
+      </LazyViewportSection>
 
       {/* Contact Info Section */}
+      <LazyViewportSection minHeight="500px">
       <section 
         className="py-20 lg:py-32 relative overflow-hidden content-auto"
         style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
@@ -2488,17 +2466,22 @@ const HomeExperienceSection = () => {
           </div>
         </div>
       </section>
+      </LazyViewportSection>
 
 
 
       {/* CTA Section */}
-      <section
-        className="relative py-20 lg:py-28 bg-obsidian-900 bg-fixed bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://res.cloudinary.com/u7xf91gp/image/upload/v1787814393/dunas-travel/catalog/30220e12459b5d974a167d56024e5403d2f5e9c8ec82006eaa849e42e640b042.webp')",
-        }}
-      >
+      <LazyViewportSection minHeight="400px">
+      <section className="relative py-20 lg:py-28 bg-obsidian-900 overflow-hidden">
+        <img
+          src="https://res.cloudinary.com/u7xf91gp/image/upload/w_800,c_limit,q_auto:good,f_webp/v1787814393/dunas-travel/catalog/30220e12459b5d974a167d56024e5403d2f5e9c8ec82006eaa849e42e640b042.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width="800"
+          height="500"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none opacity-40"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 via-obsidian-900/60 to-transparent"></div>
         <div className="relative z-10 container mx-auto px-6 text-center">
           <motion.div
@@ -2536,6 +2519,7 @@ const HomeExperienceSection = () => {
           </motion.div>
         </div>
       </section>
+      </LazyViewportSection>
 
       {/* All Tours Popup Modal */}
       <AnimatePresence>
@@ -2625,6 +2609,7 @@ const HomeExperienceSection = () => {
       </AnimatePresence>
 
       {/* Our Brands Logos - White Background */}
+      <LazyViewportSection minHeight="200px">
       <section 
         className="w-full bg-white dark:bg-white py-12 sm:py-16 content-auto our-brands-section"
         style={{ backgroundColor: '#ffffff', color: '#000000' }}
@@ -2660,6 +2645,7 @@ const HomeExperienceSection = () => {
           </div>
         </div>
       </section>
+      </LazyViewportSection>
     </div>
   );
 };

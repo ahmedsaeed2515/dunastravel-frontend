@@ -13,7 +13,9 @@
  *  5. Guest Token: attaches header 'x-guest-token' from localStorage ('dunas_guest_token') on all requests.
  */
 
-const rawApiUrl = import.meta.env.DEV
+const rawApiUrl = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+  ? '/api'
+  : import.meta.env.DEV
   ? '/api'
   : import.meta.env.VITE_API_URL ||
     'https://dunastravel-backend-seven.vercel.app/api';

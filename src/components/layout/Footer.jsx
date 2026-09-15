@@ -153,6 +153,8 @@ const Footer = () => {
               alt="Jaider Mascot"
               width="150"
               height="150"
+              loading="lazy"
+              decoding="async"
               className="w-[120px] sm:w-[150px] animate-[float_3s_ease-in-out_infinite] drop-shadow-[0_10px_25px_rgba(0,0,0,0.45)] group-hover:drop-shadow-[0_12px_30px_rgba(245,166,35,0.4)]"
             />
             {!isOpen && (
