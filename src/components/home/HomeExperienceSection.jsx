@@ -895,6 +895,21 @@ const HomeExperienceSection = () => {
     return interleaved.length > 0 ? interleaved : liveFormatted;
   }, [allLiveTours, homeTurkeyPreviewTours, homeJordanPreviewTours, homeDubaiPreviewTours, lang, t]);
 
+  const destBaseList = useMemo(() => {
+    let base = (destinationToursForMarquee || []).slice(0, 8);
+    while (base.length < 4 && (destinationToursForMarquee || []).length > 0) {
+      base = [...base, ...(destinationToursForMarquee || [])].slice(0, 8);
+    }
+    return base;
+  }, [destinationToursForMarquee]);
+
+  const pkgBaseList = useMemo(() => {
+    let base = (packagesToursForMarquee || []).slice(0, 8);
+    while (base.length < 4 && (packagesToursForMarquee || []).length > 0) {
+      base = [...base, ...(packagesToursForMarquee || [])].slice(0, 8);
+    }
+    return base;
+  }, [packagesToursForMarquee]);
 
   // Search Form State
   const [searchDest, setSearchDest] = useState("all");
@@ -1579,80 +1594,146 @@ const HomeExperienceSection = () => {
         </div>
 
         {/* Marquee Strip */}
-        <div className="relative group/marquee w-full">
+        <div className="relative group/marquee w-full overflow-hidden">
           <div 
             dir="ltr" 
             ref={destMarqueeRef} 
             className="overflow-hidden w-full relative py-4"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)'
+            }}
           >
-            <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left">
-            {(() => {
-              const infiniteList = buildInfiniteMarqueeList(destinationToursForMarquee, 'dest');
-              return infiniteList.map((tData, idx) => {
-                const resolvedTitle = resolveTourTitle(tData, t, lang);
-                const resolvedDuration = resolveTourDuration(tData, t, lang);
-                const rawDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
-                const resolvedDest = t(`nav.${rawDest}`, rawDest.charAt(0).toUpperCase() + rawDest.slice(1));
-                const imageUrl = tourImageUrl(tData);
+            <div className="flex w-max animate-continuous-marquee-left hover:[animation-play-state:paused] group-hover/marquee:[animation-play-state:paused] focus-within:[animation-play-state:paused] cursor-grab active:cursor-grabbing">
+              {/* Set 1 */}
+              <div className="flex shrink-0 items-center gap-5 pr-5">
+                {destBaseList.map((tData, idx) => {
+                  const resolvedTitle = resolveTourTitle(tData, t, lang);
+                  const resolvedDuration = resolveTourDuration(tData, t, lang);
+                  const rawDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
+                  const resolvedDest = t(`nav.${rawDest}`, rawDest.charAt(0).toUpperCase() + rawDest.slice(1));
+                  const imageUrl = tourImageUrl(tData);
 
-                return (
-                  <Link
-                    key={`dest-tour-${tData.id || idx}-${idx}`}
-                    to={tData.link || `/tours/${tData.slug || tData.id}`}
-                    tabIndex={tData.isDuplicate ? -1 : undefined}
-                    aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
-                  >
-                    <img
-                      src={getOptimizedImageUrl(imageUrl, 300, 355)}
-                      alt={resolvedTitle}
-                      width="300"
-                      height="330"
-                      className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.06]"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent"></div>
+                  return (
+                    <Link
+                      key={`dest-tour-1-${tData.id || idx}-${idx}`}
+                      to={tData.link || `/tours/${tData.slug || tData.id}`}
+                      className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group/card relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    >
+                      <img
+                        src={getOptimizedImageUrl(imageUrl, 300, 355)}
+                        alt={resolvedTitle}
+                        width="300"
+                        height="355"
+                        className="w-full h-full object-cover cinematic-transition group-hover/card:scale-[1.06]"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent"></div>
 
-                    <div className="package-badge-text absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
-                      {resolvedDest}
-                    </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full">
-                      <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                        <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2">
-                          {resolvedTitle}
-                        </h3>
-
-                        <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
-                          <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
-                            <FaClock className="text-gold-400 text-xs" />
-                            <span>{resolvedDuration}</span>
-                          </span>
-                          {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
-                            <span className="text-gold-400 font-bold text-xs">
-                              {formatPrice(tData.price)}
-                            </span>
-                          )}
-                        </div>
-
-                        {Number.isFinite(Number(tData.rating)) && Number.isFinite(Number(tData.reviewCount)) ? (
-                          <div className="flex items-center gap-1 text-gold-400">
-                            <FaStar size={11} />
-                            <span className="text-ivory-50 text-xs font-semibold">
-                              {Number(tData.rating).toFixed(1)} <span className="text-ivory-300 font-normal">({tData.reviewCount})</span>
-                            </span>
-                          </div>
-                        ) : null}
+                      <div className="package-badge-text absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
+                        {resolvedDest}
                       </div>
-                    </div>
-                  </Link>
-                );
-              });
-            })()}
+
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full">
+                        <div className="transform translate-y-1 group-hover/card:translate-y-0 transition-transform duration-300">
+                          <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2">
+                            {resolvedTitle}
+                          </h3>
+
+                          <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
+                            <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
+                              <FaClock className="text-gold-400 text-xs" />
+                              <span>{resolvedDuration}</span>
+                            </span>
+                            {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
+                              <span className="text-gold-400 font-bold text-xs">
+                                {formatPrice(tData.price)}
+                              </span>
+                            )}
+                          </div>
+
+                          {Number.isFinite(Number(tData.rating)) && Number.isFinite(Number(tData.reviewCount)) ? (
+                            <div className="flex items-center gap-1 text-gold-400">
+                              <FaStar size={11} />
+                              <span className="text-ivory-50 text-xs font-semibold">
+                                {Number(tData.rating).toFixed(1)} <span className="text-ivory-300 font-normal">({tData.reviewCount})</span>
+                              </span>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Set 2 (Identical duplicate for seamless continuous loop) */}
+              <div className="flex shrink-0 items-center gap-5 pr-5" aria-hidden="true">
+                {destBaseList.map((tData, idx) => {
+                  const resolvedTitle = resolveTourTitle(tData, t, lang);
+                  const resolvedDuration = resolveTourDuration(tData, t, lang);
+                  const rawDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
+                  const resolvedDest = t(`nav.${rawDest}`, rawDest.charAt(0).toUpperCase() + rawDest.slice(1));
+                  const imageUrl = tourImageUrl(tData);
+
+                  return (
+                    <Link
+                      key={`dest-tour-2-${tData.id || idx}-${idx}`}
+                      to={tData.link || `/tours/${tData.slug || tData.id}`}
+                      tabIndex={-1}
+                      className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group/card relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    >
+                      <img
+                        src={getOptimizedImageUrl(imageUrl, 300, 355)}
+                        alt={resolvedTitle}
+                        width="300"
+                        height="355"
+                        className="w-full h-full object-cover cinematic-transition group-hover/card:scale-[1.06]"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent"></div>
+
+                      <div className="package-badge-text absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
+                        {resolvedDest}
+                      </div>
+
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full">
+                        <div className="transform translate-y-1 group-hover/card:translate-y-0 transition-transform duration-300">
+                          <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2">
+                            {resolvedTitle}
+                          </h3>
+
+                          <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
+                            <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
+                              <FaClock className="text-gold-400 text-xs" />
+                              <span>{resolvedDuration}</span>
+                            </span>
+                            {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
+                              <span className="text-gold-400 font-bold text-xs">
+                                {formatPrice(tData.price)}
+                              </span>
+                            )}
+                          </div>
+
+                          {Number.isFinite(Number(tData.rating)) && Number.isFinite(Number(tData.reviewCount)) ? (
+                            <div className="flex items-center gap-1 text-gold-400">
+                              <FaStar size={11} />
+                              <span className="text-ivory-50 text-xs font-semibold">
+                                {Number(tData.rating).toFixed(1)} <span className="text-ivory-300 font-normal">({tData.reviewCount})</span>
+                              </span>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
         <div className="flex justify-center mt-12">
           <Link to="/tours">
@@ -1889,85 +1970,156 @@ const HomeExperienceSection = () => {
         </div>
 
         {/* Marquee Strip */}
-        <div className="relative group/marquee w-full">
+        <div className="relative group/marquee w-full overflow-hidden">
           <div 
             dir="ltr" 
             ref={pkgMarqueeRef} 
             className="overflow-hidden w-full relative py-4"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)'
+            }}
           >
-            <div className="flex w-max gap-5 px-5 animate-continuous-marquee-right">
-            {(() => {
-              const infiniteList = buildInfiniteMarqueeList(packagesToursForMarquee, 'pkg');
-              return infiniteList.map((tData, idx) => {
-                const tourImg =
-                  resolveTourHeroImage(tData) ||
-                  tData.heroImage ||
-                  (Array.isArray(tData.images) && tData.images[0]) ||
-                  tData.image ||
-                  '/imgs/egyothero.webp';
-                const rawPkgDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
-                const pkgDestName = t(`nav.${rawPkgDest}`, tData.badge || rawPkgDest.charAt(0).toUpperCase() + rawPkgDest.slice(1));
+            <div className="flex w-max animate-continuous-marquee-right hover:[animation-play-state:paused] group-hover/marquee:[animation-play-state:paused] focus-within:[animation-play-state:paused] cursor-grab active:cursor-grabbing">
+              {/* Set 1 */}
+              <div className="flex shrink-0 items-center gap-5 pr-5">
+                {pkgBaseList.map((tData, idx) => {
+                  const tourImg =
+                    resolveTourHeroImage(tData) ||
+                    tData.heroImage ||
+                    (Array.isArray(tData.images) && tData.images[0]) ||
+                    tData.image ||
+                    '/imgs/egyothero.webp';
+                  const rawPkgDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
+                  const pkgDestName = t(`nav.${rawPkgDest}`, tData.badge || rawPkgDest.charAt(0).toUpperCase() + rawPkgDest.slice(1));
 
-                return (
-                  <Link
-                    key={tData.uKey || `pkg-tour-${idx}`}
-                    to={tData.link || "/tours"}
-                    tabIndex={tData.isDuplicate ? -1 : undefined}
-                    aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
-                  >
-                    <img
-                      src={getOptimizedImageUrl(tourImg, 300, 355)}
-                      alt={tData.title}
-                      width="300"
-                      height="355"
-                      className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.08] opacity-90 group-hover:opacity-100"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent"></div>
+                  return (
+                    <Link
+                      key={`pkg-tour-1-${tData.id || idx}-${idx}`}
+                      to={tData.link || "/tours"}
+                      className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group/card relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    >
+                      <img
+                        src={getOptimizedImageUrl(tourImg, 300, 355)}
+                        alt={tData.title}
+                        width="300"
+                        height="355"
+                        className="w-full h-full object-cover cinematic-transition group-hover/card:scale-[1.08] opacity-90 group-hover/card:opacity-100"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent"></div>
 
-                    {/* Destination Badge (الوجهة) */}
-                    <div className="package-badge-text absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
-                      <FaMapMarkerAlt className="text-xs text-obsidian-950" />
-                      <span>{pkgDestName}</span>
-                    </div>
+                      {/* Destination Badge (الوجهة) */}
+                      <div className="package-badge-text absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
+                        <FaMapMarkerAlt className="text-xs text-obsidian-950" />
+                        <span>{pkgDestName}</span>
+                      </div>
 
-                    {/* Bottom Content Container */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full z-10">
-                      <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                        {/* Tour Title (اسم الرحلة) */}
-                        <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
-                          {tData.title}
-                        </h3>
+                      {/* Bottom Content Container */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full z-10">
+                        <div className="transform translate-y-1 group-hover/card:translate-y-0 transition-transform duration-300">
+                          {/* Tour Title (اسم الرحلة) */}
+                          <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
+                            {tData.title}
+                          </h3>
 
-                        {/* Duration & Price */}
-                        <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
-                          <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
-                            <FaClock className="text-gold-400 text-xs" />
-                            <span>{tData.duration}</span>
-                          </span>
-                          {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
-                            <span className="text-gold-400 font-bold text-xs">
-                              {formatPrice(tData.price)}
+                          {/* Duration & Price */}
+                          <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
+                            <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
+                              <FaClock className="text-gold-400 text-xs" />
+                              <span>{tData.duration}</span>
                             </span>
-                          )}
-                        </div>
+                            {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
+                              <span className="text-gold-400 font-bold text-xs">
+                                {formatPrice(tData.price)}
+                              </span>
+                            )}
+                          </div>
 
-                        {/* Button: عرض التفاصيل */}
-                        <div className="w-full bg-gradient-to-r from-gold-500 via-amber-400 to-yellow-500 text-obsidian-950 font-extrabold text-xs py-2.5 px-4 rounded-xl text-center shadow-lg flex items-center justify-center gap-2 group-hover:brightness-110 transition-all duration-300">
-                          <span>{t("common.viewDetails", isAr ? "عرض التفاصيل" : "View Details")}</span>
-                          <FaArrowRight className="text-xs rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                          {/* Button: عرض التفاصيل */}
+                          <div className="w-full bg-gradient-to-r from-gold-500 via-amber-400 to-yellow-500 text-obsidian-950 font-extrabold text-xs py-2.5 px-4 rounded-xl text-center shadow-lg flex items-center justify-center gap-2 group-hover/card:brightness-110 transition-all duration-300">
+                            <span>{t("common.viewDetails", isAr ? "عرض التفاصيل" : "View Details")}</span>
+                            <FaArrowRight className="text-xs rtl:rotate-180 transition-transform group-hover/card:translate-x-1 rtl:group-hover/card:-translate-x-1" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                );
-              });
-            })()}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Set 2 (Identical duplicate for seamless continuous loop) */}
+              <div className="flex shrink-0 items-center gap-5 pr-5" aria-hidden="true">
+                {pkgBaseList.map((tData, idx) => {
+                  const tourImg =
+                    resolveTourHeroImage(tData) ||
+                    tData.heroImage ||
+                    (Array.isArray(tData.images) && tData.images[0]) ||
+                    tData.image ||
+                    '/imgs/egyothero.webp';
+                  const rawPkgDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
+                  const pkgDestName = t(`nav.${rawPkgDest}`, tData.badge || rawPkgDest.charAt(0).toUpperCase() + rawPkgDest.slice(1));
+
+                  return (
+                    <Link
+                      key={`pkg-tour-2-${tData.id || idx}-${idx}`}
+                      to={tData.link || "/tours"}
+                      tabIndex={-1}
+                      className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group/card relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    >
+                      <img
+                        src={getOptimizedImageUrl(tourImg, 300, 355)}
+                        alt={tData.title}
+                        width="300"
+                        height="355"
+                        className="w-full h-full object-cover cinematic-transition group-hover/card:scale-[1.08] opacity-90 group-hover/card:opacity-100"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent"></div>
+
+                      {/* Destination Badge (الوجهة) */}
+                      <div className="package-badge-text absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
+                        <FaMapMarkerAlt className="text-xs text-obsidian-950" />
+                        <span>{pkgDestName}</span>
+                      </div>
+
+                      {/* Bottom Content Container */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full z-10">
+                        <div className="transform translate-y-1 group-hover/card:translate-y-0 transition-transform duration-300">
+                          {/* Tour Title (اسم الرحلة) */}
+                          <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
+                            {tData.title}
+                          </h3>
+
+                          {/* Duration & Price */}
+                          <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
+                            <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
+                              <FaClock className="text-gold-400 text-xs" />
+                              <span>{tData.duration}</span>
+                            </span>
+                            {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
+                              <span className="text-gold-400 font-bold text-xs">
+                                {formatPrice(tData.price)}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Button: عرض التفاصيل */}
+                          <div className="w-full bg-gradient-to-r from-gold-500 via-amber-400 to-yellow-500 text-obsidian-950 font-extrabold text-xs py-2.5 px-4 rounded-xl text-center shadow-lg flex items-center justify-center gap-2 group-hover/card:brightness-110 transition-all duration-300">
+                            <span>{t("common.viewDetails", isAr ? "عرض التفاصيل" : "View Details")}</span>
+                            <FaArrowRight className="text-xs rtl:rotate-180 transition-transform group-hover/card:translate-x-1 rtl:group-hover/card:-translate-x-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
         <div className="flex justify-center mt-12">
           <Link to="/tours">

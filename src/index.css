@@ -1138,21 +1138,36 @@ html[dir="rtl"] .dropdown-item:hover {
 }
 
 .animate-continuous-marquee-left {
-  animation: continuousMarqueeLeft 65s linear infinite;
+  animation: continuousMarqueeLeft 50s linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
 .animate-continuous-marquee-right {
-  animation: continuousMarqueeRight 65s linear infinite;
+  animation: continuousMarqueeRight 50s linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
-@media (hover: hover) {
-  .animate-continuous-marquee-left:hover,
-  .animate-continuous-marquee-right:hover,
-  .tour-marquee-track:hover {
-    animation-play-state: paused;
-  }
+/* Pause marquee seamlessly on hover over track, cards, or container */
+.group\/marquee:hover .animate-continuous-marquee-left,
+.group\/marquee:hover .animate-continuous-marquee-right,
+.group\/marquee:focus-within .animate-continuous-marquee-left,
+.group\/marquee:focus-within .animate-continuous-marquee-right,
+.animate-continuous-marquee-left:hover,
+.animate-continuous-marquee-right:hover,
+.animate-continuous-marquee-left:focus-within,
+.animate-continuous-marquee-right:focus-within,
+.tour-marquee-track:hover {
+  animation-play-state: paused !important;
 }
 
 .tour-marquee-track {
