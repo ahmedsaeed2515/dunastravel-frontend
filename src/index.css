@@ -378,58 +378,28 @@ html[data-scroll-locked] {
   .dark .about-page .routes-wrap text {
     fill: #e8d5b0 !important;
   }
-  /* Stats Strip Card Styling - Light & Dark Mode */
-  .about-page .stats-strip {
-    display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 16px !important;
-    margin-top: 60px !important;
-    border: none !important;
-  }
-  
-  /* Light Mode Stat Cards */
-  html:not(.dark) .about-page .stats-strip .stat-cell {
-    background: #FFFFFF !important;
-    border: 1.5px solid rgba(28, 69, 135, 0.15) !important;
-    border-radius: 12px !important;
-    padding: 30px 16px !important;
-    box-shadow: 0 8px 24px rgba(28, 69, 135, 0.08) !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
-  }
-  html:not(.dark) .about-page .stats-strip .stat-cell:hover {
-    transform: translateY(-6px) !important;
-    border-color: #C9A227 !important;
-    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.22) !important;
-  }
-  html:not(.dark) .about-page .stats-strip .stat-cell .stat-icon {
-    color: #1E40AF !important;
-    font-size: 28px !important;
-  }
-  html:not(.dark) .about-page .stats-strip .stat-cell .n {
-    color: #0E2A52 !important;
-    font-weight: 800 !important;
-    font-size: clamp(26px, 2.5vw, 36px) !important;
-  }
-  html:not(.dark) .about-page .stats-strip .stat-cell .l {
-    color: #1E40AF !important;
-    font-weight: 700 !important;
-    font-size: 11px !important;
-    letter-spacing: 0.08em !important;
-  }
-
-  /* Stats Strip Card Base & Perfect Centering */
+  /* Shared Stats Cards (Home & About pages) */
+  .home-stat-card,
   .about-page .stats-strip .stat-cell {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
+    border-radius: 12px !important;
+    padding: 30px 16px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease !important;
   }
+
+  .home-stat-card .stat-icon,
   .about-page .stats-strip .stat-cell .stat-icon {
     display: block !important;
     margin: 0 auto 10px auto !important;
     text-align: center !important;
+    font-size: 28px !important;
   }
+
+  .home-stat-card .n,
   .about-page .stats-strip .stat-cell .n {
     display: flex !important;
     align-items: center !important;
@@ -438,42 +408,72 @@ html[data-scroll-locked] {
     width: 100% !important;
     margin: 0 auto !important;
     line-height: 1.1 !important;
+    font-weight: 800 !important;
+    font-size: clamp(26px, 2.5vw, 36px) !important;
   }
+
+  .home-stat-card .l,
   .about-page .stats-strip .stat-cell .l {
     display: block !important;
     text-align: center !important;
     margin: 8px auto 0 auto !important;
     width: 100% !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
   }
 
-  /* Dark Mode Stat Cards */
+  /* Light Mode Shared Stat Cards */
+  html:not(.dark) .home-stat-card,
+  html:not(.dark) .about-page .stats-strip .stat-cell {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.15) !important;
+    box-shadow: 0 8px 24px rgba(28, 69, 135, 0.08) !important;
+  }
+  html:not(.dark) .home-stat-card:hover,
+  html:not(.dark) .about-page .stats-strip .stat-cell:hover {
+    transform: translateY(-6px) !important;
+    border-color: #C9A227 !important;
+    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.22) !important;
+  }
+  html:not(.dark) .home-stat-card .stat-icon,
+  html:not(.dark) .about-page .stats-strip .stat-cell .stat-icon {
+    color: #1E40AF !important;
+  }
+  html:not(.dark) .home-stat-card .n,
+  html:not(.dark) .about-page .stats-strip .stat-cell .n {
+    color: #0E2A52 !important;
+  }
+  html:not(.dark) .home-stat-card .l,
+  html:not(.dark) .about-page .stats-strip .stat-cell .l {
+    color: #1E40AF !important;
+  }
+
+  /* Dark Mode Shared Stat Cards */
+  .dark .home-stat-card,
   .dark .about-page .stats-strip .stat-cell {
     background: #142238 !important;
     border: 1.5px solid rgba(232, 203, 114, 0.3) !important;
-    border-radius: 12px !important;
-    padding: 30px 16px !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
   }
+  .dark .home-stat-card:hover,
   .dark .about-page .stats-strip .stat-cell:hover {
     transform: translateY(-6px) !important;
     border-color: #E8CB72 !important;
     box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
   }
+  .dark .home-stat-card .stat-icon,
   .dark .about-page .stats-strip .stat-cell .stat-icon {
     color: #E8CB72 !important;
-    font-size: 28px !important;
   }
+  .dark .home-stat-card .n,
   .dark .about-page .stats-strip .stat-cell .n {
     color: #FFFFFF !important;
-    font-weight: 800 !important;
-    font-size: clamp(26px, 2.5vw, 36px) !important;
   }
+  .dark .home-stat-card .l,
   .dark .about-page .stats-strip .stat-cell .l {
     color: #E8CB72 !important;
-    font-weight: 700 !important;
-    font-size: 11px !important;
-    letter-spacing: 0.08em !important;
   }
   .dark .about-page .presence-box {
     background: #0f0f1a !important;

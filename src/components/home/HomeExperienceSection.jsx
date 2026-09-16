@@ -1416,10 +1416,9 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* Stats Counter Section */}
-      <section className="relative py-16 md:py-20 overflow-hidden bg-white dark:bg-obsidian-950 border-y border-gray-100 dark:border-white/5">
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23d4a843\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'}}></div>
+      <section className="relative py-12 md:py-16 overflow-hidden bg-gray-50/50 dark:bg-obsidian-950">
         <div className="relative z-10 container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {[
               { count: 17, suffix: '+', icon: FaCalendarAlt, labelKey: 'about.heroStatsYears' },
               { count: 95654, suffix: '+', icon: FaSuitcase, labelKey: 'about.heroStatsTravelers' },
@@ -1433,15 +1432,13 @@ const HomeExperienceSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="flex flex-col items-center text-center group"
+                className="home-stat-card"
               >
-                <div className="w-16 h-16 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:scale-110 transition-all duration-300 shadow-sm">
-                  <s.icon className="text-gold-600 dark:text-gold-400 text-2xl group-hover:text-obsidian-950 transition-colors" />
-                </div>
-                <div className="text-4xl md:text-5xl font-bold text-obsidian-900 dark:text-white font-display">
+                <s.icon className="stat-icon" />
+                <div className="n">
                   <AnimatedCounter value={s.count} suffix={s.suffix} />
                 </div>
-                <div className="text-black dark:text-white text-sm mt-2 tracking-wide uppercase font-bold">
+                <div className="l">
                   {t(s.labelKey)}
                 </div>
               </motion.div>
