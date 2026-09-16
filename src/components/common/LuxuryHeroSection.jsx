@@ -52,7 +52,7 @@ export default function LuxuryHeroSection({
   };
 
   return (
-    <section className="relative w-full min-h-[580px] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none">
+    <section className="relative w-full min-h-[100dvh] sm:min-h-[600px] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none">
       {/* Background Image Container with Cinematic Zoom & Multi-layer Overlay */}
       <div
         className={`absolute inset-0 z-0 overflow-hidden bg-obsidian-950 ${onImageClick ? 'cursor-pointer group' : ''}`}
@@ -94,7 +94,7 @@ export default function LuxuryHeroSection({
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-20 container mx-auto px-4 sm:px-6 text-center max-w-5xl pt-24 sm:pt-28 md:pt-32 pb-16"
+        className="relative z-20 container mx-auto px-4 sm:px-6 text-center max-w-5xl pt-20 sm:pt-28 md:pt-32 pb-14 sm:pb-16 flex flex-col items-center justify-center min-h-[100dvh] sm:min-h-0"
       >
         {/* Breadcrumb Slot */}
         {breadcrumbs && (
