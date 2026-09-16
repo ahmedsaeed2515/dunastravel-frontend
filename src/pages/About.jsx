@@ -867,7 +867,7 @@ const About = () => {
           </svg>
         </div>
 
-        <div className="hero-stats">
+        <div className="stats-strip" style={{ marginTop: 40, width: '100%' }}>
           {[
             { count: 17, suffix: '+', icon: FaCalendarAlt, labelKey: 'about.heroStatsYears' },
             { count: 95654, suffix: '+', icon: FaSuitcase, labelKey: 'about.heroStatsTravelers' },
@@ -875,12 +875,12 @@ const About = () => {
             { count: 182, suffix: '+', icon: FaMapMarkedAlt, labelKey: 'about.heroStatsGuides' },
             { count: 5, suffix: '', icon: FaGlobe, labelKey: 'about.heroStatsOffices' },
           ].map((s, i) => (
-            <div key={i}>
+            <div className="stat-cell" key={i}>
               <s.icon className="stat-icon" />
-              <div className="num">
+              <div className="n">
                 <AnimatedCounter value={s.count} suffix={s.suffix} />
               </div>
-              <div className="lbl">{t(s.labelKey)}</div>
+              <div className="l">{t(s.labelKey)}</div>
             </div>
           ))}
         </div>
