@@ -417,6 +417,35 @@ html[data-scroll-locked] {
     letter-spacing: 0.08em !important;
   }
 
+  /* Stats Strip Card Base & Perfect Centering */
+  .about-page .stats-strip .stat-cell {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .about-page .stats-strip .stat-cell .stat-icon {
+    display: block !important;
+    margin: 0 auto 10px auto !important;
+    text-align: center !important;
+  }
+  .about-page .stats-strip .stat-cell .n {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    line-height: 1.1 !important;
+  }
+  .about-page .stats-strip .stat-cell .l {
+    display: block !important;
+    text-align: center !important;
+    margin: 8px auto 0 auto !important;
+    width: 100% !important;
+  }
+
   /* Dark Mode Stat Cards */
   .dark .about-page .stats-strip .stat-cell {
     background: #142238 !important;
