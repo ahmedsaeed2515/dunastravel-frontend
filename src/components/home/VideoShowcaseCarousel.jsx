@@ -10,6 +10,7 @@ import {
   FaVolumeUp,
   FaVideo,
 } from 'react-icons/fa';
+import ConsentGate from '../privacy/ConsentGate';
 
 function getEmbedInfo(url) {
   if (!url) return null;
@@ -325,13 +326,20 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
                 const activeEmbed = getEmbedInfo(activeVideo.url || activeVideo.videoUrl || activeVideo.secureUrl);
                 if (activeEmbed) {
                   return (
-                    <iframe
-                      src={activeEmbed.embedUrl}
-                      title={activeVideo.title || activeVideo.alt || 'Dunas Travel Video'}
-                      className="w-full aspect-video object-contain bg-black border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    />
+                    <ConsentGate
+                      category="marketing"
+                      providerName={activeEmbed.type === 'youtube' ? 'YouTube' : 'Video Provider'}
+                      fallbackThumbnail={activeEmbed.thumbnailUrl}
+                      height="100%"
+                    >
+                      <iframe
+                        src={activeEmbed.embedUrl}
+                        title={activeVideo.title || activeVideo.alt || 'Dunas Travel Video'}
+                        className="w-full aspect-video object-contain bg-black border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    </ConsentGate>
                   );
                 }
                 return (

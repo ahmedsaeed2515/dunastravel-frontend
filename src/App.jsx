@@ -5,6 +5,9 @@ import { useTranslation } from "react-i18next";
 import Layout from "./components/layout/Layout";
 import Logo from "./components/ui/Logo";
 import { trackEvent } from "./utils/analytics";
+import { ConsentProvider } from "./privacy/consent";
+import CookieConsentBanner from "./components/privacy/CookieConsentBanner";
+import CookiePreferencesModal from "./components/privacy/CookiePreferencesModal";
 
 // ── Stale Chunk / Deployment Recovery Helpers ─────────────────────────────
 const isChunkLoadFailed = (error) => {
@@ -170,6 +173,7 @@ const ForgotPassword = lazyWithRetry(() => import("./pages/auth/ForgotPassword")
 const ResetPassword = lazyWithRetry(() => import("./pages/auth/ResetPassword"));
 const VerifyEmail = lazyWithRetry(() => import("./pages/auth/VerifyEmail"));
 const UserDashboard = lazyWithRetry(() => import("./pages/user/UserDashboard"));
+const CookiePolicy = lazyWithRetry(() => import("./pages/legal/CookiePolicy"));
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 
@@ -283,10 +287,13 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <ScrollProgressBar />
+      <ConsentProvider>
+        <ScrollProgressBar />
+        <CookieConsentBanner />
+        <CookiePreferencesModal />
 
-      <Suspense fallback={<FallbackLoader />}>
-        <Routes location={location} key={location.pathname}>
+        <Suspense fallback={<FallbackLoader />}>
+          <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Layout />}>
                 <Route
                   index
@@ -534,6 +541,22 @@ function App() {
                   }
                 />
                 <Route
+                  path="cookie-policy"
+                  element={
+                    <PageTransition>
+                      <CookiePolicy />
+                    </PageTransition>
+                  }
+                />
+                <Route
+                  path="cookies"
+                  element={
+                    <PageTransition>
+                      <CookiePolicy />
+                    </PageTransition>
+                  }
+                />
+                <Route
                   path="invoice"
                   element={
                     <PageTransition>
@@ -701,6 +724,7 @@ function App() {
               </Route>
             </Routes>
         </Suspense>
+      </ConsentProvider>
     </ErrorBoundary>
   );
 }

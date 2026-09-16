@@ -5,6 +5,7 @@ import { FaFacebook, FaInstagram, FaPhone, FaEnvelope, FaWhatsapp, FaMapMarkerAl
 import Logo from '../ui/Logo';
 import TiT0Chat from '../ui/TiT0Chat';
 import { useJaiderChat } from '../../context/JaiderChatContext';
+import { useConsent } from '../../privacy/consent';
 import './Footer.css';
 
 const Footer = () => {
@@ -13,6 +14,7 @@ const Footer = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
   const { isOpen, setIsOpen } = useJaiderChat();
+  const { openPreferences } = useConsent();
 
   useEffect(() => {
     const word = "DUNAS TRAVEL";
@@ -199,6 +201,7 @@ const Footer = () => {
               <li><Link to="/blogs" className="text-white hover:text-[#F5A623] transition-colors">{t('nav.blogs')}</Link></li>
               <li><Link to="/contact" className="text-white hover:text-[#F5A623] transition-colors">{t('nav.contact')}</Link></li>
               <li><Link to="/faq" className="text-white hover:text-[#F5A623] transition-colors">{t('footer.faq', 'FAQs')}</Link></li>
+              <li><Link to="/cookie-policy" className="text-white hover:text-[#F5A623] transition-colors">{t('footer.cookiePolicy', 'Cookie Policy')}</Link></li>
               <li><Link to="/" className="text-white hover:text-[#F5A623] transition-colors">{t('nav.home', 'Home')}</Link></li>
             </ul>
           </div>
@@ -213,11 +216,24 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Credits */}
-        <div className="mt-6 pt-4 border-t border-white/10 text-center">
+        {/* Credits & Privacy Settings */}
+        <div className="mt-6 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <p className="text-body-md text-white font-semibold tracking-wide">
             &copy; {new Date().getFullYear()} Dunas Travel. {t('footer.rights', 'All rights reserved.')}
           </p>
+          <div className="flex items-center gap-4 text-xs font-semibold">
+            <Link to="/cookie-policy" className="text-slate-300 hover:text-[#E8CB72] transition-colors underline">
+              {t('footer.cookiePolicy', 'Cookie Policy')}
+            </Link>
+            <span className="text-white/30">•</span>
+            <button
+              type="button"
+              onClick={openPreferences}
+              className="text-[#E8CB72] hover:text-[#C9A227] transition-colors underline cursor-pointer bg-transparent border-none p-0 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C9A227] rounded-sm"
+            >
+              {t('footer.cookieSettings', 'Cookie Settings')}
+            </button>
+          </div>
         </div>
       </div>
 
