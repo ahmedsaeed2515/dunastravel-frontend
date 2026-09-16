@@ -450,11 +450,13 @@ html[data-scroll-locked] {
 
     /* ── Scrollbar Utilities ─────────────────────────────────────── */
   .no-scrollbar::-webkit-scrollbar,
-  .hide-scrollbar::-webkit-scrollbar {
+  .hide-scrollbar::-webkit-scrollbar,
+  .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
   .no-scrollbar,
-  .hide-scrollbar {
+  .hide-scrollbar,
+  .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
@@ -1158,15 +1160,14 @@ html[dir="rtl"] .dropdown-item:hover {
 }
 
 @media (max-width: 768px) {
+  /* Keep smooth GPU marquee scrolling active on mobile while maintaining touch scrollability */
   .animate-continuous-marquee-left,
   .animate-continuous-marquee-right,
   .photo-showcase-marquee-track,
   .video-showcase-marquee-track,
   .marquee-track,
   .tour-marquee-track {
-    animation: none !important;
-    transform: none !important;
-    will-change: auto !important;
+    will-change: transform;
   }
 }
 

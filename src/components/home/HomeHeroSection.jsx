@@ -296,7 +296,7 @@ export default function HomeHeroSection() {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % SLIDE_DATA.length);
-    }, 8000);
+    }, 5000);
 
     return () => clearInterval(timer);
   }, []);

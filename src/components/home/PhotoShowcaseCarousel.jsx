@@ -134,16 +134,14 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
             transform: translate3d(-50%, 0, 0);
           }
         }
-        @media (min-width: 768px) {
-          .photo-showcase-marquee-track {
-            display: flex;
-            width: max-content;
-            animation: photoShowcaseContinuous 35s linear infinite !important;
-            will-change: transform;
-          }
-          .photo-showcase-marquee-track:hover {
-            animation-play-state: paused !important;
-          }
+        .photo-showcase-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: photoShowcaseContinuous 35s linear infinite !important;
+          will-change: transform;
+        }
+        .photo-showcase-marquee-track:hover {
+          animation-play-state: paused !important;
         }
       `}</style>
 

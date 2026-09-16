@@ -268,28 +268,6 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
         </div>
       </div>
 
-      {/* Autoplay Play/Pause Bar */}
-      <div className="container mx-auto px-6 mt-8 flex items-center justify-center gap-4">
-        <button
-          type="button"
-          onClick={togglePlayPause}
-          aria-label={isPlaying ? t('home.pauseCarousel', 'Pause Autoplay') : t('home.playCarousel', 'Start Autoplay')}
-          className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-xs md:text-sm font-bold bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#F5A623]/50 text-white/80 hover:text-white transition-all shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
-        >
-          {isPlaying ? (
-            <>
-              <FaPause className="w-3 h-3 text-[#F5A623]" />
-              <span>{t('home.pause', 'Pause')}</span>
-            </>
-          ) : (
-            <>
-              <FaPlay className="w-3 h-3 text-[#F5A623]" />
-              <span>{t('home.play', 'Autoplay')}</span>
-            </>
-          )}
-        </button>
-      </div>
-
       {/* Fullscreen Video Player Modal */}
       <AnimatePresence>
         {activeVideo && (
