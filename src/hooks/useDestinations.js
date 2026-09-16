@@ -6,8 +6,8 @@ import { supportedLocale } from '../utils/locale';
 const DEST_FALLBACK_IMAGES = {
   egypt: '/imgs/destinations/egypt.webp',
   egipto: '/imgs/destinations/egypt.webp',
-  turkey: '/imgs/destinations/turkey.webp',
-  dubai: '/imgs/destinations/dubai.webp',
+  turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85',
+  dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=85',
   jordan: '/imgs/destinations/jordan.webp',
   morocco: '/imgs/destinations/morocco.webp',
   tunisia: '/imgs/destinations/tunisia.webp',
