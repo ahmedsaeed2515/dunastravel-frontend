@@ -2,15 +2,16 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { staggerContainer, fadeInUp } from '../../animations/variants';
 import { useDestinations } from '../../hooks/useDestinations';
+import { useTours } from '../../hooks/useTours';
 import TourCard from '../../components/tour/TourCard';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 const Destinations = () => {
   const { t } = useTranslation();
   const { destinations, loading: destsLoading, error } = useDestinations();
-  const loading = destsLoading;
+  const { tours: allTours, loading: toursLoading } = useTours();
+  const loading = destsLoading && toursLoading;
   const destinationsList = Array.isArray(destinations) ? destinations : [];
 
   return <main className="min-h-screen bg-obsidian-50 pb-24">
@@ -46,9 +47,24 @@ const Destinations = () => {
       ) : (
         <div className="flex flex-col gap-24">
           {destinationsList.map((destination) => {
-            const destTours = Array.isArray(destination?.tours) ? destination.tours : [];
             const destSlug = String(destination?.slug || destination?.id || '').toLowerCase();
-            const cardImage = (destSlug === 'egypt' || destSlug === 'egipto') 
+            const targetSlug = (destSlug === 'egipto' || destSlug === 'egito') ? 'egypt' : destSlug;
+
+            const providedTours = Array.isArray(destination?.tours) ? destination.tours : [];
+            const matchedTours = (allTours || []).filter((tour) => {
+              const tourDest = String(tour.destination || tour.country || '').toLowerCase();
+              const tourCategory = String(tour.category || tour.type || '').toLowerCase();
+              if (targetSlug === 'holy-land' || targetSlug === 'holyland' || targetSlug === 'religious') {
+                return tourDest.includes('holy') || tourCategory.includes('religious');
+              }
+              if (targetSlug === 'multi-country' || targetSlug === 'multi_country') {
+                return tourDest.includes('multi') || tourCategory.includes('multi');
+              }
+              return tourDest === targetSlug || tourDest.includes(targetSlug) || targetSlug.includes(tourDest);
+            });
+
+            const destTours = providedTours.length > 0 ? providedTours : matchedTours;
+            const cardImage = (targetSlug === 'egypt') 
               ? '/imgs/egyothero.webp' 
               : (destination.heroImageUrl || destination.image || '/imgs/egyothero.webp');
 
@@ -69,7 +85,7 @@ const Destinations = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/30 to-transparent flex flex-col justify-end p-8 md:p-12">
                     <span className="text-gold-500 uppercase tracking-widest text-caption mb-2">
-                      {destination.toursCount} {t('destinations.tours', 'Tours')}
+                      {destTours.length || destination.toursCount || 0} {t('destinations.tours', 'Tours')}
                     </span>
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                       <h2 className="text-display-xl text-ivory-50 m-0 leading-none">

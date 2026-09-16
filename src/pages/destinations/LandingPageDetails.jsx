@@ -8,7 +8,7 @@ import TourCard from '../../components/tour/TourCard';
 import { useLandingPage } from '../../hooks/useLandingPage';
 import ErrorState from '../../components/ui/ErrorState';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
-import Button from '../../components/ui/Button';
+import { useTours } from '../../hooks/useTours';
 
 function readableSections(sections) {
   if (!Array.isArray(sections)) return [];
@@ -201,6 +201,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   const slug = (rawSlug || '').toLowerCase().trim();
   const { t } = useTranslation();
   const { landingPage, loading, error, retry } = useLandingPage(slug, { destinationOnly });
+  const { tours: allCatalogTours } = useTours();
 
   const config = DEST_FALLBACK_DATA[slug] || {};
   const effectiveLandingPage = landingPage || (config && (config.headline || config.headlineDefault) ? {
@@ -273,13 +274,30 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   }
 
   const sections = readableSections(effectiveLandingPage.sections);
-  const sortedTours = Array.isArray(effectiveLandingPage.tours)
-    ? [...effectiveLandingPage.tours].sort((a, b) => {
-        if (a.isFeatured && !b.isFeatured) return -1;
-        if (!a.isFeatured && b.isFeatured) return 1;
-        return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
-      })
+  const providedTours = Array.isArray(effectiveLandingPage.tours) && effectiveLandingPage.tours.length > 0
+    ? effectiveLandingPage.tours
     : [];
+
+  const targetSlug = (slug === 'egipto' || slug === 'egito') ? 'egypt' : slug;
+  const matchedCatalogTours = (allCatalogTours || []).filter((tour) => {
+    const tourDest = String(tour.destination || tour.country || '').toLowerCase();
+    const tourCategory = String(tour.category || tour.type || '').toLowerCase();
+    if (targetSlug === 'holy-land' || targetSlug === 'holyland' || targetSlug === 'religious') {
+      return tourDest.includes('holy') || tourCategory.includes('religious');
+    }
+    if (targetSlug === 'multi-country' || targetSlug === 'multi_country') {
+      return tourDest.includes('multi') || tourCategory.includes('multi');
+    }
+    return tourDest === targetSlug || tourDest.includes(targetSlug) || targetSlug.includes(tourDest);
+  });
+
+  const rawToursToDisplay = providedTours.length > 0 ? providedTours : matchedCatalogTours;
+
+  const sortedTours = [...rawToursToDisplay].sort((a, b) => {
+    if (a.isFeatured && !b.isFeatured) return -1;
+    if (!a.isFeatured && b.isFeatured) return 1;
+    return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+  });
 
   const heroBadge = config.badge ? t(config.badge, config.badgeDefault) : (effectiveLandingPage.type || 'LUXURY DESTINATION');
   const heroTitle = effectiveLandingPage.title || (config.headline ? t(config.headline, config.headlineDefault) : slug.toUpperCase());
