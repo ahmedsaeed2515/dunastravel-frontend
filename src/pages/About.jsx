@@ -303,47 +303,80 @@ const styles = `
     text-transform: uppercase;
   }
   .about-page .presence-row .v { font-weight: 400; text-align: right; max-width: 62%; }
+  /* Stats Strip Card Styling - Light & Dark Mode */
   .about-page .stats-strip {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin-top: 90px;
-    border-top: 1px solid rgba(14, 42, 82, .15);
-    border-bottom: 1px solid rgba(14, 42, 82, .15);
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 16px !important;
+    margin-top: 60px !important;
+    border: none !important;
   }
-  .about-page .stat-cell {
-    padding: 34px 18px;
-    text-align: center;
-    border-right: 1px solid rgba(14, 42, 82, .15);
-    transition: transform .35s ease;
+  
+  /* Light Mode Stat Cards */
+  html:not(.dark) .about-page .stats-strip .stat-cell {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.15) !important;
+    border-radius: 12px !important;
+    padding: 30px 16px !important;
+    box-shadow: 0 8px 24px rgba(28, 69, 135, 0.08) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
   }
-  .about-page .stat-cell:last-child { border-right: none; }
-  .about-page .stat-cell:hover { transform: translateY(-4px); }
-  .about-page .stat-cell .n {
-    font-family: var(--mono);
-    font-weight: 700;
-    font-size: clamp(26px, 2.6vw, 38px);
-    color: var(--navy);
-    transition: color .35s ease;
+  html:not(.dark) .about-page .stats-strip .stat-cell:hover {
+    transform: translateY(-6px) !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.22) !important;
   }
-  .about-page .stat-cell:hover .n { color: var(--gold); }
-  .about-page .stat-cell .l {
-    margin-top: 6px;
-    font-size: 10.5px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
+  html:not(.dark) .about-page .stats-strip .stat-cell .stat-icon {
+    color: #1E40AF !important;
+    font-size: 28px !important;
   }
-  .about-page .stat-cell .stat-icon {
-    font-size: 24px;
-    color: var(--royal);
-    margin-bottom: 6px;
-    display: block;
-    transition: color .35s ease;
+  html:not(.dark) .about-page .stats-strip .stat-cell .n {
+    color: #0E2A52 !important;
+    font-weight: 800 !important;
+    font-size: clamp(26px, 2.5vw, 36px) !important;
   }
-  .about-page .stat-cell:hover .stat-icon { color: var(--gold); }
-  @media(max-width:760px) {
-    .about-page .stats-strip { grid-template-columns: repeat(2, 1fr); }
-    .about-page .stat-cell { border-bottom: 1px solid rgba(14, 42, 82, .15); }
+  html:not(.dark) .about-page .stats-strip .stat-cell .l {
+    color: #1E40AF !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  /* Dark Mode Stat Cards */
+  .dark .about-page .stats-strip .stat-cell {
+    background: #142238 !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 30px 16px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  }
+  .dark .about-page .stats-strip .stat-cell:hover {
+    transform: translateY(-6px) !important;
+    border-color: #E8CB72 !important;
+    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
+  }
+  .dark .about-page .stats-strip .stat-cell .stat-icon {
+    color: #E8CB72 !important;
+    font-size: 28px !important;
+  }
+  .dark .about-page .stats-strip .stat-cell .n {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    font-size: clamp(26px, 2.5vw, 36px) !important;
+  }
+  .dark .about-page .stats-strip .stat-cell .l {
+    color: #E8CB72 !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  @media(max-width:900px) {
+    .about-page .stats-strip { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+  }
+  @media(max-width:480px) {
+    .about-page .stats-strip { grid-template-columns: 1fr !important; }
   }
   .about-page .chart-wrap {
     display: grid;

@@ -378,11 +378,73 @@ html[data-scroll-locked] {
   .dark .about-page .routes-wrap text {
     fill: #e8d5b0 !important;
   }
-  .dark .about-page .stat-cell .l {
-    color: #a8a4a0 !important;
+  /* Stats Strip Card Styling - Light & Dark Mode */
+  .about-page .stats-strip {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 16px !important;
+    margin-top: 60px !important;
+    border: none !important;
   }
-  .dark .about-page .stat-cell .n {
-    color: var(--gold-light) !important;
+  
+  /* Light Mode Stat Cards */
+  html:not(.dark) .about-page .stats-strip .stat-cell {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.15) !important;
+    border-radius: 12px !important;
+    padding: 30px 16px !important;
+    box-shadow: 0 8px 24px rgba(28, 69, 135, 0.08) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  }
+  html:not(.dark) .about-page .stats-strip .stat-cell:hover {
+    transform: translateY(-6px) !important;
+    border-color: #C9A227 !important;
+    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.22) !important;
+  }
+  html:not(.dark) .about-page .stats-strip .stat-cell .stat-icon {
+    color: #1E40AF !important;
+    font-size: 28px !important;
+  }
+  html:not(.dark) .about-page .stats-strip .stat-cell .n {
+    color: #0E2A52 !important;
+    font-weight: 800 !important;
+    font-size: clamp(26px, 2.5vw, 36px) !important;
+  }
+  html:not(.dark) .about-page .stats-strip .stat-cell .l {
+    color: #1E40AF !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  /* Dark Mode Stat Cards */
+  .dark .about-page .stats-strip .stat-cell {
+    background: #142238 !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 30px 16px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  }
+  .dark .about-page .stats-strip .stat-cell:hover {
+    transform: translateY(-6px) !important;
+    border-color: #E8CB72 !important;
+    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
+  }
+  .dark .about-page .stats-strip .stat-cell .stat-icon {
+    color: #E8CB72 !important;
+    font-size: 28px !important;
+  }
+  .dark .about-page .stats-strip .stat-cell .n {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    font-size: clamp(26px, 2.5vw, 36px) !important;
+  }
+  .dark .about-page .stats-strip .stat-cell .l {
+    color: #E8CB72 !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em !important;
   }
   .dark .about-page .presence-box {
     background: #0f0f1a !important;
