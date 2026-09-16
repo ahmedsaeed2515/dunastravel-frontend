@@ -193,7 +193,16 @@ const styles = `
   }
   .about-page .section-dark { position: relative; }
   .about-page #growth {
-    background: url('/imgs/egyothero.webp') center / cover no-repeat;
+    background: linear-gradient(rgba(8, 24, 48, 0.85), rgba(8, 24, 48, 0.85)), url('/imgs/egyothero.webp') center / cover no-repeat;
+    color: #FFFFFF !important;
+  }
+  .about-page #growth .eyebrow,
+  .about-page #growth h2,
+  .about-page #growth h2 *,
+  .about-page #growth p,
+  .about-page #growth .val,
+  .about-page #growth .bar-yr {
+    color: #FFFFFF !important;
   }
   .about-page .section-dark::before {
     content: '';
@@ -833,7 +842,7 @@ const About = () => {
         <div style={{ marginTop: 50 }} className="reveal">
           <div className="ic-label eyebrow" style={{ color: 'var(--royal)' }}>{t('about.instTradeShows')}</div>
           <div className="tradeshow-row" style={{ marginTop: 18 }}>
-            {[1,2,3,4,5,6].map((n) => (
+            {[1, 2, 3, 4, 5, 6].map((n) => (
               <div className="tradeshow-chip" key={n}>{t('about.tradeShow' + n)}</div>
             ))}
           </div>
