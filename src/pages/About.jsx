@@ -193,8 +193,8 @@ const styles = `
   }
   .about-page .section-dark { position: relative; }
   .about-page #growth {
-    background: linear-gradient(rgba(8, 24, 48, 0.85), rgba(8, 24, 48, 0.85)), url('/imgs/egyothero.webp') center / cover no-repeat;
-    color: #FFFFFF !important;
+    background: url('/imgs/egyothero.webp') center / cover no-repeat;
+    color: #EBF3FA !important;
   }
   .about-page #growth .eyebrow,
   .about-page #growth h2,
@@ -202,7 +202,7 @@ const styles = `
   .about-page #growth p,
   .about-page #growth .val,
   .about-page #growth .bar-yr {
-    color: #FFFFFF !important;
+    color: #EBF3FA !important;
   }
   .about-page .section-dark::before {
     content: '';
