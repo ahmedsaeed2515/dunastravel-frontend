@@ -9,6 +9,7 @@ import { useLandingPage } from '../../hooks/useLandingPage';
 import ErrorState from '../../components/ui/ErrorState';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 import { useTours } from '../../hooks/useTours';
+import Button from '../../components/ui/Button';
 
 function readableSections(sections) {
   if (!Array.isArray(sections)) return [];
