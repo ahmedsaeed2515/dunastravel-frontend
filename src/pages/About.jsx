@@ -813,9 +813,64 @@ const styles = `
     margin-top: 6px !important;
     font-weight: 500 !important;
   }
-  @media(max-width:900px) {
-    .about-page .services-grid,
-    .about-page .values-row { grid-template-columns: repeat(2, 1fr); }
+  /* Responsive Layout for Section #services (05 — WHY CHOOSE DUNAS TRAVEL) */
+  @media (max-width: 1024px) {
+    .about-page .services-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 16px !important;
+      margin-bottom: 60px !important;
+    }
+    .about-page .values-row {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 20px !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .about-page #services {
+      padding-top: 40px !important;
+      padding-bottom: 40px !important;
+    }
+    .about-page #services .section-head h2 {
+      font-size: 22px !important;
+      line-height: 1.3 !important;
+    }
+    .about-page #services .eyebrow {
+      font-size: 11px !important;
+      letter-spacing: 0.1em !important;
+    }
+    .about-page .services-grid {
+      grid-template-columns: 1fr !important;
+      gap: 14px !important;
+      margin-bottom: 36px !important;
+    }
+    .about-page .svc-card {
+      padding: 24px 20px !important;
+      min-height: auto !important;
+      border-radius: 12px !important;
+    }
+    .about-page .svc-title {
+      font-size: 19px !important;
+      margin-top: 14px !important;
+    }
+    .about-page .svc-card p {
+      font-size: 13.5px !important;
+      margin-top: 8px !important;
+    }
+    .about-page .values-row {
+      grid-template-columns: 1fr !important;
+      gap: 16px !important;
+    }
+    .about-page .value-item {
+      padding-top: 12px !important;
+    }
+    .about-page .value-item .vt {
+      font-size: 17px !important;
+    }
+    .about-page .value-item .vd {
+      font-size: 12.5px !important;
+      margin-top: 4px !important;
+    }
   }
 
   .about-page .tradeshow-row { display: flex; flex-wrap: wrap; gap: 12px; }
