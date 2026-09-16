@@ -400,9 +400,9 @@ const HomeExperienceSection = () => {
         ? (typeof v.images[0] === 'string' ? v.images[0] : v.images[0]?.imageUrl)
         : null;
       const image = v.heroImage || v.image || v.heroImageUrl || firstImage || (
-        normalizedCat === 'bus' ? '/imgs/transportation/bus1.jpeg' :
-        normalizedCat === 'coaster' ? '/imgs/transportation/costar.jpeg' :
-        '/imgs/transportation/privte.jpeg'
+        normalizedCat === 'bus' ? '/imgs/transportation/bus1.webp' :
+        normalizedCat === 'coaster' ? '/imgs/transportation/costar.webp' :
+        '/imgs/transportation/privte.webp'
       );
 
       const price = Number(v.pricePerDay || v.pricePerTrip || v.price || v.basePriceUsd || 0);

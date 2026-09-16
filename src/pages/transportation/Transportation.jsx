@@ -136,10 +136,16 @@ const Transportation = () => {
       <section className="relative w-full h-[480px] md:h-[650px] lg:h-[720px] flex items-center justify-start overflow-hidden bg-obsidian-950">
         <div className="absolute inset-0 z-0">
           <img
-            src="/imgs/transportation-hero.png"
-            alt="Transportation Hero"
+            src="/imgs/transportation-hero.webp"
+            srcSet="/imgs/transportation-hero-768w.webp 768w, /imgs/transportation-hero.webp 1024w"
+            sizes="100vw"
+            alt={t('transportation.heroTitle', 'Transportation Hero')}
             className="w-full h-full object-cover object-center"
             loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width="1024"
+            height="441"
           />
         </div>
 
@@ -229,8 +235,12 @@ const Transportation = () => {
                       alt={t(`data.${vehicle.name}`, vehicle.name)}
                       className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.06]"
                       onError={(e) => {
-                        e.currentTarget.src = '/imgs/transportation/bus1.jpeg';
+                        e.currentTarget.src = '/imgs/transportation/bus1.webp';
                       }}
+                      loading="lazy"
+                      decoding="async"
+                      width="400"
+                      height="256"
                     />
                     <div
                       className="absolute top-4 left-4 bg-gold-500 !text-white text-caption uppercase px-3 py-1 rounded-full shadow-md font-bold"
@@ -424,7 +434,7 @@ const Transportation = () => {
           {/* Infinite Track Container */}
           <div className="w-full overflow-hidden">
             <div className="dunas-marquee-track flex gap-6 px-4">
-              {[...galleryImages, ...galleryImages, ...galleryImages, ...galleryImages].map((imgUrl, idx) => {
+              {[...galleryImages, ...galleryImages].map((imgUrl, idx) => {
                 const originalIndex = idx % galleryImages.length;
                 return (
                   <div
@@ -437,6 +447,9 @@ const Transportation = () => {
                       alt={`Dunas VIP Fleet ${originalIndex + 1}`}
                       className="w-full h-full object-cover cinematic-transition group-hover:scale-110"
                       loading="lazy"
+                      decoding="async"
+                      width="384"
+                      height="288"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity"></div>
                     <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-ivory-50 z-10">

@@ -33,9 +33,9 @@ const LayoutContent = () => {
 
     let idleId;
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(load, { timeout: 12000 });
+      idleId = window.requestIdleCallback(load, { timeout: 1800 });
     } else {
-      const timer = setTimeout(load, 8000);
+      const timer = setTimeout(load, 1500);
       return () => {
         events.forEach((e) => window.removeEventListener(e, onInteract));
         clearTimeout(timer);

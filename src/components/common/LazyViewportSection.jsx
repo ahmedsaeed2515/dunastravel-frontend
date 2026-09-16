@@ -1,67 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
+import React from 'react';
 
 /**
  * LazyViewportSection
- * Defers rendering and mounting of below-the-fold components until they approach the viewport.
- * Dramatically slashes initial DOM node count, React reconciliation overhead, and TBT.
- * Renders immediately in Vitest/test environment to preserve 100% test compatibility.
+ * Leverages native CSS content-visibility: auto to defer rendering/paint of below-the-fold
+ * content without destroying the React component tree or unmounting DOM elements.
+ * Preserves 100% SEO, accessibility, internal anchors (#search-section, etc.), and state.
  */
 export default function LazyViewportSection({
   children,
   minHeight = '350px',
-  rootMargin = '500px',
   className = '',
   id = undefined,
 }) {
-  // In test environment, render synchronously so test queries find elements immediately
-  if (import.meta.env?.MODE === 'test') {
-    return (
-      <div id={id} className={className}>
-        {children}
-      </div>
-    );
-  }
-
-  const [isVisible, setIsVisible] = useState(false);
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (isVisible) return;
-
-    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin }
-    );
-
-    const el = containerRef.current;
-    if (el) {
-      observer.observe(el);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [isVisible, rootMargin]);
-
   return (
-    <div
-      ref={containerRef}
+    <section
       id={id}
       className={className}
-      style={!isVisible ? { minHeight } : undefined}
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: `0 ${minHeight}`,
+      }}
     >
-      {isVisible ? children : null}
-    </div>
+      {children}
+    </section>
   );
 }

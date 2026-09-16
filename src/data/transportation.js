@@ -9,7 +9,7 @@ export const transportation = [
     reviews: 140,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/bus1.jpeg',
+    image: '/imgs/transportation/bus1.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Restroom', 'Leather Seats', 'Luggage Compartment']
   },
   {
@@ -22,7 +22,7 @@ export const transportation = [
     reviews: 98,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/bus2.jpeg',
+    image: '/imgs/transportation/bus2.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Restroom', 'Audio System', 'Reclining Seats']
   },
   {
@@ -35,7 +35,7 @@ export const transportation = [
     reviews: 215,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/bus3.jpeg',
+    image: '/imgs/transportation/bus3.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Restroom', 'Leather Seats', 'USB Chargers']
   },
   {
@@ -48,7 +48,7 @@ export const transportation = [
     reviews: 112,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/bus4.jpeg',
+    image: '/imgs/transportation/bus4.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Restroom', 'Premium Audio', 'Reclining Seats']
   },
   {
@@ -61,7 +61,7 @@ export const transportation = [
     reviews: 85,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/bus5.jpeg',
+    image: '/imgs/transportation/bus5.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Restroom', 'LED TV', 'USB Chargers']
   },
   {
@@ -74,7 +74,7 @@ export const transportation = [
     reviews: 76,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/bus6.jpeg',
+    image: '/imgs/transportation/bus6.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Audio System', 'Luggage Compartment']
   },
   {
@@ -87,7 +87,7 @@ export const transportation = [
     reviews: 130,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/bus7.jpeg',
+    image: '/imgs/transportation/bus7.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Restroom', 'Leather Seats', 'Mini Fridge']
   },
   {
@@ -100,7 +100,7 @@ export const transportation = [
     reviews: 92,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/costar.jpeg',
+    image: '/imgs/transportation/costar.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Audio System', 'Spacious Legroom']
   },
   {
@@ -113,7 +113,7 @@ export const transportation = [
     reviews: 104,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/costar1.jpeg',
+    image: '/imgs/transportation/costar1.webp',
     features: ['AC', 'WiFi', 'Professional Driver', 'Leather Seats', 'USB Chargers', 'Premium Audio']
   },
   {
@@ -126,7 +126,7 @@ export const transportation = [
     reviews: 320,
     transmission: 'Auto',
     pricePerDay: 0,
-    image: '/imgs/transportation/privte.jpeg',
+    image: '/imgs/transportation/privte.webp',
     features: ['AC', 'GPS', 'Airbag', 'WiFi', 'Professional Driver', 'Leather Seats', 'Mineral Water']
   }
 ];
