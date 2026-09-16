@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import api from '../utils/api';
+import api, { resolveFullUrl, getOrCreateGuestToken } from '../utils/api';
 
 const JaiderChatContext = createContext(null);
 
@@ -380,8 +380,8 @@ export const JaiderChatProvider = ({ children }) => {
     setMessages((prev) => [...prev, initialBotMsg]);
 
     const activeLang = i18n.language || 'en';
-    const baseUrl = api.defaults?.baseURL || (typeof window !== 'undefined' ? '/api' : 'https://dunastravel-backend-seven.vercel.app/api');
-    const streamUrl = `${String(baseUrl).replace(/\/+$/, '')}/ai/chat/stream`;
+    const streamUrl = resolveFullUrl('/ai/chat/stream');
+    const guestToken = getOrCreateGuestToken();
 
     const idempotencyKey = `idem-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
@@ -393,7 +393,9 @@ export const JaiderChatProvider = ({ children }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(guestToken ? { 'x-guest-token': guestToken } : {}),
         },
+        credentials: 'include',
         body: JSON.stringify({
           message: cleanText,
           sessionId,
@@ -409,6 +411,11 @@ export const JaiderChatProvider = ({ children }) => {
 
       if (!response.ok) {
         throw new Error(`Stream HTTP error ${response.status}`);
+      }
+
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('text/event-stream')) {
+        throw new Error(`Stream returned unexpected Content-Type: ${contentType}`);
       }
 
       if (!response.body) {
@@ -589,10 +596,15 @@ export const JaiderChatProvider = ({ children }) => {
           );
         } catch (fallbackErr) {
           console.error('GuideR standard message call also failed:', fallbackErr);
-          const isAr = (activeLang || '').startsWith('ar');
-          const replyText = isAr
-            ? 'عذراً، خدمة مستشار السفر الذكي غير متاحة حالياً. يرجى المحاولة مرة أخرى أو التواصل مباشرة مع فريق خدمة العملاء.'
-            : 'GuideR travel concierge is temporarily unavailable. Please try again or reach out to our senior travel advisors directly.';
+          const langCode = (activeLang || 'en').toLowerCase().split('-')[0];
+          const errorMessages = {
+            ar: 'نعتذر عن هذا التأخير المؤقت في معالجة طلبك الذكي. مستشارو دوناس ترافيل متواجدون لمساعدتك فوراً في التخطيط لرحلتك الفاخرة.',
+            es: 'Disculpe la demora temporal en procesar su solicitud. Los especialistas de Dunas Travel están a su disposición de inmediato para asesorarle.',
+            pt: 'Pedimos desculpa pela demora temporária no processamento do seu pedido. Os especialistas da Dunas Travel estão à sua disposição de imediato para o ajudar.',
+            it: 'Ci scusiamo per il momentaneo ritardo nell\'elaborazione della richiesta. Gli specialisti di Dunas Travel sono a tua completa disposizione per assisterti.',
+            en: 'We apologize for this brief connection delay. Dunas Travel senior specialists are on standby to assist you immediately.',
+          };
+          const replyText = errorMessages[langCode] || errorMessages.en;
 
           setMessages((prev) =>
             prev.map((m) =>

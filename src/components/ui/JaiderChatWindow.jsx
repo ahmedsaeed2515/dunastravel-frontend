@@ -72,6 +72,7 @@ const JaiderChatWindow = () => {
   const [activeFeedbackModal, setActiveFeedbackModal] = useState(null); // msgId for negative feedback
   const [feedbackComment, setFeedbackComment] = useState('');
   const [feedbackCategory, setFeedbackCategory] = useState('INCORRECT_INFO');
+  const [retryingMsgId, setRetryingMsgId] = useState(null);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -132,6 +133,16 @@ const JaiderChatWindow = () => {
     setInput('');
     sendMessage(textToSend);
     setTimeout(() => scrollToBottom(true), 50);
+  };
+
+  const handleRetryMessage = async (failedText, msgId) => {
+    if (!failedText || isTyping) return;
+    setRetryingMsgId(msgId);
+    try {
+      await sendMessage(failedText);
+    } finally {
+      setRetryingMsgId(null);
+    }
   };
 
   const handleInputKeyDown = (e) => {
@@ -340,18 +351,88 @@ const JaiderChatWindow = () => {
                         )}
 
                         <div
-                          className={`p-3.5 rounded-2xl text-xs sm:text-[13px] leading-relaxed shadow-sm transition-all ${
+                          className={`rounded-2xl text-xs sm:text-[13px] leading-relaxed shadow-sm transition-all ${
                             isUser
                               ? 'bg-amber-500 text-slate-950 font-bold rounded-tr-none shadow-md px-4 py-2.5'
                               : isStaff
-                              ? 'bg-slate-900/90 text-slate-100 border border-amber-500/40 rounded-tl-none'
+                              ? 'bg-slate-900/90 text-slate-100 border border-amber-500/40 rounded-tl-none p-3.5'
                               : msg.isError
-                              ? 'bg-rose-950/40 text-rose-200 border border-rose-500/40 rounded-tl-none'
-                              : 'bg-slate-900/90 text-slate-200 border border-slate-800 rounded-tl-none'
+                              ? 'bg-gradient-to-br from-slate-900 via-obsidian-950 to-slate-900 text-slate-200 border border-gold-500/40 rounded-tl-none p-4 shadow-xl relative overflow-hidden'
+                              : 'bg-slate-900/90 text-slate-200 border border-slate-800 rounded-tl-none p-3.5'
                           }`}
                         >
                           {isUser ? (
                             <p className="whitespace-pre-wrap font-bold text-slate-950">{msg.text}</p>
+                          ) : msg.isError ? (
+                            <div className="space-y-3">
+                              {/* Ambient Luxury Glow */}
+                              <div className="absolute -top-12 -right-12 w-28 h-28 bg-gold-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                              {/* Concierge VIP Header */}
+                              <div className="flex items-center gap-2.5 pb-2.5 border-b border-gold-500/20">
+                                <div className="w-7 h-7 rounded-full bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400 shrink-0">
+                                  <FaCrown size={12} />
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs font-bold text-gold-300">
+                                    {t('jaider.conciergeTitle', isRtl ? 'مستشار السفر الخاص — دوناس ترافيل' : 'Dunas Travel VIP Concierge')}
+                                  </span>
+                                  <span className="text-[10px] text-slate-400">
+                                    {t('jaider.conciergeSubtitle', isRtl ? 'مستشارونا في انتظارك لتقديم خدمة مصممة خصيصاً لك' : 'Dedicated travel designers standing by')}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Concierge Reassuring Copy */}
+                              <p className="text-xs sm:text-[13px] leading-relaxed text-slate-200">
+                                {msg.text}
+                              </p>
+
+                              {/* Luxury Action CTAs */}
+                              <div className="pt-2 flex flex-wrap gap-2 border-t border-slate-800/80">
+                                {msg.failedMessageText && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRetryMessage(msg.failedMessageText, msg.id)}
+                                    disabled={retryingMsgId === msg.id || isTyping}
+                                    className="px-3.5 py-2 bg-gradient-to-r from-gold-500 via-gold-400 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-obsidian-950 font-black text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer disabled:opacity-50"
+                                  >
+                                    <FaRedoAlt size={10} className={retryingMsgId === msg.id ? 'animate-spin' : ''} />
+                                    <span>
+                                      {retryingMsgId === msg.id
+                                        ? t('jaider.connecting', isRtl ? 'جاري الاتصال...' : 'Connecting...')
+                                        : t('jaider.retry', isRtl ? 'إعادة المحاولة' : 'Retry')}
+                                    </span>
+                                  </button>
+                                )}
+
+                                <a
+                                  href={`https://wa.me/201149401111?text=${encodeURIComponent(
+                                    isRtl
+                                      ? `مرحباً دوناس ترافيل، أود استشارة بخصوص: "${msg.failedMessageText || 'تخطيط رحلتي الفاخرة'}"`
+                                      : `Hello Dunas Travel, I would like concierge assistance regarding: "${msg.failedMessageText || 'my luxury journey'}"`
+                                  )}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow-emerald-500/20 transition-all flex items-center gap-1.5 active:scale-95"
+                                >
+                                  <FaWhatsapp size={13} className="text-white" />
+                                  <span>{t('jaider.chatOnWhatsApp', isRtl ? 'تواصل عبر واتساب' : 'Chat on WhatsApp')}</span>
+                                </a>
+
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    navigate('/tours');
+                                    setIsOpen(false);
+                                  }}
+                                  className="px-3 py-2 bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-gold-300 font-semibold text-xs rounded-xl border border-slate-700/90 transition-all flex items-center gap-1.5 cursor-pointer"
+                                >
+                                  <FaCompass size={11} className="text-gold-400" />
+                                  <span>{t('jaider.browseTours', isRtl ? 'استعراض الرحلات الفاخرة' : 'Browse Luxury Tours')}</span>
+                                </button>
+                              </div>
+                            </div>
                           ) : (
                             <>
                               {msg.text ? (
@@ -369,33 +450,6 @@ const JaiderChatWindow = () => {
                                 </div>
                               ) : null}
                             </>
-                          )}
-
-                          {msg.isError && (
-                            <div className="mt-3 flex flex-wrap gap-2 pt-2.5 border-t border-rose-500/30">
-                              {msg.failedMessageText && (
-                                <button
-                                  onClick={() => sendMessage(msg.failedMessageText)}
-                                  className="px-3 py-1.5 bg-gold-500/20 hover:bg-gold-500 hover:text-obsidian-950 text-gold-300 font-bold text-xs rounded-xl border border-gold-500/40 transition-all flex items-center gap-1.5 cursor-pointer"
-                                >
-                                  <FaRedoAlt size={10} />
-                                  <span>{isRtl ? 'إعادة المحاولة' : 'Retry'}</span>
-                                </button>
-                              )}
-                              <a
-                                href={`https://wa.me/201149401111?text=${encodeURIComponent(
-                                  isRtl
-                                    ? 'مرحباً دوناس ترافيل، أود المساعدة من مستشار السفر بخصوص رحلتي.'
-                                    : 'Hello Dunas Travel, I would like assistance from a senior travel specialist.'
-                                )}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 font-bold text-xs rounded-xl border border-emerald-500/40 transition-all flex items-center gap-1.5"
-                              >
-                                <FaWhatsapp size={12} />
-                                <span>{isRtl ? 'تواصل عبر واتساب' : 'Chat on WhatsApp'}</span>
-                              </a>
-                            </div>
                           )}
                         </div>
 

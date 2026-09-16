@@ -387,6 +387,9 @@ export const api = {
     apiRequest(path, { ...options, method: 'PUT', body }),
   delete: (path, options = {}) =>
     apiRequest(path, { ...options, method: 'DELETE' }),
+  defaults: {
+    baseURL: BASE_URL,
+  },
 };
 
 export default api;

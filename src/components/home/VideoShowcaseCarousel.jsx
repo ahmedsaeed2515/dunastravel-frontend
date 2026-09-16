@@ -12,23 +12,46 @@ import {
 } from 'react-icons/fa';
 import ConsentGate from '../privacy/ConsentGate';
 
+function extractYouTubeId(url) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url, 'https://youtube.com');
+    const vParam = parsed.searchParams.get('v');
+    if (vParam && /^[a-zA-Z0-9_-]{11}$/.test(vParam)) return vParam;
+    if (parsed.hostname.includes('youtu.be')) {
+      const id = parsed.pathname.slice(1).split('/')[0];
+      if (/^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
+    }
+    const pathMatch = parsed.pathname.match(/\/(?:shorts|embed|live|v)\/([a-zA-Z0-9_-]{11})/);
+    if (pathMatch) return pathMatch[1];
+  } catch {
+    // Regex fallback below
+  }
+  const match = url.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?.*v=|embed\/|shorts\/|v\/|live\/))([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+function extractVimeoId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:vimeo\.com\/(?:video\/)?|player\.vimeo\.com\/video\/)(\d+)/);
+  return match ? match[1] : null;
+}
+
 function getEmbedInfo(url) {
   if (!url) return null;
-  const ytMatch = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
-  if (ytMatch) {
+  const ytId = extractYouTubeId(url);
+  if (ytId) {
     return {
       type: 'youtube',
-      embedUrl: `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0`,
-      thumbnailUrl: `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0`,
+      thumbnailUrl: `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`,
     };
   }
-  const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-  if (vimeoMatch) {
+  const vimeoId = extractVimeoId(url);
+  if (vimeoId) {
     return {
       type: 'vimeo',
-      embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`,
+      embedUrl: `https://player.vimeo.com/video/${vimeoId}?autoplay=1`,
       thumbnailUrl: null,
     };
   }

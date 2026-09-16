@@ -120,8 +120,6 @@ export default function ReviewsMap({ tourId }) {
   useEffect(() => {
     if (!tourId) return undefined;
     let active = true;
-    setLoading(true);
-    setLoadError('');
 
     api.get(`/tours/${encodeURIComponent(tourId)}/reviews`)
       .then((response) => {
@@ -134,6 +132,7 @@ export default function ReviewsMap({ tourId }) {
           ? items.reduce((total, review) => total + Number(review.rating || 0), 0) / items.length
           : 5.0;
         setSummary(response?.ratingSummary || { averageRating, totalReviews: items.length });
+        setLoadError('');
       })
       .catch((requestError) => {
         if (!active) return;
@@ -155,13 +154,13 @@ export default function ReviewsMap({ tourId }) {
     if (!urlReviewId || reviews.length === 0) return;
     const match = reviews.find((r) => r.id === urlReviewId);
     if (match) {
-      setHighlightedReviewId(urlReviewId);
       const timer = setTimeout(() => {
+        setHighlightedReviewId(urlReviewId);
         const el = document.getElementById(`review-${urlReviewId}`);
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-      }, 150);
+      }, 50);
 
       // Auto-clear highlight ring after 7 seconds
       const clearTimer = setTimeout(() => {

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaShieldAlt, FaStar, FaUserCheck, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 
 export default function ReviewAuthModal({ isOpen, onClose, returnUrl }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   useEffect(() => {
