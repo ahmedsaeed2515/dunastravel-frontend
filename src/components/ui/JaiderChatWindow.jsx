@@ -44,6 +44,7 @@ const JaiderChatWindow = () => {
     isTyping,
     suggestions,
     leadFormState,
+    setLeadFormState,
     submitLead,
     submitCustomTripInquiry,
     guiderAvailability,

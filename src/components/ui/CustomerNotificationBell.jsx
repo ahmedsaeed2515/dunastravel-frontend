@@ -4,11 +4,44 @@ import { useNavigate } from 'react-router-dom';
 import { FaBell, FaCheckDouble, FaCalendarCheck, FaCreditCard, FaQuestionCircle, FaTimes, FaVolumeUp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import api from '../../utils/api';
 import { playNotificationSound } from '../../utils/sound';
 
-export default function CustomerNotificationBell() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function CustomerNotificationBell({
+  isOpen: controlledIsOpen,
+  onToggle: controlledOnToggle,
+  onClose: controlledOnClose,
+}) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isControlled = typeof controlledIsOpen === 'boolean';
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  const handleToggle = () => {
+    if (isControlled && controlledOnToggle) {
+      controlledOnToggle();
+    } else {
+      setInternalIsOpen((prev) => !prev);
+    }
+  };
+
+  const handleClose = () => {
+    if (isControlled && controlledOnClose) {
+      controlledOnClose();
+    } else {
+      setInternalIsOpen(false);
+    }
+  };
+
+  const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  useClickOutside(dropdownRef, handleClose, {
+    enabled: isOpen,
+    escapeKey: true,
+    ignoreRefs: [buttonRef],
+  });
+
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -92,7 +125,7 @@ export default function CustomerNotificationBell() {
     if (!item.isRead) {
       handleMarkAsRead(item.id);
     }
-    setIsOpen(false);
+    handleClose();
     setSelectedNotification(item);
   };
 
@@ -110,9 +143,12 @@ export default function CustomerNotificationBell() {
   return (
     <div className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        ref={buttonRef}
+        type="button"
+        onClick={handleToggle}
         aria-label="Notifications"
-        className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110 relative"
+        aria-expanded={isOpen}
+        className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110 relative cursor-pointer"
       >
         <FaBell size={10} className="text-[#F5A623]" />
         {unreadCount > 0 && (
@@ -123,7 +159,20 @@ export default function CustomerNotificationBell() {
       </button>
 
       {isOpen && (
-        <div className={`fixed sm:absolute top-16 sm:top-full ${isRtl ? 'left-3 sm:left-0' : 'right-3 sm:right-0'} mt-2 w-[calc(100vw-1.5rem)] sm:w-80 max-w-sm bg-white dark:bg-obsidian-900 border border-gray-200 dark:border-obsidian-700 rounded-2xl shadow-2xl z-[999999] overflow-hidden text-gray-900 dark:text-white transition-all`}>
+        <>
+          {/* Mobile backdrop to dismiss cleanly on outside tap */}
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs z-[9999] sm:hidden"
+            onClick={handleClose}
+            aria-hidden="true"
+          />
+
+          <div
+            ref={dropdownRef}
+            className={`fixed sm:absolute top-12 sm:top-full left-1/2 -translate-x-1/2 sm:translate-x-0 ${
+              isRtl ? 'sm:left-0 sm:right-auto' : 'sm:right-0 sm:left-auto'
+            } sm:mt-2 w-[calc(100vw-1.5rem)] sm:w-80 max-w-sm bg-white dark:bg-obsidian-900 border border-gray-200 dark:border-obsidian-700 rounded-2xl shadow-2xl z-[10000] overflow-hidden text-gray-900 dark:text-white transition-all`}
+          >
           <div className="p-3 border-b border-gray-100 dark:border-obsidian-800 flex items-center justify-between bg-gray-50 dark:bg-obsidian-800/50">
             <span className="font-bold text-xs">
               {isRtl ? 'الإشعارات' : 'Notifications'} {unreadCount > 0 && `(${unreadCount})`}
@@ -184,6 +233,7 @@ export default function CustomerNotificationBell() {
             )}
           </div>
         </div>
+        </>
       )}
 
       {/* NOTIFICATION DETAILS MODAL / MOBILE BOTTOM SHEET (PORTAL TO DOCUMENT.BODY) */}

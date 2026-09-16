@@ -16,8 +16,8 @@ import Button from '../../components/ui/Button';
 import api from '../../utils/api';
 import { useToast } from '../../context/ToastContext';
 
-const inputClass = "w-full p-3 rounded-xl outline-none transition-all text-[14px] bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-[rgba(201,162,39,0.5)] focus:shadow-[0_0_20px_rgba(201,162,39,0.1)] [color-scheme:dark]";
-const labelClass = "block text-caption text-gold-500 font-medium mb-1 text-[12px] uppercase tracking-[1px]";
+const inputClass = "w-full min-h-[44px] p-3 rounded-xl outline-none transition-all text-base sm:text-sm bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-[rgba(201,162,39,0.5)] focus:shadow-[0_0_20px_rgba(201,162,39,0.1)] [color-scheme:dark]";
+const labelClass = "block text-caption text-gold-500 font-medium mb-1.5 text-xs uppercase tracking-[1px]";
 
 const UserDashboard = ({ initialTab = 'overview' }) => {
   const navigate = useNavigate();
@@ -206,7 +206,7 @@ const UserDashboard = ({ initialTab = 'overview' }) => {
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-obsidian-900 text-ivory-50 font-body">
+    <div className="min-h-screen pt-28 pb-28 sm:pb-20 bg-obsidian-900 text-ivory-50 font-body">
       <Helmet>
         <title>{t('user.dashboardTitle', 'My Dashboard | Dunas Travel')}</title>
       </Helmet>
@@ -240,10 +240,47 @@ const UserDashboard = ({ initialTab = 'overview' }) => {
           </div>
         </div>
 
+        {/* Mobile Horizontal Navigation Tabs (lg:hidden) */}
+        <div className="lg:hidden mb-6 -mx-4 px-4 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-2 min-w-max pb-1">
+            {[
+              { id: 'overview', label: t('user.tabOverview', 'Overview'), icon: FaGlobeAmericas },
+              { id: 'bookings', label: t('user.tabBookings', 'My Bookings'), icon: FaBookmark, count: bookings.length },
+              { id: 'favorites', label: t('user.tabFavorites', 'Saved Tours'), icon: FaHeart, count: favorites?.length },
+              { id: 'profile', label: t('user.tabProfile', 'Profile'), icon: FaUser },
+              { id: 'security', label: t('user.tabSecurity', 'Security'), icon: FaLock },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`min-h-[42px] px-4 py-2 rounded-xl font-semibold text-[12px] uppercase tracking-[1px] flex items-center gap-2 transition-all border ${
+                    isActive
+                      ? 'bg-gradient-to-r from-gold-500 to-gold-700 text-obsidian-900 border-gold-400 shadow-[0_0_15px_rgba(201,162,39,0.3)]'
+                      : 'bg-[#121118] text-ivory-300 border-[rgba(201,162,39,0.15)] hover:text-gold-400 hover:border-gold-500/40'
+                  }`}
+                >
+                  <Icon size={14} />
+                  <span>{tab.label}</span>
+                  {typeof tab.count === 'number' && tab.count > 0 && (
+                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      isActive ? 'bg-obsidian-900/30 text-obsidian-950' : 'bg-gold-500/20 text-gold-400'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Tab Navigation & Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar Tabs */}
-          <div className="lg:col-span-1 space-y-2">
+          {/* Desktop Sidebar Tabs */}
+          <div className="hidden lg:block lg:col-span-1 space-y-2">
             <div className="bg-[#121118] border border-[rgba(201,162,39,0.15)] rounded-2xl p-3 shadow-lg">
               <button
                 onClick={() => setActiveTab('overview')}
@@ -387,7 +424,7 @@ const UserDashboard = ({ initialTab = 'overview' }) => {
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-body-sm text-ivory-300 mb-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-body-sm text-ivory-300 mb-4">
                           <div>
                             <span className="block text-[11px] text-ivory-400 uppercase">{t('booking.arrivalDate', 'Arrival')}</span>
                             <span className="font-semibold text-ivory-100">{b.arrivalDate || 'TBD'}</span>
@@ -404,25 +441,26 @@ const UserDashboard = ({ initialTab = 'overview' }) => {
                             <span className="block text-[11px] text-ivory-400 uppercase">{t('booking.paymentStatus', 'Payment')}</span>
                             <span className="font-semibold text-ivory-100">{b.paymentStatus || t('booking.awaitingPayment', 'Awaiting payment')}</span>
                           </div>
-                          <div className="flex items-end gap-2">
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-[rgba(201,162,39,0.08)]">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedInvoiceBooking(b)}
+                            className="flex-1 sm:flex-none min-h-[40px] px-4 py-2 bg-gradient-to-r from-gold-500 to-gold-700 text-obsidian-900 font-bold rounded-xl text-[12px] uppercase tracking-[1px] flex items-center justify-center gap-1.5 hover:scale-105 transition-all"
+                          >
+                            <FaFileInvoiceDollar /> {t('booking.viewInvoice', 'Invoice')}
+                          </button>
+                          {b.status !== 'CANCELLED' && b.status !== 'cancelled' && (
                             <button
                               type="button"
-                              onClick={() => setSelectedInvoiceBooking(b)}
-                              className="px-3.5 py-2 bg-gradient-to-r from-gold-500 to-gold-700 text-obsidian-900 font-bold rounded-lg text-[11px] uppercase tracking-[1px] flex items-center gap-1.5 hover:scale-105 transition-all"
+                              disabled={cancellingCode === (b.referenceCode || b.id)}
+                              onClick={() => handleCancelBooking(b.referenceCode || b.id)}
+                              className="flex-1 sm:flex-none min-h-[40px] px-4 py-2 bg-red-500/15 border border-red-500/30 text-red-400 font-semibold rounded-xl text-[12px] uppercase tracking-[1px] flex items-center justify-center gap-1 hover:bg-red-500/25 transition-all"
                             >
-                              <FaFileInvoiceDollar /> {t('booking.viewInvoice', 'Invoice')}
+                              <FaTimesCircle /> {t('common.cancel', 'Cancel')}
                             </button>
-                            {b.status !== 'CANCELLED' && b.status !== 'cancelled' && (
-                              <button
-                                type="button"
-                                disabled={cancellingCode === (b.referenceCode || b.id)}
-                                onClick={() => handleCancelBooking(b.referenceCode || b.id)}
-                                className="px-3 py-2 bg-red-500/15 border border-red-500/30 text-red-400 font-semibold rounded-lg text-[11px] uppercase tracking-[1px] flex items-center gap-1 hover:bg-red-500/25 transition-all"
-                              >
-                                <FaTimesCircle /> {t('common.cancel', 'Cancel')}
-                              </button>
-                            )}
-                          </div>
+                          )}
                         </div>
                       </div>
                     ))}
