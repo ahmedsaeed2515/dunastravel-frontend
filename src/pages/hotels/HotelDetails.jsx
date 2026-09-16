@@ -35,6 +35,7 @@ import { useHotel } from '../../hooks/useHotels';
 import Button from '../../components/ui/Button';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
+import ConsentGate from '../../components/privacy/ConsentGate';
 
 const HotelDetails = () => {
   const { t, i18n } = useTranslation();
@@ -609,16 +610,18 @@ const HotelDetails = () => {
           </div>
 
           <div className="lg:w-1/2 min-h-[350px] rounded-2xl overflow-hidden shadow-inner border border-slate-200 relative">
-            <iframe
-              src={`https://maps.google.com/maps?q=${encodeURIComponent(hotelInfo.location || `${hotelInfo.name}, ${apiHotel?.city || 'Egypt'}`)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              style={{ border: 0, minHeight: '350px' }}
-              allowFullScreen=""
-              loading="lazy"
-              title={t('hotel.location.title', 'Hotel Location')}
-            />
+            <ConsentGate category="marketing" providerName="Google Maps" height="350px">
+              <iframe
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(hotelInfo.location || `${hotelInfo.name}, ${apiHotel?.city || 'Egypt'}`)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                style={{ border: 0, minHeight: '350px' }}
+                allowFullScreen=""
+                loading="lazy"
+                title={t('hotel.location.title', 'Hotel Location')}
+              />
+            </ConsentGate>
           </div>
         </div>
       </section>
@@ -642,14 +645,21 @@ const HotelDetails = () => {
 
             <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-slate-800 bg-black">
               {isPlayingVideo ? (
-                <iframe
-                  className="w-full h-full absolute inset-0"
-                  src={`https://www.youtube.com/embed/${apiHotel?.amenities?.youtubeId || 'RFeQ5fjkYt8'}?autoplay=1`}
-                  title={`${hotelInfo.name} Cinematic Video Tour`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
+                <ConsentGate
+                  category="marketing"
+                  providerName="YouTube"
+                  height="100%"
+                  fallbackThumbnail={`https://img.youtube.com/vi/${apiHotel?.amenities?.youtubeId || 'RFeQ5fjkYt8'}/hqdefault.jpg`}
+                >
+                  <iframe
+                    className="w-full h-full absolute inset-0"
+                    src={`https://www.youtube.com/embed/${apiHotel?.amenities?.youtubeId || 'RFeQ5fjkYt8'}?autoplay=1`}
+                    title={`${hotelInfo.name} Cinematic Video Tour`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </ConsentGate>
               ) : (
                 <div
                   className="w-full h-full absolute inset-0 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-gold-500"

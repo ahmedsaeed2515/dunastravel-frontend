@@ -1,11 +1,17 @@
 /**
  * analytics.js — First-party Visitor Event Tracking Client
  * Sends privacy-aware visitor events to POST /api/analytics/events
+ * Governed by ConsentManager (Analytics Category)
  */
 import api from './api';
+import { consentManager } from '../privacy/consent';
 
 function getSessionId() {
   if (typeof window === 'undefined') return null;
+  // Strictly gate reading/setting analytics session ID behind analytics consent
+  if (!consentManager.hasConsent('analytics')) {
+    return null;
+  }
   let sid = localStorage.getItem('dunas_analytics_sid');
   if (!sid) {
     sid = 'sid_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
@@ -27,6 +33,11 @@ function generateEventId() {
 }
 
 export async function trackEvent(eventName, payload = {}) {
+  // CRITICAL PRIVACY GATE: If user has not granted analytics consent, drop event immediately.
+  if (!consentManager.hasConsent('analytics')) {
+    return;
+  }
+
   try {
     const sessionId = getSessionId();
     const deviceCategory = getDeviceCategory();
@@ -36,8 +47,6 @@ export async function trackEvent(eventName, payload = {}) {
       : 'en';
     const rawReferrer = typeof document !== 'undefined' ? document.referrer : '';
     // Only include referrer when it's a valid absolute URL the backend @IsUrl validator accepts.
-    // document.referrer can be '' (no referrer) or 'about:blank' / 'file://...' (non-http origins),
-    // all of which would cause a 400 from the strict @IsUrl({ protocols: ['http','https'] }) rule.
     const validReferrer = /^https?:\/\//i.test(rawReferrer) ? rawReferrer : undefined;
     const eventId = payload.eventId || generateEventId();
 
@@ -67,6 +76,17 @@ export async function trackEvent(eventName, payload = {}) {
     await api.post('/analytics/events', body).catch(() => {});
   } catch (err) {
     // Non-blocking catch
-    console.warn('[Analytics] Track event failed:', err);
+    if (import.meta.env?.DEV) {
+      console.warn('[Analytics] Track event failed:', err);
+    }
   }
+}
+
+// Auto-track initial page view when analytics consent is granted mid-session
+if (typeof window !== 'undefined') {
+  consentManager.subscribe((currentState, previousState) => {
+    if (currentState.analytics && (!previousState || !previousState.analytics)) {
+      trackEvent('page_view', { pathname: window.location.pathname });
+    }
+  });
 }

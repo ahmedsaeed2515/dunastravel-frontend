@@ -23,6 +23,7 @@ import Button from '../components/ui/Button';
 import ContactForms from '../components/contact/ContactForms';
 import { useToast } from '../context/ToastContext';
 import FormFeedback from '../components/ui/FormFeedback';
+import ConsentGate from '../components/privacy/ConsentGate';
 
 const Contact = () => {
   const { t, i18n } = useTranslation();
@@ -476,29 +477,33 @@ const Contact = () => {
             </div>
 
             {/* Embedded Google Map */}
-            <a
-              href="https://maps.app.goo.gl/oA84mQGwUsHWo4kt8"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full h-[240px] rounded-2xl overflow-hidden border border-gold-500/40 shadow-xl relative group cursor-pointer mt-4"
-              title={t('contact.openMaps', 'Open location in Google Maps')}
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.026723223011!2d31.2052!3d30.0076!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAwJzI3LjQiTiAzMcKwMTInMTg3LjJF!5e0!3m2!1sen!2seg!4v1680000000000"
-                width="100%"
-                height="100%"
-                style={{ border: 0, pointerEvents: 'none' }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-              <div className="absolute inset-0 bg-slate-950/30 group-hover:bg-slate-950/10 transition-all duration-300 flex items-center justify-center">
-                <span className="bg-slate-900/95 backdrop-blur-md text-gold-300 font-bold px-5 py-2.5 rounded-full border border-gold-500/60 text-xs shadow-2xl group-hover:scale-105 transition-all flex items-center gap-2">
-                  <span>📍</span>
-                  <span>{t('contact.openGoogleMaps', 'فتح الموقع على خرائط جوجل مباشرة')}</span>
-                </span>
-              </div>
-            </a>
+            <div className="block w-full h-[240px] rounded-2xl overflow-hidden border border-gold-500/40 shadow-xl relative group mt-4">
+              <ConsentGate category="marketing" providerName="Google Maps" height="240px">
+                <a
+                  href="https://maps.app.goo.gl/oA84mQGwUsHWo4kt8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full h-full relative cursor-pointer"
+                  title={t('contact.openMaps', 'Open location in Google Maps')}
+                >
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.026723223011!2d31.2052!3d30.0076!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAwJzI3LjQiTiAzMcKwMTInMTg3LjJF!5e0!3m2!1sen!2seg!4v1680000000000"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, pointerEvents: 'none' }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                  <div className="absolute inset-0 bg-slate-950/30 group-hover:bg-slate-950/10 transition-all duration-300 flex items-center justify-center">
+                    <span className="bg-slate-900/95 backdrop-blur-md text-gold-300 font-bold px-5 py-2.5 rounded-full border border-gold-500/60 text-xs shadow-2xl group-hover:scale-105 transition-all flex items-center gap-2">
+                      <span>📍</span>
+                      <span>{t('contact.openGoogleMaps', 'فتح الموقع على خرائط جوجل مباشرة')}</span>
+                    </span>
+                  </div>
+                </a>
+              </ConsentGate>
+            </div>
           </div>
 
           {/* Right Side: Message Form (Header Colors Palette) */}

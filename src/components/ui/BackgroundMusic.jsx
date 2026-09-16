@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useJaiderChat } from '../../context/JaiderChatContext';
+import { useConsent, consentManager } from '../../privacy/consent';
 
 const DEFAULT_YOUTUBE_ID = 'QqjdVDbxz6s';
 const backgroundMusicUrl = import.meta.env.VITE_BACKGROUND_MUSIC_URL;
@@ -11,6 +12,7 @@ const BackgroundMusic = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const { isOpen: isJaiderOpen } = useJaiderChat();
+  const { hasConsent, openPreferences } = useConsent();
   const isHomePage = location.pathname === '/';
 
   const audioRef = useRef(null);
@@ -52,6 +54,10 @@ const BackgroundMusic = () => {
   const loadAndInitYT = (callback) => {
     if (isLocalAudio) {
       if (callback) callback();
+      return;
+    }
+
+    if (!consentManager.hasConsent('marketing')) {
       return;
     }
 
@@ -181,6 +187,10 @@ const BackgroundMusic = () => {
       pauseMusic();
       sessionStorage.removeItem('userManualPlayNonHome');
     } else {
+      if (!isLocalAudio && !hasConsent('marketing')) {
+        openPreferences();
+        return;
+      }
       if (!isHomePage) {
         sessionStorage.setItem('userManualPlayNonHome', 'true');
       }
