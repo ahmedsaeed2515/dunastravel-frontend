@@ -471,13 +471,31 @@ const styles = `
     text-transform: uppercase;
     color: var(--ink-soft);
   }
-  /* Section 03 #institutional Royal Blue text rules in Light Mode */
+  /* Section 03 #institutional Royal Blue text rules in Light Mode - Ultra Clear & Bold */
   html:not(.dark) .about-page #institutional .section-head .eyebrow,
-  html:not(.dark) .about-page #institutional .ic-label.eyebrow,
-  html:not(.dark) .about-page #institutional .tradeshow-chip,
-  html:not(.dark) .about-page #institutional .quote-block p,
+  html:not(.dark) .about-page #institutional .ic-label.eyebrow {
+    color: #1E40AF !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.22em !important;
+  }
+  html:not(.dark) .about-page #institutional .tradeshow-chip {
+    color: #1E40AF !important;
+    font-weight: 700 !important;
+    border: 1.5px solid rgba(30, 64, 175, 0.4) !important;
+    background: #F0F5FF !important;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.08) !important;
+  }
+  html:not(.dark) .about-page #institutional .quote-block {
+    border-left: 4px solid #1E40AF !important;
+  }
+  html:not(.dark) .about-page #institutional .quote-block p {
+    color: #1E40AF !important;
+    font-weight: 600 !important;
+  }
   html:not(.dark) .about-page #institutional .quote-block span {
-    color: var(--royal) !important;
+    color: #1E40AF !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.15em !important;
   }
   .about-page .events-list { display: flex; flex-direction: column; }
   .about-page .event-row {
