@@ -401,7 +401,6 @@ export const JaiderChatProvider = ({ children }) => {
           sessionId,
           locale: activeLang,
           personaCode: selectedPersona,
-          idempotencyKey,
           pageContext: {
             pathname: typeof window !== 'undefined' ? window.location.pathname : '/',
           },
@@ -553,7 +552,6 @@ export const JaiderChatProvider = ({ children }) => {
             sessionId,
             locale: activeLang,
             personaCode: selectedPersona,
-            idempotencyKey,
             pageContext: {
               pathname: typeof window !== 'undefined' ? window.location.pathname : '/',
             },

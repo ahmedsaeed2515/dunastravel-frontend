@@ -280,8 +280,8 @@ export async function apiRequest(path, options = {}, { raw = false, _retry = fal
         : undefined,
   });
 
-  // Handle 401 Unauthorized for Refresh Token (exclude /auth/me, /auth/login, /auth/refresh)
-  if (res.status === 401 && !_retry && !path.includes('/auth/refresh') && !path.includes('/auth/login') && !path.includes('/auth/me')) {
+  // Handle 401 Unauthorized for Refresh Token (exclude /auth/refresh and /auth/login)
+  if (res.status === 401 && !_retry && !path.includes('/auth/refresh') && !path.includes('/auth/login')) {
     if (_isRefreshing) {
       const success = await new Promise((resolve) => addRefreshSubscriber(resolve));
       if (success) {
@@ -313,6 +313,9 @@ export async function apiRequest(path, options = {}, { raw = false, _retry = fal
         if (refreshRes.ok) {
           clearCsrfToken(); // Need new CSRF token after refresh
           onRefreshed(true);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('auth:refreshed'));
+          }
           return apiRequest(path, options, { raw, _retry: true });
         } else {
           onRefreshed(false);
@@ -324,7 +327,7 @@ export async function apiRequest(path, options = {}, { raw = false, _retry = fal
         notifyUnauthorized();
       }
     }
-  } else if (res.status === 401 && (path.includes('/auth/refresh') || path.includes('/auth/me') || _retry)) {
+  } else if (res.status === 401 && (path.includes('/auth/refresh') || _retry)) {
     notifyUnauthorized();
   }
 

@@ -8,12 +8,9 @@ import {
   FaReply,
   FaShieldAlt,
   FaInfoCircle,
-  FaLock,
-  FaPen,
 } from 'react-icons/fa';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
-import ReviewAuthModal from './ReviewAuthModal';
 
 const AVATAR_GRADIENTS = [
   'from-amber-500 to-orange-600',
@@ -85,6 +82,27 @@ function formatReview(review, locale) {
   };
 }
 
+function getLocalReviews(tourKey) {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(`dunas_my_reviews_${tourKey}`);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalReview(tourKey, review) {
+  if (typeof window === 'undefined') return;
+  try {
+    const existing = getLocalReviews(tourKey);
+    const updated = [review, ...existing.filter((r) => r.id !== review.id && r.comment !== review.comment)];
+    localStorage.setItem(`dunas_my_reviews_${tourKey}`, JSON.stringify(updated));
+  } catch {
+    // Ignore storage quota or disabled errors
+  }
+}
+
 export default function ReviewsMap({ tourId }) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
@@ -101,10 +119,10 @@ export default function ReviewsMap({ tourId }) {
   const [submitted, setSubmitted] = useState(false);
   const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const [hoverRating, setHoverRating] = useState(0);
   const [form, setForm] = useState({
+    reviewerName: '',
     rating: 5,
     comment: '',
   });
@@ -127,17 +145,40 @@ export default function ReviewsMap({ tourId }) {
         const items = Array.isArray(response?.items)
           ? response.items
           : (Array.isArray(response?.data) ? response.data : (Array.isArray(response) ? response : []));
-        setReviews(items.map((review) => formatReview(review, i18n.language || 'en')));
-        const averageRating = items.length
-          ? items.reduce((total, review) => total + Number(review.rating || 0), 0) / items.length
+        
+        const formattedPublic = items.map((review) => formatReview(review, i18n.language || 'en'));
+        const publicIds = new Set(formattedPublic.map((p) => p.id));
+        const publicComments = new Set(formattedPublic.map((p) => p.comment));
+
+        // Optimistic Google Maps pattern: merge user's locally submitted reviews at top
+        const localItems = getLocalReviews(tourId);
+        const pendingLocals = localItems.filter(
+          (loc) => !publicIds.has(loc.id) && !publicComments.has(loc.comment)
+        );
+
+        if (localItems.length > 0) {
+          setAlreadyReviewed(true);
+        }
+
+        const combined = [...pendingLocals, ...formattedPublic];
+        setReviews(combined);
+
+        const averageRating = combined.length
+          ? combined.reduce((total, review) => total + Number(review.rating || 0), 0) / combined.length
           : 5.0;
-        setSummary(response?.ratingSummary || { averageRating, totalReviews: items.length });
+        setSummary(response?.ratingSummary || { averageRating, totalReviews: combined.length });
         setLoadError('');
       })
       .catch((requestError) => {
         if (!active) return;
-        setReviews([]);
-        setSummary({ averageRating: 5.0, totalReviews: 0 });
+        const localItems = getLocalReviews(tourId);
+        if (localItems.length > 0) {
+          setReviews(localItems);
+          setAlreadyReviewed(true);
+        } else {
+          setReviews([]);
+        }
+        setSummary({ averageRating: 5.0, totalReviews: localItems.length });
         setLoadError(requestError?.message || t('reviews.loadError', 'Reviews could not be loaded.'));
       })
       .finally(() => {
@@ -179,8 +220,9 @@ export default function ReviewsMap({ tourId }) {
   async function submit(event) {
     event.preventDefault();
 
-    if (!user) {
-      setIsAuthModalOpen(true);
+    const effectiveName = (user?.name || user?.email || form.reviewerName).trim();
+    if (!effectiveName) {
+      setSubmitError(t('reviews.yourNameRequired', 'Please enter your name.'));
       return;
     }
 
@@ -191,32 +233,59 @@ export default function ReviewsMap({ tourId }) {
 
     setSubmitting(true);
     setSubmitError('');
-    setAlreadyReviewed(false);
 
     try {
       const payload = {
-        reviewerName: user.name || user.email || 'Verified Traveler',
+        reviewerName: effectiveName,
         rating: Number(form.rating),
         comment: form.comment.trim(),
       };
-      await api.post(`/tours/${encodeURIComponent(tourId)}/reviews`, payload);
-      setForm({ rating: 5, comment: '' });
+      
+      const response = await api.post(`/tours/${encodeURIComponent(tourId)}/reviews`, payload);
+      const newReviewId = response?.id || `local-${Date.now()}`;
+
+      // Optimistic Instant Feedback (Google Maps Experience):
+      // Review immediately appears in the traveler's view as posted!
+      const newReview = {
+        id: newReviewId,
+        name: effectiveName,
+        rating: Number(form.rating),
+        comment: form.comment.trim(),
+        adminReply: null,
+        isVerified: Boolean(user),
+        date: new Date().toLocaleDateString(i18n.language || 'en', { month: 'long', year: 'numeric' }),
+      };
+
+      // Prepend to visible reviews and persist locally
+      setReviews((prev) => [newReview, ...prev.filter((r) => r.id !== newReviewId)]);
+      saveLocalReview(tourId, newReview);
+
+      setForm({ reviewerName: '', rating: 5, comment: '' });
       setSubmitted(true);
+      setAlreadyReviewed(true);
+      setHighlightedReviewId(newReviewId);
+
+      // Smooth scroll to the newly published review card
+      setTimeout(() => {
+        const el = document.getElementById(`review-${newReviewId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+
+      // Auto-clear highlight after 7 seconds
+      setTimeout(() => {
+        setHighlightedReviewId(null);
+      }, 7000);
     } catch (error) {
       const isDuplicate =
         error?.status === 409 ||
         error?.response?.status === 409 ||
         /already reviewed/i.test(error?.message || '');
 
-      const isUnauthorized =
-        error?.status === 401 ||
-        error?.response?.status === 401;
-
       if (isDuplicate) {
         setAlreadyReviewed(true);
         setSubmitError('');
-      } else if (isUnauthorized) {
-        setIsAuthModalOpen(true);
       } else {
         setSubmitError(
           error?.response?.data?.message ||
@@ -342,92 +411,65 @@ export default function ReviewsMap({ tourId }) {
           </div>
         </div>
 
-        {/* Submit Review Section: Gated or Authenticated Form */}
-        {!user ? (
-          /* Guest Gating Box */
-          <div className="mx-auto max-w-2xl rounded-3xl border border-amber-400/30 bg-white/5 backdrop-blur-xl p-8 sm:p-10 shadow-2xl text-center space-y-6">
-            <div className="w-16 h-16 rounded-2xl bg-amber-400/10 border border-amber-400/20 text-amber-400 flex items-center justify-center mx-auto">
-              <FaLock className="w-7 h-7" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                {t('tour.leaveReview', 'Write a Review')}
-              </h3>
-              <p className="text-sm text-white/75 max-w-md mx-auto leading-relaxed">
-                {t(
-                  'reviews.writeReviewPrompt',
-                  'Have you experienced this journey? Sign in to rate this trip and share your impressions with other travelers.'
-                )}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsAuthModalOpen(true)}
-              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs font-black uppercase tracking-widest shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 transition-all duration-200 cursor-pointer"
-            >
-              <FaPen className="w-3.5 h-3.5" />
-              <span>{t('reviews.signInToReview', 'Sign in to Write a Review')}</span>
-            </button>
+        {/* Submit Review Form (Available to Both Authenticated Travelers and Guests) */}
+        <form
+          onSubmit={submit}
+          className="mx-auto max-w-2xl rounded-3xl border border-white/20 bg-white/5 backdrop-blur-xl p-8 sm:p-10 shadow-2xl space-y-6"
+        >
+          <div className="text-center space-y-1.5">
+            <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              {t('tour.leaveReview', 'Write a Review')}
+            </h3>
+            <p className="text-xs sm:text-sm text-white/70">
+              {t('reviews.shareYourThoughts', 'Share your thoughts and rate your luxury travel experience.')}
+            </p>
           </div>
-        ) : (
-          /* Authenticated Review Form */
-          <form
-            onSubmit={submit}
-            className="mx-auto max-w-2xl rounded-3xl border border-white/20 bg-white/5 backdrop-blur-xl p-8 sm:p-10 shadow-2xl space-y-6"
-          >
-            <div className="text-center space-y-1.5">
-              <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                {t('tour.leaveReview', 'Write a Review')}
-              </h3>
-              <p className="text-xs sm:text-sm text-white/70">
-                {t('reviews.shareYourThoughts', 'Share your thoughts and rate your luxury travel experience.')}
-              </p>
+
+          {/* Success Banner (Google Maps Tone) */}
+          {submitted && (
+            <div
+              role="status"
+              className="flex items-center gap-3 rounded-2xl border border-emerald-500/40 bg-emerald-500/20 px-5 py-4 text-sm text-emerald-200 animate-in fade-in duration-200"
+            >
+              <FaCheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+              <span className="leading-relaxed font-medium">
+                {t(
+                  'reviews.reviewSuccess',
+                  'Thank you! Your review has been posted.'
+                )}
+              </span>
             </div>
+          )}
 
-            {/* Success Banner */}
-            {submitted && (
-              <div
-                role="status"
-                className="flex items-center gap-3 rounded-2xl border border-emerald-500/40 bg-emerald-500/20 px-5 py-4 text-sm text-emerald-200 animate-in fade-in duration-200"
-              >
-                <FaCheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span className="leading-relaxed">
-                  {t(
-                    'reviews.reviewSuccess',
-                    'Thank you! Your review has been submitted and will appear once approved by our team.'
-                  )}
-                </span>
-              </div>
-            )}
+          {/* Duplicate Review Banner */}
+          {alreadyReviewed && !submitted && (
+            <div
+              role="status"
+              className="flex items-center gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/15 px-5 py-4 text-sm text-amber-200 animate-in fade-in duration-200"
+            >
+              <FaCheckCircle className="w-5 h-5 text-amber-400 shrink-0" />
+              <span className="leading-relaxed">
+                {t(
+                  'reviews.alreadyReviewed',
+                  'You have already reviewed this trip. Thank you for your feedback!'
+                )}
+              </span>
+            </div>
+          )}
 
-            {/* Duplicate Review Banner (409 Conflict) */}
-            {alreadyReviewed && (
-              <div
-                role="status"
-                className="flex items-center gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/15 px-5 py-4 text-sm text-amber-200 animate-in fade-in duration-200"
-              >
-                <FaCheckCircle className="w-5 h-5 text-amber-400 shrink-0" />
-                <span className="leading-relaxed">
-                  {t(
-                    'reviews.alreadyReviewed',
-                    'You have already reviewed this trip. Thank you for your feedback!'
-                  )}
-                </span>
-              </div>
-            )}
+          {/* Error Banner */}
+          {submitError && (
+            <div
+              role="alert"
+              className="flex items-center gap-3 rounded-2xl border border-rose-500/40 bg-rose-500/20 px-5 py-4 text-sm text-rose-200 animate-in fade-in duration-200"
+            >
+              <FaInfoCircle className="w-5 h-5 text-rose-400 shrink-0" />
+              <span className="leading-relaxed">{submitError}</span>
+            </div>
+          )}
 
-            {/* Error Banner */}
-            {submitError && (
-              <div
-                role="alert"
-                className="flex items-center gap-3 rounded-2xl border border-rose-500/40 bg-rose-500/20 px-5 py-4 text-sm text-rose-200 animate-in fade-in duration-200"
-              >
-                <FaInfoCircle className="w-5 h-5 text-rose-400 shrink-0" />
-                <span className="leading-relaxed">{submitError}</span>
-              </div>
-            )}
-
-            {/* Logged-in User Profile Card */}
+          {/* Reviewer Identity: Logged-in User Profile OR Guest Name Input */}
+          {user ? (
             <div className="flex items-center justify-between p-4 rounded-2xl bg-white/10 border border-amber-400/30 text-white">
               <div className="flex items-center gap-3">
                 <div
@@ -449,85 +491,100 @@ export default function ReviewsMap({ tourId }) {
                 {t('reviews.verifiedTraveler', 'Verified Traveler')}
               </span>
             </div>
-
-            {/* Interactive Star Rating */}
+          ) : (
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="block text-xs font-bold uppercase tracking-wider text-white">
-                  {t('reviews.rating', 'Rating')} (1-5 ⭐) *
-                </span>
-                <span className="text-xs font-semibold text-amber-300 animate-in fade-in duration-150">
-                  {ratingDescriptions[activeRating] || ''}
-                </span>
-              </div>
-              <div className="py-2 px-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
-                <Stars
-                  rating={activeRating}
-                  onRate={(rating) => setForm({ ...form, rating })}
-                  onHover={(rating) => setHoverRating(rating)}
-                  onLeave={() => setHoverRating(0)}
-                  readOnly={false}
-                  size="xl"
-                />
-                <span className="text-lg font-black text-amber-400 font-mono">{form.rating} / 5</span>
-              </div>
-            </div>
-
-            {/* Comment Textarea with Character Counter */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="review-body-text"
-                  className="block text-xs font-bold uppercase tracking-wider text-white"
-                >
-                  {t('reviews.reviewText', 'Your Review')} *
-                </label>
-                <span className={`text-[11px] font-mono ${form.comment.trim().length < 10 && form.comment.length > 0 ? 'text-amber-400' : 'text-white/50'}`}>
-                  {form.comment.length} / 5000 {form.comment.length > 0 && form.comment.trim().length < 10 ? `(min 10)` : ''}
-                </span>
-              </div>
-              <textarea
-                id="review-body-text"
+              <label
+                htmlFor="reviewer-name-input"
+                className="block text-xs font-bold uppercase tracking-wider text-white"
+              >
+                {t('reviews.yourName', 'Your Name')} *
+              </label>
+              <input
+                id="reviewer-name-input"
+                type="text"
                 required
-                rows={4}
-                maxLength={5000}
-                value={form.comment}
+                value={form.reviewerName}
                 onChange={(e) => {
-                  setForm({ ...form, comment: e.target.value });
+                  setForm({ ...form, reviewerName: e.target.value });
                   if (submitError) setSubmitError('');
                 }}
-                placeholder={t(
-                  'reviews.commentPlaceholder',
-                  'Tell us about your tour guide, accommodation, transport, and favorite moments...'
-                )}
-                className="w-full resize-none rounded-xl border border-white/25 bg-white/10 p-4 text-sm text-white placeholder-white/50 focus:border-amber-400 focus:outline-none leading-relaxed transition-colors"
+                placeholder={t('reviews.namePlaceholder', 'e.g. Sarah Jenkins')}
+                className="w-full rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/50 focus:border-amber-400 focus:outline-none transition-colors"
               />
             </div>
+          )}
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={submitting || alreadyReviewed}
-              className="w-full rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 py-4 text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-amber-500/25 transition-all disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2"
-            >
-              {submitting ? (
-                <>
-                  <span className="inline-block w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                  <span>{t('reviews.submitting', 'Submitting review...')}</span>
-                </>
-              ) : (
-                <span>{t('tour.submitReview', 'Submit Review')}</span>
+          {/* Interactive Star Rating */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="block text-xs font-bold uppercase tracking-wider text-white">
+                {t('reviews.rating', 'Rating')} (1-5 ⭐) *
+              </span>
+              <span className="text-xs font-semibold text-amber-300 animate-in fade-in duration-150">
+                {ratingDescriptions[activeRating] || ''}
+              </span>
+            </div>
+            <div className="py-2 px-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+              <Stars
+                rating={activeRating}
+                onRate={(rating) => setForm({ ...form, rating })}
+                onHover={(rating) => setHoverRating(rating)}
+                onLeave={() => setHoverRating(0)}
+                readOnly={false}
+                size="xl"
+              />
+              <span className="text-lg font-black text-amber-400 font-mono">{form.rating} / 5</span>
+            </div>
+          </div>
+
+          {/* Comment Textarea with Character Counter */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="review-body-text"
+                className="block text-xs font-bold uppercase tracking-wider text-white"
+              >
+                {t('reviews.reviewText', 'Your Review')} *
+              </label>
+              <span className={`text-[11px] font-mono ${form.comment.trim().length < 10 && form.comment.length > 0 ? 'text-amber-400' : 'text-white/50'}`}>
+                {form.comment.length} / 5000 {form.comment.length > 0 && form.comment.trim().length < 10 ? `(min 10)` : ''}
+              </span>
+            </div>
+            <textarea
+              id="review-body-text"
+              required
+              rows={4}
+              maxLength={5000}
+              value={form.comment}
+              onChange={(e) => {
+                setForm({ ...form, comment: e.target.value });
+                if (submitError) setSubmitError('');
+              }}
+              placeholder={t(
+                'reviews.commentPlaceholder',
+                'Tell us about your tour guide, accommodation, transport, and favorite moments...'
               )}
-            </button>
-          </form>
-        )}
-      </div>
+              className="w-full resize-none rounded-xl border border-white/25 bg-white/10 p-4 text-sm text-white placeholder-white/50 focus:border-amber-400 focus:outline-none leading-relaxed transition-colors"
+            />
+          </div>
 
-      {/* Review Authentication Modal for Unauthenticated Guests */}
-      <ReviewAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={submitting || alreadyReviewed}
+            className="w-full rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 py-4 text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-amber-500/25 transition-all disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2"
+          >
+            {submitting ? (
+              <>
+                <span className="inline-block w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                <span>{t('reviews.submitting', 'Submitting review...')}</span>
+              </>
+            ) : (
+              <span>{t('tour.submitReview', 'Submit Review')}</span>
+            )}
+          </button>
+        </form>
+      </div>
     </section>
   );
 }

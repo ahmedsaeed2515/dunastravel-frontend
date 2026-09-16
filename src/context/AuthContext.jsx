@@ -31,18 +31,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Global 401 listener: clear user state when unauthorized event is fired
-  useEffect(() => {
-    const handleUnauthorized = () => {
-      setUser(null);
-    };
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('auth:unauthorized', handleUnauthorized);
-      return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
-    }
-  }, []);
-
   const getMe = useCallback(async () => {
     try {
       const data = await api.get('/auth/me');
@@ -56,6 +44,26 @@ export const AuthProvider = ({ children }) => {
       throw err;
     }
   }, []);
+
+  // Global 401 & Refresh listeners: clear user on unauthorized, re-sync on refreshed
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+
+    const handleRefreshed = () => {
+      getMe().catch(() => {});
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('auth:unauthorized', handleUnauthorized);
+      window.addEventListener('auth:refreshed', handleRefreshed);
+      return () => {
+        window.removeEventListener('auth:unauthorized', handleUnauthorized);
+        window.removeEventListener('auth:refreshed', handleRefreshed);
+      };
+    }
+  }, [getMe]);
 
   useEffect(() => {
     const initAuth = async () => {
