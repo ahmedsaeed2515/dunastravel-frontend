@@ -798,7 +798,7 @@ const About = () => {
         </div>
         <div className="chart-wrap">
           <div className="reveal">
-            <p style={{ fontSize: 16, lineHeight: 1.85, fontWeight: 300 }}>{t('about.growthDesc')}</p>
+            <p style={{ fontSize: 16, lineHeight: 1.85, fontWeight: 400, color: '#ffffff' }}>{t('about.growthDesc')}</p>
           </div>
           <div className="chart reveal">
             {chartData.map((c, i) => (

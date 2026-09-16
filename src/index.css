@@ -260,19 +260,28 @@ html[data-scroll-locked] {
   .dark .about-page .hero .sub {
     color: #e8d5b0 !important;
   }
-  /* Section 02 #growth text colors */
+  /* Section 02 #growth text colors (Light & Dark mode) */
+  .about-page #growth,
+  .about-page #growth .eyebrow,
+  .about-page #growth h2,
+  .about-page #growth h2 *,
+  .about-page #growth p,
+  .about-page #growth .val,
+  .about-page #growth .bar-yr,
+  html:not(.dark) .about-page #growth,
   html:not(.dark) .about-page #growth .eyebrow,
   html:not(.dark) .about-page #growth h2,
   html:not(.dark) .about-page #growth h2 *,
   html:not(.dark) .about-page #growth p,
-  html:not(.dark) .about-page #growth .bar-yr {
-    color: #000000 !important;
-  }
-
+  html:not(.dark) .about-page #growth .val,
+  html:not(.dark) .about-page #growth .bar-yr,
+  .dark .about-page #growth,
   .dark .about-page #growth .eyebrow,
   .dark .about-page #growth h2,
   .dark .about-page #growth h2 *,
-  .dark .about-page #growth p {
+  .dark .about-page #growth p,
+  .dark .about-page #growth .val,
+  .dark .about-page #growth .bar-yr {
     color: #ffffff !important;
   }
   .dark .about-page .hero-stats .lbl {
