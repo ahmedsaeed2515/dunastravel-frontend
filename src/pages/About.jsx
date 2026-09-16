@@ -194,7 +194,7 @@ const styles = `
   .about-page .section-dark { position: relative; }
   .about-page #growth {
     background: url('/imgs/egyothero.webp') center / cover no-repeat;
-    color: #EBF3FA !important;
+    color: #FFFFFF !important;
   }
   .about-page #growth .eyebrow,
   .about-page #growth h2,
@@ -202,7 +202,7 @@ const styles = `
   .about-page #growth p,
   .about-page #growth .val,
   .about-page #growth .bar-yr {
-    color: #EBF3FA !important;
+    color: #FFFFFF !important;
   }
   .about-page .section-dark::before {
     content: '';
