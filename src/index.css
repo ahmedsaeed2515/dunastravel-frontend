@@ -523,7 +523,7 @@ html[data-scroll-locked] {
 
 /* ── Cinematic Transitions ──────────────────────────────────────── */
 .cinematic-transition {
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ── Interactive Elements & Buttons (Optimized GPU transitions) ─────────────────── */
@@ -569,7 +569,7 @@ a.bg-gold-500:hover {
 
 /* ── Dropdown Items ─────────────────────────────────────────────── */
 .dropdown-item {
-  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-color 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-left-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   border-left: 2px solid transparent;
 }
 .dropdown-item:hover {
@@ -582,7 +582,7 @@ a.bg-gold-500:hover {
 input,
 textarea,
 select {
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 input:hover,
 input:focus,
@@ -597,7 +597,7 @@ select:focus {
 
 /* ── Footer Links ───────────────────────────────────────────────── */
 footer a {
-  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1), transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   display: inline-block;
 }
 footer a:hover {
@@ -612,7 +612,7 @@ html[dir="rtl"] footer a:hover {
 
 /* ── Social Icons ───────────────────────────────────────────────── */
 .social-icon {
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
 }
 .social-icon:hover {

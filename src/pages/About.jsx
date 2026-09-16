@@ -20,9 +20,9 @@ const styles = `
     --ink: #0E1B2E;
     --ink-soft: #3C4A5E;
     --line: rgba(201, 162, 39, 0.28);
-    --display: 'Cormorant Garamond', serif;
-    --body: 'Jost', sans-serif;
-    --mono: 'Space Grotesk', sans-serif;
+    --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --body: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --mono: 'Space Grotesk', ui-monospace, SFMono-Regular, monospace;
   }
   .about-page ::selection { background: var(--gold-light); color: var(--navy-deep); }
   .about-page .eyebrow {
@@ -123,15 +123,11 @@ const styles = `
     top: 50%;
     left: 50%;
     transform: translate(-50%, -46%);
-    font-family: var(--display);
-    font-weight: 600;
-    font-size: clamp(220px, 34vw, 560px);
-    color: rgba(232, 203, 114, 0.045);
-    letter-spacing: 0.02em;
+    width: clamp(220px, 34vw, 560px);
+    height: auto;
     z-index: 1;
     pointer-events: none;
     user-select: none;
-    white-space: nowrap;
   }
   .about-page .scroll-cue {
     position: absolute;
@@ -159,6 +155,10 @@ const styles = `
     50% { opacity: 1; }
   }
   .about-page section { padding: 120px 8%; position: relative; }
+  .about-page section:not(:first-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 700px;
+  }
   .about-page .section-light { background: var(--ivory); }
   .about-page .section-dark {
     background: linear-gradient(180deg, var(--navy-deep), var(--navy) 60%, var(--navy-deep));
@@ -654,15 +654,14 @@ const About = () => {
       <Helmet>
         <title>{t('about.seoTitle', 'About Us | Dunas Travel')}</title>
         <meta name="description" content={t('about.seoDescNew', 'Discover our story. Dunas Travel Group — 17+ years designing and operating travel experiences for tour operators and agencies across Europe and Latin America.')} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Helmet>
 
       <style>{styles}</style>
 
       <header className="hero" id="about-hero">
-        <div className="hero-watermark">DT</div>
+        <svg className="hero-watermark" aria-hidden="true" viewBox="0 0 400 240">
+          <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central" fill="rgba(232, 203, 114, 0.045)" fontFamily="'Cormorant Garamond', Georgia, serif" fontWeight="600" fontSize="220" letterSpacing="0.02em">DT</text>
+        </svg>
         <div className="hero-eyebrow eyebrow">{cmsData?.heroEyebrow || t('about.heroEyebrow')}</div>
         <h1 dangerouslySetInnerHTML={{ __html: cmsData?.heroTitle || t('about.heroTitle') }} />
         <p className="sub">{cmsData?.heroSub || t('about.heroSub')}</p>

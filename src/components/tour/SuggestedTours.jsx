@@ -106,7 +106,10 @@ export default function SuggestedTours({ currentDestination = 'egypt', currentSl
   if (suggestedTours.length === 0) return null;
 
   return (
-    <section className="w-full bg-obsidian-50 dark:bg-[#0c0d19] py-16 relative overflow-hidden border-t border-gold-500/10">
+    <section
+      className="w-full bg-obsidian-50 dark:bg-[#0c0d19] py-16 relative overflow-hidden border-t border-gold-500/10"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}
+    >
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">

@@ -10,6 +10,7 @@ import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
 import NotFound from '../NotFound';
 import { FaChevronRight, FaCalendarAlt, FaClock, FaTag, FaShareAlt, FaPlane, FaArrowRight } from 'react-icons/fa';
+import { optimizeImageUrl } from '../../utils/imageOptimizer';
 
 const BlogDetails = () => {
   const { t, i18n } = useTranslation();
@@ -163,12 +164,20 @@ const BlogDetails = () => {
       {/* 2. Hero Image — Tours Style */}
       <section className="relative w-full h-[50vh] lg:h-[70vh] overflow-hidden">
         <img
-          src={blog.img || blog.coverImage || "/images/hero.webp"}
+          src={optimizeImageUrl(blog.img || blog.coverImage || "/images/hero.webp", { width: 800, quality: 75 })}
+          srcSet={`
+            ${optimizeImageUrl(blog.img || blog.coverImage || "/images/hero.webp", { width: 480, quality: 75 })} 480w,
+            ${optimizeImageUrl(blog.img || blog.coverImage || "/images/hero.webp", { width: 800, quality: 75 })} 800w,
+            ${optimizeImageUrl(blog.img || blog.coverImage || "/images/hero.webp", { width: 1280, quality: 75 })} 1280w
+          `}
+          sizes="(max-width: 640px) 480px, (max-width: 1024px) 768px, 1200px"
           alt={t(`blogs.${blog.title}`, blog.title)}
           className="w-full h-full object-cover"
           loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
       </section>
 
       {/* Article Body */}
@@ -257,7 +266,10 @@ const BlogDetails = () => {
       </section>
 
       {/* Related Articles */}
-      <section className="bg-ivory-50 py-16 md:py-24 border-t border-obsidian-900/5">
+      <section
+        className="bg-ivory-50 py-16 md:py-24 border-t border-obsidian-900/5"
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}
+      >
         <div className="container mx-auto px-6">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-display-lg text-obsidian-900" style={{ fontFamily: "'Playfair Display', serif" }}>{t('blogs.related', 'Related Articles')}</h2>
@@ -279,10 +291,11 @@ const BlogDetails = () => {
                       {t(`blogs.cat.${relBlog.category}`, relBlog.category)}
                     </div>
                     <img
-                      src={relBlog.img || relBlog.coverImage || "/images/hero.webp"}
+                      src={optimizeImageUrl(relBlog.img || relBlog.coverImage || "/images/hero.webp", { width: 600, quality: 75 })}
                       alt={t(`blogs.${relBlog.title}`, relBlog.title)}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
+                      decoding="async"
                     />
                   </Link>
                   <div className="p-5 md:p-6 flex flex-col flex-grow">

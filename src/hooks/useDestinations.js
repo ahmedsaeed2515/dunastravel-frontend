@@ -1,19 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, startTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
+import { optimizeImageUrl } from '../utils/imageOptimizer';
 
 const DEST_FALLBACK_IMAGES = {
   egypt: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg',
   egipto: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/8_mpyvu4.jpg',
-  turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
-  dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
+  turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=800&q=75',
+  dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=75',
   jordan: 'https://pport.com/wp-content/uploads/2020/05/jordan-88.jpg',
-  morocco: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
-  tunisia: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=80',
+  morocco: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=800&q=75',
+  tunisia: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=75',
   greece: 'https://static.arrajol.com/styles/800x533/public/2020/11/14/287336-80888809099.jpg',
-  'holy-land': 'https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg',
-  holyland: 'https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg',
+  'holy-land': 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_limit/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg',
+  holyland: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_limit/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg',
 };
 
 const staticDestinations = [
@@ -40,10 +41,11 @@ function readDestinations(response) {
     const slug = String(item.slug || item.id || '').toLowerCase();
     if (!slug) return null;
     const toursCount = Number(item.toursCount || (Array.isArray(item.tours) ? item.tours.length : 0));
-    const image = item.heroImageUrl || item.image || DEST_FALLBACK_IMAGES[slug] || DEST_FALLBACK_IMAGES.egypt;
+    const rawImage = item.heroImageUrl || item.image || DEST_FALLBACK_IMAGES[slug] || DEST_FALLBACK_IMAGES.egypt;
+    const image = optimizeImageUrl(rawImage, { width: 800, quality: 75 });
     return {
       ...item,
-      id: item.id || slug,
+      id: slug,
       slug,
       title: item.title || item.name || slug,
       name: item.title || item.name || slug,
@@ -65,9 +67,9 @@ export function useDestinations() {
   const cacheKey = lang;
   const [destinations, setDestinations] = useState(() => {
     const cached = destinationsCache.get(cacheKey);
-    return cached?.data || [];
+    return cached?.data || staticDestinations;
   });
-  const [loading, setLoading] = useState(() => !destinationsCache.has(cacheKey));
+  const [loading, setLoading] = useState(() => !destinationsCache.has(cacheKey) && staticDestinations.length === 0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -83,9 +85,6 @@ export function useDestinations() {
           return;
         }
 
-        if (!cached) {
-          setLoading(true);
-        }
         setError(null);
 
         let request = pendingDestinationsRequests.get(cacheKey);
@@ -108,7 +107,10 @@ export function useDestinations() {
 
         const items = await request;
         if (isMounted) {
-          setDestinations(items);
+          startTransition(() => {
+            setDestinations(items);
+            setLoading(false);
+          });
         }
       } catch (requestError) {
         if (isMounted) {

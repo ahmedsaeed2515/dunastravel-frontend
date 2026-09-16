@@ -8,6 +8,7 @@ import { useBlogs } from '../hooks/useBlogs';
 import SkeletonLoader from '../components/ui/SkeletonLoader';
 import ErrorState from '../components/ui/ErrorState';
 import { FaChevronRight, FaChevronLeft, FaClock, FaCalendarAlt, FaPlane } from 'react-icons/fa';
+import { optimizeImageUrl } from '../utils/imageOptimizer';
 
 const Blogs = () => {
   const { t, i18n } = useTranslation();
@@ -35,8 +36,8 @@ const Blogs = () => {
   const startIndex = (currentPage - 1) * perPage;
   const currentBlogs = filteredBlogs.slice(startIndex, startIndex + perPage);
 
-  if (loading) return <SkeletonLoader count={6} />;
-  if (error) return <ErrorState message={error.message || 'Failed to load blogs'} />;
+  if (loading && blogs.length === 0) return <SkeletonLoader count={6} />;
+  if (error && blogs.length === 0) return <ErrorState message={error.message || 'Failed to load blogs'} />;
 
   const goToPage = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -62,30 +63,31 @@ const Blogs = () => {
       </Helmet>
 
       {/* Main Hero */}
-      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[720px] md:min-h-[580px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80"
+            src="/imgs/blogs-hero.webp"
+            srcSet="/imgs/blogs-hero-768w.webp 768w, /imgs/blogs-hero.webp 1920w"
+            sizes="100vw"
             alt="Blogs Hero"
+            width="1920"
+            height="1080"
             className="w-full h-full object-cover"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
-          <div className="absolute inset-0 bg-obsidian-900/60 bg-gradient-to-t from-obsidian-900 to-transparent"></div>
+          <div className="absolute inset-0 bg-obsidian-900/60 bg-gradient-to-t from-obsidian-900 to-transparent pointer-events-none"></div>
         </div>
 
-        <motion.div
-          className="relative z-10 container mx-auto px-6 text-center mt-12"
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.span variants={fadeInUp} className="inline-block font-body text-gold-500 tracking-[0.2em] uppercase text-sm mb-4">
+        <div className="relative z-10 container mx-auto px-6 text-center mt-12">
+          <span className="inline-block font-body text-gold-500 tracking-[0.2em] uppercase text-sm mb-4">
             {t('blogs.subtitle', 'Stories, guides, and inspiration from the world of luxury travel')}
-          </motion.span>
-          <motion.h1 variants={fadeInUp} className="text-display-xl text-ivory-50 mb-6">
+          </span>
+          <h1 className="text-display-xl text-ivory-50 mb-6 font-serif">
             {t('blogs.title', 'Travel Journal')}
-          </motion.h1>
-        </motion.div>
+          </h1>
+        </div>
       </section>
 
       {/* Blog Grid */}
@@ -96,20 +98,14 @@ const Blogs = () => {
           </p>
         </div>
 
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-        >
-          {currentBlogs.map(blog => (
-            <motion.article key={blog.id} variants={fadeInUp}>
-              <motion.div
-                className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)] group h-full flex flex-col border border-gray-100/50 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] hover:-translate-y-1"
-                variants={cardHover}
-                initial="rest"
-                whileHover="hover"
-                animate="rest"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {currentBlogs.map((blog, idx) => (
+            <article
+              key={blog.slug || blog.id || idx}
+              style={{ contentVisibility: 'auto', containIntrinsicSize: '0 450px' }}
+            >
+              <div
+                className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)] group h-full flex flex-col border border-gray-100/50 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] hover:-translate-y-1"
               >
                 <Link to={`/blogs/${blog.slug}`} className="relative block overflow-hidden" style={{ height: '240px' }}>
                   <div className={`absolute top-4 left-4 z-10 bg-gradient-to-r ${getCategoryGradient(blog.category)} text-white text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg font-semibold`}>
@@ -123,10 +119,11 @@ const Blogs = () => {
                   )}
 
                   <img
-                    src={blog.img || blog.coverImage || "/images/hero.webp"}
+                    src={optimizeImageUrl(blog.img || blog.coverImage || "/images/hero.webp", { width: 600, quality: 75 })}
                     alt={t(`blogs.${blog.title}`, blog.title)}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </Link>
@@ -160,10 +157,10 @@ const Blogs = () => {
                     </Link>
                   </div>
                 </div>
-              </motion.div>
-            </motion.article>
+              </div>
+            </article>
           ))}
-        </motion.div>
+        </div>
 
         {/* Pagination */}
         <div className="flex justify-center items-center mt-16 gap-2">

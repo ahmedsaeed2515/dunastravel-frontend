@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, startTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
@@ -17,7 +17,7 @@ export function useBlogs(filters = {}) {
   const lang = supportedLocale(i18n.language);
 
   const [blogs, setBlogs] = useState(fallbackBlogs);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const filterKey = JSON.stringify(filters);
@@ -35,13 +35,14 @@ export function useBlogs(filters = {}) {
         const cached = blogsCache.get(cacheKey);
         if (cached && Date.now() - cached.timestamp < BLOGS_CACHE_TTL_MS) {
           if (isMounted) {
-            setBlogs(cached.data);
+            startTransition(() => {
+              setBlogs(cached.data);
+            });
             setLoading(false);
           }
           return;
         }
 
-        setLoading(true);
         setError(null);
 
         // 2. Deduplicate concurrent requests
@@ -80,11 +81,15 @@ export function useBlogs(filters = {}) {
 
         const items = await request;
         if (isMounted) {
-          setBlogs(items && items.length > 0 ? items : fallbackBlogs);
+          startTransition(() => {
+            setBlogs(items && items.length > 0 ? items : fallbackBlogs);
+          });
         }
       } catch (err) {
         if (isMounted) {
-          setBlogs(fallbackBlogs);
+          startTransition(() => {
+            setBlogs(fallbackBlogs);
+          });
         }
       } finally {
         if (isMounted) setLoading(false);

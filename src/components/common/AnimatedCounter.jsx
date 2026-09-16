@@ -1,11 +1,10 @@
-﻿import React, { useEffect, useState, useRef } from 'react';
-import { useInView } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
 
 /**
  * AnimatedCounter
  * Smoothly animates numbers from 0 to target value when scrolled into view.
- * Built with React state & requestAnimationFrame to ensure robust rendering and
- * complete immunity to React re-render resets.
+ * Direct DOM textContent manipulation avoids hundreds of React re-renders per second,
+ * drastically reducing main-thread Total Blocking Time (TBT).
  */
 export default function AnimatedCounter({
   value,
@@ -16,24 +15,25 @@ export default function AnimatedCounter({
   formatter,
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-20px' });
-  const [count, setCount] = useState(0);
   const targetNumber = typeof value === 'number' ? value : parseInt(value, 10) || 0;
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const formatNumber = (num) => {
+      if (formatter) return formatter(num);
+      return num.toLocaleString();
+    };
+
     // If reduced motion is preferred, jump straight to target value
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setCount(targetNumber);
+      el.textContent = `${prefix}${formatNumber(targetNumber)}${suffix}`;
       return;
     }
 
-    if (!isInView) return;
-
-    let startTime = null;
     let animationFrameId;
-
-    const startValue = 0;
-    const endValue = targetNumber;
+    let startTime = null;
 
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
@@ -42,33 +42,49 @@ export default function AnimatedCounter({
 
       // Smooth ease-out cubic curve
       const easeOut = 1 - Math.pow(1 - progress, 3);
-      const current = Math.round(startValue + (endValue - startValue) * easeOut);
+      const current = Math.round(targetNumber * easeOut);
 
-      setCount(current);
+      if (el) {
+        el.textContent = `${prefix}${formatNumber(current)}${suffix}`;
+      }
 
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(animate);
-      } else {
-        setCount(endValue);
+      } else if (el) {
+        el.textContent = `${prefix}${formatNumber(targetNumber)}${suffix}`;
       }
     };
 
-    animationFrameId = requestAnimationFrame(animate);
+    if (typeof IntersectionObserver === 'undefined') {
+      animationFrameId = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(animationFrameId);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      },
+      { rootMargin: '-20px' }
+    );
+
+    observer.observe(el);
 
     return () => {
+      observer.disconnect();
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [isInView, targetNumber, duration]);
+  }, [targetNumber, duration, prefix, suffix, formatter]);
 
-  const formattedCount = formatter 
-    ? formatter(count) 
-    : count.toLocaleString();
+  const formatInitial = (num) => (formatter ? formatter(num) : num.toLocaleString());
 
   return (
     <span ref={ref} className={className}>
-      {prefix}{formattedCount}{suffix}
+      {prefix}{formatInitial(targetNumber)}{suffix}
     </span>
   );
 }

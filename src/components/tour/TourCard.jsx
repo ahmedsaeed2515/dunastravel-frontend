@@ -22,6 +22,7 @@ import {
   resolveLocalizedText, 
   resolveTourHeroImage 
 } from '../../utils/titleHelper';
+import { optimizeImageUrl } from '../../utils/imageOptimizer';
 
 const marketFlag = (market) => {
   const flags = { Brasil: '🇧🇷', Italia: '🇮🇹', Spain: '🇪🇸', Egypt: '🇪🇬' };
@@ -77,7 +78,20 @@ const contentStaggerVariants = {
 const TourCard = ({
   tour,
   linkBase = '/tours',
+  priority = false,
+  disableMotion = false,
 }) => {
+  const CardContainer = disableMotion ? 'div' : motion.div;
+  const ContentContainer = disableMotion ? 'div' : motion.div;
+  const containerMotionProps = disableMotion ? {} : {
+    variants: cardVariants,
+    initial: 'hidden',
+    whileInView: 'visible',
+    viewport: { once: true, margin: '-40px' }
+  };
+  const contentMotionProps = disableMotion ? {} : {
+    variants: contentStaggerVariants
+  };
   const { t, i18n } = useTranslation();
   const lang = i18n.language || 'en';
   const isRtl = lang.startsWith('ar');
@@ -150,13 +164,10 @@ const TourCard = ({
   };
 
   return (
-    <motion.div
+    <CardContainer
       onClick={handleCardClick}
       className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-40px' }}
+      {...containerMotionProps}
     >
       {/* Dunas Corner Accent Ornament (.about-sp) */}
       <div className="about-sp">
@@ -205,10 +216,11 @@ const TourCard = ({
         <Link to={detailUrl} className="block w-full h-full overflow-hidden">
           {tourImage ? (
             <img
-              src={tourImage}
+              src={optimizeImageUrl(tourImage, { width: 600, quality: 75 })}
               alt={`${title} — ${destinationText}`}
               className="w-full h-full object-cover"
-              loading="eager"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
               decoding="async"
               width="400"
               height="255"
@@ -226,12 +238,9 @@ const TourCard = ({
       </div>
 
       {/* Dunas Content Section (.populer-contnet) */}
-      <motion.div 
+      <ContentContainer 
         className="populer-contnet flex flex-col flex-grow bg-white dark:bg-transparent"
-        variants={contentStaggerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        {...contentMotionProps}
       >
         {/* Title */}
         <Link to={detailUrl}>
@@ -322,8 +331,8 @@ const TourCard = ({
             </Link>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </ContentContainer>
+    </CardContainer>
   );
 };
 

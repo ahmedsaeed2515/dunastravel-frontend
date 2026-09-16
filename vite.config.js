@@ -156,6 +156,14 @@ export default defineConfig(({ mode }) => {
             if (id.includes('node_modules/react-icons')) return 'vendor-icons';
             if (id.includes('node_modules/leaflet') || id.includes('node_modules/react-leaflet')) return 'vendor-leaflet';
             if (id.includes('node_modules/react-helmet-async')) return 'vendor-helmet';
+            if (id.includes('src/i18n/locales/core/')) {
+              const match = id.match(/core[\\/]([a-z]{2})\.json/);
+              if (match) return `locale-core-${match[1]}`;
+            }
+            if (id.includes('src/i18n/locales/extended/')) {
+              const match = id.match(/extended[\\/]([a-z]{2})\.json/);
+              if (match) return `locale-ext-${match[1]}`;
+            }
             if (id.includes('src/i18n/locales/')) {
               const match = id.match(/locales[\\/]([a-z]{2})\.json/);
               if (match) return `locale-${match[1]}`;

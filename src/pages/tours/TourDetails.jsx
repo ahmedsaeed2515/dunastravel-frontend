@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,6 +24,36 @@ import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
 const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
+
+function LazyMount({ children, minHeight = '320px', rootMargin = '300px' }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (isVisible || !ref.current) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [isVisible, rootMargin]);
+
+  return (
+    <div ref={ref} style={{ minHeight: isVisible ? undefined : minHeight }}>
+      {isVisible ? children : null}
+    </div>
+  );
+}
 
 const TourDetails = () => {
   const { t, i18n } = useTranslation();
@@ -349,9 +379,11 @@ const TourDetails = () => {
             {/* Interactive Route Map */}
             {tour.itinerary && tour.itinerary.length > 0 && (
               <div className="mt-16">
-                <Suspense fallback={<div className="h-64 flex items-center justify-center text-gold-500 font-semibold bg-obsidian-900/50 rounded-2xl animate-pulse">Loading map route...</div>}>
-                  <RouteMap itinerary={tour.itinerary} tourTitle={title} />
-                </Suspense>
+                <LazyMount minHeight="384px">
+                  <Suspense fallback={<div className="h-64 flex items-center justify-center text-gold-500 font-semibold bg-obsidian-900/50 rounded-2xl animate-pulse">Loading map route...</div>}>
+                    <RouteMap itinerary={tour.itinerary} tourTitle={title} />
+                  </Suspense>
+                </LazyMount>
               </div>
             )}
 
@@ -368,7 +400,10 @@ const TourDetails = () => {
 
         {/* Hotels Section */}
         {tour.hotels && (
-          <div className="relative mt-20 mb-8">
+          <div
+            className="relative mt-20 mb-8"
+            style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}
+          >
             <div className="absolute inset-0 bg-gradient-to-r from-obsidian-50 via-gold-50/20 to-obsidian-50 dark:from-[#0f0f1a] dark:via-[#1a1a30] dark:to-[#0f0f1a] rounded-3xl"></div>
             <div className="relative z-10 px-4 md:px-12 py-16">
 
@@ -427,9 +462,11 @@ const TourDetails = () => {
       </section>
 
       {tour?.slug && (
-        <Suspense fallback={<div className="py-12 text-center text-gold-500 font-semibold">Loading guest feedback...</div>}>
-          <ReviewsMap tourId={tour.slug} />
-        </Suspense>
+        <LazyMount minHeight="300px">
+          <Suspense fallback={<div className="py-12 text-center text-gold-500 font-semibold">Loading guest feedback...</div>}>
+            <ReviewsMap tourId={tour.slug} />
+          </Suspense>
+        </LazyMount>
       )}
 
       {/* Lightbox Modal */}

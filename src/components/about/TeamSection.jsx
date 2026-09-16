@@ -1,5 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { optimizeImageUrl } from '../../utils/imageOptimizer';
 
 const teamMembers = [
   {
@@ -155,9 +156,10 @@ export default function TeamSection() {
                 {hasImage ? (
                   <>
                     <img
-                      src={member.image}
+                      src={optimizeImageUrl(member.image, { width: 400, quality: 75 })}
                       alt={member.name}
                       loading="lazy"
+                      decoding="async"
                       onError={() => setImgErrors((prev) => ({ ...prev, [member.id]: true }))}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       style={member.objectPosition ? { objectPosition: member.objectPosition } : undefined}

@@ -6,6 +6,7 @@ import { staggerContainer, fadeInUp } from '../../animations/variants';
 import { useDestinations } from '../../hooks/useDestinations';
 import TourCard from '../../components/tour/TourCard';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import { optimizeImageUrl } from '../../utils/imageOptimizer';
 
 const Destinations = () => {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ const Destinations = () => {
     <LuxuryHeroSection
       badge={t('destinations.worldCurated', 'The World, Curated')}
       title={t('destinations.heading', 'Our Destinations')}
-      bgImage="https://res.cloudinary.com/degbrq3ck/image/upload/e_upscale,e_enhance,e_sharpen:120,f_auto,q_auto:best/v1783026771/5_upvijm.jpg"
+      bgImage="/imgs/destinations-hero.webp"
       primaryCta={null}
       secondaryCta={null}
       zoomDuration={12}
@@ -45,7 +46,7 @@ const Destinations = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-24">
-          {destinationsList.map((destination) => {
+          {destinationsList.map((destination, index) => {
             const destTours = Array.isArray(destination?.tours) ? destination.tours : [];
             const destSlug = String(destination?.slug || destination?.id || '').toLowerCase();
             const cardImage = (destSlug === 'egypt' || destSlug === 'egipto') 
@@ -54,18 +55,24 @@ const Destinations = () => {
 
             return (
               <motion.article 
-                key={destination.id} 
+                key={destination.slug || destination.id} 
                 initial={{ opacity: 0, y: 40 }} 
                 whileInView={{ opacity: 1, y: 0 }} 
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6 }}
+                style={index > 0 ? { contentVisibility: 'auto', containIntrinsicSize: '0 800px' } : undefined}
               >
                 {/* Destination Card / Header */}
                 <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden mb-12 shadow-card group">
                   <img 
-                    src={cardImage} 
+                    src={optimizeImageUrl(cardImage, { width: 800, quality: 75 })} 
                     alt={destination.name} 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    loading="lazy"
+                    fetchPriority="low"
+                    decoding="async"
+                    width="800"
+                    height="400" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/30 to-transparent flex flex-col justify-end p-8 md:p-12">
                     <span className="text-gold-500 uppercase tracking-widest text-caption mb-2">
@@ -94,7 +101,7 @@ const Destinations = () => {
                 {destTours.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {destTours.map((tour) => (
-                      <TourCard key={tour.id} tour={tour} />
+                      <TourCard key={tour.slug || tour.id} tour={tour} disableMotion={true} />
                     ))}
                   </div>
                 ) : (

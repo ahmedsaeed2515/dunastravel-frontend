@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, startTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
@@ -382,7 +382,12 @@ export function useTours(filters = {}) {
           pendingRequests.set(cacheKey, request);
         }
         const resultData = await request;
-        if (isMounted) setToursState(resultData);
+        if (isMounted) {
+          startTransition(() => {
+            setToursState(resultData);
+            setLoading(false);
+          });
+        }
       } catch (requestError) {
         if (isMounted) {
           const fallback = await getFallbackTours(currentFilters, lang);

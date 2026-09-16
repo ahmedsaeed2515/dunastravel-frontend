@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaCompass, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+import { optimizeImageUrl } from '../../utils/imageOptimizer';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -34,7 +35,8 @@ export default function LuxuryHeroSection({
   onImageClick = null,
   zoomDuration = 12,
   zoomScale = 1.15,
-  ease = 'easeOut'
+  ease = 'easeOut',
+  className = '',
 }) {
   const isRtl = document.dir === 'rtl' || true;
 
@@ -52,29 +54,39 @@ export default function LuxuryHeroSection({
   };
 
   return (
-    <section className="relative w-full min-h-[580px] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none">
+    <section className={`relative w-full min-h-[750px] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none ${className}`}>
       {/* Background Image Container with Cinematic Zoom & Multi-layer Overlay */}
       <div
         className={`absolute inset-0 z-0 overflow-hidden bg-obsidian-950 ${onImageClick ? 'cursor-pointer group' : ''}`}
         onClick={onImageClick || undefined}
       >
-        <motion.img
-          initial={{ scale: 1 }}
-          animate={{ scale: zoomScale }}
-          transition={{ duration: zoomDuration, ease: ease, repeat: Infinity, repeatType: 'reverse' }}
-          src={bgImage || '/imgs/destinations/egypt.webp'}
+        <img
+          src={optimizeImageUrl(bgImage || '/imgs/destinations/egypt.webp', { width: 1280, quality: 75 })}
+          srcSet={
+            bgImage === '/imgs/destinations-hero.webp'
+              ? '/imgs/destinations-hero-768w.webp 768w, /imgs/destinations-hero.webp 1440w'
+              : bgImage === '/imgs/tours-hero.webp'
+              ? '/imgs/tours-hero-768w.webp 768w, /imgs/tours-hero.webp 1440w'
+              : bgImage && typeof bgImage === 'string' && (bgImage.includes('unsplash.com') || bgImage.includes('cloudinary.com') || bgImage.includes('lexica.art'))
+              ? `${optimizeImageUrl(bgImage, { width: 480, quality: 75 })} 480w, ${optimizeImageUrl(bgImage, { width: 800, quality: 75 })} 800w, ${optimizeImageUrl(bgImage, { width: 1280, quality: 75 })} 1280w`
+              : undefined
+          }
+          sizes="100vw"
           onError={(e) => {
             e.currentTarget.src = bgImage || '/imgs/destinations/egypt.webp';
           }}
           alt={title}
-          style={{ willChange: 'transform' }}
+          width="1440"
+          height="810"
           className={`w-full h-full object-cover object-center ${onImageClick ? 'transition-transform duration-700 group-hover:scale-105' : ''}`}
           loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
 
         {/* Ultra-Light Gradient Layer: High image clarity while preserving text legibility */}
         <div
-          className="absolute inset-0 z-10"
+          className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background: `linear-gradient(
               to bottom,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, startTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
@@ -19,7 +19,7 @@ export function useBlog(slug) {
 
   const initialFallback = slug ? fallbackBlogs.find((b) => b.slug === slug || b.id === slug) || null : null;
   const [blog, setBlog] = useState(initialFallback);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialFallback && Boolean(slug));
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -38,13 +38,17 @@ export function useBlog(slug) {
         const cached = blogCache.get(cacheKey);
         if (cached && Date.now() - cached.timestamp < BLOG_CACHE_TTL_MS) {
           if (isMounted) {
-            setBlog(cached.data);
-            setLoading(false);
+            startTransition(() => {
+              setBlog(cached.data);
+              setLoading(false);
+            });
           }
           return;
         }
 
-        setLoading(true);
+        if (!fallbackItem) {
+          setLoading(true);
+        }
         setError(null);
 
         // 2. Deduplicate
@@ -68,11 +72,15 @@ export function useBlog(slug) {
 
         const data = await request;
         if (isMounted) {
-          setBlog(data || fallbackItem);
+          startTransition(() => {
+            setBlog(data || fallbackItem);
+          });
         }
       } catch (err) {
         if (isMounted) {
-          setBlog(fallbackItem);
+          startTransition(() => {
+            setBlog(fallbackItem);
+          });
         }
       } finally {
         if (isMounted) setLoading(false);

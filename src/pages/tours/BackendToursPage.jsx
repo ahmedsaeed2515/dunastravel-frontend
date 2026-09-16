@@ -21,7 +21,7 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
   const heroImage = bgImage || (
     filters.category === 'Religious'
       ? 'https://images.akhbarelyom.com/UP/20240601193248245.jpg'
-      : 'https://res.cloudinary.com/degbrq3ck/image/upload/v1783023886/3776ecde-249e-4183-9840-e9fd900ad96b_xvmumu.jpg'
+      : '/imgs/tours-hero.webp'
   );
 
   const handlePageChange = (newPage) => {
@@ -73,7 +73,7 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
         ) : (
           <>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {tours.map((tour) => <TourCard key={tour.id} tour={tour} />)}
+              {tours.map((tour) => <TourCard key={tour.slug || tour.id} tour={tour} disableMotion={true} />)}
             </div>
 
             {/* Canonical Pagination Controls */}

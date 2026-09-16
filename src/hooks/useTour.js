@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, startTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
 import { resolveDestinationSlug } from '../utils/destinationHelper';
-
-export function getFallbackTour() {
-  return null;
-}
+import { tours as staticTours } from '../data/tours';
 
 function normalizeTour(data, lang = 'en', fallback = null) {
   const id = data?.id || data?.slug;
@@ -105,11 +102,25 @@ function normalizeTour(data, lang = 'en', fallback = null) {
   };
 }
 
+export function getFallbackTour(slug, lang = 'en') {
+  if (!slug) return null;
+  const match = staticTours.find(
+    (t) => t.slug === slug || t.id === slug
+  );
+  if (!match) return null;
+  try {
+    return normalizeTour(match, lang);
+  } catch {
+    return null;
+  }
+}
+
 export function useTour(slug) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
-  const [tour, setTour] = useState(null);
-  const [loading, setLoading] = useState(Boolean(slug));
+  const fallback = getFallbackTour(slug, lang);
+  const [tour, setTour] = useState(fallback);
+  const [loading, setLoading] = useState(!fallback && Boolean(slug));
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -121,23 +132,30 @@ export function useTour(slug) {
       return undefined;
     }
 
-    setLoading(true);
+    if (!fallback) {
+      setLoading(true);
+    }
 
     const fetchTour = async () => {
       try {
         const result = normalizeTour(
           await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`),
-          lang
+          lang,
+          fallback
         );
         if (isMounted) {
-          setTour(result);
-          setError(null);
+          startTransition(() => {
+            setTour(result);
+            setError(null);
+          });
         }
       } catch (requestError) {
         if (isMounted) {
-          const errorMsg = requestError?.response?.data?.message || requestError?.message || 'Tour not found';
-          setError(typeof errorMsg === 'string' ? errorMsg : String(errorMsg));
-          setTour(null);
+          if (!fallback) {
+            const errorMsg = requestError?.response?.data?.message || requestError?.message || 'Tour not found';
+            setError(typeof errorMsg === 'string' ? errorMsg : String(errorMsg));
+            setTour(null);
+          }
         }
       } finally {
         if (isMounted) setLoading(false);

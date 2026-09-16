@@ -72,39 +72,6 @@
   animation: heroZoomSequence 6.5s cubic-bezier(0.37, 0, 0.63, 1) forwards;
 }
 
-.slider-bg {
-  background: url('/imgs/slider-abu-simbel.webp');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  will-change: transform;
-}
-
-.slider-bg.two {
-  background: url('/imgs/slider-pyramids.webp');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  will-change: transform;
-}
-
-.slider-bg.three {
-  background: url('/imgs/slider-karnak.webp');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  will-change: transform;
-}
-
 .slider-section .hero_content {
   position: relative;
   z-index: 10;

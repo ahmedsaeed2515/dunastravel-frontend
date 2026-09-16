@@ -8,6 +8,7 @@ const SLIDE_DATA = [
   {
     id: "hero-s1",
     bgImage: "/imgs/slider-abu-simbel.webp",
+    bgImageMobile: "/imgs/slider-abu-simbel-768w.webp",
     titlePart1: "luxury",
     titlePart2: "journey",
     desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
@@ -17,6 +18,7 @@ const SLIDE_DATA = [
   {
     id: "hero-s2",
     bgImage: "/imgs/slider-pyramids.webp",
+    bgImageMobile: "/imgs/slider-pyramids-768w.webp",
     titlePart1: "luxury",
     titlePart2: "journey",
     desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
@@ -26,6 +28,7 @@ const SLIDE_DATA = [
   {
     id: "hero-s3",
     bgImage: "/imgs/slider-karnak.webp",
+    bgImageMobile: "/imgs/slider-karnak-768w.webp",
     titlePart1: "luxury",
     titlePart2: "journey",
     desc: "Discover the magic of Egypt and its historical monuments with the help of Experts",
@@ -39,29 +42,48 @@ export default function HomeHeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [mountedSecondary, setMountedSecondary] = useState(false);
   const touchStartX = useRef(0);
 
   const isRtl = i18n.language === "ar" || (i18n.dir && i18n.dir() === "rtl");
+
+  // Defer secondary slide image decode/loading until after critical paint
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(() => setMountedSecondary(true), { timeout: 3500 });
+      return () => window.cancelIdleCallback(id);
+    } else {
+      const timer = setTimeout(() => setMountedSecondary(true), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const ensureSecondaryMounted = useCallback(() => {
+    setMountedSecondary(true);
+  }, []);
 
   // Autoplay cycle with concurrent startTransition to protect main thread
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
+      ensureSecondaryMounted();
       startTransition(() => {
         setActiveIndex((prev) => (prev + 1) % SLIDE_DATA.length);
       });
     }, 7000);
     return () => clearInterval(timer);
-  }, [isPaused]);
+  }, [isPaused, ensureSecondaryMounted]);
 
   // Touch gesture support for mobile swiping
   const handleTouchStart = (e) => {
+    ensureSecondaryMounted();
     touchStartX.current = e.touches[0].clientX;
   };
 
   const handleTouchEnd = (e) => {
     const diffX = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diffX) > 45) {
+      ensureSecondaryMounted();
       if (diffX > 0) {
         // Swipe left -> next
         setActiveIndex((prev) => (prev + 1) % SLIDE_DATA.length);
@@ -73,8 +95,9 @@ export default function HomeHeroSection() {
   };
 
   const handleSlideTo = useCallback((index) => {
+    ensureSecondaryMounted();
     setActiveIndex(index);
-  }, []);
+  }, [ensureSecondaryMounted]);
 
   // Helper to split word into characters for styling
   const renderAnimatedWord = (word) => {
@@ -94,7 +117,10 @@ export default function HomeHeroSection() {
       className={`boxed ${isRtl ? "rtl" : "ltr"}`}
       dir={isRtl ? "rtl" : "ltr"}
       style={{ direction: isRtl ? "rtl" : "ltr", textAlign: isRtl ? "right" : "left" }}
-      onMouseEnter={() => setIsPaused(true)}
+      onMouseEnter={() => {
+        ensureSecondaryMounted();
+        setIsPaused(true);
+      }}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -103,6 +129,7 @@ export default function HomeHeroSection() {
         {SLIDE_DATA.map((slide, idx) => {
           const isActive = idx === activeIndex;
           const isFirst = idx === 0;
+          const shouldRenderImage = isFirst || mountedSecondary || isActive;
 
           return (
             <div
@@ -121,16 +148,22 @@ export default function HomeHeroSection() {
               aria-hidden={!isActive}
             >
               {/* Native Responsive High-Priority Eager Image for Instant LCP */}
-              <img
-                src={slide.bgImage}
-                alt={t("home.heroTitle1", slide.titlePart1) + " " + t("home.heroTitle2", slide.titlePart2)}
-                width="1920"
-                height="850"
-                fetchPriority={isFirst ? "high" : "low"}
-                loading={isFirst ? "eager" : "lazy"}
-                decoding="async"
-                className={`slider-bg-img ${isActive ? "zoom-active" : ""}`}
-              />
+              {shouldRenderImage ? (
+                <img
+                  src={slide.bgImage}
+                  srcSet={`${slide.bgImageMobile} 768w, ${slide.bgImage} 1920w`}
+                  sizes="100vw"
+                  alt={t("home.heroTitle1", slide.titlePart1) + " " + t("home.heroTitle2", slide.titlePart2)}
+                  width="1920"
+                  height="850"
+                  fetchPriority={isFirst ? "high" : "low"}
+                  loading={isFirst ? "eager" : "lazy"}
+                  decoding="async"
+                  className={`slider-bg-img ${isActive ? "zoom-active" : ""}`}
+                />
+              ) : (
+                <div style={{ position: 'absolute', inset: 0, backgroundColor: '#122327' }} />
+              )}
               <div className="slider-overlay"></div>
 
               <div className="auto-container relative z-10 w-full">

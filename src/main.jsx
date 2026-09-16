@@ -20,21 +20,17 @@ window.addEventListener('vite:preloadError', (event) => {
   }
 });
 
+const i18nInitPromise = initI18n().catch((err) => console.warn('i18n init error:', err));
+
 function Root() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    initI18n()
-      .catch((err) => console.warn('i18n init error:', err))
-      .finally(() => setReady(true));
+    i18nInitPromise.finally(() => setReady(true));
   }, []);
 
   if (!ready) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[#071330]">
-        <div className="w-10 h-10 border-2 border-[#C9A227]/30 border-t-[#C9A227] rounded-full animate-spin"></div>
-      </div>
-    );
+    return null;
   }
 
   return (
