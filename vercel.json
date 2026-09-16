@@ -39,7 +39,7 @@
       ]
     },
     {
-      "source": "/(assets|imgs)/(.*)",
+      "source": "/assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -48,7 +48,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(webp|png|jpg|jpeg|svg|ico|woff2?))",
+      "source": "/imgs/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
