@@ -17,7 +17,9 @@ const isChunkLoadFailed = (error) => {
     error.name === 'ChunkLoadError' ||
     msg.includes('failed to fetch dynamically imported module') ||
     msg.includes('importing a module script failed') ||
-    msg.includes('error loading dynamically imported module')
+    msg.includes('error loading dynamically imported module') ||
+    msg.includes('cannot read properties of undefined') ||
+    msg.includes('reading \'default\'')
   );
 };
 
@@ -31,7 +33,8 @@ const lazyWithRetry = (componentImport) =>
       const pageAlreadyRefreshed = window.sessionStorage.getItem('chunk_reload_attempted');
       if (isChunkLoadFailed(error) && !pageAlreadyRefreshed) {
         window.sessionStorage.setItem('chunk_reload_attempted', 'true');
-        window.location.reload();
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.location.href = cleanUrl + '?v=' + Date.now();
         return new Promise(() => {}); // Hold rendering until browser reloads new version
       }
       throw error;
@@ -49,7 +52,8 @@ class ErrorBoundary extends React.Component {
       const pageAlreadyRefreshed = window.sessionStorage.getItem('chunk_reload_attempted');
       if (!pageAlreadyRefreshed) {
         window.sessionStorage.setItem('chunk_reload_attempted', 'true');
-        window.location.reload();
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.location.href = cleanUrl + '?v=' + Date.now();
         return { hasError: false, error: null };
       }
     }
@@ -107,7 +111,8 @@ class ErrorBoundary extends React.Component {
             onClick={() => {
               this.setState({ hasError: false, error: null });
               window.sessionStorage.removeItem('chunk_reload_attempted');
-              window.location.reload();
+              const cleanUrl = window.location.origin + window.location.pathname;
+              window.location.href = cleanUrl + '?v=' + Date.now();
             }}
             style={{
               marginTop: '0.5rem',
