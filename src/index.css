@@ -538,12 +538,77 @@ html[data-scroll-locked] {
   .dark .about-page .event-row {
     background: transparent !important;
   }
-  .dark .about-page .svc-card,
-  .dark .about-page .val-card {
-    background: #1a1a30 !important;
+  /* Services Grid (.svc-card) Light & Dark Mode */
+  .about-page .services-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    background: transparent !important;
+    border: none !important;
+    margin-bottom: 90px !important;
+  }
+
+  /* Light Mode Services Cards */
+  html:not(.dark) .about-page .svc-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.16) !important;
+    border-radius: 12px !important;
+    padding: 36px 28px !important;
+    min-height: 220px !important;
+    box-shadow: 0 8px 24px rgba(28, 69, 135, 0.08) !important;
+  }
+  html:not(.dark) .about-page .svc-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: #C9A227 !important;
+    box-shadow: 0 16px 36px rgba(201, 162, 39, 0.22) !important;
+  }
+  html:not(.dark) .about-page .svc-num {
+    color: #C9A227 !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+  }
+  html:not(.dark) .about-page .svc-title {
+    color: #0E2A52 !important;
+    font-weight: 700 !important;
+    font-size: 24px !important;
+  }
+  html:not(.dark) .about-page .svc-card p {
+    color: #334155 !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+  }
+
+  /* Dark Mode Services Cards */
+  .dark .about-page .svc-card {
+    background: #142238 !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.35) !important;
+    border-radius: 12px !important;
+    padding: 36px 28px !important;
+    min-height: 220px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
   }
   .dark .about-page .svc-card:hover {
-    background: var(--navy-deep) !important;
+    transform: translateY(-6px) !important;
+    border-color: #E8CB72 !important;
+    box-shadow: 0 16px 36px rgba(232, 203, 114, 0.25) !important;
+    background: #1A2E4C !important;
+  }
+  .dark .about-page .svc-num {
+    color: #E8CB72 !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+  }
+  .dark .about-page .svc-title {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 24px !important;
+  }
+  .dark .about-page .svc-card p {
+    color: #CBD5E1 !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
   }
   .dark .about-page .member-card {
     background: linear-gradient(160deg, #0f2040, #060a14) !important;

@@ -683,47 +683,93 @@ const styles = `
     font-weight: 300;
     line-height: 1.7;
   }
+  /* Services Grid (.svc-card) Light & Dark Mode */
   .about-page .services-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: rgba(14, 42, 82, .12);
-    border: 1px solid rgba(14, 42, 82, .12);
-    margin-bottom: 90px;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    background: transparent !important;
+    border: none !important;
+    margin-bottom: 90px !important;
   }
-  .about-page .svc-card {
-    background: var(--ivory);
-    padding: 38px 28px;
-    min-height: 210px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: background .35s;
+
+  /* Light Mode Services Cards */
+  html:not(.dark) .about-page .svc-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.16) !important;
+    border-radius: 12px !important;
+    padding: 36px 28px !important;
+    min-height: 220px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-shadow: 0 8px 24px rgba(28, 69, 135, 0.08) !important;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease !important;
   }
-  .about-page .svc-card:hover { background: var(--navy-deep); }
-  .about-page .svc-card:hover .svc-title,
-  .about-page .svc-card:hover p { color: var(--ivory); }
-  .about-page .svc-card:hover .svc-num { color: var(--gold-light); }
-  .about-page .svc-num {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--gold);
-    font-weight: 600;
+  html:not(.dark) .about-page .svc-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: #C9A227 !important;
+    box-shadow: 0 16px 36px rgba(201, 162, 39, 0.22) !important;
   }
-  .about-page .svc-title {
-    font-family: var(--display);
-    font-size: 24px;
-    color: var(--navy-deep);
-    margin-top: 30px;
-    font-weight: 500;
-    transition: color .35s;
+  html:not(.dark) .about-page .svc-num {
+    font-family: var(--mono) !important;
+    font-size: 14px !important;
+    color: #C9A227 !important;
+    font-weight: 800 !important;
   }
-  .about-page .svc-card p {
-    font-size: 13.5px;
-    color: var(--ink-soft);
-    margin-top: 10px;
-    font-weight: 300;
-    transition: color .35s;
+  html:not(.dark) .about-page .svc-title {
+    font-family: var(--display) !important;
+    font-size: 24px !important;
+    color: #0E2A52 !important;
+    margin-top: 24px !important;
+    font-weight: 700 !important;
+  }
+  html:not(.dark) .about-page .svc-card p {
+    font-size: 14px !important;
+    color: #334155 !important;
+    margin-top: 10px !important;
+    font-weight: 500 !important;
+    line-height: 1.65 !important;
+  }
+
+  /* Dark Mode Services Cards */
+  .dark .about-page .svc-card {
+    background: #142238 !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.35) !important;
+    border-radius: 12px !important;
+    padding: 36px 28px !important;
+    min-height: 220px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease !important;
+  }
+  .dark .about-page .svc-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: #E8CB72 !important;
+    box-shadow: 0 16px 36px rgba(232, 203, 114, 0.25) !important;
+    background: #1A2E4C !important;
+  }
+  .dark .about-page .svc-num {
+    font-family: var(--mono) !important;
+    font-size: 14px !important;
+    color: #E8CB72 !important;
+    font-weight: 800 !important;
+  }
+  .dark .about-page .svc-title {
+    font-family: var(--display) !important;
+    font-size: 24px !important;
+    color: #FFFFFF !important;
+    margin-top: 24px !important;
+    font-weight: 700 !important;
+  }
+  .dark .about-page .svc-card p {
+    font-size: 14px !important;
+    color: #CBD5E1 !important;
+    margin-top: 10px !important;
+    font-weight: 500 !important;
+    line-height: 1.65 !important;
   }
   .about-page .values-row {
     display: grid;
