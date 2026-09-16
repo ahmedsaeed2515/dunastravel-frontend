@@ -44,6 +44,7 @@ describe('AuthContext Security & Session Integration', () => {
   it('handles guest state gracefully when /auth/me returns 401', async () => {
     vi.spyOn(api, 'get').mockRejectedValue({ status: 401, message: 'Unauthorized' });
 
+
     render(
       <AuthProvider>
         <TestComponent />
@@ -55,6 +56,40 @@ describe('AuthContext Security & Session Integration', () => {
     });
 
     expect(localStorage.getItem('token')).toBeNull();
+  });
+
+  it('restores user session when auth:refreshed event is fired', async () => {
+    let callCount = 0;
+    const mockUser = { id: 'u-1', email: 'restored@luxury.com', name: 'John Doe' };
+    vi.spyOn(api, 'get').mockImplementation((path) => {
+      if (path === '/auth/me') {
+        callCount++;
+        if (callCount === 1) {
+          return Promise.reject({ status: 401, message: 'Unauthorized' });
+        }
+        return Promise.resolve(mockUser);
+      }
+      return Promise.resolve({});
+    });
+
+    render(
+      <AuthProvider>
+        <TestComponent />
+      </AuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('user-email')).toHaveTextContent('guest');
+    });
+
+    // Simulate silent refresh success event
+    act(() => {
+      window.dispatchEvent(new CustomEvent('auth:refreshed'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('user-email')).toHaveTextContent('restored@luxury.com');
+    });
   });
 
   it('connects register, updateProfile, changePassword, forgotPassword, resetPassword, verifyEmail, and resendVerification', async () => {
