@@ -720,15 +720,15 @@ const styles = `
   html:not(.dark) .about-page .svc-title {
     font-family: var(--display) !important;
     font-size: 24px !important;
-    color: #0E2A52 !important;
+    color: #1E40AF !important;
     margin-top: 24px !important;
     font-weight: 700 !important;
   }
   html:not(.dark) .about-page .svc-card p {
     font-size: 14px !important;
-    color: #334155 !important;
+    color: #1E40AF !important;
     margin-top: 10px !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     line-height: 1.65 !important;
   }
 
@@ -781,17 +781,29 @@ const styles = `
     border-top: 2px solid var(--gold);
     padding-top: 16px;
   }
-  .about-page .value-item .vt {
-    font-family: var(--display);
-    font-size: 19px;
-    color: var(--navy-deep);
-    font-weight: 600;
+  html:not(.dark) .about-page .value-item .vt {
+    font-family: var(--display) !important;
+    font-size: 19px !important;
+    color: #1E40AF !important;
+    font-weight: 700 !important;
   }
-  .about-page .value-item .vd {
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    margin-top: 6px;
-    font-weight: 300;
+  html:not(.dark) .about-page .value-item .vd {
+    font-size: 13px !important;
+    color: #1E40AF !important;
+    margin-top: 6px !important;
+    font-weight: 600 !important;
+  }
+  .dark .about-page .value-item .vt {
+    font-family: var(--display) !important;
+    font-size: 19px !important;
+    color: #F8F3E6 !important;
+    font-weight: 700 !important;
+  }
+  .dark .about-page .value-item .vd {
+    font-size: 13px !important;
+    color: #CBD5E1 !important;
+    margin-top: 6px !important;
+    font-weight: 500 !important;
   }
   @media(max-width:900px) {
     .about-page .services-grid,
