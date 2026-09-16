@@ -37,9 +37,29 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
 
   const isRtl = i18n.dir() === 'rtl';
 
+  // Sanitize returnUrl against open redirect vulnerabilities
+  const getSanitizedReturnUrl = (url) => {
+    if (!url || typeof url !== 'string') return null;
+    const trimmed = url.trim();
+    if (!trimmed.startsWith('/') || trimmed.startsWith('//') || trimmed.startsWith('/\\')) {
+      return null;
+    }
+    if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(trimmed)) {
+      return null;
+    }
+    return trimmed;
+  };
+
   const handleSuccess = () => {
-    const destination = location.state?.from || '/dashboard';
+    const searchParams = new URLSearchParams(location.search);
+    const returnParam = searchParams.get('returnUrl') || searchParams.get('redirect');
+    const sanitizedReturn = getSanitizedReturnUrl(returnParam);
+    const destination = sanitizedReturn || location.state?.from || '/dashboard';
     navigate(destination, { replace: true });
+  };
+
+  const navigateWithQuery = (path) => {
+    navigate(`${path}${location.search || ''}`);
   };
 
   const titles = {
@@ -124,8 +144,8 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
                 >
                   <LoginForm
                     onSuccess={handleSuccess}
-                    onSwitchToRegister={() => navigate('/register')}
-                    onForgotPassword={() => navigate('/forgot-password')}
+                    onSwitchToRegister={() => navigateWithQuery('/register')}
+                    onForgotPassword={() => navigateWithQuery('/forgot-password')}
                   />
                 </motion.div>
               )}
@@ -142,7 +162,7 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
                 >
                   <RegisterForm
                     onSuccess={handleSuccess}
-                    onSwitchToLogin={() => navigate('/login')}
+                    onSwitchToLogin={() => navigateWithQuery('/login')}
                     onTermsClick={() => {}}
                   />
                 </motion.div>
@@ -159,8 +179,8 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
                   transition={{ duration: 0.25 }}
                 >
                   <ForgotPasswordForm
-                    onSwitchToLogin={() => navigate('/login')}
-                    onSwitchToRegister={() => navigate('/register')}
+                    onSwitchToLogin={() => navigateWithQuery('/login')}
+                    onSwitchToRegister={() => navigateWithQuery('/register')}
                   />
                 </motion.div>
               )}
