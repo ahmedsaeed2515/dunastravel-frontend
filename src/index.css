@@ -312,6 +312,14 @@ html[data-scroll-locked] {
     letter-spacing: 0.15em !important;
   }
 
+  /* Team Section (#team) Background Light & Dark Mode */
+  html:not(.dark) #team {
+    background: linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%) !important;
+  }
+  .dark #team {
+    background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #0F172A 100%) !important;
+  }
+
   /* Section 03 #institutional Dark Mode Card & Text Clarity */
   .dark .about-page #institutional .inst-grid {
     background: transparent !important;
