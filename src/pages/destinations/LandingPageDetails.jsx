@@ -58,7 +58,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'استمتع بجولات القصور العثمانية في إسطنبول، وركوب المناطيد فوق مداخن كابادوكيا، والاستجمام في منتجعات الريفيرا التركية.',
     tags: ['dest.turkey.tag1', 'dest.turkey.tag2', 'dest.turkey.tag3'],
     tagsDefault: ['🎈 Private Cappadocia Hot Air Balloon Flights', '🛥️ Private Luxury Yacht Cruises on the Bosphorus', '🏰 Royal Cave Hotel Stays'],
-    heroImage: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
+    heroImage: '/imgs/destinations/turkey.webp',
   },
   dubai: {
     badge: 'dest.dubai.badge',
@@ -71,7 +71,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'Experience world-class luxury among towering skyscrapers, artificial islands, and royal desert safaris.',
     tags: ['dest.dubai.tag1', 'dest.dubai.tag2', 'dest.dubai.tag3'],
     tagsDefault: ['🏙️ VIP Burj Khalifa & Observation Deck Tickets', '🏎️ Luxury Sports Car & Private Yacht Cruise', '🏜️ Royal Desert Safari with VIP Dinner'],
-    heroImage: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
+    heroImage: '/imgs/destinations/dubai.webp',
   },
   morocco: {
     badge: 'dest.morocco.badge',
@@ -84,7 +84,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'Explore historic medinas and imperial palaces with luxury Sahara excursions in Merzouga.',
     tags: ['dest.morocco.tag1', 'dest.morocco.tag2', 'dest.morocco.tag3'],
     tagsDefault: ['🏰 Stays in Historic Luxury Riads', '🐫 Luxury Sahara Desert Safari in Merzouga', '🎨 Exclusive Tours in Marrakech & Fes Souks'],
-    heroImage: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
+    heroImage: '/imgs/destinations/morocco.webp',
   },
   tunisia: {
     badge: 'dest.tunisia.badge',
@@ -97,7 +97,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'Discover ancient Roman ruins, iconic blue-and-white coastal villages, and desert oases.',
     tags: ['dest.tunisia.tag1', 'dest.tunisia.tag2', 'dest.tunisia.tag3'],
     tagsDefault: ['🏛️ El Jem Amphitheatre & Legendary Carthage', '🌊 Sidi Bou Said Blue & White Coastal Views', '🌴 Tozeur Oases & Luxury Sahara Camping'],
-    heroImage: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=80',
+    heroImage: '/imgs/destinations/tunisia.webp',
   },
   greece: {
     badge: 'dest.greece.badge',

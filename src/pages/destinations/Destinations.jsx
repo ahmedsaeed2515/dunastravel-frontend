@@ -63,10 +63,24 @@ const Destinations = () => {
               return tourDest === targetSlug || tourDest.includes(targetSlug) || targetSlug.includes(tourDest);
             });
 
+            const LOCAL_DEST_IMAGES = {
+              dubai: '/imgs/destinations/dubai.webp',
+              morocco: '/imgs/destinations/morocco.webp',
+              egypt: '/imgs/egyothero.webp',
+              egipto: '/imgs/egyothero.webp',
+              egito: '/imgs/egyothero.webp',
+              jordan: '/imgs/destinations/jordan.webp',
+              turkey: '/imgs/destinations/turkey.webp',
+              tunisia: '/imgs/destinations/tunisia.webp',
+              'holy-land': '/images/holy-land.webp',
+              holyland: '/images/holy-land.webp',
+            };
+
             const destTours = providedTours.length > 0 ? providedTours : matchedTours;
-            const cardImage = (targetSlug === 'egypt') 
-              ? '/imgs/egyothero.webp' 
-              : (destination.heroImageUrl || destination.image || '/imgs/egyothero.webp');
+            const cardImage = LOCAL_DEST_IMAGES[targetSlug]
+              || destination.heroImageUrl 
+              || destination.image 
+              || '/imgs/egyothero.webp';
 
             return (
               <motion.article 
@@ -81,7 +95,10 @@ const Destinations = () => {
                   <img 
                     src={cardImage} 
                     alt={destination.name} 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = LOCAL_DEST_IMAGES[targetSlug] || '/imgs/egyothero.webp';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/30 to-transparent flex flex-col justify-end p-8 md:p-12">
                     <span className="text-gold-500 uppercase tracking-widest text-caption mb-2">
