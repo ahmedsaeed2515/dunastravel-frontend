@@ -26,7 +26,7 @@ const FloatingGuideR = () => {
   return (
     <div
       dir="ltr"
-      className="fixed bottom-[calc(76px+env(safe-area-inset-bottom,0px))] lg:bottom-5 right-4 sm:right-6 z-[9998] flex items-center flex-row"
+      className="fixed bottom-5 right-4 sm:right-6 z-[9998] flex items-center flex-row"
     >
       {/* Speech Bubble / Tooltip on Hover */}
       <AnimatePresence>

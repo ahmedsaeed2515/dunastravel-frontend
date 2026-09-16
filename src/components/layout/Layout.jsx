@@ -2,7 +2,6 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import MobileTabBar from './MobileTabBar';
 import { JaiderChatProvider, useJaiderChat } from '../../context/JaiderChatContext';
 
 const FloatingContact = lazy(() => import('./FloatingContact'));
@@ -53,12 +52,11 @@ const LayoutContent = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-grow pb-[calc(72px+env(safe-area-inset-bottom))] lg:pb-0">
+      <main className="flex-grow">
         <Outlet />
       </main>
 
       <Footer />
-      <MobileTabBar />
       {loadWidgets && (
         <Suspense fallback={null}>
           <FloatingContact />

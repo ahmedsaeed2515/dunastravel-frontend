@@ -270,7 +270,7 @@ const BackgroundMusic = () => {
         onClick={togglePlay}
         title={tooltipText}
         aria-label={tooltipText}
-        className={`fixed left-4 bottom-[calc(76px+env(safe-area-inset-bottom,0px))] lg:left-6 lg:bottom-[88px] z-[9997] flex h-12 w-12 items-center justify-center rounded-full border bg-slate-950/90 backdrop-blur-md transition-all duration-500 hover:scale-110 active:scale-95 ${
+        className={`fixed left-4 bottom-5 lg:left-6 lg:bottom-[88px] z-[9997] flex h-12 w-12 items-center justify-center rounded-full border bg-slate-950/90 backdrop-blur-md transition-all duration-500 hover:scale-110 active:scale-95 ${
           showMusicIcon
             ? 'opacity-100 scale-100 pointer-events-auto translate-y-0'
             : 'opacity-0 scale-75 pointer-events-none translate-y-6'

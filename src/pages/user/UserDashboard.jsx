@@ -721,6 +721,64 @@ const UserDashboard = ({ initialTab = 'overview' }) => {
       {selectedInvoiceBooking && (
         <InvoiceModal booking={selectedInvoiceBooking} onClose={() => setSelectedInvoiceBooking(null)} />
       )}
+
+      {/* Mobile Dashboard Bottom Tab Bar (Appears ONLY in the Dashboard on mobile) */}
+      <nav
+        aria-label="Dashboard Navigation"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-[9990] bg-obsidian-950/95 backdrop-blur-xl border-t border-gold-500/25 shadow-[0_-8px_25px_rgba(0,0,0,0.6)]"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      >
+        <div className="flex items-center justify-around h-[58px] px-1 max-w-lg mx-auto">
+          {[
+            { id: 'overview', label: t('user.tabOverview', 'Overview'), icon: FaGlobeAmericas },
+            { id: 'bookings', label: t('user.tabBookings', 'Bookings'), icon: FaBookmark, count: bookings.length },
+            { id: 'favorites', label: t('user.tabFavorites', 'Saved'), icon: FaHeart, count: favorites?.length },
+            { id: 'profile', label: t('user.tabProfile', 'Profile'), icon: FaUser },
+            { id: 'security', label: t('user.tabSecurity', 'Security'), icon: FaLock },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                aria-label={tab.label}
+                className={`relative flex-1 flex flex-col items-center justify-center min-h-[44px] py-1 px-1 transition-all duration-200 select-none outline-none ${
+                  isActive ? 'text-gold-400 font-semibold' : 'text-ivory-400/80 hover:text-ivory-200'
+                }`}
+              >
+                {isActive && (
+                  <span className="absolute top-0 w-8 h-[2.5px] bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 rounded-full shadow-[0_0_8px_rgba(245,166,35,0.7)]" />
+                )}
+
+                <div className="relative mt-0.5 mb-1 flex items-center justify-center">
+                  <Icon
+                    size={18}
+                    className={`transition-transform duration-200 ${
+                      isActive ? 'scale-110 text-gold-400 drop-shadow-[0_0_6px_rgba(245,166,35,0.5)]' : ''
+                    }`}
+                  />
+                  {Boolean(tab.count && tab.count > 0) && (
+                    <span className="absolute -top-1.5 -right-2 min-w-[15px] h-[15px] px-1 bg-amber-500 text-white font-bold text-[9px] rounded-full flex items-center justify-center border border-obsidian-950 shadow-sm animate-pulse">
+                      {tab.count > 9 ? '9+' : tab.count}
+                    </span>
+                  )}
+                </div>
+
+                <span className={`text-[10px] font-medium tracking-tight truncate max-w-[64px] transition-colors ${
+                  isActive ? 'text-gold-400 font-semibold' : 'text-ivory-400/80'
+                }`}>
+                  {tab.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 };
