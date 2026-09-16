@@ -85,7 +85,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'اكتشف أسواق مراكش وفاس الفاسحة، واستمتع بإقامة في أفخم الرياضات التراثية، ومغامرات الكثبان الذهبية في مرزوكة.',
     tags: ['dest.morocco.tag1', 'dest.morocco.tag2', 'dest.morocco.tag3'],
     tagsDefault: ['🏰 Stays in Historic Luxury Riads', '🐫 Luxury Sahara Desert Safari in Merzouga', '🎨 Exclusive Tours in Marrakech & Fes Souks'],
-    heroImage: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&w=1920&q=85',
+    heroImage: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=85',
   },
   tunisia: {
     badge: 'dest.tunisia.badge',
@@ -98,7 +98,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'استمتع بجولات بين آثار قرطاج الشامخة، والأزقة البيضاء والزرقاء ساحرة الجمال في سيدي بوسعيد، وواحات توزر الصحراوية.',
     tags: ['dest.tunisia.tag1', 'dest.tunisia.tag2', 'dest.tunisia.tag3'],
     tagsDefault: ['🏛️ El Jem Amphitheatre & Legendary Carthage', '🌊 Sidi Bou Said Blue & White Coastal Views', '🌴 Tozeur Oases & Luxury Sahara Camping'],
-    heroImage: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1920&q=85',
+    heroImage: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=85',
   },
   greece: {
     badge: 'dest.greece.badge',
