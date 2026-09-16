@@ -471,6 +471,14 @@ const styles = `
     text-transform: uppercase;
     color: var(--ink-soft);
   }
+  /* Section 03 #institutional Royal Blue text rules in Light Mode */
+  html:not(.dark) .about-page #institutional .section-head .eyebrow,
+  html:not(.dark) .about-page #institutional .ic-label.eyebrow,
+  html:not(.dark) .about-page #institutional .tradeshow-chip,
+  html:not(.dark) .about-page #institutional .quote-block p,
+  html:not(.dark) .about-page #institutional .quote-block span {
+    color: var(--royal) !important;
+  }
   .about-page .events-list { display: flex; flex-direction: column; }
   .about-page .event-row {
     display: grid;
