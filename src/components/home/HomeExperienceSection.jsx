@@ -430,14 +430,14 @@ const HomeExperienceSection = () => {
   const liveDestinations = useMemo(() => Array.isArray(liveDestinationsRaw) ? liveDestinationsRaw : [], [liveDestinationsRaw]);
   const DEST_HERO_MAP = {
     egypt: '/imgs/egyothero.webp',
-    turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    jordan: '/images/jordan-petra.webp',
-    dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    morocco: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    tunisia: 'https://images.unsplash.com/photo-1580502304784-8985b7eb7260?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    'holy-land': 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    holyland: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=800&q=80&fm=webp',
+    jordan: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80&fm=webp',
+    dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80&fm=webp',
+    morocco: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=800&q=80&fm=webp',
+    greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80&fm=webp',
+    tunisia: 'https://images.unsplash.com/photo-1580502304784-8985b7eb7260?auto=format&fit=crop&w=800&q=80&fm=webp',
+    'holy-land': '/images/holy-land.webp',
+    holyland: '/images/holy-land.webp',
   };
 
   const DEST_TOUR_COUNTS = {
@@ -901,10 +901,23 @@ const HomeExperienceSection = () => {
   const [searchTour, setSearchTour] = useState("");
   const [searchPeople, setSearchPeople] = useState(1);
 
+  const getClearDestinationImg = (url, slug) => {
+    const slugKey = String(slug || '').toLowerCase();
+    if (DEST_HERO_MAP[slugKey]) return DEST_HERO_MAP[slugKey];
+    if (slugKey.includes('holy')) return '/images/holy-land.webp';
+    if (!url) return '/imgs/egyothero.webp';
+    if (typeof url === 'string' && url.includes('images.unsplash.com')) {
+      return url.replace(/w=\d+/, 'w=800').replace(/q=\d+/, 'q=80');
+    }
+    return url;
+  };
+
   const destinations = liveDestinationCards.map((destination) => ({
     id: destination.id,
     label: destination.name,
-    img: destination.image,
+    img: getClearDestinationImg(destination.image, destination.id),
+    toursCount: destination.toursCount || 0,
+    link: destination.link || `/destinations/${destination.id}`,
   }));
 
   const slugify = (str) => String(str || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -1167,9 +1180,9 @@ const HomeExperienceSection = () => {
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-5xl"
+            className="w-full max-w-6xl xl:max-w-7xl mx-auto"
           >
-            <div className="bg-black/50 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 md:p-10 border border-amber-400/40 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_40px_rgba(245,166,35,0.2)] hover:border-amber-400/80 hover:shadow-[0_25px_70px_rgba(0,0,0,0.7),0_0_60px_rgba(245,166,35,0.35)] transition-all duration-500 relative overflow-hidden group/box">
+            <div className="max-w-5xl mx-auto bg-black/50 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 md:p-10 border border-amber-400/40 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_40px_rgba(245,166,35,0.2)] hover:border-amber-400/80 hover:shadow-[0_25px_70px_rgba(0,0,0,0.7),0_0_60px_rgba(245,166,35,0.35)] transition-all duration-500 relative overflow-hidden group/box">
               {/* Subtle top border illumination ray */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/80 to-transparent" />
 
@@ -1260,29 +1273,59 @@ const HomeExperienceSection = () => {
               </div>
             </div>
 
-            {/* Quick Country Pills Row */}
-            <div className="mt-8 flex flex-wrap justify-center gap-2.5 sm:gap-3 max-w-4xl mx-auto px-2">
-              {destinations.map((d, index) => (
-                <motion.div
-                  key={d.id}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05, duration: 0.4 }}
-                  whileHover={{ scale: 1.08, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link
-                    to={`/destinations/${d.id}`}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-xl border font-bold text-xs sm:text-sm tracking-wide transition-all shadow-md bg-obsidian-900/80 border-amber-400/30 text-white hover:border-amber-400 hover:text-amber-300 hover:shadow-[0_0_15px_rgba(245,166,35,0.4)]"
+            {/* Luxury Destination Cards — Single Line, High Definition Images */}
+            <div className="mt-8 sm:mt-10 w-full">
+              <div className="flex lg:grid lg:grid-cols-8 gap-3 sm:gap-3.5 overflow-x-auto no-scrollbar scroll-smooth pb-3 pt-1 px-1 snap-x snap-mandatory">
+                {destinations.map((d, index) => (
+                  <motion.div
+                    key={d.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.04, duration: 0.35 }}
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    whileTap={{ scale: 0.96 }}
+                    className="shrink-0 w-32 sm:w-36 lg:w-auto snap-start"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                    <span>
-                      {d.label}
-                    </span>
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      to={d.link || `/destinations/${d.id}`}
+                      aria-label={d.label}
+                      className="group relative flex flex-col justify-between h-36 sm:h-40 md:h-44 rounded-2xl overflow-hidden border border-white/20 hover:border-amber-400/90 bg-slate-900/80 shadow-[0_8px_20px_rgba(0,0,0,0.6)] hover:shadow-[0_12px_30px_rgba(245,166,35,0.4)] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    >
+                      {/* High-Resolution Crystal Clear Destination Cover Image */}
+                      <img
+                        src={d.img}
+                        alt={d.label}
+                        width="600"
+                        height="400"
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-115 transition-transform duration-700 ease-out"
+                      />
+
+                      {/* Multi-layer Dark Gradient for Maximum Image Contrast & Text Clarity */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/10 group-hover:from-black/90 group-hover:via-black/20 transition-colors duration-300 pointer-events-none" />
+
+                      {/* Top Indicator: Amber Golden Jewel Badge */}
+                      <div className="relative z-10 p-2 sm:p-2.5 flex justify-end">
+                        <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#F5A623] group-hover:scale-125 transition-transform duration-300" />
+                      </div>
+
+                      {/* Bottom Label & Tour Count */}
+                      <div className="relative z-10 p-2 sm:p-3 text-center flex flex-col items-center justify-end">
+                        <span className="text-white font-serif font-extrabold text-xs sm:text-sm md:text-base tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition-colors">
+                          {d.label}
+                        </span>
+                        {d.toursCount > 0 && (
+                          <span className="mt-1 inline-block text-[10px] sm:text-[11px] font-bold text-amber-300 bg-black/60 px-2 py-0.5 rounded-full border border-amber-400/30 backdrop-blur-sm shadow-sm">
+                            {d.toursCount} {t('home.toursShort', isAr ? 'برامج' : 'Tours')}
+                          </span>
+                        )}
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
