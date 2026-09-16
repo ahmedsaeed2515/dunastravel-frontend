@@ -530,7 +530,7 @@ export function resolveTourHeroImage(tour) {
     }
   }
 
-  return null;
+  return 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85';
 }
 
 export default {
