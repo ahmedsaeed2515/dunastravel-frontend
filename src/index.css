@@ -311,6 +311,67 @@ html[data-scroll-locked] {
     font-weight: 700 !important;
     letter-spacing: 0.15em !important;
   }
+
+  /* Section 03 #institutional Dark Mode Card & Text Clarity */
+  .dark .about-page #institutional .inst-grid {
+    background: transparent !important;
+    border: none !important;
+    gap: 20px !important;
+  }
+  .dark .about-page #institutional .inst-cell {
+    background: #142238 !important;
+    border: 1px solid rgba(232, 203, 114, 0.25) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+    padding: 34px 32px !important;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  }
+  .dark .about-page #institutional .inst-cell:hover {
+    transform: translateY(-4px) !important;
+    border-color: #e8cb72 !important;
+    box-shadow: 0 12px 32px rgba(201, 162, 39, 0.2) !important;
+  }
+  .dark .about-page #institutional .inst-cell .ic-label {
+    color: #e8cb72 !important;
+    font-weight: 700 !important;
+  }
+  .dark .about-page #institutional .inst-cell h4 {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+  }
+  .dark .about-page #institutional .inst-cell p {
+    color: #CBD5E1 !important;
+  }
+
+  .dark .about-page #institutional .tradeshow-chip {
+    background: #182842 !important;
+    color: #93C5FD !important;
+    border: 1.5px solid rgba(147, 197, 253, 0.35) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+  }
+  .dark .about-page #institutional .tradeshow-chip:hover {
+    background: #1E3A8A !important;
+    color: #FFFFFF !important;
+    border-color: #60A5FA !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .dark .about-page #institutional .quote-block {
+    border-left: 4px solid #d4921e !important;
+    background: rgba(20, 34, 56, 0.6) !important;
+    padding: 24px 28px 24px 36px !important;
+    border-radius: 0 8px 8px 0 !important;
+  }
+  .dark .about-page #institutional .quote-block p {
+    color: #FFFFFF !important;
+    font-weight: 500 !important;
+  }
+  .dark .about-page #institutional .quote-block span {
+    color: #e8cb72 !important;
+    font-weight: 700 !important;
+  }
   .dark .about-page .hero-stats .lbl {
     color: rgba(232, 228, 224, 0.5) !important;
   }
