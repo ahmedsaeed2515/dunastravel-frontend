@@ -94,7 +94,26 @@ export const CountryFlag = ({
         </svg>
       );
 
+    case 'portugal':
     case 'pt':
+      // Flag of Portugal 🇵🇹
+      return (
+        <svg
+          viewBox="0 0 600 400"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Portugal"
+          role="img"
+        >
+          <rect width="240" height="400" fill="#046A38" />
+          <rect x="240" width="360" height="400" fill="#DA291C" />
+          <g transform="translate(240, 200)">
+            <circle r="65" fill="#FFE900" stroke="#000000" strokeWidth="4" />
+            <rect x="-25" y="-30" width="50" height="60" rx="8" fill="#DA291C" stroke="#FFFFFF" strokeWidth="5" />
+            <rect x="-12" y="-18" width="24" height="28" rx="4" fill="#002B7F" />
+          </g>
+        </svg>
+      );
+
     case 'br':
     case 'brazil':
       // Flag of Brazil 🇧🇷

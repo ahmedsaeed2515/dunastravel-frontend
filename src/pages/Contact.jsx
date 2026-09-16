@@ -24,6 +24,7 @@ import ContactForms from '../components/contact/ContactForms';
 import { useToast } from '../context/ToastContext';
 import FormFeedback from '../components/ui/FormFeedback';
 import ConsentGate from '../components/privacy/ConsentGate';
+import CountryFlag from '../components/ui/CountryFlag';
 
 const Contact = () => {
   const { t, i18n } = useTranslation();
@@ -180,14 +181,14 @@ const Contact = () => {
               <div className="relative bg-gradient-to-b from-slate-900/95 to-slate-950/95 border-2 border-gold-500/60 rounded-3xl p-6 shadow-[0_20px_40px_rgba(0,0,0,0.7)] backdrop-blur-2xl hover:border-gold-400 hover:shadow-[0_0_30px_rgba(212,175,55,0.35)] transition-all duration-300 transform hover:-translate-y-1 flex flex-col items-center justify-between group overflow-hidden">
                 <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-red-600 via-amber-400 to-black"></div>
                 <div className="flex items-center justify-between w-full mb-3 pb-3 border-b border-slate-800/80">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl filter drop-shadow">🇪🇬</span>
-                    <div className="text-right">
-                      <h4 className="font-extrabold text-base text-gold-300 tracking-wide">{t('contact.clockEgypt', 'مصر')}</h4>
-                      <p className="text-xs text-ivory-200/90 font-medium">{t('contact.cairoCity', 'القاهرة — المقر الرئيسي')}</p>
+                  <div className="flex items-center gap-3 flex-1">
+                    <CountryFlag code="egypt" className="w-8 h-5.5 rounded shadow-md flex-shrink-0" />
+                    <div className="text-center flex-1 px-1">
+                      <h4 className="font-extrabold text-base text-white tracking-wide text-center">{t('contact.clockEgypt', 'مصر')}</h4>
+                      <p className="text-xs text-white font-medium text-center">{t('contact.cairoCity', 'القاهرة — المقر الرئيسي')}</p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40">UTC+3</span>
+                  <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40 flex-shrink-0">UTC+3</span>
                 </div>
 
                 <div className="my-3 text-center w-full">
@@ -212,14 +213,14 @@ const Contact = () => {
               <div className="relative bg-gradient-to-b from-slate-900/95 to-slate-950/95 border-2 border-gold-500/60 rounded-3xl p-6 shadow-[0_20px_40px_rgba(0,0,0,0.7)] backdrop-blur-2xl hover:border-gold-400 hover:shadow-[0_0_30px_rgba(212,175,55,0.35)] transition-all duration-300 transform hover:-translate-y-1 flex flex-col items-center justify-between group overflow-hidden">
                 <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-red-600 via-yellow-400 to-red-600"></div>
                 <div className="flex items-center justify-between w-full mb-3 pb-3 border-b border-slate-800/80">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl filter drop-shadow">🇪🇸</span>
-                    <div className="text-right">
-                      <h4 className="font-extrabold text-base text-gold-300 tracking-wide">{t('contact.clockSpain', 'إسبانيا')}</h4>
-                      <p className="text-xs text-ivory-200/90 font-medium">{t('contact.madridCity', 'مدريد — فرع أوروبا')}</p>
+                  <div className="flex items-center gap-3 flex-1">
+                    <CountryFlag code="spain" className="w-8 h-5.5 rounded shadow-md flex-shrink-0" />
+                    <div className="text-center flex-1 px-1">
+                      <h4 className="font-extrabold text-base text-white tracking-wide text-center">{t('contact.clockSpain', 'إسبانيا')}</h4>
+                      <p className="text-xs text-white font-medium text-center">{t('contact.madridCity', 'مدريد — فرع أوروبا')}</p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40">UTC+2</span>
+                  <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40 flex-shrink-0">UTC+2</span>
                 </div>
 
                 <div className="my-3 text-center w-full">
@@ -244,14 +245,14 @@ const Contact = () => {
               <div className="relative bg-gradient-to-b from-slate-900/95 to-slate-950/95 border-2 border-gold-500/60 rounded-3xl p-6 shadow-[0_20px_40px_rgba(0,0,0,0.7)] backdrop-blur-2xl hover:border-gold-400 hover:shadow-[0_0_30px_rgba(212,175,55,0.35)] transition-all duration-300 transform hover:-translate-y-1 flex flex-col items-center justify-between group overflow-hidden">
                 <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-green-600 via-red-600 to-amber-400"></div>
                 <div className="flex items-center justify-between w-full mb-3 pb-3 border-b border-slate-800/80">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl filter drop-shadow">🇵🇹</span>
-                    <div className="text-right">
-                      <h4 className="font-extrabold text-base text-gold-300 tracking-wide">{t('contact.clockPortugal', 'البرتغال')}</h4>
-                      <p className="text-xs text-ivory-200/90 font-medium">{t('contact.lisbonCity', 'لشبونة — مكتب الاتصال')}</p>
+                  <div className="flex items-center gap-3 flex-1">
+                    <CountryFlag code="portugal" className="w-8 h-5.5 rounded shadow-md flex-shrink-0" />
+                    <div className="text-center flex-1 px-1">
+                      <h4 className="font-extrabold text-base text-white tracking-wide text-center">{t('contact.clockPortugal', 'البرتغال')}</h4>
+                      <p className="text-xs text-white font-medium text-center">{t('contact.lisbonCity', 'لشبونة — مكتب الاتصال')}</p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40">UTC+1</span>
+                  <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40 flex-shrink-0">UTC+1</span>
                 </div>
 
                 <div className="my-3 text-center w-full">
