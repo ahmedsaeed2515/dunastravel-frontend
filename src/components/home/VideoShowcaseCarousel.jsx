@@ -119,8 +119,6 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
     return [
       ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v1-${v.id || i}-${i}`, isDuplicate: false })),
       ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v2-${v.id || i}-${i}`, isDuplicate: true })),
-      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v3-${v.id || i}-${i}`, isDuplicate: true })),
-      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v4-${v.id || i}-${i}`, isDuplicate: true })),
     ];
   }, [videos]);
 
@@ -201,7 +199,7 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
         <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 md:w-44 bg-gradient-to-l from-[#050A14] via-[#050A14]/80 to-transparent z-20" />
 
         {/* Continuous Right-to-Left Infinite Marquee Track */}
-        <div className="w-full relative overflow-x-auto md:overflow-hidden py-4 scrollbar-none snap-x snap-mandatory md:snap-none" dir="ltr">
+        <div className="w-full relative overflow-hidden py-4" dir="ltr">
           <div
             className="video-showcase-marquee-track flex gap-6 px-4"
             style={{
@@ -227,7 +225,7 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
                   tabIndex={0}
                   role="button"
                   aria-label={`${t('home.playVideo', 'Play video clip of')} ${videoTitle}`}
-                  className={`group relative w-[320px] sm:w-[380px] md:w-[420px] lg:w-[460px] h-[250px] sm:h-[280px] md:h-[320px] shrink-0 rounded-3xl overflow-hidden border border-white/10 hover:border-[#F5A623]/80 bg-[#0E1726] shadow-2xl transition-all duration-500 hover:scale-[1.03] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623] ${video.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
+                  className="group relative w-[320px] sm:w-[380px] md:w-[420px] lg:w-[460px] h-[250px] sm:h-[280px] md:h-[320px] shrink-0 block rounded-3xl overflow-hidden border border-white/10 hover:border-[#F5A623]/80 bg-[#0E1726] shadow-2xl transition-all duration-500 hover:scale-[1.03] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]"
                 >
                   <img
                     src={poster}

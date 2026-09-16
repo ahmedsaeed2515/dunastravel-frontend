@@ -1147,9 +1147,12 @@ html[dir="rtl"] .dropdown-item:hover {
   will-change: transform;
 }
 
-.animate-continuous-marquee-left:hover,
-.animate-continuous-marquee-right:hover {
-  animation-play-state: paused;
+@media (hover: hover) {
+  .animate-continuous-marquee-left:hover,
+  .animate-continuous-marquee-right:hover,
+  .tour-marquee-track:hover {
+    animation-play-state: paused;
+  }
 }
 
 .tour-marquee-track {
@@ -1157,7 +1160,7 @@ html[dir="rtl"] .dropdown-item:hover {
   will-change: transform;
 }
 
-@media (max-width: 768px) {
+@media (prefers-reduced-motion: reduce) {
   .animate-continuous-marquee-left,
   .animate-continuous-marquee-right,
   .photo-showcase-marquee-track,

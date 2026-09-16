@@ -26,8 +26,6 @@ const buildInfiniteMarqueeList = (items, prefix = 'gal', maxVisible = 8) => {
   return [
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: false, uKey: `${prefix}-set1-${tItem.id || i}-${i}` })),
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set2-${tItem.id || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set3-${tItem.id || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set4-${tItem.id || i}-${i}` })),
   ];
 };
 
@@ -134,15 +132,20 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
             transform: translate3d(-50%, 0, 0);
           }
         }
-        @media (min-width: 768px) {
-          .photo-showcase-marquee-track {
-            display: flex;
-            width: max-content;
-            animation: photoShowcaseContinuous 35s linear infinite !important;
-            will-change: transform;
-          }
+        .photo-showcase-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: photoShowcaseContinuous 35s linear infinite !important;
+          will-change: transform;
+        }
+        @media (hover: hover) {
           .photo-showcase-marquee-track:hover {
             animation-play-state: paused !important;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .photo-showcase-marquee-track {
+            animation: none !important;
           }
         }
       `}</style>
@@ -179,7 +182,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
         </div>
 
         {/* Marquee Track */}
-        <div dir="ltr" className="w-full relative overflow-x-auto md:overflow-hidden py-8 z-10 scrollbar-none snap-x snap-mandatory md:snap-none">
+        <div dir="ltr" className="w-full relative overflow-hidden py-8 z-10">
           <div
             className="photo-showcase-marquee-track flex"
             style={{
@@ -196,7 +199,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
                 return (
                   <div
                     key={img.uKey || `gal-${idx}`}
-                    className={`flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.04] hover:z-30 border border-white/20 hover:border-[#0CB2DB] bg-slate-900/50 shadow-2xl ${img.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
+                    className="flex-shrink-0 cursor-pointer overflow-hidden rounded-xl group relative transition-transform duration-300 hover:scale-[1.04] hover:z-30 border border-white/20 hover:border-[#0CB2DB] bg-slate-900/50 shadow-2xl"
                     onClick={() => openLightbox(originalIndex)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {

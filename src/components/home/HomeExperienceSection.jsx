@@ -337,8 +337,6 @@ const buildInfiniteMarqueeList = (items, prefix = 'tour', maxVisible = 8) => {
   return [
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: false, uKey: `${prefix}-set1-${tItem.id || tItem.slug || i}-${i}` })),
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set2-${tItem.id || tItem.slug || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set3-${tItem.id || tItem.slug || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set4-${tItem.id || tItem.slug || i}-${i}` })),
   ];
 };
 
@@ -1438,35 +1436,26 @@ const HomeExperienceSection = () => {
             </p>
           </div>
 
-          {/* Destination Cards Grid - Exact Travolo Replica (3 Columns, Tall 520px Cards, Top Hanging Badge & Bottom Floating Box) */}
+          {/* Destination Cards Grid - Exact Travolo Replica (3 Columns, Tall Cards, Top Hanging Badge & Bottom Floating Box) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(destinationsLoading || toursLoading) && (
+            {liveDestinationCards.length === 0 && (destinationsLoading || toursLoading) && (
               <div className="lg:col-span-3 rounded-3xl border border-white/20 bg-[#041446]/50 px-6 py-16 text-center text-white backdrop-blur-md">
                 <div className="inline-block w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
                 <p className="font-bold text-lg text-white">{t('common.loading', 'Loading destinations and tours...')}</p>
               </div>
             )}
-            {(destinationsError || toursError) && liveDestinationCards.length === 0 && !destinationsLoading && !toursLoading && (
-              <div className="lg:col-span-3 rounded-3xl border border-red-400/30 bg-red-950/20 px-6 py-16 text-center text-white backdrop-blur-md">
-                {t('common.loadError', 'Unable to load live catalog data. Please try again later.')}
-              </div>
-            )}
-            {!destinationsLoading && !toursLoading && liveDestinationCards.length === 0 && !destinationsError && !toursError && (
+            {liveDestinationCards.length === 0 && !destinationsLoading && !toursLoading && (
               <div className="lg:col-span-3 rounded-3xl border border-white/20 bg-[#041446]/50 px-6 py-16 text-center text-white backdrop-blur-md">
                 {t('destination.empty', 'No destinations are currently available.')}
               </div>
             )}
-            {!destinationsLoading && !toursLoading && liveDestinationCards.length > 0 && liveDestinationCards.map((dest, index) => {
+            {liveDestinationCards.map((dest, index) => {
               const tourCount = dest.toursCount;
               const isFirst = index % 3 === 0;
 
               return (
-                <motion.div
+                <div
                   key={dest.id}
-                  initial={{ opacity: 0, y: 35 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.08 }}
                   onClick={() => navigate(dest.link)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -1477,7 +1466,7 @@ const HomeExperienceSection = () => {
                   role="button"
                   tabIndex={0}
                   aria-label={`${t("destination.viewGuide", "View destination guide")} ${dest.name}`}
-                  className="group relative h-[480px] sm:h-[520px] rounded-[24px] overflow-hidden shadow-2xl border border-white/15 hover:border-[#F5A623]/80 transition-all duration-500 hover:-translate-y-2.5 cursor-pointer focus:outline-none flex flex-col justify-between"
+                  className="group relative h-[420px] sm:h-[480px] md:h-[500px] rounded-[24px] overflow-hidden shadow-2xl border border-white/15 hover:border-[#F5A623]/80 transition-all duration-500 hover:-translate-y-2.5 cursor-pointer focus:outline-none flex flex-col justify-between"
                 >
                   {/* Full Background Cover Photo */}
                   <img
@@ -1522,7 +1511,7 @@ const HomeExperienceSection = () => {
                       <span className="text-white font-extrabold">{tourCount} {t("home.toursAvailable", "رحلة متوفرة")}</span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -1551,7 +1540,7 @@ const HomeExperienceSection = () => {
           <div 
             dir="ltr" 
             ref={destMarqueeRef} 
-            className="overflow-x-auto md:overflow-hidden w-full relative py-4 scrollbar-none snap-x snap-mandatory md:snap-none"
+            className="overflow-hidden w-full relative py-4"
           >
             <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left">
             {(() => {
@@ -1569,7 +1558,7 @@ const HomeExperienceSection = () => {
                     to={tData.link || `/tours/${tData.slug || tData.id}`}
                     tabIndex={tData.isDuplicate ? -1 : undefined}
                     aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className={`min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500 ${tData.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
+                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
                   >
                     <img
                       src={getOptimizedImageUrl(imageUrl, 300, 355)}
@@ -1692,12 +1681,8 @@ const HomeExperienceSection = () => {
                   const isHero = pkg.featured || idx === 0;
 
                   return (
-                    <motion.div
+                    <div
                       key={pkg.recordId || pkg.id}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: idx * 0.1 }}
                       className={`group relative rounded-3xl overflow-hidden cursor-pointer flex flex-col justify-between border transition-all duration-500 backdrop-blur-xl ${
                         isHero 
                           ? "lg:col-span-2 min-h-[380px] sm:min-h-[420px] bg-gradient-to-br from-[#121c3b]/90 via-[#0d152d]/90 to-[#070c1b]/90 border-gold-500/40 hover:border-gold-400 shadow-[0_12px_40px_rgba(245,166,35,0.2)] hover:shadow-[0_16px_50px_rgba(245,166,35,0.35)]" 
@@ -1776,7 +1761,7 @@ const HomeExperienceSection = () => {
                           </Link>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
@@ -1865,7 +1850,7 @@ const HomeExperienceSection = () => {
           <div 
             dir="ltr" 
             ref={pkgMarqueeRef} 
-            className="overflow-x-auto md:overflow-hidden w-full relative py-4 scrollbar-none snap-x snap-mandatory md:snap-none"
+            className="overflow-hidden w-full relative py-4"
           >
             <div className="flex w-max gap-5 px-5 animate-continuous-marquee-right">
             {(() => {
@@ -1886,7 +1871,7 @@ const HomeExperienceSection = () => {
                     to={tData.link || "/tours"}
                     tabIndex={tData.isDuplicate ? -1 : undefined}
                     aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className={`min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500 ${tData.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
+                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 block group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
                   >
                     <img
                       src={getOptimizedImageUrl(tourImg, 300, 355)}
@@ -2003,7 +1988,7 @@ const HomeExperienceSection = () => {
           </div>
 
           {/* Vehicles Strip: Infinite Marquee */}
-          <div dir="ltr" className="w-full relative overflow-x-auto md:overflow-hidden py-4 scrollbar-none snap-x snap-mandatory md:snap-none">
+          <div dir="ltr" className="w-full relative overflow-hidden py-4">
             <div
               className="tour-marquee-track flex w-max"
               style={{
@@ -2018,7 +2003,7 @@ const HomeExperienceSection = () => {
                 return repeatedList.map((vehicle, idx) => (
                   <div
                     key={`veh-${vehicle.id}-${idx}`}
-                    className={`flex-shrink-0 flex flex-col rounded-[16px] overflow-hidden group relative w-[280px] h-[360px] md:h-[380px] transition-all duration-[350ms] ease-out hover:scale-[1.05] hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(245,166,35,0.35)] hover:z-10 border border-obsidian-700/50 hover:border-gold-500 bg-obsidian-900 ${vehicle.isDuplicate ? 'hidden md:flex' : 'snap-start'}`}
+                    className="flex-shrink-0 flex flex-col rounded-[16px] overflow-hidden group relative w-[280px] h-[360px] md:h-[380px] transition-all duration-[350ms] ease-out hover:scale-[1.05] hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(245,166,35,0.35)] hover:z-10 border border-obsidian-700/50 hover:border-gold-500 bg-obsidian-900"
                   >
                     <img
                       src={vehicle.heroImage || vehicle.image}
@@ -2122,11 +2107,7 @@ const HomeExperienceSection = () => {
           <div className="flex flex-col md:flex-row gap-8 w-full max-w-5xl mx-auto min-h-[500px] md:h-[550px]">
             
             {/* Hotels Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1 }}
+            <div
               className="relative flex-1 md:hover:grow-[1.4] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group rounded-3xl overflow-hidden cursor-pointer shadow-card hover:shadow-card-lg border border-gold-200/20 flex flex-col justify-end"
             >
               <Link to="/services" className="absolute inset-0 z-20" aria-label={t('nav.hotelsTab', 'Hotels')} />
@@ -2181,15 +2162,11 @@ const HomeExperienceSection = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Transportation Card */}
-            <motion.a
+            <a
               href="/programs/transportation"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.2 }}
               className="relative flex-1 md:hover:grow-[1.4] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group rounded-3xl overflow-hidden cursor-pointer shadow-card hover:shadow-card-lg border border-gold-200/20 flex flex-col justify-end"
             >
               {/* Background Image with Muted Overlay */}
@@ -2246,7 +2223,7 @@ const HomeExperienceSection = () => {
                   </div>
                 </div>
               </div>
-            </motion.a>
+            </a>
 
           </div>
         </div>
