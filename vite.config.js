@@ -135,19 +135,42 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            if (id.includes('node_modules/react-dom')) return 'vendor-react-dom';
-            if (id.includes('node_modules/react/') || id.includes('node_modules/scheduler')) return 'vendor-react';
-            if (id.includes('node_modules/react-router')) return 'vendor-router';
-            if (id.includes('node_modules/framer-motion')) return 'vendor-motion';
-            if (id.includes('node_modules/swiper')) return 'vendor-swiper';
-            if (id.includes('node_modules/gsap')) return 'vendor-gsap';
-            if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next') || id.includes('node_modules/i18next-browser-languagedetector')) return 'vendor-i18n';
-            if (id.includes('node_modules/react-icons/fa') || id.includes('node_modules/react-icons/fa6')) return 'vendor-icons-fa';
-            if (id.includes('node_modules/react-icons')) return 'vendor-icons';
-            if (id.includes('node_modules/leaflet') || id.includes('node_modules/react-leaflet')) return 'vendor-leaflet';
-            if (id.includes('node_modules/react-helmet-async')) return 'vendor-helmet';
-            if (id.includes('src/i18n/locales/')) {
-              const match = id.match(/locales[\\/]([a-z]{2})\.json/);
+            const normalizedId = id.replace(/\\/g, '/');
+            if (
+              normalizedId.includes('node_modules/react/') ||
+              normalizedId.includes('node_modules/react-dom/') ||
+              normalizedId.includes('node_modules/react-router/') ||
+              normalizedId.includes('node_modules/react-router-dom/') ||
+              normalizedId.includes('node_modules/react-helmet-async/') ||
+              normalizedId.includes('node_modules/scheduler/')
+            ) {
+              return 'vendor-react';
+            }
+            if (normalizedId.includes('node_modules/framer-motion')) return 'vendor-motion';
+            if (normalizedId.includes('node_modules/swiper')) return 'vendor-swiper';
+            if (normalizedId.includes('node_modules/gsap')) return 'vendor-gsap';
+            if (
+              normalizedId.includes('node_modules/i18next') ||
+              normalizedId.includes('node_modules/react-i18next') ||
+              normalizedId.includes('node_modules/i18next-browser-languagedetector')
+            ) {
+              return 'vendor-i18n';
+            }
+            if (
+              normalizedId.includes('node_modules/react-icons/fa') ||
+              normalizedId.includes('node_modules/react-icons/fa6')
+            ) {
+              return 'vendor-icons-fa';
+            }
+            if (normalizedId.includes('node_modules/react-icons')) return 'vendor-icons';
+            if (
+              normalizedId.includes('node_modules/leaflet') ||
+              normalizedId.includes('node_modules/react-leaflet')
+            ) {
+              return 'vendor-leaflet';
+            }
+            if (normalizedId.includes('src/i18n/locales/')) {
+              const match = normalizedId.match(/locales\/([a-z]{2})\.json/);
               if (match) return `locale-${match[1]}`;
             }
           },
