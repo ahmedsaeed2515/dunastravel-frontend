@@ -54,7 +54,41 @@ export const syncDocumentDirection = (lng) => {
   }
 };
 
-i18n.use(LanguageDetector).use(initReactI18next);
+const initialLng = getDefaultLng();
+syncDocumentDirection(initialLng);
+
+i18n.use(LanguageDetector).use(initReactI18next).init({
+  fallbackLng: 'en',
+  lng: initialLng,
+  interpolation: { escapeValue: false },
+  keySeparator: false,
+  react: { useSuspense: false },
+});
+
+const hydrateExtended = async (targetLng) => {
+  try {
+    const extData = await loadExtendedLocaleResource(targetLng);
+    i18n.addResourceBundle(targetLng, 'translation', extData, true, true);
+  } catch (e) {
+    console.warn('Extended locale load error:', e);
+  }
+};
+
+// Load locales lazily on-demand when switched
+i18n.on('languageChanged', async (newLng) => {
+  syncDocumentDirection(newLng);
+  const lang = newLng.split('-')[0];
+  if (supportedLngs.includes(lang)) {
+    if (!i18n.hasResourceBundle(lang, 'translation')) {
+      const data = await loadCoreLocaleResource(lang);
+      i18n.addResourceBundle(lang, 'translation', data, true, true);
+    }
+    hydrateExtended(lang).then(() => {
+      i18n.emit('loaded');
+    }).catch(() => {});
+    i18n.emit('loaded');
+  }
+});
 
 let initPromise = null;
 
@@ -62,34 +96,13 @@ export const initI18n = async () => {
   if (initPromise) return initPromise;
   initPromise = (async () => {
     try {
-      const lng = getDefaultLng();
+      const lng = (i18n.language ? i18n.language.split('-')[0] : null) || initialLng;
       const coreData = await loadCoreLocaleResource(lng);
-      
-      const resources = {
-        [lng]: { translation: coreData }
-      };
-
-      await i18n.init({
-        resources,
-        fallbackLng: 'en',
-        lng,
-        interpolation: { escapeValue: false },
-        keySeparator: false,
-      });
-
+      i18n.addResourceBundle(lng, 'translation', coreData, true, true);
       syncDocumentDirection(lng);
 
       // Hydrate extended catalogue translations (tours/blogs) after initial render or immediately in test
       const isTest = typeof process !== 'undefined' && (process.env?.NODE_ENV === 'test' || Boolean(process.env?.VITEST));
-      const hydrateExtended = async (targetLng) => {
-        try {
-          const extData = await loadExtendedLocaleResource(targetLng);
-          i18n.addResourceBundle(targetLng, 'translation', extData, true, true);
-        } catch (e) {
-          console.warn('Extended locale load error:', e);
-        }
-      };
-
       if (isTest) {
         await hydrateExtended(lng);
       } else if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
@@ -97,22 +110,6 @@ export const initI18n = async () => {
       } else {
         setTimeout(() => hydrateExtended(lng), 500);
       }
-
-      // Load locales lazily on-demand when switched
-      i18n.on('languageChanged', async (newLng) => {
-        syncDocumentDirection(newLng);
-        const lang = newLng.split('-')[0];
-        if (supportedLngs.includes(lang)) {
-          if (!i18n.hasResourceBundle(lang, 'translation')) {
-            const data = await loadCoreLocaleResource(lang);
-            i18n.addResourceBundle(lang, 'translation', data, true, true);
-          }
-          hydrateExtended(lang).then(() => {
-            i18n.emit('loaded');
-          }).catch(() => {});
-          i18n.emit('loaded');
-        }
-      });
     } catch (err) {
       console.warn('initI18n fallback triggered:', err);
     }

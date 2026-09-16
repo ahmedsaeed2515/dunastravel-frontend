@@ -150,26 +150,20 @@ const Transportation = () => {
         </div>
 
         <div className="container mx-auto px-6 md:px-12 relative z-10 mt-16">
-          <motion.div 
-            className="max-w-xl text-start ltr:text-left rtl:text-right space-y-3" 
-            variants={staggerContainer} 
-            initial="hidden" 
-            animate="visible"
-          >
-            <motion.span variants={fadeInUp} className="text-white uppercase tracking-widest text-caption font-extrabold block drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+          <div className="max-w-xl text-start ltr:text-left rtl:text-right space-y-3">
+            <span className="text-white uppercase tracking-widest text-caption font-extrabold block drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
               {t('services.subtitle', 'Tailored Experiences')}
-            </motion.span>
-            <motion.h1
-              variants={fadeInUp}
+            </span>
+            <h1
               className="text-display-lg md:text-display-xl text-white font-black font-display leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {t('nav.transportation', 'Transportation')}
-            </motion.h1>
-            <motion.p variants={fadeInUp} className="text-body-md md:text-body-lg text-white font-bold leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+            </h1>
+            <p className="text-body-md md:text-body-lg text-white font-bold leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
               {t('transportation.heroDesc', 'Travel in Comfort & Style')}
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
         </div>
       </section>
 
@@ -202,28 +196,20 @@ const Transportation = () => {
                 ? t('transportation.filter.coasters', 'Coaster Vehicles')
                 : t('transportation.filter.private', 'Private Vehicles');
 
+            const rawImg = vehicle.image || vehicle.heroImageUrl;
+            const normalizedImg = rawImg ? rawImg.replace(/\.jpe?g$/i, '.webp') : null;
             const vehicleImg =
-              vehicle.image ||
-              vehicle.heroImageUrl ||
+              normalizedImg ||
               (cat === 'private'
-                ? '/imgs/transportation/privte.jpeg'
+                ? '/imgs/transportation/privte.webp'
                 : cat === 'coaster'
-                ? '/imgs/transportation/costar.jpeg'
-                : '/imgs/transportation/bus1.jpeg');
+                ? '/imgs/transportation/costar.webp'
+                : '/imgs/transportation/bus1.webp');
 
             return (
-              <motion.div
+              <div
                 key={vehicle.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                whileHover={{
-                  y: -6,
-                  boxShadow: '0 0 32px rgba(201,162,39,0.22)',
-                  transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-                }}
-                className="bg-ivory-50 dark:bg-obsidian-900 border border-gray-100 dark:border-obsidian-800 rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 group flex flex-col justify-between"
+                className="bg-ivory-50 dark:bg-obsidian-900 border border-gray-100 dark:border-obsidian-800 rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 group flex flex-col justify-between hover:-translate-y-1.5 hover:shadow-[0_0_32px_rgba(201,162,39,0.22)]"
               >
                 <div>
                   <div
@@ -326,7 +312,7 @@ const Transportation = () => {
                     <span className={`${isRtl ? 'rotate-180 inline-block' : ''} !text-white`} style={{ color: '#ffffff' }}>&rarr;</span>
                   </button>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -424,6 +410,11 @@ const Transportation = () => {
             }
             .dunas-marquee-track:hover {
               animation-play-state: paused;
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .dunas-marquee-track {
+                animation: none !important;
+              }
             }
           `}</style>
 

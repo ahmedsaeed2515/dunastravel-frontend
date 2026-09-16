@@ -20,19 +20,10 @@ window.addEventListener('vite:preloadError', (event) => {
   }
 });
 
-const i18nInitPromise = initI18n().catch((err) => console.warn('i18n init error:', err));
+// Initiate background core and catalogue translation hydration
+initI18n().catch((err) => console.warn('i18n init error:', err));
 
 function Root() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    i18nInitPromise.finally(() => setReady(true));
-  }, []);
-
-  if (!ready) {
-    return null;
-  }
-
   return (
     <StrictMode>
       <BrowserRouter>
