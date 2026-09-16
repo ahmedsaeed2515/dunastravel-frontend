@@ -171,7 +171,7 @@ const Footer = () => {
               {t('footer.titoTagline', 'Descubre la magia de Egipto y sus monumentos históricos de la mano de los Expertos')}
             </p>
             
-            <div className="mt-6 sm:mt-8 flex items-center justify-center sm:justify-start">
+            <div className="mt-6 sm:mt-8 flex items-center justify-center sm:justify-start gap-6 flex-wrap">
               <img
                 src="/imgs/iata-logo.svg"
                 alt="IATA Accredited Agent"
@@ -179,10 +179,19 @@ const Footer = () => {
                 height="112"
                 loading="lazy"
                 decoding="async"
-                className="h-20 sm:h-28 w-auto object-contain filter brightness-0 invert opacity-95 hover:opacity-100 transition-all hover:scale-105"
+                className="h-16 sm:h-20 w-auto object-contain filter brightness-0 invert opacity-95 hover:opacity-100 transition-all hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.src = "https://cdn.svgrepo.com/show/306218/iata.svg";
                 }}
+              />
+              <img
+                src="/imgs/getpayin-logo.png"
+                alt="GetPayIn Payment Partner"
+                width="140"
+                height="45"
+                loading="lazy"
+                decoding="async"
+                className="h-9 sm:h-11 w-auto object-contain filter brightness-0 invert opacity-95 hover:opacity-100 transition-all hover:scale-105"
               />
             </div>
           </div>
