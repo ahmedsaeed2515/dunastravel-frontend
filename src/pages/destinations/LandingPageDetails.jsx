@@ -59,7 +59,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'استمتع بجولات القصور العثمانية في إسطنبول، وركوب المناطيد فوق مداخن كابادوكيا، والاستجمام في منتجعات الريفيرا التركية.',
     tags: ['dest.turkey.tag1', 'dest.turkey.tag2', 'dest.turkey.tag3'],
     tagsDefault: ['🎈 Private Cappadocia Hot Air Balloon Flights', '🛥️ Private Luxury Yacht Cruises on the Bosphorus', '🏰 Royal Cave Hotel Stays'],
-    heroImage: '/imgs/destinations/turkey.webp',
+    heroImage: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85',
   },
   dubai: {
     badge: 'dest.dubai.badge',

@@ -62,9 +62,12 @@ export default function LuxuryHeroSection({
           initial={{ scale: 1 }}
           animate={{ scale: zoomScale }}
           transition={{ duration: zoomDuration, ease: ease, repeat: Infinity, repeatType: 'reverse' }}
-          src={bgImage || '/imgs/destinations/egypt.webp'}
+          src={bgImage || 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85'}
           onError={(e) => {
-            e.currentTarget.src = bgImage || '/imgs/destinations/egypt.webp';
+            if (!e.currentTarget.dataset.fallback) {
+              e.currentTarget.dataset.fallback = 'true';
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85';
+            }
           }}
           alt={title}
           style={{ willChange: 'transform' }}
@@ -78,9 +81,9 @@ export default function LuxuryHeroSection({
           style={{
             background: `linear-gradient(
               to bottom,
-              rgba(6, 13, 26, 0.04) 0%,
-              rgba(6, 13, 26, 0.18) 50%,
-              rgba(6, 13, 26, 0.45) 100%
+              rgba(6, 13, 26, 0.15) 0%,
+              rgba(6, 13, 26, 0.35) 50%,
+              rgba(6, 13, 26, 0.70) 100%
             )`
           }}
         />
@@ -108,9 +111,9 @@ export default function LuxuryHeroSection({
         {/* Eyebrow Glass Badge */}
         {badge && (
           <motion.div variants={itemVariants} className="inline-block mb-6">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gold-500/15 border border-gold-500/40 backdrop-blur-xl shadow-lg shadow-gold-500/10">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gold-500/20 border border-gold-500/50 backdrop-blur-xl shadow-xl shadow-gold-500/20">
               <FaCompass className="text-gold-400 text-sm" />
-              <span className="text-xs sm:text-sm font-semibold tracking-wide text-gold-300 uppercase">
+              <span className="text-xs sm:text-sm font-bold tracking-wider text-gold-300 uppercase">
                 {badge}
               </span>
             </div>
@@ -120,7 +123,7 @@ export default function LuxuryHeroSection({
         {/* Headline */}
         <motion.h1
           variants={itemVariants}
-          className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-ivory-50 leading-[1.25] tracking-tight mb-4 font-serif text-balance"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.2] tracking-tight mb-4 font-serif text-balance drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
         >
           {title}
         </motion.h1>
@@ -129,7 +132,7 @@ export default function LuxuryHeroSection({
         {subtitle && (
           <motion.p
             variants={itemVariants}
-            className="text-sm sm:text-lg md:text-xl font-medium text-gold-400/90 tracking-widest uppercase mb-6 font-sans drop-shadow-sm"
+            className="text-sm sm:text-lg md:text-xl font-bold text-gold-300 tracking-widest uppercase mb-6 font-sans drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
           >
             {subtitle}
           </motion.p>
@@ -139,7 +142,7 @@ export default function LuxuryHeroSection({
         {description && (
           <motion.p
             variants={itemVariants}
-            className="text-base sm:text-lg md:text-xl text-ivory-200/90 max-w-3xl mx-auto leading-relaxed mb-8 font-light"
+            className="text-base sm:text-lg md:text-xl text-ivory-100 max-w-3xl mx-auto leading-relaxed mb-8 font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
           >
             {description}
           </motion.p>
