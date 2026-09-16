@@ -236,32 +236,65 @@ const styles = `
     gap: 18px;
     margin-top: 14px;
   }
-  .about-page .feature-card {
-    border: 1px solid rgba(14, 42, 82, .14);
-    padding: 26px 22px;
-    border-radius: 2px;
-    background: var(--cream);
-    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  /* Feature Card (SPECIALISTS & OWN OPERATIONS) Light & Dark Mode */
+  html:not(.dark) .about-page .feature-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.18) !important;
+    padding: 24px 22px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 6px 20px rgba(28, 69, 135, 0.08) !important;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease !important;
   }
-  .about-page .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 40px rgba(14, 42, 82, 0.12);
-    border-color: var(--gold);
+  html:not(.dark) .about-page .feature-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.2) !important;
+    border-color: var(--gold) !important;
   }
-  .about-page .feature-card .ftitle {
-    font-family: var(--mono);
-    font-weight: 600;
-    font-size: 12.5px;
-    letter-spacing: .06em;
-    color: var(--navy);
-    text-transform: uppercase;
-    margin-bottom: 8px;
+  html:not(.dark) .about-page .feature-card .ftitle {
+    font-family: var(--mono) !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    letter-spacing: .08em !important;
+    color: #1E40AF !important;
+    text-transform: uppercase !important;
+    margin-bottom: 8px !important;
   }
-  .about-page .feature-card p {
-    font-size: 13.5px;
-    color: var(--ink-soft);
-    margin: 0;
-    line-height: 1.6;
+  html:not(.dark) .about-page .feature-card p {
+    font-size: 14px !important;
+    color: #1E293B !important;
+    margin: 0 !important;
+    line-height: 1.65 !important;
+    font-weight: 500 !important;
+  }
+
+  .dark .about-page .feature-card {
+    background: #142238 !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.35) !important;
+    padding: 24px 22px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease !important;
+  }
+  .dark .about-page .feature-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
+    border-color: #E8CB72 !important;
+  }
+  .dark .about-page .feature-card .ftitle {
+    font-family: var(--mono) !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    letter-spacing: .08em !important;
+    color: #E8CB72 !important;
+    text-transform: uppercase !important;
+    margin-bottom: 8px !important;
+  }
+  .dark .about-page .feature-card p {
+    font-size: 14px !important;
+    color: #F8FAFC !important;
+    margin: 0 !important;
+    line-height: 1.65 !important;
+    font-weight: 500 !important;
   }
   .about-page .presence-box {
     background: var(--navy-deep);

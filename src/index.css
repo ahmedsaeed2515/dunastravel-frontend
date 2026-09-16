@@ -475,6 +475,63 @@ html[data-scroll-locked] {
   .dark .about-page .stats-strip .stat-cell .l {
     color: #E8CB72 !important;
   }
+
+  /* Feature Card (SPECIALISTS & OWN OPERATIONS) Light & Dark Mode */
+  html:not(.dark) .about-page .feature-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.18) !important;
+    padding: 24px 22px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 6px 20px rgba(28, 69, 135, 0.08) !important;
+  }
+  html:not(.dark) .about-page .feature-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.2) !important;
+    border-color: #C9A227 !important;
+  }
+  html:not(.dark) .about-page .feature-card .ftitle {
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    letter-spacing: .08em !important;
+    color: #1E40AF !important;
+    text-transform: uppercase !important;
+    margin-bottom: 8px !important;
+  }
+  html:not(.dark) .about-page .feature-card p {
+    font-size: 14px !important;
+    color: #1E293B !important;
+    margin: 0 !important;
+    line-height: 1.65 !important;
+    font-weight: 500 !important;
+  }
+
+  .dark .about-page .feature-card {
+    background: #142238 !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.35) !important;
+    padding: 24px 22px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  }
+  .dark .about-page .feature-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
+    border-color: #E8CB72 !important;
+  }
+  .dark .about-page .feature-card .ftitle {
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    letter-spacing: .08em !important;
+    color: #E8CB72 !important;
+    text-transform: uppercase !important;
+    margin-bottom: 8px !important;
+  }
+  .dark .about-page .feature-card p {
+    font-size: 14px !important;
+    color: #F8FAFC !important;
+    margin: 0 !important;
+    line-height: 1.65 !important;
+    font-weight: 500 !important;
+  }
   .dark .about-page .presence-box {
     background: #0f0f1a !important;
   }
