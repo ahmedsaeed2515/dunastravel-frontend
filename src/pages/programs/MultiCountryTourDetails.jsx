@@ -187,13 +187,10 @@ export default function MultiCountryTourDetails() {
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gold-100 hover:shadow-md transition-shadow">
                           <div className="flex items-center gap-3 mb-3">
                             <span className="font-semibold text-obsidian-900">
-                              {t('tour.day', 'Day')} {day.day}
+                              {day.title
+                                ? t(`data.${day.title}`, day.title)
+                                : `${t('tour.day', 'Day')} ${day.day}`}
                             </span>
-                            {day.title && (
-                              <span className="text-body-sm text-obsidian-600 font-medium">
-                                {t(`data.${day.title}`, day.title)}
-                              </span>
-                            )}
                           </div>
 
                           {day.description && (

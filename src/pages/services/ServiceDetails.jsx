@@ -222,10 +222,11 @@ const ServiceDetails = () => {
 
                             <div className="bg-ivory-50 rounded-2xl p-6 shadow-sm border border-gold-100 hover:shadow-md transition-shadow text-start">
                               <div className="flex items-center gap-3 mb-3">
-                                <span className="font-semibold text-obsidian-900">{t('tour.day', 'Day')} {day.day}</span>
-                                {day.title && (
-                                  <span className="text-body-sm text-obsidian-500">{translateData(day.title, day.title)}</span>
-                                )}
+                                <span className="font-semibold text-obsidian-900">
+                                  {day.title
+                                    ? translateData(day.title, day.title)
+                                    : `${t('tour.day', 'Day')} ${day.day}`}
+                                </span>
                               </div>
 
                               <div className="space-y-2">

@@ -312,8 +312,9 @@ export default function TurkeyProgramDetails() {
                         <div className="bg-ivory-50 dark:bg-obsidian-800 rounded-2xl p-6 shadow-sm border border-gold-100 dark:border-obsidian-600 hover:shadow-md transition-shadow">
                           <div className="flex items-center gap-3 mb-3">
                             <span className="font-semibold text-obsidian-900 dark:text-ivory-100">
-                              {t('tour.day', 'Day')} {d.day}
-                              {d.title ? `: ${d.title}` : ''}
+                              {d.title
+                                ? d.title
+                                : `${t('tour.day', 'Day')} ${d.day}`}
                             </span>
                             {d.meals && (
                               <span className="text-caption text-obsidian-400 dark:text-obsidian-300 flex items-center gap-1 ltr:ml-auto rtl:mr-auto">
