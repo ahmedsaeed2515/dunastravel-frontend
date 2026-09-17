@@ -1416,7 +1416,7 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* Stats Counter Section */}
-      <section className="relative py-12 md:py-16 overflow-hidden bg-gray-50/50 dark:bg-obsidian-950">
+      <section className="relative py-12 md:py-16 overflow-hidden bg-gray-50/50 dark:bg-[#07163c]">
         <div className="relative z-10 container mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {[

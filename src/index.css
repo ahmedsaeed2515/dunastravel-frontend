@@ -461,15 +461,15 @@ html[data-scroll-locked] {
   /* Dark Mode Shared Stat Cards */
   .dark .home-stat-card,
   .dark .about-page .stats-strip .stat-cell {
-    background: #142238 !important;
-    border: 1.5px solid rgba(232, 203, 114, 0.3) !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    background: linear-gradient(145deg, #07153b 0%, #0a2055 50%, #0d2a6e 100%) !important;
+    border: 1.5px solid rgba(245, 166, 35, 0.45) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
   }
   .dark .home-stat-card:hover,
   .dark .about-page .stats-strip .stat-cell:hover {
     transform: translateY(-6px) !important;
-    border-color: #E8CB72 !important;
-    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
+    border-color: #F5A623 !important;
+    box-shadow: 0 14px 32px rgba(245, 166, 35, 0.35) !important;
   }
   .dark .home-stat-card .stat-icon,
   .dark .about-page .stats-strip .stat-cell .stat-icon {
