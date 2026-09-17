@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useJaiderChat } from '../../context/JaiderChatContext';
@@ -16,70 +17,101 @@ const FloatingGuideR = () => {
   const { t, i18n } = useTranslation();
   const { isOpen, setIsOpen, guiderAvailability } = useJaiderChat();
   const [isHovered, setIsHovered] = useState(false);
+  const location = useLocation();
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
+
+  useEffect(() => {
+    // Always show on non-home pages
+    if (location.pathname !== '/') {
+      setIsScrolledPastHero(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      // Hide in Hero section (first 500px on home page), reveal as user scrolls to next section
+      if (window.scrollY >= 500) {
+        setIsScrolledPastHero(true);
+      } else {
+        setIsScrolledPastHero(false);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
 
   const isRtl = i18n.dir() === 'rtl';
   const tooltip = t('guider.tooltip', 'Ask GuideR • AI Travel Concierge');
 
-  // Don't render the launcher when the chat modal is already open or when GuideR is disabled/maintenance
-  if (isOpen || (guiderAvailability?.loaded && !guiderAvailability?.enabled)) return null;
+  const showWidget = !isOpen && (guiderAvailability?.loaded ? guiderAvailability?.enabled : true) && isScrolledPastHero;
 
   return (
-    <div
-      dir="ltr"
-      className="fixed bottom-5 right-5 sm:right-6 z-[9998] flex items-center flex-row"
-    >
-      {/* Speech Bubble / Tooltip on Hover */}
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85, x: 12 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.85, x: 12 }}
-            transition={{ duration: 0.2 }}
-            className="pointer-events-none hidden sm:flex items-center px-4 py-2 rounded-2xl bg-slate-950/90 backdrop-blur-md border border-gold-500/40 shadow-[0_8px_25px_rgba(0,0,0,0.4)] text-ivory-50 text-xs font-semibold whitespace-nowrap mr-3"
-            dir={isRtl ? 'rtl' : 'ltr'}
+    <AnimatePresence>
+      {showWidget && (
+        <motion.div
+          key="floating-guider-widget"
+          initial={{ opacity: 0, scale: 0.6, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.6, y: 40 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+          dir="ltr"
+          className="fixed bottom-5 right-5 sm:right-6 z-[9998] flex items-center flex-row"
+        >
+          {/* Speech Bubble / Tooltip on Hover */}
+          <AnimatePresence>
+            {isHovered && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85, x: 12 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.85, x: 12 }}
+                transition={{ duration: 0.2 }}
+                className="pointer-events-none hidden sm:flex items-center px-4 py-2 rounded-2xl bg-slate-950/90 backdrop-blur-md border border-gold-500/40 shadow-[0_8px_25px_rgba(0,0,0,0.4)] text-ivory-50 text-xs font-semibold whitespace-nowrap mr-3"
+                dir={isRtl ? 'rtl' : 'ltr'}
+              >
+                <span className="text-gold-400 ml-1.5 font-bold">✦</span>
+                <span>{tooltip}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Mascot Button (Transparent Background) */}
+          <motion.button
+            onClick={() => setIsOpen(true)}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            whileHover={{ scale: 1.12 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label={tooltip}
+            title={tooltip}
+            className="relative group cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-full select-none"
           >
-            <span className="text-gold-400 ml-1.5 font-bold">✦</span>
-            <span>{tooltip}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {/* Ambient Golden Glow Aura */}
+            <div className="absolute inset-0 rounded-full bg-gold-500/20 blur-xl group-hover:bg-gold-500/35 transition-all duration-500 scale-125" />
 
-      {/* Mascot Button (Transparent Background) */}
-      <motion.button
-        onClick={() => setIsOpen(true)}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        whileHover={{ scale: 1.12 }}
-        whileTap={{ scale: 0.95 }}
-        aria-label={tooltip}
-        title={tooltip}
-        className="relative group cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-full select-none"
-      >
-        {/* Ambient Golden Glow Aura */}
-        <div className="absolute inset-0 rounded-full bg-gold-500/20 blur-xl group-hover:bg-gold-500/35 transition-all duration-500 scale-125" />
+            {/* Mascot Avatar Image with Floating Physics */}
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center animate-[float_3s_ease-in-out_infinite]">
+              <img
+                src="/imgs/tito-mascot.webp"
+                alt="GuideR Luxury Travel Concierge"
+                className="w-full h-full object-contain filter drop-shadow-[0_8px_18px_rgba(245,166,35,0.45)] group-hover:drop-shadow-[0_12px_24px_rgba(245,166,35,0.65)] transition-all duration-300"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                width="80"
+                height="80"
+              />
 
-        {/* Mascot Avatar Image with Floating Physics */}
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center animate-[float_3s_ease-in-out_infinite]">
-          <img
-            src="/imgs/tito-mascot.webp"
-            alt="GuideR Luxury Travel Concierge"
-            className="w-full h-full object-contain filter drop-shadow-[0_8px_18px_rgba(245,166,35,0.45)] group-hover:drop-shadow-[0_12px_24px_rgba(245,166,35,0.65)] transition-all duration-300"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            width="80"
-            height="80"
-          />
-
-          {/* Online Live Status Pulse */}
-          <span className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex h-3.5 w-3.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-slate-950 shadow-sm"></span>
-          </span>
-        </div>
-      </motion.button>
-    </div>
+              {/* Online Live Status Pulse */}
+              <span className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-slate-950 shadow-sm"></span>
+              </span>
+            </div>
+          </motion.button>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

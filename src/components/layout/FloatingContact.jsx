@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaWhatsapp, FaFacebookF, FaInstagram, FaPhone, FaEnvelope, FaTimes, FaHeadset } from 'react-icons/fa';
@@ -8,6 +9,29 @@ const FloatingContact = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { isOpen: isJaiderOpen } = useJaiderChat();
+  const location = useLocation();
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
+
+  useEffect(() => {
+    // Always show on non-home pages
+    if (location.pathname !== '/') {
+      setIsScrolledPastHero(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      // Hide in Hero section (first 500px on home page), reveal as user scrolls to next section
+      if (window.scrollY >= 500) {
+        setIsScrolledPastHero(true);
+      } else {
+        setIsScrolledPastHero(false);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
 
   const options = [
     { icon: FaWhatsapp, href: 'https://wa.me/201149401111', label: t('contact.whatsapp', 'WhatsApp'), bg: 'bg-[#25D366] text-white hover:bg-[#1ebd5a]' },
@@ -40,59 +64,68 @@ const FloatingContact = () => {
     }
   };
 
-  if (isJaiderOpen) return null;
+  const showWidget = !isJaiderOpen && isScrolledPastHero;
 
   return (
-    <div
-      id="floating-contact-container"
-      className="floating-contact fixed bottom-[88px] sm:bottom-[98px] right-6 z-[9997] flex items-center justify-center"
-    >
-      <AnimatePresence>
-        {isOpen && options.map((item, idx) => {
-          const Icon = item.icon;
-          return (
-            <motion.a
-              key={item.label}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              custom={idx}
-              variants={itemVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
-              whileHover={{ scale: 1.18 }}
-              whileTap={{ scale: 0.92 }}
-              title={item.label}
-              aria-label={item.label}
-              className={`absolute w-10 h-10 rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-all duration-200 group ${item.bg}`}
-            >
-              <Icon size={18} />
-              <span className="absolute hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none text-[10px] font-semibold tracking-wide px-2 py-0.5 rounded-md bg-slate-950/90 text-ivory-100 border border-gold-500/30 whitespace-nowrap -top-7 shadow-md">
-                {item.label}
-              </span>
-            </motion.a>
-          );
-        })}
-      </AnimatePresence>
-
-      <motion.button
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? "Close contact options" : "Open contact options"}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.94 }}
-        className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-gold-300 bg-slate-950/90 backdrop-blur-md border border-gold-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.45)] hover:border-gold-400 hover:text-gold-200 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 transition-all duration-300 cursor-pointer"
-      >
+    <AnimatePresence>
+      {showWidget && (
         <motion.div
-          animate={{ rotate: isOpen ? 90 : 0 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+          key="floating-contact-widget"
+          initial={{ opacity: 0, scale: 0.6, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.6, y: 40 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 22, delay: 0.08 }}
+          id="floating-contact-container"
+          className="floating-contact fixed bottom-[88px] sm:bottom-[98px] right-6 z-[9997] flex items-center justify-center"
         >
-          {isOpen ? <FaTimes size={18} /> : <FaHeadset size={20} />}
+          <AnimatePresence>
+            {isOpen && options.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <motion.a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  custom={idx}
+                  variants={itemVariants}
+                  initial="closed"
+                  animate="open"
+                  exit="closed"
+                  whileHover={{ scale: 1.18 }}
+                  whileTap={{ scale: 0.92 }}
+                  title={item.label}
+                  aria-label={item.label}
+                  className={`absolute w-10 h-10 rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-all duration-200 group ${item.bg}`}
+                >
+                  <Icon size={18} />
+                  <span className="absolute hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none text-[10px] font-semibold tracking-wide px-2 py-0.5 rounded-md bg-slate-950/90 text-ivory-100 border border-gold-500/30 whitespace-nowrap -top-7 shadow-md">
+                    {item.label}
+                  </span>
+                </motion.a>
+              );
+            })}
+          </AnimatePresence>
+
+          <motion.button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close contact options" : "Open contact options"}
+            aria-expanded={isOpen}
+            aria-haspopup="true"
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
+            className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center text-gold-300 bg-slate-950/90 backdrop-blur-md border border-gold-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.45)] hover:border-gold-400 hover:text-gold-200 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 transition-all duration-300 cursor-pointer"
+          >
+            <motion.div
+              animate={{ rotate: isOpen ? 90 : 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+            >
+              {isOpen ? <FaTimes size={18} /> : <FaHeadset size={20} />}
+            </motion.div>
+          </motion.button>
         </motion.div>
-      </motion.button>
-    </div>
+      )}
+    </AnimatePresence>
   );
 };
 

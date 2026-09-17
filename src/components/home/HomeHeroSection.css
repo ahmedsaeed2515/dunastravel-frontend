@@ -110,7 +110,7 @@
 .slider-section .hero_content {
   position: relative;
   z-index: 10;
-  padding: 0 15px;
+  padding: 60px 15px 0;
   max-width: 100%;
 }
 
@@ -142,7 +142,7 @@
   color: var(--color-white);
   width: 45%;
   line-height: 32px;
-  margin: 14px 0 5px;
+  margin: 24px 0 8px;
   font-family: var(--text-font);
 }
 
@@ -177,18 +177,22 @@
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
+
   25% {
     -webkit-transform: scale(2.10);
     transform: scale(2.10);
   }
+
   50% {
     -webkit-transform: scale(2.65);
     transform: scale(2.65);
   }
+
   75% {
     -webkit-transform: scale(1.40);
     transform: scale(1.40);
   }
+
   100% {
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
@@ -200,44 +204,54 @@
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
+
   25% {
     -webkit-transform: scale(2.10);
     transform: scale(2.10);
   }
+
   50% {
     -webkit-transform: scale(2.65);
     transform: scale(2.65);
   }
+
   75% {
     -webkit-transform: scale(1.40);
     transform: scale(1.40);
   }
+
   100% {
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
 }
 
-/* Circular Video Badge */
+/* Circular Video Badge - Positioned at bottom-right (LTR) / bottom-left (RTL) */
 .circle__video {
   position: absolute;
+  bottom: 100px;
+  right: 50px;
   width: 85px;
   height: 85px;
-  line-height: 85px;
+  line-height: 80px;
   background: linear-gradient(135deg, rgba(4, 20, 70, 0.88) 0%, rgba(6, 29, 93, 0.88) 40%, rgba(10, 40, 120, 0.88) 100%);
   border: 1px solid rgba(201, 162, 39, 0.35);
   border-radius: 50%;
   text-align: center;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  left: 38%;
-  top: 14%;
   z-index: 25;
   overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.circle__video:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 36px rgba(12, 178, 219, 0.4);
 }
 
 .circle__video svg {
@@ -377,7 +391,7 @@
   font-size: 18px;
   letter-spacing: 2.3px;
   padding: 15px 40px;
-  margin-top: 24px;
+  margin-top: 36px;
   border-radius: 30px;
   transition: 0.5s;
   position: relative;
@@ -473,8 +487,8 @@
     width: 75px;
     height: 75px;
     line-height: 75px;
-    left: 42%;
-    top: 12%;
+    bottom: 85px;
+    right: 38px;
   }
 
   .travel-slider-dots {
@@ -485,7 +499,7 @@
   }
 }
 
-/* 992px screens (Tablets - Video circle positioned bottom-right) */
+/* 992px screens (Tablets) */
 @media only screen and (max-width: 992px) {
   .boxed {
     padding: 0;
@@ -512,17 +526,12 @@
     border-radius: 24px;
   }
 
-  /* Video Circle positioned at bottom-right above dots */
   .circle__video {
-    position: absolute;
-    width: 58px;
-    height: 58px;
-    line-height: 58px;
-    left: auto !important;
-    right: 24px !important;
-    top: auto !important;
-    bottom: 80px !important;
-    z-index: 25;
+    width: 65px;
+    height: 65px;
+    line-height: 65px;
+    bottom: 78px;
+    right: 30px;
   }
 
   .travel-slider-dots {
@@ -585,15 +594,12 @@
     box-shadow: 0 8px 25px rgba(12, 178, 219, 0.4);
   }
 
-  /* Video Circle at Bottom-Right */
   .circle__video {
-    width: 48px;
-    height: 48px;
-    line-height: 48px;
-    left: auto !important;
-    right: 20px !important;
-    top: auto !important;
-    bottom: 75px !important;
+    width: 55px;
+    height: 55px;
+    line-height: 55px;
+    bottom: 75px;
+    right: 20px;
   }
 
   .circle__video text {
@@ -664,15 +670,12 @@
     letter-spacing: 1.5px;
   }
 
-  /* Video Circle at Bottom-Right */
   .circle__video {
-    width: 42px;
-    height: 42px;
-    line-height: 42px;
-    left: auto !important;
-    right: 16px !important;
-    top: auto !important;
-    bottom: 70px !important;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    bottom: 70px;
+    right: 16px;
     backdrop-filter: blur(10px);
   }
 
@@ -725,13 +728,12 @@
     padding: 10px 22px;
   }
 
-  /* Video Circle at Bottom-Right */
   .circle__video {
-    width: 38px;
-    height: 38px;
-    line-height: 38px;
-    right: 14px !important;
-    bottom: 65px !important;
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    bottom: 65px;
+    right: 14px;
   }
 
   .circle__video .circle-vide_btn {
@@ -806,8 +808,14 @@
 
 .rtl .circle__video,
 [dir="rtl"] .circle__video {
-  right: auto;
-  left: 38%;
+  right: auto !important;
+  left: 50px !important;
+}
+
+.rtl .travel-slider-dots,
+[dir="rtl"] .travel-slider-dots {
+  right: auto !important;
+  left: 40px !important;
 }
 
 @media only screen and (max-width: 1600px) {
@@ -826,11 +834,6 @@
     font-size: 90px;
     line-height: 95px;
   }
-
-  .rtl .circle__video,
-  [dir="rtl"] .circle__video {
-    left: 42%;
-  }
 }
 
 @media only screen and (max-width: 992px) {
@@ -845,12 +848,6 @@
   [dir="rtl"] .slider-section .hero_content .slider-contect-des {
     width: 80%;
   }
-
-  .rtl .circle__video,
-  [dir="rtl"] .circle__video {
-    right: 24px !important;
-    left: auto !important;
-  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -864,12 +861,6 @@
   .rtl .slider-section .hero_content .slider-contect-des,
   [dir="rtl"] .slider-section .hero_content .slider-contect-des {
     width: 92%;
-  }
-
-  .rtl .circle__video,
-  [dir="rtl"] .circle__video {
-    right: 20px !important;
-    left: auto !important;
   }
 }
 

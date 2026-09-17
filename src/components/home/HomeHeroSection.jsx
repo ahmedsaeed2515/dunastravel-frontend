@@ -49,7 +49,7 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
 
     if (!isActive) {
       const elsToReset = slideEl.querySelectorAll(
-        ".hero-heading-1, .hero-heading-2, .dunas-logo, .slider-contect-des, .defult-btn a, .char"
+        ".hero-heading-1, .hero-heading-2, .dunas-logo, .slider-contect-des, .defult-btn a, .circle__video, .char"
       );
       gsap.killTweensOf(elsToReset);
       gsap.set(elsToReset, { opacity: 0, y: 0 });
@@ -72,11 +72,12 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
     const logo = slideEl.querySelector(".dunas-logo");
     const desc = slideEl.querySelector(".slider-contect-des");
     const btn = slideEl.querySelector(".defult-btn a");
+    const circle = slideEl.querySelector(".circle__video");
 
     const chars1 = heading1 ? heading1.querySelectorAll(".char") : [];
     const chars2 = heading2 ? heading2.querySelectorAll(".char") : [];
 
-    const allAnimatableEls = [heading1, heading2, logo, desc, btn, ...chars1, ...chars2].filter(Boolean);
+    const allAnimatableEls = [heading1, heading2, logo, desc, btn, circle, ...chars1, ...chars2].filter(Boolean);
     gsap.killTweensOf(allAnimatableEls);
 
     // Make parent headings visible so child character spans are displayed
@@ -175,6 +176,22 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
         }
       );
     }
+
+    // 6. Rotating Circle Video Badge: Rises up from bottom (+50px)
+    if (circle) {
+      gsap.fromTo(
+        circle,
+        { opacity: 0, y: 50, scale: 0.85 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.0,
+          delay: 0.54,
+          ease: "power3.out",
+        }
+      );
+    }
   }, [isActive]);
 
   const renderAnimatedWord = (word) => {
@@ -222,66 +239,67 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
                 </h1>
                 <p className="slider-contect-des">{t("home.heroDesc", slide.desc)}</p>
                 <div className="hero-btn defult-btn">
-                  <Link to={slide.btnLink}>
-                    {t("home.heroBtnText", slide.btnText)}
-                    <svg
-                      width="16"
-                      height="12"
-                      viewBox="0 0 16 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M14.96 4.9808C12.8146 4.9808 10.8592 3.0272 10.8592 0.88V0H9.0992V0.88C9.0992 2.44112 9.78384 3.90544 10.8583 4.9808H0V6.7408H10.8583C9.78384 7.81616 9.0992 9.28048 9.0992 10.8416V11.7216H10.8592V10.8416C10.8592 8.69528 12.8146 6.7408 14.96 6.7408H15.84V4.9808H14.96Z"
-                        fill="white"
-                      ></path>
-                    </svg>
-                  </Link>
+                    <Link to={slide.btnLink}>
+                      {t("home.heroBtnText", slide.btnText)}
+                      <svg
+                        width="16"
+                        height="12"
+                        viewBox="0 0 16 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M14.96 4.9808C12.8146 4.9808 10.8592 3.0272 10.8592 0.88V0H9.0992V0.88C9.0992 2.44112 9.78384 3.90544 10.8583 4.9808H0V6.7408H10.8583C9.78384 7.81616 9.0992 9.28048 9.0992 10.8416V11.7216H10.8592V10.8416C10.8592 8.69528 12.8146 6.7408 14.96 6.7408H15.84V4.9808H14.96Z"
+                          fill="white"
+                        ></path>
+                      </svg>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div
-          className="circle__video"
-          onClick={() => setIsVideoOpen(true)}
-          style={{ cursor: "pointer" }}
-        >
-          <svg viewBox="0 0 200 200">
-            <defs>
-              <path
-                id={`circlePath-${slide.id}`}
-                d="M 100, 100 m -62, 0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"
-              ></path>
-            </defs>
-            <g className="rotate-text" style={{ transformOrigin: "100px 100px" }}>
-              <text>
-                <textPath href={`#circlePath-${slide.id}`} startOffset="0%">
-                  {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp;
-                </textPath>
-              </text>
-            </g>
-          </svg>
-
-          <button
-            type="button"
-            className="circle-vide_btn popup-video"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsVideoOpen(true);
-            }}
-            aria-label="Play Video"
+          {/* Rotating Circular Video Badge positioned at bottom-right (bottom-left in RTL) */}
+          <div
+            className="circle__video"
+            onClick={() => setIsVideoOpen(true)}
+            style={{ cursor: "pointer" }}
           >
-            <span className="play-now">
-              <FaPlay style={{ fontSize: "7px", marginLeft: "1px" }} />
-            </span>
-          </button>
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <path
+                  id={`circlePath-${slide.id}`}
+                  d="M 100, 100 m -62, 0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"
+                ></path>
+              </defs>
+              <g className="rotate-text" style={{ transformOrigin: "100px 100px" }}>
+                <text>
+                  <textPath href={`#circlePath-${slide.id}`} startOffset="0%">
+                    {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp;
+                  </textPath>
+                </text>
+              </g>
+            </svg>
+
+            <button
+              type="button"
+              className="circle-vide_btn popup-video"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsVideoOpen(true);
+              }}
+              aria-label="Play Video"
+            >
+              <span className="play-now">
+                <FaPlay style={{ fontSize: "7px", marginLeft: "1px" }} />
+              </span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
   );
 }
 
