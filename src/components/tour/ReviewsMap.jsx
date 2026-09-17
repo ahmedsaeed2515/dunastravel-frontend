@@ -55,9 +55,8 @@ function Stars({ rating, onRate, onHover, onLeave, readOnly = false, size = 'md'
           aria-label={readOnly ? `${star} star rating` : `Rate ${star} out of 5 stars`}
           onClick={() => onRate?.(star)}
           onMouseEnter={() => onHover?.(star)}
-          className={`${
-            readOnly ? 'cursor-default' : 'cursor-pointer hover:scale-125 focus:scale-125'
-          } transition-all duration-150 p-0.5 focus:outline-none`}
+          className={`${readOnly ? 'cursor-default' : 'cursor-pointer hover:scale-125 focus:scale-125'
+            } transition-all duration-150 p-0.5 focus:outline-none`}
         >
           {star <= rating ? (
             <FaStar className={`${sizeClasses} text-amber-400 fill-amber-400 drop-shadow-sm`} />
@@ -103,10 +102,19 @@ function saveLocalReview(tourKey, review) {
   }
 }
 
+function useSafeSearchParams() {
+  try {
+    return useSearchParams();
+  } catch {
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+    return [params];
+  }
+}
+
 export default function ReviewsMap({ tourId }) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSafeSearchParams();
 
   const urlReviewId = searchParams.get('reviewId') || searchParams.get('highlight');
   const [highlightedReviewId, setHighlightedReviewId] = useState(urlReviewId);
@@ -145,7 +153,7 @@ export default function ReviewsMap({ tourId }) {
         const items = Array.isArray(response?.items)
           ? response.items
           : (Array.isArray(response?.data) ? response.data : (Array.isArray(response) ? response : []));
-        
+
         const formattedPublic = items.map((review) => formatReview(review, i18n.language || 'en'));
         const publicIds = new Set(formattedPublic.map((p) => p.id));
         const publicComments = new Set(formattedPublic.map((p) => p.comment));
@@ -240,7 +248,7 @@ export default function ReviewsMap({ tourId }) {
         rating: Number(form.rating),
         comment: form.comment.trim(),
       };
-      
+
       const response = await api.post(`/tours/${encodeURIComponent(tourId)}/reviews`, payload);
       const newReviewId = response?.id || `local-${Date.now()}`;
 
@@ -349,11 +357,10 @@ export default function ReviewsMap({ tourId }) {
                 <article
                   key={review.id}
                   id={`review-${review.id}`}
-                  className={`rounded-3xl border backdrop-blur-md p-6 shadow-xl flex flex-col justify-between transition-all duration-500 ${
-                    isTarget
+                  className={`rounded-3xl border backdrop-blur-md p-6 shadow-xl flex flex-col justify-between transition-all duration-500 ${isTarget
                       ? 'border-amber-400 bg-amber-400/10 ring-4 ring-amber-400/40 shadow-[0_0_35px_rgba(251,191,36,0.35)] scale-[1.02]'
                       : 'border-white/15 bg-white/5 hover:border-amber-400/40 hover:-translate-y-1'
-                  }`}
+                    }`}
                 >
                   <div className="space-y-4">
                     {/* Deep-link Highlight Badge */}
