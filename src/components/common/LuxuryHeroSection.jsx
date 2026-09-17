@@ -79,23 +79,9 @@ export default function LuxuryHeroSection({
           loading="eager"
           fetchPriority="high"
         />
-
-        {/* Ultra-Light Gradient Layer: High image clarity on mobile while preserving text legibility */}
-        <div
-          className="absolute inset-0 z-10 pointer-events-none"
-          style={{
-            background: `linear-gradient(
-              to bottom,
-              rgba(6, 13, 26, 0.10) 0%,
-              rgba(6, 13, 26, 0.30) 45%,
-              rgba(6, 13, 26, 0.82) 100%
-            )`
-          }}
-        />
-
-        {/* Ambient Gold Radial Flare */}
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[320px] sm:w-[600px] h-[200px] sm:h-[300px] bg-gold-500/15 blur-[70px] sm:blur-[90px] rounded-full pointer-events-none z-10" />
       </div>
+
+
 
       {/* Main Content Area */}
       <motion.div
