@@ -45,7 +45,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'اكتشف السيق العجيب والبتراء الوردية، وعش تجربة التخييم الفاخر تحت نجوم وادي رم، والاسترخاء في أفضل منتجعات البحر الميت.',
     tags: ['dest.jordan.tag1', 'dest.jordan.tag2', 'dest.jordan.tag3'],
     tagsDefault: ['🏛️ VIP Petra Entry & Guided Tour', '🌌 Luxury Bubble Camps in Wadi Rum', '🌊 Dead Sea Luxury Wellness Resorts'],
-    heroImage: 'https://images.unsplash.com/photo-1579606030856-4929e5d22b2a?auto=format&fit=crop&w=1920&q=85',
+    heroImage: '/images/jordan-petra.webp',
     hotelCities: ['amman', 'petra', 'wadiRum', 'aqaba', 'deadSea'],
   },
   turkey: {
@@ -202,7 +202,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   const slug = (rawSlug || '').toLowerCase().trim();
   const { t } = useTranslation();
   const { landingPage, loading, error, retry } = useLandingPage(slug, { destinationOnly });
-  const { tours: allCatalogTours } = useTours();
+  const { tours: allCatalogTours } = useTours({ limit: 70 });
 
   const config = DEST_FALLBACK_DATA[slug] || {};
   const effectiveLandingPage = landingPage || (config && (config.headline || config.headlineDefault) ? {
@@ -292,7 +292,9 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
     return tourDest === targetSlug || tourDest.includes(targetSlug) || targetSlug.includes(tourDest);
   });
 
-  const rawToursToDisplay = providedTours.length > 0 ? providedTours : matchedCatalogTours;
+  const rawToursToDisplay = providedTours.length > 0
+    ? providedTours
+    : (matchedCatalogTours.length > 0 ? matchedCatalogTours : (allCatalogTours || []));
 
   const sortedTours = [...rawToursToDisplay].sort((a, b) => {
     if (a.isFeatured && !b.isFeatured) return -1;
@@ -463,8 +465,8 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
             >
               {t('dest.jordan.hotelsTitle', 'Accommodation Schedule & Luxury Hotels')}
             </h2>
-            <div className="w-24 h-1 bg-gold-500 mx-auto mt-4" />
-            <p className="text-body-md text-obsidian-600 dark:text-ivory-300 mt-4 max-w-2xl mx-auto">
+            <div className="w-24 h-1 bg-gold-500 mx-auto mt-4 rounded-full shadow-[0_0_12px_rgba(245,166,35,0.6)]" />
+            <p className="text-body-md text-obsidian-600 dark:text-ivory-200 mt-4 max-w-2xl mx-auto font-medium">
               {t(
                 'dest.jordan.hotelsDesc',
                 'Based on availability, accommodation in one of the following hotels in each destination.'
@@ -478,16 +480,18 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
               return (
                 <div
                   key={city}
-                  className="bg-white dark:bg-[#1a1a30] rounded-2xl shadow-card border border-gold-500/15 overflow-hidden"
+                  className="group bg-white dark:bg-[#0f172a]/95 rounded-2xl shadow-card dark:shadow-[0_10px_30px_rgba(0,0,0,0.6)] border border-gold-500/20 dark:border-gold-500/40 hover:border-gold-500 dark:hover:border-gold-400 transition-all duration-300 hover:-translate-y-1.5 overflow-hidden"
                 >
-                  <div className="bg-obsidian-900 px-5 py-3.5 flex items-center gap-2">
-                    <FaHotel className="text-gold-400 text-sm flex-shrink-0" />
-                    <h3 className="text-gold-400 font-semibold text-xs md:text-sm uppercase tracking-widest">
+                  <div className="bg-gradient-to-r from-obsidian-950 via-[#162550] to-obsidian-950 dark:from-[#0b132b] dark:via-[#162758] dark:to-[#0b132b] px-5 py-4 flex items-center gap-3 border-b border-gold-500/25">
+                    <div className="w-8 h-8 rounded-lg bg-gold-500/20 border border-gold-400/40 flex items-center justify-center text-gold-400 dark:text-gold-300 shrink-0 shadow-inner">
+                      <FaHotel className="text-xs" />
+                    </div>
+                    <h3 className="text-gold-400 dark:text-gold-300 font-bold text-xs md:text-sm uppercase tracking-widest">
                       {t(`dest.jordan.hotelCities.${city}`, city)}
                     </h3>
                   </div>
-                  <div className="p-5">
-                    <p className="text-body-sm text-obsidian-700 dark:text-ivory-200 leading-relaxed whitespace-pre-line">
+                  <div className="p-5 bg-white dark:bg-transparent">
+                    <p className="text-body-sm text-obsidian-700 dark:text-ivory-100 leading-relaxed font-medium whitespace-pre-line group-hover:dark:text-white transition-colors">
                       {t(`dest.jordan.${keyName}`, '')}
                     </p>
                   </div>
@@ -503,41 +507,55 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
         <section className="container mx-auto px-6 mt-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Included */}
-            <div className="bg-white dark:bg-[#1a1a30] rounded-2xl p-8 border border-gold-500/20 shadow-card">
-              <h3
-                className="text-display-md text-2xl text-obsidian-900 dark:text-ivory-50 mb-6 font-display"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                {t('tourDetail.included', 'What is Included')}
-              </h3>
+            <div className="bg-white dark:bg-gradient-to-br dark:from-[#06201b]/95 dark:to-[#0d3b31]/90 rounded-2xl p-8 border border-emerald-500/30 dark:border-emerald-500/50 shadow-xl dark:shadow-[0_10px_35px_rgba(16,185,129,0.15)] hover:border-emerald-400 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-emerald-500/20">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
+                  <FaCheck className="text-base" />
+                </div>
+                <h3
+                  className="text-display-md text-2xl text-emerald-950 dark:text-emerald-300 font-display font-bold"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                  {t('tourDetail.included', 'What is Included')}
+                </h3>
+              </div>
               <ul className="flex flex-col gap-3.5">
                 {safeIncludes.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-body-md text-obsidian-700 dark:text-ivory-200">
-                    <FaCheck className="text-emerald-500 mt-1 flex-shrink-0 text-sm" />
-                    <span>{item}</span>
+                  <li key={idx} className="flex items-start gap-3.5 text-body-md text-obsidian-800 dark:text-emerald-50 font-medium">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-500 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <FaCheck className="text-[10px]" />
+                    </div>
+                    <span className="leading-snug">{item}</span>
                   </li>
                 ))}
               </ul>
               {t('dest.jordan.mandatoryFees', '') && (
-                <p className="text-caption text-obsidian-500 dark:text-ivory-400 mt-5 italic border-t border-gold-500/10 pt-3">
+                <p className="text-caption text-obsidian-600 dark:text-emerald-200/80 mt-6 italic border-t border-emerald-500/20 pt-3.5 font-medium">
                   {t('dest.jordan.mandatoryFees', '')}
                 </p>
               )}
             </div>
 
             {/* Excluded */}
-            <div className="bg-white dark:bg-[#1a1a30] rounded-2xl p-8 border border-gold-500/20 shadow-card">
-              <h3
-                className="text-display-md text-2xl text-obsidian-900 dark:text-ivory-50 mb-6 font-display"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                {t('tourDetail.excluded', 'What is Excluded')}
-              </h3>
+            <div className="bg-white dark:bg-gradient-to-br dark:from-[#270b15]/95 dark:to-[#421427]/90 rounded-2xl p-8 border border-rose-500/30 dark:border-rose-500/50 shadow-xl dark:shadow-[0_10px_35px_rgba(244,63,94,0.15)] hover:border-rose-400 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-rose-500/20">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-400 shrink-0">
+                  <FaTimes className="text-base" />
+                </div>
+                <h3
+                  className="text-display-md text-2xl text-rose-950 dark:text-rose-300 font-display font-bold"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                  {t('tourDetail.excluded', 'What is Excluded')}
+                </h3>
+              </div>
               <ul className="flex flex-col gap-3.5">
                 {safeExcludes.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-body-md text-obsidian-700 dark:text-ivory-200">
-                    <FaTimes className="text-rose-400 mt-1 flex-shrink-0 text-sm" />
-                    <span>{item}</span>
+                  <li key={idx} className="flex items-start gap-3.5 text-body-md text-obsidian-800 dark:text-rose-50 font-medium">
+                    <div className="w-5 h-5 rounded-full bg-rose-500/20 border border-rose-400/30 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <FaTimes className="text-[10px]" />
+                    </div>
+                    <span className="leading-snug">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -549,9 +567,9 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
       {/* Jordan Children Policy */}
       {isJordan && (
         <section className="container mx-auto px-6 mt-20">
-          <div className="bg-white dark:bg-[#1a1a30] rounded-2xl p-8 border border-gold-500/20 max-w-5xl mx-auto shadow-card">
+          <div className="bg-white dark:bg-[#0f172a]/95 rounded-2xl p-8 border border-gold-500/25 dark:border-gold-500/40 max-w-5xl mx-auto shadow-xl dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
             <h3
-              className="text-display-md text-2xl text-obsidian-900 dark:text-ivory-50 mb-6 font-display text-center"
+              className="text-display-md text-2xl text-obsidian-900 dark:text-ivory-50 mb-6 font-display text-center font-bold"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {t('dest.jordan.childrenTitle', 'Children Policy')}
@@ -561,9 +579,11 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
                 const text = t(`dest.jordan.${key}`, '');
                 if (!text) return null;
                 return (
-                  <div key={key} className="bg-obsidian-50 dark:bg-[#151528] p-4 rounded-xl border border-gold-500/10 flex items-start gap-3">
-                    <FaInfoCircle className="text-gold-500 text-base mt-0.5 shrink-0" />
-                    <span className="text-body-sm text-obsidian-700 dark:text-ivory-200">{text}</span>
+                  <div key={key} className="bg-obsidian-50 dark:bg-gradient-to-r dark:from-[#131e3d] dark:to-[#1a2852] p-5 rounded-xl border border-gold-500/20 dark:border-gold-500/35 flex items-start gap-3.5 shadow-sm hover:border-gold-400 transition-all">
+                    <div className="w-8 h-8 rounded-lg bg-gold-500/20 border border-gold-400/30 flex items-center justify-center text-gold-400 shrink-0">
+                      <FaInfoCircle className="text-sm" />
+                    </div>
+                    <span className="text-body-sm text-obsidian-800 dark:text-ivory-100 font-medium leading-relaxed">{text}</span>
                   </div>
                 );
               })}
@@ -579,9 +599,9 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
             {sections.map((section, index) => (
               <div
                 key={`${index}-${section.slice(0, 20)}`}
-                className="rounded-2xl border border-gold-500/15 bg-white dark:bg-[#1a1a30] p-6 text-obsidian-700 dark:text-ivory-200 shadow-sm"
+                className="rounded-2xl border border-gold-500/20 dark:border-gold-500/35 bg-white dark:bg-[#0f172a]/90 backdrop-blur-md p-6 md:p-8 text-obsidian-800 dark:text-ivory-100 shadow-md dark:shadow-[0_8px_25px_rgba(0,0,0,0.4)]"
               >
-                <p className="leading-relaxed">{section}</p>
+                <p className="leading-relaxed font-medium">{section}</p>
               </div>
             ))}
           </div>

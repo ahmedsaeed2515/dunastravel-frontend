@@ -423,12 +423,12 @@ function App() {
                   <Route path="extensions/:id" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="classic" element={<PageTransition><BackendToursPage titleKey="programs.classicTitle" titleDefault="Classic Egypt Tours" filters={{ category: 'Classic' }} /></PageTransition>} />
                   <Route path="classic/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
-                  <Route path="turkey" element={<PageTransition><BackendToursPage titleKey="nav.turkey" titleDefault="Turkey Tours" filters={{ destination: 'Turkey' }} /></PageTransition>} />
+                  <Route path="turkey" element={<PageTransition><BackendToursPage titleKey="nav.turkey" titleDefault="Turkey Tours" filters={{ destination: 'Turkey' }} bgImage="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85" /></PageTransition>} />
                   <Route path="turkey/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="turquia/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
-                  <Route path="jordan" element={<PageTransition><BackendToursPage titleKey="nav.jordan" titleDefault="Jordan Tours" filters={{ destination: 'Jordan' }} /></PageTransition>} />
+                  <Route path="jordan" element={<PageTransition><BackendToursPage titleKey="nav.jordan" titleDefault="Jordan Tours" filters={{ destination: 'Jordan' }} bgImage="/images/jordan-petra.webp" /></PageTransition>} />
                   <Route path="jordan/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
-                  <Route path="dubai" element={<PageTransition><BackendToursPage titleKey="nav.dubai" titleDefault="Dubai Tours" filters={{ destination: 'United Arab Emirates' }} /></PageTransition>} />
+                  <Route path="dubai" element={<PageTransition><BackendToursPage titleKey="nav.dubai" titleDefault="Dubai Tours" filters={{ destination: 'United Arab Emirates' }} bgImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=85" /></PageTransition>} />
                   <Route path="dubai/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="hotels" element={<Navigate to="/services" replace />} />
                   <Route path="transportation" element={<Navigate to="/transportation" replace />} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,12 +16,13 @@ import {
   FaChevronLeft
 } from 'react-icons/fa';
 import { getTurkeyProgramBySlug, useTurkeyPrograms } from '../../hooks/useTurkeyPrograms';
-import RouteMap from '../../components/tour/RouteMap';
-import ReviewsMap from '../../components/tour/ReviewsMap';
 import TourCard from '../../components/tour/TourCard';
 import TurkeySidebarBooking from '../../components/booking/TurkeySidebarBooking';
 import SuggestedTours from '../../components/tour/SuggestedTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+
+const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
+const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },

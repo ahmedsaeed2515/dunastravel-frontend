@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Button from '../../components/ui/Button';
 import TourCard from '../../components/tour/TourCard';
-import tours from '../../data/tours.js';
 import { useTours } from '../../hooks/useTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
@@ -32,8 +31,14 @@ export default function Egipto() {
   const lang = i18n.language || 'en';
   const isRtl = lang.startsWith('ar');
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = React.useState('all');
-  const { tours: liveTours = [] } = useTours({ destination: 'egypt', limit: 50 });
+  const { tours: allLiveTours = [] } = useTours({ limit: 70 });
+  const liveTours = useMemo(() => {
+    const list = (allLiveTours || []).filter(t => {
+      const d = String(t.destination || t.country || '').toLowerCase();
+      return d.includes('egypt') || d.includes('cairo') || d.includes('luxor');
+    });
+    return list.length > 0 ? list : allLiveTours;
+  }, [allLiveTours]);
 
   // Define the 9 standalone base classic tours for Egypt top section
   const BASE_CLASSIC_SLUGS = [
@@ -49,7 +54,8 @@ export default function Egipto() {
   ];
 
   const baseClassic9Tours = useMemo(() => {
-    const tourList = Array.isArray(liveTours) && liveTours.length > 0 ? liveTours : tours;
+    const tourList = Array.isArray(liveTours) ? liveTours : [];
+    if (tourList.length === 0) return [];
     const foundMap = new Map();
     tourList.forEach((t) => {
       if (t && t.slug) {
@@ -57,15 +63,8 @@ export default function Egipto() {
       }
     });
 
-    return BASE_CLASSIC_SLUGS.map((slug) => {
-      if (foundMap.has(slug)) {
-        return foundMap.get(slug);
-      }
-      // Fallback matching in local tours array
-      const local = tours.find((lt) => lt.slug === slug);
-      if (local) return local;
-      return null;
-    }).filter(Boolean);
+    const result = BASE_CLASSIC_SLUGS.map((slug) => foundMap.get(slug)).filter(Boolean);
+    return result.length > 0 ? result : tourList;
   }, [liveTours]);
 
   return (

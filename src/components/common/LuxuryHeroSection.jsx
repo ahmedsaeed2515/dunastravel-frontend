@@ -69,6 +69,7 @@ export default function LuxuryHeroSection({
           alt={title}
           className={`w-full h-full object-cover object-[center_35%] sm:object-center ${onImageClick ? 'transition-transform duration-700 group-hover:scale-105' : ''}`}
           loading="eager"
+          fetchPriority="high"
         />
 
         {/* Ultra-Light Gradient Layer: High image clarity on mobile while preserving text legibility */}

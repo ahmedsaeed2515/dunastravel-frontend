@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +8,12 @@ import {
 } from 'react-icons/fa';
 import TourCard from '../../components/tour/TourCard';
 import AdvancedBooking from '../../components/booking/AdvancedBooking';
-import RouteMap from '../../components/tour/RouteMap';
-import ReviewsMap from '../../components/tour/ReviewsMap';
-import multiCountryTours from '../../data/multiCountryTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import { useTour } from '../../hooks/useTour';
+import { useTours } from '../../hooks/useTours';
+
+const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
+const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -22,17 +24,15 @@ export default function MultiCountryTourDetails() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || 'en';
   const { slug } = useParams();
+  const { tour } = useTour(slug);
+  const { tours: relatedTours } = useTours({ destination: 'multi-country', limit: 8 });
 
-  const tour = multiCountryTours.find(
-    (item) => item.slug === slug || item.id.toLowerCase() === (slug || '').toLowerCase()
-  ) || multiCountryTours[0];
+  const title = tour?.title || 'Multi-Country Tour';
+  const subtitle = tour?.subtitle || tour?.duration || '';
+  const overview = tour?.overview || '';
+  const duration = tour?.duration || '';
 
-  const title = tour ? t(`data.${tour.title}`, tour.title) : 'Multi-Country Tour';
-  const subtitle = tour?.subtitle ? t(`data.${tour.subtitle}`, tour.subtitle) : '';
-  const overview = tour?.overview ? t(`data.${tour.overview}`, tour.overview) : '';
-  const duration = tour?.duration ? t(`data.${tour.duration}`, tour.duration) : '';
-
-  const shuffledTours = useMemo(() => [...multiCountryTours].reverse(), []);
+  const shuffledTours = useMemo(() => Array.isArray(relatedTours) ? [...relatedTours].reverse() : [], [relatedTours]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const carouselRef = useRef(null);
 

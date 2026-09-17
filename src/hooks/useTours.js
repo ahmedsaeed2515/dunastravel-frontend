@@ -16,18 +16,7 @@ const ALLOWED_FILTERS = new Set([
   'isFeatured',
 ]);
 
-let staticToursCache = null;
-async function getStaticTours() {
-  if (!staticToursCache) {
-    try {
-      const db = await import('../data/database/unified_52_tours.json');
-      staticToursCache = db.default?.tours || db.tours || [];
-    } catch {
-      staticToursCache = [];
-    }
-  }
-  return staticToursCache;
-}
+
 
 const DEST_ALIASES = {
   'united arab emirates': 'dubai',
@@ -68,25 +57,19 @@ function getFieldVal(tour, fields, lang = 'en') {
 
 function mapTour(tour, lang = 'en') {
   if (!tour || typeof tour !== 'object') {
-    throw new Error('Invalid tour catalog item');
+    return null;
   }
-  const id = tour.id || tour.slug;
-  const slug = tour.slug || tour.id;
+  const id = tour.id || tour.slug || tour._id || `tour-${Math.random().toString(36).substring(2, 9)}`;
+  const slug = tour.slug || tour.id || tour._id || id;
 
-  const title = getFieldVal(tour, ['titleJsonb', 'name', 'title'], lang) || slug;
-
-  if (!id || !slug || !title) {
-    throw new Error('Invalid tour catalog item');
-  }
+  const title = getFieldVal(tour, ['titleJsonb', 'name', 'title'], lang) || tour.name || tour.title || slug || 'Tour';
 
   const rawPrice = tour.basePriceUsd ?? tour.price ?? tour.basePrice ?? tour.raw?.price ?? 0;
-  const price = Number(rawPrice);
-  if (!Number.isFinite(price) || price < 0) {
-    throw new Error(`Invalid tour price for ${slug}`);
-  }
+  const parsedPrice = Number(rawPrice);
+  const price = (Number.isFinite(parsedPrice) && parsedPrice >= 0) ? parsedPrice : 0;
 
-  const overview = getFieldVal(tour, ['overviewJsonb', 'overview', 'description', 'desc'], lang);
-  const duration = getFieldVal(tour, ['durationJsonb', 'duration'], lang);
+  const overview = getFieldVal(tour, ['overviewJsonb', 'overview', 'description', 'desc'], lang) || '';
+  const duration = getFieldVal(tour, ['durationJsonb', 'duration'], lang) || '';
 
   const destination = String(tour.destination || tour.country || '').toLowerCase();
 
@@ -159,121 +142,6 @@ function mapTour(tour, lang = 'en') {
   };
 }
 
-function mapStaticTour(t, lang = 'en') {
-  const id = t.id || t.slug;
-  const slug = t.slug || id;
-  const title = getFieldVal(t, ['titleJsonb', 'name', 'title'], lang) || slug;
-  const overview = getFieldVal(t, ['overviewJsonb', 'overview', 'description', 'desc'], lang);
-  const duration = getFieldVal(t, ['durationJsonb', 'duration'], lang);
-
-  const price = Number(t.price || t.basePriceUsd || 0);
-  const destination = String(t.destination || t.country || '').toLowerCase();
-
-  const heroImageObj = Array.isArray(t.images)
-    ? t.images.find(img => img && typeof img === 'object' && (img.isHero === true || img.is_hero === true))
-    : null;
-  const resolvedHeroImage = (heroImageObj ? (heroImageObj.imageUrl || heroImageObj.url) : null)
-    || (typeof t.heroImage === 'string' && t.heroImage.trim() ? t.heroImage.trim() : (t.heroImage?.imageUrl || t.heroImage?.url || null))
-    || (typeof t.heroImageUrl === 'string' && t.heroImageUrl.trim() ? t.heroImageUrl.trim() : null)
-    || (Array.isArray(t.images) && t.images.length > 0
-        ? (typeof t.images[0] === 'string' ? t.images[0] : (t.images[0]?.imageUrl || t.images[0]?.url))
-        : null)
-    || '';
-
-  const images = Array.isArray(t.images) && t.images.length > 0
-    ? t.images.map(img => typeof img === 'string' ? img : (img?.imageUrl || img?.url || '')).filter(Boolean)
-    : (resolvedHeroImage ? [resolvedHeroImage] : []);
-
-  const resolveList = (val) => {
-    if (!val) return [];
-    const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
-    if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
-      val = val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || [];
-    }
-    if (Array.isArray(val)) {
-      return val.map(item => {
-        if (typeof item === 'object' && item !== null) {
-          return item[cleanLang] || item[lang] || item.en || item.ar || item.es || item.pt || item.it || Object.values(item)[0] || '';
-        }
-        return String(item || '');
-      }).filter(Boolean);
-    }
-    return [];
-  };
-
-  return {
-    ...t,
-    id: t.id || t.slug,
-    slug: t.slug,
-    title,
-    overview,
-    duration,
-    destination,
-    country: t.country || t.destination || 'Egypt',
-    category: t.category || t.destination || '',
-    images,
-    heroImage: resolvedHeroImage || images[0] || '',
-    raw: { price, type: t.category || t.type || '' },
-    price,
-    basePriceUsd: price,
-    code: typeof t.code === 'object' ? (t.code[lang] || t.code.en || t.code.ar) : (t.code || t.id),
-    highlights: resolveList(t.highlights),
-    included: resolveList(t.included || t.includes),
-    excluded: resolveList(t.excluded || t.excludes),
-  };
-}
-
-async function getFallbackTours(filters, lang) {
-  const staticTours = await getStaticTours();
-  let items = staticTours.map((t) => mapStaticTour(t, lang));
-
-  if (filters.destination) {
-    const targetDest = normalizeDest(filters.destination);
-    items = items.filter((t) => {
-      const tourDest = normalizeDest(t.destination || t.country);
-      return tourDest === targetDest || tourDest.includes(targetDest) || targetDest.includes(tourDest);
-    });
-  }
-
-  if (filters.category) {
-    const cat = String(filters.category).toLowerCase();
-    items = items.filter((t) => String(t.category || t.type || '').toLowerCase().includes(cat));
-  }
-
-  if (filters.search) {
-    const q = String(filters.search).toLowerCase();
-    items = items.filter((t) =>
-      String(t.title || '').toLowerCase().includes(q) ||
-      String(t.overview || '').toLowerCase().includes(q) ||
-      String(t.slug || '').toLowerCase().includes(q)
-    );
-  }
-
-  const total = items.length;
-  const page = Math.max(1, Number(filters.page || 1));
-  const limit = filters.limit ? Number(filters.limit) : total;
-  const totalPages = limit > 0 ? Math.ceil(total / limit) : 1;
-
-  if (filters.page && filters.limit) {
-    const start = (page - 1) * limit;
-    items = items.slice(start, start + limit);
-  } else if (filters.limit) {
-    items = items.slice(0, limit);
-  }
-
-  return {
-    items,
-    meta: {
-      total,
-      page,
-      limit,
-      totalPages,
-      hasNextPage: page < totalPages,
-      hasPrevPage: page > 1,
-    },
-  };
-}
-
 function parseToursResponse(response, filters, lang) {
   let rawItems = [];
   let meta = {
@@ -307,7 +175,17 @@ function parseToursResponse(response, filters, lang) {
     meta.hasPrevPage = Boolean(m.hasPrevPage ?? (meta.page > 1));
   }
 
-  const items = rawItems.map((t) => mapTour(t, lang));
+  const items = rawItems
+    .map((t) => {
+      try {
+        return mapTour(t, lang);
+      } catch (err) {
+        console.warn('[useTours] Skipping invalid tour item:', t, err);
+        return null;
+      }
+    })
+    .filter(Boolean);
+
   return { items, meta };
 }
 
@@ -328,7 +206,7 @@ export function useTours(filters = {}) {
       hasPrevPage: false,
     };
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !toursCache.has(cacheKey));
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
@@ -364,19 +242,23 @@ export function useTours(filters = {}) {
           request = api
             .get(`/tours?${params.toString()}`)
             .then((response) => parseToursResponse(response, currentFilters, lang))
-            .then(async ({ items, meta }) => {
-              const result = items.length > 0
-                ? { tours: items, ...meta }
-                : await (async () => {
-                    const fallback = await getFallbackTours(currentFilters, lang);
-                    return { tours: fallback.items, ...fallback.meta };
-                  })();
+            .then(({ items, meta }) => {
+              const result = { tours: items, ...meta };
               toursCache.set(cacheKey, { data: result, timestamp: Date.now() });
               return result;
             })
-            .catch(async () => {
-              const fallback = await getFallbackTours(currentFilters, lang);
-              return { tours: fallback.items, ...fallback.meta };
+            .catch((err) => {
+              const emptyResult = {
+                tours: [],
+                total: 0,
+                page: Number(currentFilters.page || 1),
+                limit: Number(currentFilters.limit || 12),
+                totalPages: 1,
+                hasNextPage: false,
+                hasPrevPage: false,
+              };
+              if (isMounted) setError(err);
+              return emptyResult;
             })
             .finally(() => pendingRequests.delete(cacheKey));
           pendingRequests.set(cacheKey, request);
@@ -385,9 +267,16 @@ export function useTours(filters = {}) {
         if (isMounted) setToursState(resultData);
       } catch (requestError) {
         if (isMounted) {
-          const fallback = await getFallbackTours(currentFilters, lang);
-          setToursState({ tours: fallback.items, ...fallback.meta });
-          if (fallback.items.length === 0) setError(requestError);
+          setError(requestError);
+          setToursState({
+            tours: [],
+            total: 0,
+            page: 1,
+            limit: 12,
+            totalPages: 1,
+            hasNextPage: false,
+            hasPrevPage: false,
+          });
         }
       } finally {
         if (isMounted) setLoading(false);

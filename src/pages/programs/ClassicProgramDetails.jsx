@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -8,12 +8,12 @@ import {
 } from 'react-icons/fa';
 import TourCard from '../../components/tour/TourCard';
 import AdvancedBooking from '../../components/booking/AdvancedBooking';
-import RouteMap from '../../components/tour/RouteMap';
-import ReviewsMap from '../../components/tour/ReviewsMap';
 import SuggestedTours from '../../components/tour/SuggestedTours';
 import { useTours } from '../../hooks/useTours';
-import staticTours from '../../data/tours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+
+const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
+const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -223,7 +223,7 @@ export default function ClassicProgramDetails() {
   const { title, duration, type: tourType, groupSize, overview, highlights, included, excluded, itinerary } = currentLangData;
 
   const { tours: liveTours } = useTours({ category: 'classic', limit: 12 });
-  const pool = (liveTours && liveTours.length > 0) ? liveTours : staticTours;
+  const pool = liveTours || [];
   const shuffledTours = useMemo(() => [...pool].reverse(), [pool]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const carouselRef = useRef(null);

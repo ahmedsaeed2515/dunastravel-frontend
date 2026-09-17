@@ -5,13 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { FaChevronRight } from 'react-icons/fa';
 import TourCard from '../../components/tour/TourCard';
 import { useTours } from '../../hooks/useTours';
-import staticMultiCountryTours from '../../data/multiCountryTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 export default function MultiCountryTours() {
   const { t } = useTranslation();
-  const { tours: liveTours } = useTours({ destination: 'multi-country', limit: 50 });
-  const displayTours = (liveTours && liveTours.length > 0) ? liveTours : staticMultiCountryTours;
+  const { tours: liveTours } = useTours({ destination: 'multi-country', limit: 70 });
+  const displayTours = liveTours || [];
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">

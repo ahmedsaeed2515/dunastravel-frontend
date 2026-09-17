@@ -16,11 +16,6 @@ import HomeHeroSection from "./HomeHeroSection";
 import { useCurrency } from "../../context/CurrencyContext";
 import api from "../../utils/api";
 import {
-  homeTurkeyPreviewTours,
-  homeJordanPreviewTours,
-  homeDubaiPreviewTours,
-} from "../../data/homePreviewTours";
-import {
   resolveLocalizedText,
   resolveTourOverview,
   resolveTourTitle,
@@ -380,7 +375,7 @@ const HomeExperienceSection = () => {
     tours: allLiveToursRaw,
     loading: toursLoading,
     error: toursError,
-  } = useTours({ limit: 100 });
+  } = useTours({ limit: 70 });
   const allLiveTours = useMemo(() => Array.isArray(allLiveToursRaw) ? allLiveToursRaw : [], [allLiveToursRaw]);
   const { services: rawTransportation = [], loading: transportLoading } = useServices('transportation');
   const transportationList = useMemo(() => {
@@ -529,230 +524,7 @@ const HomeExperienceSection = () => {
 
 
 
-  const defaultPackageTours = useMemo(() => [
-    // 1. Multi-Country Combined - Top Picks matching reference order
-    {
-      id: "mct-005",
-      slug: "stars-of-the-middle-east-16-days",
-      title: isAr ? "نجوم الشرق الأوسط (مصر والأردن ودبي 16 يوماً)" : "Stars of the Middle East 16 Days",
-      overview: isAr ? "رحلة استكشافية شاملة تجمع بين النيل، البتراء، وصحراء رم، وناطحات سحاب دبي." : "16-day luxury tour across the Nile valley, Petra rose city, and Dubai skyline.",
-      duration: isAr ? "16 يوم / 15 ليلة" : "16 Days / 15 Nights",
-      price: 3100,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.94,
-      reviewCount: 165,
-      images: ["https://internationalandroaming.orange.jo/sites/default/files/wp-content/uploads/2020/11/egypt-roaming.jpg"],
-      heroImage: "https://internationalandroaming.orange.jo/sites/default/files/wp-content/uploads/2020/11/egypt-roaming.jpg",
-      link: "/programs/multi-country/stars-of-the-middle-east-16-days"
-    },
-    {
-      id: "mct-004",
-      slug: "marvels-of-dubai-and-turkey-14-days",
-      title: isAr ? "روائع دبي وتركيا (فخامة الخليج وسحر البسفور)" : "Marvels of Dubai and Turkey (14 Days)",
-      overview: isAr ? "توليفة استثنائية بين حداثة دبي الفائقة وتاريخ إسطنبول وجمال الطبيعة التركية." : "14 days exploring futuristic Dubai luxury and historic Turkish Riviera beauty.",
-      duration: isAr ? "14 يوم / 13 ليلة" : "14 Days / 13 Nights",
-      price: 2750,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.91,
-      reviewCount: 198,
-      images: ["/imgs/multicountryhero.jpg"],
-      link: "/programs/multi-country/marvels-of-dubai-and-turkey-14-days"
-    },
-    {
-      id: "mct-003",
-      slug: "essences-of-egypt-and-turkey-15-days",
-      title: isAr ? "جوهر مصر وتركيا (النيل وإسطنبول 15 يوماً)" : "Essences of Egypt and Turkey 15 Days",
-      overview: isAr ? "برنامج فاخر يربط سحر الأهرامات والرحلة النيلية بأجواء البسفور وكبادوكيا." : "15 days spanning Cairo, Nile Cruise, Istanbul, and Cappadocia balloon skies.",
-      duration: isAr ? "15 يوم / 14 ليلة" : "15 Days / 14 Nights",
-      price: 2890,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.92,
-      reviewCount: 278,
-      images: ["/imgs/multicountryhero.jpg"],
-      link: "/programs/multi-country/essences-of-egypt-and-turkey-15-days"
-    },
-    {
-      id: "mct-006",
-      slug: "treasures-of-egypt-and-tunisia-16-days",
-      title: isAr ? "كنوز مصر وتونس (الحضارة وسيدي بو سعيد)" : "Treasures of Egypt and Tunisia 16 Days",
-      overview: isAr ? "رحلة شمال أفريقية تدمج الأهرامات والنيل مع تاريخ قرطاج وجمال سيدي بو سعيد." : "16 days combining Pharaohs' temples with Carthage ruins and blue whitewashed Sidi Bou Said.",
-      duration: isAr ? "16 يوم / 15 ليلة" : "16 Days / 15 Nights",
-      price: 2950,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.87,
-      reviewCount: 132,
-      images: ["/imgs/multicountryhero.jpg"],
-      link: "/programs/multi-country/treasures-of-egypt-and-tunisia-16-days"
-    },
-    {
-      id: "mct-007",
-      slug: "egypt-and-dubai-13-days",
-      title: isAr ? "رحلة مصر ودبي (الأهرامات والتسوق الفاخر)" : "Egypt and Dubai 13 Days",
-      overview: isAr ? "مزيج متناغم بين أسرار الفراعنة وأشهر المعالم الحديثة والتجارب الفاخرة في دبي." : "13 days combining ancient Egyptian heritage with Dubai modern luxury.",
-      duration: isAr ? "13 يوم / 12 ليلة" : "13 Days / 12 Nights",
-      price: 2650,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.89,
-      reviewCount: 175,
-      images: ["/imgs/multicountryhero.jpg"],
-      link: "/programs/multi-country/egypt-and-dubai-13-days"
-    },
-
-    // 2. Classic Program (1 tour)
-    {
-      id: "classic-program-tour-1",
-      slug: "classic-program",
-      title: isAr ? "البرنامج الكلاسيكي: القاهرة والأهرامات والنيل الفاخر" : "Classic Egypt: Cairo, Pyramids & Nile Cruise",
-      overview: isAr ? "برنامج متميز يجمع بين الأهرامات، الجيزة، والمتحف الكبير مع رحلة نيلية فاخرة." : "Timeless Classic Egypt itinerary covering Cairo Pyramids, GEM Museum, and Nile Cruise.",
-      duration: isAr ? "8 أيام / 7 ليالي" : "8 Days / 7 Nights",
-      price: 1290,
-      badge: isAr ? "البرنامج الكلاسيكي" : "Classic Program",
-      destination: "egypt",
-      rating: 4.9,
-      reviewCount: 312,
-      images: ["https://res.cloudinary.com/degbrq3ck/image/upload/w_600,h_450,c_fill,q_60,f_webp/v1783029636/Classic_Program_gfal0s.jpg"],
-      link: "/programs/classic/classic-program"
-    },
-
-    // 3. Honeymooners (1 tour)
-    {
-      id: "honeymooners-tour-1",
-      slug: "honeymooners",
-      title: isAr ? "باقة شهر العسل والرفاهية الرومانسية" : "Honeymoon & Romantic Luxury Escape",
-      overview: isAr ? "عطلة رومانسية ساحرة تشمل شواطئ البحر الأحمر وغروب النيل المذهل." : "Enchanting Red Sea escapes & private Nile sunset cruises for couples.",
-      duration: isAr ? "10 أيام / 9 ليالي" : "10 Days / 9 Nights",
-      price: 1650,
-      badge: isAr ? "شهر العسل" : "Honeymoon",
-      destination: "egypt",
-      rating: 4.95,
-      reviewCount: 189,
-      images: ["https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=800&q=65&fm=webp"],
-      link: "/programs/honeymooners"
-    },
-
-    // 4. Religious Programs (1 tour)
-    {
-      id: "religious-tour-1",
-      slug: "religious",
-      title: isAr ? "باقة مسار العائلة المقدسة والتراث الديني" : "Holy Family & Sacred Journeys",
-      overview: isAr ? "مسار إيماني وثقافي عريق يمتد عبر الكنائس والأديرة الأثرية في مصر." : "Spiritual path along Coptic monasteries & ancient holy shrines.",
-      duration: isAr ? "9 أيام / 8 ليالي" : "9 Days / 8 Nights",
-      price: 1390,
-      badge: isAr ? "رحلة دينية" : "Religious Heritage",
-      destination: "egypt",
-      rating: 4.85,
-      reviewCount: 176,
-      images: ["https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=800&q=65&fm=webp"],
-      link: "/programs/religious"
-    },
-
-    // 5. Remaining Multi-Country Tours
-    {
-      id: "mct-001",
-      slug: "estrellas-medio-oriente-19d",
-      title: isAr ? "نجوم الشرق الأوسط (مصر والأردن وتركيا ودبي)" : "Estrellas del Medio Oriente (19 Days)",
-      overview: isAr ? "رحلة أسطورية تجمع بين عظمة الفراعنة، البتراء الوردية، مناطيد كبادوكيا وبرج خليفة." : "19-day grand odyssey traversing Egypt, Jordan, Turkey, and Dubai.",
-      duration: isAr ? "19 يوم / 18 ليلة" : "19 Days / 18 Nights",
-      price: 3450,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.9,
-      reviewCount: 210,
-      images: ["https://theglobetrottingdetective.com/wp-content/uploads/2022/03/best-places-in-the-middle-east-traveling-the-middle-east-cappadocia-turkey.jpg"],
-      link: "/programs/multi-country/estrellas-medio-oriente-19d"
-    },
-    {
-      id: "mct-002",
-      slug: "cairo-and-athens-11-days",
-      title: isAr ? "رحلة القاهرة وأثينا (عجائب مصر واليونان)" : "Cairo and Athens 11 Days",
-      overview: isAr ? "رحلة تجمع بين حضارة الفراعنة في القاهرة وأساطير الأكروبوليس في أثينا." : "11 days combining ancient Egyptian wonders and Greek Mediterranean mythology.",
-      duration: isAr ? "11 يوم / 10 ليالي" : "11 Days / 10 Nights",
-      price: 2250,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.88,
-      reviewCount: 145,
-      images: ["https://cdn.thecollector.com/wp-content/uploads/2024/07/history-cairo-monuments.jpg"],
-      link: "/programs/multi-country/cairo-and-athens-11-days"
-    },
-    {
-      id: "mct-008",
-      slug: "spices-of-egypt-and-morocco",
-      title: isAr ? "عبق مصر والمغرب (النيل وسحر مراكش)" : "Spices of Egypt and Morocco 12 Days",
-      overview: isAr ? "تجربة ثقافية ساحرة بين النيل وأهرامات مصر وأسواق مراكش وقصور فاس." : "12 days exploring Nile valley treasures and imperial medinas of Morocco.",
-      duration: isAr ? "12 يوم / 11 ليلة" : "12 Days / 11 Nights",
-      price: 2490,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.93,
-      reviewCount: 220,
-      images: ["https://th.bing.com/th/id/R.58564825c2c22ad5062b00d620ed4397?rik=XgQR%2bu8MUj6NHA&pid=ImgRaw&r=0"],
-      link: "/programs/multi-country/spices-of-egypt-and-morocco"
-    },
-    {
-      id: "mct-009",
-      slug: "jewels-of-egypt-and-jordan-11-days",
-      title: isAr ? "جواهر مصر والأردن (القاهرة، النيل، البتراء والبحر الميت)" : "Jewels of Egypt and Jordan 11 Days",
-      overview: isAr ? "برنامج رائع يشمل عجائب الجيزة، الأقصر، أسوان، البتراء، والطفو في البحر الميت." : "11 days featuring Giza Pyramids, Nile Cruise, Petra Wonders, and Dead Sea floating.",
-      duration: isAr ? "11 يوم / 10 ليالي" : "11 Days / 10 Nights",
-      price: 2350,
-      badge: isAr ? "جولات متعددة الدول" : "Multi-Country",
-      destination: "multi-country",
-      rating: 4.96,
-      reviewCount: 285,
-      images: ["https://th.bing.com/th/id/R.d4c411bd75b827b087396502b4144fe6?rik=3VllwT9EP1BvFA&pid=ImgRaw&r=0"],
-      link: "/programs/multi-country/jewels-of-egypt-and-jordan-11-days"
-    },
-
-    // 6. Extensions (3 tours)
-    {
-      id: "extension-tour-1",
-      slug: "hurghada-4d3n",
-      title: isAr ? "استجمام الغردقة والبحر الأحمر" : "Hurghada Red Sea Escape",
-      overview: isAr ? "إقامة فاخرة على ساحل الغردقة للاستمتاع بالمياه الفيروزية والأنشطة البحرية." : "Red Sea resorts in Hurghada with beach escapes and coral diving.",
-      duration: isAr ? "4 أيام / 3 ليالي" : "4 Days / 3 Nights",
-      price: 590,
-      badge: isAr ? "تمديد وساحل" : "Extension",
-      destination: "egypt",
-      rating: 4.8,
-      reviewCount: 168,
-      images: ["https://1.bp.blogspot.com/-HqmKDzZ73hY/XgSOtrhSAOI/AAAAAAAARdc/cxtywSwZxLIaZPfw98FzQHYtiPblmzg2gCLcBGAsYHQ/w1200-h630-p-k-no-nu/%D8%A3%D9%81%D8%B6%D9%84-%D8%A3%D9%86%D8%B4%D8%B7%D8%A9-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%AD%D9%8A%D8%A9-%D9%81%D9%89-%D8%A7%D9%84%D8%BA%D8%B1%D8%AF%D9%82%D8%A9-825x510.jpg"],
-      link: "/programs/extension/hurghada-4d3n"
-    },
-    {
-      id: "extension-tour-2",
-      slug: "sharm-4d3n",
-      title: isAr ? "شرم الشيخ ومنتجعات البحر الأحمر" : "Sharm El Sheikh Paradise",
-      overview: isAr ? "استجمام شاطئي ممتع في شرم الشيخ مع زيارة محمية رأس محمد الساحرة." : "Red Sea luxury resort getaway in Sharm El Sheikh.",
-      duration: isAr ? "4 أيام / 3 ليالي" : "4 Days / 3 Nights",
-      price: 620,
-      badge: isAr ? "تمديد وساحل" : "Extension",
-      destination: "egypt",
-      rating: 4.84,
-      reviewCount: 135,
-      images: ["https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=65&fm=webp"],
-      link: "/programs/extension/sharm-4d3n"
-    },
-    {
-      id: "extension-tour-3",
-      slug: "siwa-oasis-alexandria",
-      title: isAr ? "سحر واحة سيوة والإسكندرية" : "Siwa Oasis & Alexandria Adventure",
-      overview: isAr ? "مغامرة صحراوية بيئية فريدة في سيوة مع جولة تاريخية ساحلية بالإسكندرية." : "Siwa Desert Oasis eco-adventure & Mediterranean Alexandria escape.",
-      duration: isAr ? "5 أيام / 4 ليالي" : "5 Days / 4 Nights",
-      price: 780,
-      badge: isAr ? "سياحة بيئية" : "Eco Tour",
-      destination: "egypt",
-      rating: 4.88,
-      reviewCount: 110,
-      images: ["https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=65&fm=webp"],
-      link: "/programs/extension/siwa-oasis-alexandria"
-    }
-  ], [isAr]);
+  const defaultPackageTours = useMemo(() => [], []);
 
   const packagesToursMap = useMemo(() => {
     const matches = (tour, values) => {
@@ -770,13 +542,13 @@ const HomeExperienceSection = () => {
     const extLive = safeTours.filter((tour) => matches(tour, ['extension', 'escape']));
 
     return {
-      'classic-program': withLinkBase(classicLive.length > 0 ? classicLive : defaultPackageTours.filter(t => t.slug === 'classic-program')),
-      honeymooners: withLinkBase(honeymoonLive.length > 0 ? honeymoonLive : defaultPackageTours.filter(t => t.slug === 'honeymooners')),
-      religious: withLinkBase(religiousLive.length > 0 ? religiousLive : defaultPackageTours.filter(t => t.slug === 'religious')),
-      'multi-country': withLinkBase(multiLive.length > 0 ? multiLive : defaultPackageTours.filter(t => t.destination === 'multi-country')),
-      extension: withLinkBase(extLive.length > 0 ? extLive : defaultPackageTours.filter(t => t.id?.startsWith('extension'))),
+      'classic-program': withLinkBase(classicLive.length > 0 ? classicLive : safeTours),
+      honeymooners: withLinkBase(honeymoonLive.length > 0 ? honeymoonLive : safeTours),
+      religious: withLinkBase(religiousLive.length > 0 ? religiousLive : safeTours),
+      'multi-country': withLinkBase(multiLive.length > 0 ? multiLive : safeTours),
+      extension: withLinkBase(extLive.length > 0 ? extLive : safeTours),
     };
-  }, [allLiveTours, defaultPackageTours]);
+  }, [allLiveTours]);
 
   const packagesToursForMarquee = useMemo(() => {
     if (allLiveTours && allLiveTours.length > 0) {
@@ -808,8 +580,7 @@ const HomeExperienceSection = () => {
       return true;
     };
 
-    // 1. Format live tours
-    const liveFormatted = (allLiveTours || []).filter(isSingleDestTour).map((tourItem) => ({
+    return (allLiveTours || []).filter(isSingleDestTour).map((tourItem) => ({
       ...tourItem,
       id: tourItem.id || tourItem.slug,
       title: resolveTourTitle(tourItem, t, lang),
@@ -820,82 +591,7 @@ const HomeExperienceSection = () => {
       images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : [tourItem.heroImage || '/imgs/egyothero.webp'],
       link: `/tours/${tourItem.slug || tourItem.id}`,
     }));
-
-    // 2. Format Turkey preview tours
-    const turkeyFormatted = (homeTurkeyPreviewTours || []).map((tourItem) => ({
-      id: tourItem.id,
-      slug: tourItem.slug || tourItem.id,
-      title: resolveLocalizedText(tourItem.name || tourItem.title, t, lang),
-      duration: resolveLocalizedText(tourItem.duration, t, lang),
-      overview: resolveLocalizedText(tourItem.overview, t, lang),
-      destination: 'turkey',
-      price: tourItem.price || 0,
-      rating: 4.9,
-      reviewCount: 45,
-      images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : ['https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=500&q=75&fm=webp'],
-      link: `/programs/turkey/${tourItem.slug || tourItem.id}`,
-    }));
-
-    // 3. Format Jordan preview tours
-    const jordanFormatted = (homeJordanPreviewTours || []).map((tourItem) => ({
-      id: tourItem.id,
-      slug: tourItem.slug || tourItem.id,
-      title: resolveLocalizedText(tourItem.name || tourItem.title, t, lang),
-      duration: resolveLocalizedText(tourItem.duration, t, lang),
-      overview: resolveLocalizedText(tourItem.overview, t, lang),
-      destination: 'jordan',
-      price: tourItem.price || 0,
-      rating: 4.95,
-      reviewCount: 38,
-      images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : ['/images/jordan-petra.webp'],
-      link: `/programs/jordan/${tourItem.slug || tourItem.id}`,
-    }));
-
-    // 4. Format Dubai preview tours
-    const dubaiFormatted = (homeDubaiPreviewTours || []).map((tourItem) => ({
-      id: tourItem.id,
-      slug: tourItem.slug || tourItem.id,
-      title: resolveLocalizedText(tourItem.name || tourItem.title, t, lang),
-      duration: resolveLocalizedText(tourItem.duration, t, lang),
-      overview: resolveLocalizedText(tourItem.overview, t, lang),
-      destination: 'dubai',
-      price: tourItem.price || 0,
-      rating: 4.88,
-      reviewCount: 52,
-      images: Array.isArray(tourItem.images) && tourItem.images.length > 0 ? tourItem.images : ['https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=500&q=75&fm=webp'],
-      link: `/programs/dubai/${tourItem.slug || tourItem.id}`,
-    }));
-
-    // Group tours by destination
-    const egyptTours = liveFormatted.filter(tItem => tItem.destination === 'egypt');
-    const moroccoTours = liveFormatted.filter(tItem => tItem.destination === 'morocco');
-    const tunisiaTours = liveFormatted.filter(tItem => tItem.destination === 'tunisia');
-    const greeceTours = liveFormatted.filter(tItem => tItem.destination === 'greece');
-    const holyLandTours = liveFormatted.filter(tItem => tItem.destination === 'holy-land' || tItem.destination === 'holyland');
-    const otherLive = liveFormatted.filter(tItem => !['egypt', 'morocco', 'tunisia', 'greece', 'holy-land', 'holyland'].includes(tItem.destination));
-
-    // Interleave tours across ALL destinations for rich variety!
-    const interleaved = [];
-    const maxLen = Math.max(
-      egyptTours.length, turkeyFormatted.length, jordanFormatted.length,
-      dubaiFormatted.length, moroccoTours.length, tunisiaTours.length,
-      greeceTours.length, holyLandTours.length, otherLive.length, 1
-    );
-
-    for (let i = 0; i < maxLen; i++) {
-      if (egyptTours[i]) interleaved.push(egyptTours[i]);
-      if (turkeyFormatted[i]) interleaved.push(turkeyFormatted[i]);
-      if (jordanFormatted[i]) interleaved.push(jordanFormatted[i]);
-      if (dubaiFormatted[i]) interleaved.push(dubaiFormatted[i]);
-      if (moroccoTours[i]) interleaved.push(moroccoTours[i]);
-      if (tunisiaTours[i]) interleaved.push(tunisiaTours[i]);
-      if (greeceTours[i]) interleaved.push(greeceTours[i]);
-      if (holyLandTours[i]) interleaved.push(holyLandTours[i]);
-      if (otherLive[i]) interleaved.push(otherLive[i]);
-    }
-
-    return interleaved.length > 0 ? interleaved : liveFormatted;
-  }, [allLiveTours, homeTurkeyPreviewTours, homeJordanPreviewTours, homeDubaiPreviewTours, lang, t]);
+  }, [allLiveTours, lang, t]);
 
 
   // Search Form State
@@ -958,27 +654,15 @@ const HomeExperienceSection = () => {
 
     if (targetDest === "all") {
       (allLiveTours || []).forEach((tour) => addTourItem(tour, "/tours"));
-      (homeDubaiPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
-      (homeTurkeyPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/turkey", "turkey"));
-      (homeJordanPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/jordan", "jordan"));
       return result;
     }
 
-    // 1. Live tours matching target destination alias
+    // Live tours matching target destination alias
     const filteredLive = (allLiveTours || []).filter((tour) => {
       const tourDest = normalizeDest(tour.destination || tour.country);
       return tourDest === targetDest || tourDest.includes(targetDest) || targetDest.includes(tourDest);
     });
     filteredLive.forEach((tour) => addTourItem(tour, "/tours", targetDest));
-
-    // 2. Local fallback datasets per destination
-    if (targetDest === "dubai") {
-      (homeDubaiPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
-    } else if (targetDest === "turkey") {
-      (homeTurkeyPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/turkey", "turkey"));
-    } else if (targetDest === "jordan") {
-      (homeJordanPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/jordan", "jordan"));
-    }
 
     return result;
   };
