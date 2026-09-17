@@ -90,7 +90,7 @@ describe('Cookie Consent & Privacy Preferences System', () => {
 
     // Now tracking should execute
     await trackEvent('search_performed', { destination: 'Egypt' });
-    expect(sendBeaconMock.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(postSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
     expect(localStorage.getItem('dunas_analytics_sid')).toBeTruthy();
 
     navigator.sendBeacon = originalSendBeacon;
