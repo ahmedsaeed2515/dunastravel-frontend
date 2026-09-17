@@ -121,7 +121,7 @@ const Contact = () => {
           <img
             src="https://igtsservice.com/uploads/files/67995_1649936390.jpg"
             alt="Dunas Travel Concierge Contact"
-            className="w-full h-full object-cover object-center scale-105 filter brightness-90 transition-transform duration-1000"
+            className="w-full h-full object-contain md:object-cover object-center max-md:scale-100 scale-105 filter brightness-90 transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/60 to-slate-950"></div>
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.18)_0%,transparent_70%)] pointer-events-none"></div>
