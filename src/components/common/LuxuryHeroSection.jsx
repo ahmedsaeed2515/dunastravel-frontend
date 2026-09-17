@@ -58,10 +58,7 @@ export default function LuxuryHeroSection({
         className={`absolute inset-0 z-0 overflow-hidden bg-obsidian-950 ${onImageClick ? 'cursor-pointer group' : ''}`}
         onClick={onImageClick || undefined}
       >
-        <motion.img
-          initial={{ scale: 1 }}
-          animate={{ scale: zoomScale }}
-          transition={{ duration: zoomDuration, ease: ease, repeat: Infinity, repeatType: 'reverse' }}
+        <img
           src={bgImage || 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85'}
           onError={(e) => {
             if (!e.currentTarget.dataset.fallback) {
@@ -70,7 +67,6 @@ export default function LuxuryHeroSection({
             }
           }}
           alt={title}
-          style={{ willChange: 'transform' }}
           className={`w-full h-full object-cover object-[center_35%] sm:object-center ${onImageClick ? 'transition-transform duration-700 group-hover:scale-105' : ''}`}
           loading="eager"
         />
