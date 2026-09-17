@@ -41,8 +41,14 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
         title={title}
         subtitle={total > 0 && !loading ? t('tours.totalCount', '{{total}} Luxury Journeys Available', { total }) : ''}
         bgImage={heroImage}
-        primaryCta={null}
-        secondaryCta={null}
+        primaryCta={{
+          text: t('destinations.exploreTours', 'Explore Tours & Packages ←'),
+          link: '#tours-grid'
+        }}
+        secondaryCta={{
+          text: t('home.tailorTour', 'Tailor Your Tour'),
+          link: '/tailor-tour'
+        }}
         zoomDuration={6}
         zoomScale={1.25}
         ease="easeInOut"
