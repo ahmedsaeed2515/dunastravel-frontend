@@ -313,8 +313,11 @@ export default function ReviewsMap({ tourId }) {
     <section
       id="reviews"
       className="reviews-section py-20 relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #070D19 0%, #0D2040 100%)' }}
+      style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
     >
+      {/* Top and Bottom Gold Accent Borders */}
+      <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+      <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
       <div className="mx-auto max-w-6xl px-6 text-white relative z-10">
         {/* Section Header */}
         <header className="mb-14 text-center">
