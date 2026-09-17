@@ -956,11 +956,6 @@ const HomeExperienceSection = () => {
 
     const targetDest = normalizeDest(destId);
 
-    if (targetDest === "dubai") {
-      (homeDubaiPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
-      return result;
-    }
-
     if (targetDest === "all") {
       (allLiveTours || []).forEach((tour) => addTourItem(tour, "/tours"));
       (homeDubaiPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
@@ -977,7 +972,9 @@ const HomeExperienceSection = () => {
     filteredLive.forEach((tour) => addTourItem(tour, "/tours", targetDest));
 
     // 2. Local fallback datasets per destination
-    if (targetDest === "turkey") {
+    if (targetDest === "dubai") {
+      (homeDubaiPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/dubai", "dubai"));
+    } else if (targetDest === "turkey") {
       (homeTurkeyPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/turkey", "turkey"));
     } else if (targetDest === "jordan") {
       (homeJordanPreviewTours || []).forEach((tour) => addTourItem(tour, "/programs/jordan", "jordan"));
