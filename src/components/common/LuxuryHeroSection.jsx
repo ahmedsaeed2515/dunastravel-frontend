@@ -52,7 +52,7 @@ export default function LuxuryHeroSection({
   };
 
   return (
-    <section className="relative w-full min-h-[500px] xs:min-h-[560px] sm:min-h-[620px] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none">
+    <section className="relative w-full min-h-[100dvh] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none">
       {/* Background Image Container with Cinematic Zoom & Multi-layer Overlay */}
       <div
         className={`absolute inset-0 z-0 overflow-hidden bg-obsidian-950 ${onImageClick ? 'cursor-pointer group' : ''}`}

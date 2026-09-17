@@ -122,8 +122,8 @@ export default function TurkeyProgramDetails() {
         secondaryCta={null}
       />
 
-      {/* Floating Key Specs Card (-mt-12) (Matching Vercel 100%) */}
-      <div className="container mx-auto px-6 -mt-12 relative z-20">
+      {/* Floating Key Specs Card (mt-6) */}
+      <div className="container mx-auto px-6 mt-6 relative z-20">
         <div className="bg-ivory-50 dark:bg-[#1a1a30] rounded-2xl shadow-card overflow-hidden border border-gray-100 dark:border-obsidian-600">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-obsidian-600 border-b border-gray-100 dark:border-obsidian-600 bg-obsidian-50 dark:bg-obsidian-800">
             {/* Duration */}

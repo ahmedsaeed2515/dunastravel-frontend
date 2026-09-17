@@ -141,7 +141,7 @@ const TourDetails = () => {
       />
 
       {/* 3. Quick Info Bar */}
-      <div className="container mx-auto px-6 -mt-12 relative z-20">
+      <div className="container mx-auto px-6 mt-6 relative z-20">
         <div className="bg-gradient-to-r from-amber-50 via-orange-100/70 to-amber-50 dark:bg-[#07163c] rounded-2xl shadow-card dark:shadow-[0_10px_35px_rgba(0,0,0,0.7)] overflow-hidden border-2 border-gold-500/70 dark:border-gold-500/40">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x rtl:md:divide-x-reverse divide-gold-600/30 dark:divide-gold-500/30 bg-transparent dark:bg-[#07163c]">
             <div className="p-6 flex flex-col items-center justify-center text-center gap-2">

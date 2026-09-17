@@ -120,7 +120,7 @@ export default function JordanProgramDetails() {
       />
 
       {/* Key Stats Bar */}
-      <div className="container mx-auto px-6 -mt-12 relative z-20">
+      <div className="container mx-auto px-6 mt-6 relative z-20">
         <div className="bg-ivory-50 rounded-2xl shadow-card overflow-hidden">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100 border-b border-gray-100 bg-obsidian-50">
             <div className="p-6 flex flex-col items-center justify-center text-center gap-2">
