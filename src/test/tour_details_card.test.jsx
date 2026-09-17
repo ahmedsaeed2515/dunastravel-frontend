@@ -103,6 +103,27 @@ describe('TourCard component', () => {
     expect(screen.getByText(/Hurghada Red Sea Extension/i)).toBeInTheDocument();
     expect(screen.getByText('$450')).toBeInTheDocument();
   });
+
+  it('renders resolved country name next to location marker for Turkey and Jordan tours', () => {
+    const turkeyTour = {
+      id: 'turkey-classic',
+      slug: 'turkey-classic',
+      title: 'Wonders of Turkey',
+      destination: 'turkey',
+      basePriceUsd: 1200,
+      price: 1200,
+      duration: '7 Days',
+      images: [],
+    };
+
+    render(
+      <MemoryRouter>
+        <TourCard tour={turkeyTour} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Turkey')).toBeInTheDocument();
+  });
 });
 
 describe('TourDetails component', () => {

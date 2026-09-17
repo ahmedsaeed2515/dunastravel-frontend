@@ -22,6 +22,10 @@ import {
   resolveLocalizedText, 
   resolveTourHeroImage 
 } from '../../utils/titleHelper';
+import { 
+  getTourDestinationSlug, 
+  getDestinationName 
+} from '../../utils/destinationHelper';
 
 const marketFlag = (market) => {
   const flags = { Brasil: '🇧🇷', Italia: '🇮🇹', Spain: '🇪🇸', Egypt: '🇪🇬' };
@@ -43,6 +47,10 @@ const DESTINATION_NAMES = {
   spain:                  { ar: 'إسبانيا',    en: 'Spain',    es: 'España',  pt: 'Espanha',  it: 'Spagna'  },
   brazil:                 { ar: 'البرازيل',   en: 'Brazil',   es: 'Brasil',  pt: 'Brasil',   it: 'Brasile' },
   italy:                  { ar: 'إيطاليا',    en: 'Italy',    es: 'Italia',  pt: 'Itália',   it: 'Italia'  },
+  'holy-land':            { ar: 'الأراضي المقدسة', en: 'Holy Land', es: 'Tierra Santa', pt: 'Terra Santa', it: 'Terra Santa' },
+  'holy land':            { ar: 'الأراضي المقدسة', en: 'Holy Land', es: 'Tierra Santa', pt: 'Terra Santa', it: 'Terra Santa' },
+  holyland:               { ar: 'الأراضي المقدسة', en: 'Holy Land', es: 'Tierra Santa', pt: 'Terra Santa', it: 'Terra Santa' },
+  'multi-country':        { ar: 'رحلة متعددة الدول', en: 'Multi-Country Journey', es: 'Viaje Multipaís', pt: 'Viagem Multipaíses', it: 'Viaggio Multi-paese' },
 };
 
 const resolveDestinationName = (dest, lang) => {
@@ -103,10 +111,13 @@ const TourCard = ({
   const codeText = resolveLocalizedText(tour.code, t, lang);
   const minPaxText = resolveLocalizedText(tour.minPax, t, lang);
 
-  // Destination name: try slug-based translation first, then fall back to generic resolve
-  const rawDest = tour.destination || tour.subtitle || '';
+  // Destination name: resolve country/destination name dynamically
+  const rawDest = tour.destination || tour.country || tour.location || tour.city || tour.subtitle || '';
+  const tourDestSlug = getTourDestinationSlug(tour);
   const destinationText =
-    resolveDestinationName(rawDest, lang) ||
+    (rawDest ? resolveDestinationName(rawDest, lang) : null) ||
+    getDestinationName(tourDestSlug, t, lang) ||
+    resolveDestinationName(tourDestSlug, lang) ||
     resolveLocalizedText(rawDest, t, lang) ||
     (isRtl ? 'مصر' : 'Egypt');
 

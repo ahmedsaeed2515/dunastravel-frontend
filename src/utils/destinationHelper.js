@@ -101,6 +101,39 @@ export const DEST_ALIASES = {
   'terra santa': 'holy-land',
   'jerusalem': 'holy-land',
   'القدس': 'holy-land',
+  // Spain
+  'spain': 'spain',
+  'españa': 'spain',
+  'espanha': 'spain',
+  'spagna': 'spain',
+  'إسبانيا': 'spain',
+  'اسبانia': 'spain',
+  'اسبانيا': 'spain',
+  'madrid': 'spain',
+  'مدريد': 'spain',
+
+  // Brazil
+  'brazil': 'brazil',
+  'brasil': 'brazil',
+  'brasile': 'brazil',
+  'البرازيل': 'brazil',
+
+  // Italy
+  'italy': 'italy',
+  'italia': 'italy',
+  'itália': 'italy',
+  'إيطاليا': 'italy',
+  'ايطاليا': 'italy',
+  'rome': 'italy',
+  'روما': 'italy',
+
+  // Multi-Country
+  'multi-country': 'multi-country',
+  'multi_country': 'multi-country',
+  'multicountry': 'multi-country',
+  'multi country': 'multi-country',
+  'متعددة الدول': 'multi-country',
+  'رحلة متعددة الدول': 'multi-country',
 };
 
 export const DEST_INFO = {
@@ -190,6 +223,50 @@ export const DEST_INFO = {
       es: 'Tierra Santa',
       pt: 'Terra Santa',
       it: 'Terra Santa',
+    },
+  },
+  spain: {
+    slug: 'spain',
+    i18nKey: 'home.destSpain',
+    fallback: {
+      ar: 'إسبانيا',
+      en: 'Spain',
+      es: 'España',
+      pt: 'Espanha',
+      it: 'Spagna',
+    },
+  },
+  brazil: {
+    slug: 'brazil',
+    i18nKey: 'home.destBrazil',
+    fallback: {
+      ar: 'البرازيل',
+      en: 'Brazil',
+      es: 'Brasil',
+      pt: 'Brasil',
+      it: 'Brasile',
+    },
+  },
+  italy: {
+    slug: 'italy',
+    i18nKey: 'home.destItaly',
+    fallback: {
+      ar: 'إيطاليا',
+      en: 'Italy',
+      es: 'Italia',
+      pt: 'Itália',
+      it: 'Italia',
+    },
+  },
+  'multi-country': {
+    slug: 'multi-country',
+    i18nKey: 'home.destMultiCountry',
+    fallback: {
+      ar: 'رحلة متعددة الدول',
+      en: 'Multi-Country Journey',
+      es: 'Viaje Multipaís',
+      pt: 'Viagem Multipaíses',
+      it: 'Viaggio Multi-paese',
     },
   },
 };
