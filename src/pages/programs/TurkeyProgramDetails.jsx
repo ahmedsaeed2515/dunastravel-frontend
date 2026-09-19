@@ -100,7 +100,7 @@ export default function TurkeyProgramDetails() {
         badge={t('dest.turkey.title', 'Turkey') + ' • ' + (code || duration)}
         title={title}
         subtitle={duration}
-        bgImage={images && images.length > 0 ? images[0] : 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80'}
+        bgImage={images && images.length > 0 ? images[0] : 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=800&q=60&fm=webp'}
         onImageClick={() => setActiveImageIndex(0)}
         breadcrumbs={
           <div className="flex flex-wrap items-center justify-center gap-2 text-caption text-gold-400 mb-2 uppercase tracking-wider text-xs md:text-sm font-semibold">

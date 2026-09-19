@@ -11,6 +11,7 @@ import {
   FaVideo,
 } from 'react-icons/fa';
 import ConsentGate from '../privacy/ConsentGate';
+import useInViewport from '../../hooks/useInViewport';
 
 function extractYouTubeId(url) {
   if (!url) return null;
@@ -59,18 +60,23 @@ function getEmbedInfo(url) {
 }
 
 export default function VideoShowcaseCarousel({ videos = [], loading = false }) {
-  const { t, i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const [sectionRef, isVisible] = useInViewport({ threshold: 0.05 });
+  const { t } = useTranslation();
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [activeVideo, setActiveVideo] = useState(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   const videoPlayerRef = useRef(null);
 
-  const prefersReducedMotion = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener?.('change', handler);
+    return () => mediaQuery.removeEventListener?.('change', handler);
   }, []);
 
   // Format video duration
@@ -79,26 +85,6 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
     return `${m}:${s < 10 ? '0' : ''}${s}`;
-  };
-
-  // Tab visibility listener
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        setIsPlaying(false);
-      } else {
-        if (!activeVideo && !prefersReducedMotion) {
-          setIsPlaying(true);
-        }
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [activeVideo, prefersReducedMotion]);
-
-  // Toggle Play / Pause Carousel
-  const togglePlayPause = () => {
-    setIsPlaying((prev) => !prev);
   };
 
   // Open / Close Video Modal
@@ -112,9 +98,6 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
       videoPlayerRef.current.pause();
     }
     setActiveVideo(null);
-    if (!prefersReducedMotion) {
-      setIsPlaying(true);
-    }
   };
 
   // When video playback ends, close video and resume
@@ -124,15 +107,17 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
 
   // Keyboard escape handler for video modal
   useEffect(() => {
-    if (!activeVideo) return;
+    if (!activeVideo) return undefined;
     const handleKey = (e) => {
-      if (e.key === 'Escape') closeVideo();
+      if (e.key === 'Escape') {
+        closeVideo();
+      }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [activeVideo]);
 
-  // Build seamless infinite marquee items
+  // Build seamless infinite marquee items (2 sets for optimal DOM size)
   const infiniteVideos = useMemo(() => {
     if (!videos || videos.length === 0) return [];
     let base = [...videos];
@@ -142,8 +127,6 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
     return [
       ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v1-${v.id || i}-${i}`, isDuplicate: false })),
       ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v2-${v.id || i}-${i}`, isDuplicate: true })),
-      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v3-${v.id || i}-${i}`, isDuplicate: true })),
-      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v4-${v.id || i}-${i}`, isDuplicate: true })),
     ];
   }, [videos]);
 
@@ -169,6 +152,7 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
 
   return (
     <section
+      ref={sectionRef}
       className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-[#050A14] via-[#081224] to-[#050A14] border-t border-white/10 text-white select-none"
       role="region"
       aria-roledescription="carousel"
@@ -187,10 +171,21 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
           display: flex;
           width: max-content;
           animation: videoShowcaseContinuous 60s linear infinite;
+          animation-play-state: paused;
+        }
+        .video-showcase-marquee-track[data-active="true"] {
+          animation-play-state: running;
           will-change: transform;
         }
         .video-showcase-marquee-track:hover {
           animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .video-showcase-marquee-track {
+            animation: none !important;
+            animation-play-state: paused !important;
+            will-change: auto !important;
+          }
         }
       `}</style>
 
@@ -227,8 +222,9 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
         <div className="w-full relative overflow-x-auto md:overflow-hidden py-4 scrollbar-none snap-x snap-mandatory md:snap-none" dir="ltr">
           <div
             className="video-showcase-marquee-track flex gap-6 px-4"
+            data-active={isVisible && isPlaying && !activeVideo ? "true" : "false"}
             style={{
-              animationPlayState: !isPlaying || activeVideo || prefersReducedMotion ? 'paused' : undefined,
+              animationPlayState: !isVisible || !isPlaying || activeVideo || prefersReducedMotion ? 'paused' : undefined,
               animation: prefersReducedMotion ? 'none' : undefined,
             }}
           >

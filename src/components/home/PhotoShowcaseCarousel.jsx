@@ -8,6 +8,7 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import { galleryImages as defaultGalleryImages } from '../../data/media';
+import useInViewport from '../../hooks/useInViewport';
 
 const getOptimizedImageUrl = (url, width = 500, height = 650) => {
   if (!url) return url;
@@ -26,13 +27,13 @@ const buildInfiniteMarqueeList = (items, prefix = 'gal', maxVisible = 8) => {
   return [
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: false, uKey: `${prefix}-set1-${tItem.id || i}-${i}` })),
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set2-${tItem.id || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set3-${tItem.id || i}-${i}` })),
-    ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set4-${tItem.id || i}-${i}` })),
   ];
 };
 
 export default function PhotoShowcaseCarousel({ photos = [], loading = false }) {
+  const [sectionRef, isVisible] = useInViewport({ threshold: 0.05 });
   const { t, i18n } = useTranslation();
+
   const isRtl = i18n.dir() === 'rtl';
   const navigate = useNavigate();
 
@@ -124,7 +125,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
   }
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
+    <section ref={sectionRef} className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
       <style>{`
         @keyframes photoShowcaseContinuous {
           0% {
@@ -138,10 +139,21 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
           display: flex;
           width: max-content;
           animation: photoShowcaseContinuous 35s linear infinite !important;
+          animation-play-state: paused !important;
+        }
+        .photo-showcase-marquee-track[data-active="true"] {
+          animation-play-state: running !important;
           will-change: transform;
         }
         .photo-showcase-marquee-track:hover {
           animation-play-state: paused !important;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .photo-showcase-marquee-track {
+            animation: none !important;
+            animation-play-state: paused !important;
+            will-change: auto !important;
+          }
         }
       `}</style>
 
@@ -180,12 +192,15 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
         <div dir="ltr" className="w-full relative overflow-x-auto md:overflow-hidden py-8 z-10 scrollbar-none snap-x snap-mandatory md:snap-none">
           <div
             className="photo-showcase-marquee-track flex"
+            data-active={isVisible ? "true" : "false"}
             style={{
               gap: "20px",
               paddingLeft: "20px",
             }}
             onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
-            onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
+            onMouseLeave={e => {
+              if (isVisible) e.currentTarget.style.animationPlayState = 'running';
+            }}
           >
             {(() => {
               const infiniteImages = buildInfiniteMarqueeList(normalizedPhotos, 'gal', 8);

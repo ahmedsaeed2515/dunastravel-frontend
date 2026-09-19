@@ -23,6 +23,7 @@ import ErrorState from '../../components/ui/ErrorState';
 import TransportationForm from '../../components/booking/TransportationForm';
 import { useCurrency } from '../../context/CurrencyContext';
 import Button from '../../components/ui/Button';
+import useInViewport from '../../hooks/useInViewport';
 
 const Transportation = () => {
   const { t, i18n } = useTranslation();
@@ -400,61 +401,8 @@ const Transportation = () => {
 
       {/* Infinite Moving Marquee Strip Gallery Section */}
       {galleryImages.length > 0 && (
-        <section className="w-full py-12 mb-20 bg-obsidian-950 overflow-hidden relative" dir="ltr">
-          <style>{`
-            @keyframes dunasMarqueeLtr {
-              0% { transform: translate3d(0, 0, 0); }
-              100% { transform: translate3d(-50%, 0, 0); }
-            }
-            .dunas-marquee-track {
-              display: flex;
-              width: max-content;
-              animation: dunasMarqueeLtr 65s linear infinite;
-              will-change: transform;
-            }
-            .dunas-marquee-track:hover {
-              animation-play-state: paused;
-            }
-          `}</style>
-
-          {/* Gradient Edge Fade Overlays for cinematic look */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-20 md:w-32 bg-gradient-to-r from-obsidian-950 to-transparent z-20"></div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-20 md:w-32 bg-gradient-to-l from-obsidian-950 to-transparent z-20"></div>
-
-          {/* Infinite Track Container */}
-          <div className="w-full overflow-hidden">
-            <div className="dunas-marquee-track flex gap-6 px-4">
-              {[...galleryImages, ...galleryImages, ...galleryImages, ...galleryImages].map((imgUrl, idx) => {
-                const originalIndex = idx % galleryImages.length;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => openLightbox(originalIndex)}
-                    className="relative w-72 sm:w-80 md:w-96 h-56 sm:h-64 md:h-72 flex-shrink-0 rounded-3xl overflow-hidden cursor-pointer group border border-gold-500/25 bg-obsidian-900 shadow-[0_15px_35px_rgba(0,0,0,0.7)] transition-transform duration-500 hover:scale-105 hover:border-gold-500/60"
-                  >
-                    <img
-                      src={imgUrl}
-                      alt={`Dunas VIP Fleet ${originalIndex + 1}`}
-                      className="w-full h-full object-cover cinematic-transition group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity"></div>
-                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-ivory-50 z-10">
-                      <span className="text-caption text-gold-400 font-bold tracking-widest uppercase">
-                        DUNAS VIP FLEET
-                      </span>
-                      <div className="w-8 h-8 rounded-full bg-obsidian-900/80 border border-gold-500/40 text-gold-400 flex items-center justify-center text-xs group-hover:bg-gold-500 group-hover:text-obsidian-900 transition-all">
-                        <FaExpandAlt />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <GalleryMarqueeSection galleryImages={galleryImages} openLightbox={openLightbox} />
       )}
-
       {/* Lightbox Modal - Click anywhere to close */}
       <AnimatePresence>
         {isLightboxOpen && activeGalleryIndex !== null && (
@@ -567,5 +515,78 @@ const Transportation = () => {
     </div>
   );
 };
+
+function GalleryMarqueeSection({ galleryImages, openLightbox }) {
+  const [sectionRef, isVisible] = useInViewport({ threshold: 0.05 });
+  const duplicatedList = useMemo(() => {
+    if (!galleryImages || galleryImages.length === 0) return [];
+    return [...galleryImages, ...galleryImages];
+  }, [galleryImages]);
+
+  return (
+    <section ref={sectionRef} className="w-full py-12 mb-20 bg-obsidian-950 overflow-hidden relative" dir="ltr">
+      <style>{`
+        @keyframes dunasMarqueeLtr {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        .dunas-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: dunasMarqueeLtr 65s linear infinite;
+          animation-play-state: paused;
+        }
+        .dunas-marquee-track[data-active="true"] {
+          animation-play-state: running;
+          will-change: transform;
+        }
+        .dunas-marquee-track:hover {
+          animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .dunas-marquee-track {
+            animation: none !important;
+            animation-play-state: paused !important;
+            will-change: auto !important;
+          }
+        }
+      `}</style>
+
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-20 md:w-32 bg-gradient-to-r from-obsidian-950 to-transparent z-20" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-20 md:w-32 bg-gradient-to-l from-obsidian-950 to-transparent z-20" />
+
+      <div className="w-full overflow-hidden">
+        <div className="dunas-marquee-track flex gap-6 px-4" data-active={isVisible ? "true" : "false"}>
+          {duplicatedList.map((imgUrl, idx) => {
+            const originalIndex = idx % galleryImages.length;
+            return (
+              <div
+                key={idx}
+                onClick={() => openLightbox(originalIndex)}
+                className="relative w-72 sm:w-80 md:w-96 h-56 sm:h-64 md:h-72 flex-shrink-0 rounded-3xl overflow-hidden cursor-pointer group border border-gold-500/25 bg-obsidian-900 shadow-[0_15px_35px_rgba(0,0,0,0.7)] transition-transform duration-500 hover:scale-105 hover:border-gold-500/60"
+              >
+                <img
+                  src={imgUrl}
+                  alt={`Dunas VIP Fleet ${originalIndex + 1}`}
+                  className="w-full h-full object-cover cinematic-transition group-hover:scale-110"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-ivory-50 z-10">
+                  <span className="text-caption text-gold-400 font-bold tracking-widest uppercase">
+                    DUNAS VIP FLEET
+                  </span>
+                  <div className="w-8 h-8 rounded-full bg-obsidian-900/80 border border-gold-500/40 text-gold-400 flex items-center justify-center text-xs group-hover:bg-gold-500 group-hover:text-obsidian-900 transition-all">
+                    <FaExpandAlt />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default Transportation;

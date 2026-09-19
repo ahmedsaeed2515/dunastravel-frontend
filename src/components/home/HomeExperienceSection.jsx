@@ -807,33 +807,14 @@ const HomeExperienceSection = () => {
             src="/images/pyramids-search-bg.webp"
             alt="Search tours and holiday packages background"
             className="search-hero-bg-parallax w-full h-full object-cover object-center"
-            fetchPriority="high"
-            loading="eager"
-            decoding="sync"
+            loading="lazy"
+            decoding="async"
             width="1440"
             height="600"
           />
-          {/* Ambient animated floating light blobs (hidden on mobile to prevent GPU fill-rate exhaustion) */}
-          <motion.div
-            className="hidden md:block absolute -top-20 -left-20 w-[450px] h-[450px] bg-amber-500/30 rounded-full blur-[110px] pointer-events-none"
-            animate={{
-              x: [-20, 80, -20],
-              y: [-20, 50, -20],
-              scale: [1, 1.25, 1],
-              opacity: [0.35, 0.75, 0.35],
-            }}
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="hidden md:block absolute -bottom-20 -right-20 w-[450px] h-[450px] bg-blue-600/30 rounded-full blur-[110px] pointer-events-none"
-            animate={{
-              x: [0, -80, 0],
-              y: [0, -50, 0],
-              scale: [1, 1.3, 1],
-              opacity: [0.35, 0.75, 0.35],
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          />
+          {/* Ambient light glows */}
+          <div className="hidden md:block absolute -top-20 -left-20 w-[450px] h-[450px] bg-amber-500/20 rounded-full blur-[110px] pointer-events-none" />
+          <div className="hidden md:block absolute -bottom-20 -right-20 w-[450px] h-[450px] bg-blue-600/20 rounded-full blur-[110px] pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-b from-obsidian-950/60 via-obsidian-950/40 to-obsidian-950/75" />
         </div>
 

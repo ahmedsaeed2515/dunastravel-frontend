@@ -1,17 +1,8 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { fadeInUp } from '../../animations/variants';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-// Fix Leaflet default marker icon issue
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
+import useInViewport from '../../hooks/useInViewport';
 
 const COORDINATES_DATABASE = {
   // Egypt
@@ -120,376 +111,68 @@ const COORDINATES_DATABASE = {
 };
 
 const KEYWORDS_MAP = {
-  // Egypt - Cairo
-  "cairo": "cairo",
-  "القاهرة": "cairo",
-  "قاهرة": "cairo",
-
-  // Egypt - Giza/Pyramids/Sphinx
-  "giza": "giza",
-  "guiza": "giza",
-  "الجيزة": "giza",
-  "جيزة": "giza",
-  "pirâmide": "pyramids",
-  "pirámide": "pyramids",
-  "pyramid": "pyramids",
-  "piramide": "pyramids",
-  "piramidi": "pyramids",
-  "الأهرامات": "pyramids",
-  "أهرامات": "pyramids",
-  "الاهرامات": "pyramids",
-  "اهرامات": "pyramids",
-  "esfinge": "sphinx",
-  "sphinx": "sphinx",
-  "أبو الهول": "sphinx",
-  "ابو الهول": "sphinx",
-
-  // Egypt - Luxor
-  "luxor": "luxor",
-  "lúxor": "luxor",
-  "الأقصر": "luxor",
-
-  // Egypt - Aswan
-  "aswan": "aswan",
-  "assuã": "aswan",
-  "aswán": "aswan",
-  "assuan": "aswan",
-  "أسوان": "aswan",
-  "اسوان": "aswan",
-
-  // Egypt - Alexandria
-  "alexandria": "alexandria",
-  "alejandría": "alexandria",
-  "alessandria": "alexandria",
-  "الإسكندرية": "alexandria",
-  "الاسكندرية": "alexandria",
-  "إسكندرية": "alexandria",
-  "اسكندرية": "alexandria",
-
-  // Egypt - Hurghada
-  "hurghada": "hurghada",
-  "الغردقة": "hurghada",
-  "غردقة": "hurghada",
-
-  // Egypt - Sharm El Sheikh
-  "sharm": "sharm",
-  "شرم الشيخ": "sharm",
-  "شرم": "sharm",
-
-  // Egypt - Siwa
-  "siwa": "siwa",
-  "سيوة": "siwa",
-  "واحة سيوة": "siwa",
-
-  // Egypt - Abu Simbel
-  "abu simbel": "abu simbel",
-  "abú simbel": "abu simbel",
-  "أبو سمبل": "abu simbel",
-  "ابو سمبل": "abu simbel",
-
-  // Egypt - Kom Ombo
-  "kom ombo": "kom ombo",
-  "كوم أمبو": "kom ombo",
-  "كوم امبو": "kom ombo",
-
-  // Egypt - Edfu
-  "edfu": "edfu",
-  "إدفو": "edfu",
-  "ادفو": "edfu",
-
-  // Egypt - Philae
-  "philae": "philae",
-  "filae": "philae",
-  "فيلة": "philae",
-  "معبد فيلة": "philae",
-
-  // Egypt - Valley of the Kings
-  "vales dos reis": "valley of the kings",
-  "valle de los reyes": "valley of the kings",
-  "valley of the kings": "valley of the kings",
-  "valle dei re": "valley of the kings",
-
-  // Turkey - Istanbul
-  "istanbul": "istanbul",
-  "istambul": "istanbul",
-  "إسطنبول": "istanbul",
-  "اسطنبول": "istanbul",
-
-  // Turkey - Cappadocia
-  "cappadocia": "cappadocia",
-  "capadócia": "cappadocia",
-  "capadocia": "cappadocia",
-  "كبادوكيا": "cappadocia",
-  "كابادوكيا": "cappadocia",
-
-  // Turkey - Pamukkale
-  "pamukkale": "pamukkale",
-  "باموكالي": "pamukkale",
-  "باموق قلعة": "pamukkale",
-
-  // Turkey - Ephesus
-  "ephesus": "ephesus",
-  "éfeso": "ephesus",
-  "efeso": "ephesus",
-  "أفسس": "ephesus",
-  "افسس": "ephesus",
-
-  // Turkey - Antalya
-  "antalya": "antalya",
-  "antália": "antalya",
-  "أنطاليا": "antalya",
-  "انطاليا": "antalya",
-
-  // Turkey - Ankara
-  "ankara": "ankara",
-  "ancara": "ankara",
-  "أنقرة": "ankara",
-  "انقرة": "ankara",
-
-  // Turkey - Konya
-  "konya": "konya",
-  "قونية": "konya",
-
-  // Turkey - Bursa
-  "bursa": "bursa",
-  "بورصة": "bursa",
-
-  // Turkey - Izmir
-  "izmir": "izmir",
-  "esmirna": "izmir",
-  "إزمير": "izmir",
-  "ازمير": "izmir",
-
-  // Turkey - Kusadasi
-  "kusadasi": "kusadasi",
-  "kuşadası": "kusadasi",
-  "كوشاداسي": "kusadasi",
-
-  // Turkey - Canakkale
-  "canakkale": "canakkale",
-  "çanakkale": "canakkale",
-  "جناق قلعة": "canakkale",
-
-  // Turkey - Troy
-  "troy": "troy",
-  "troya": "troy",
-  "طروادة": "troy",
-
-  // Jordan - Amman
-  "amman": "amman",
-  "amã": "amman",
-  "عمان": "amman",
-  "عمّان": "amman",
-
-  // Jordan - Petra
-  "petra": "petra",
-  "البتراء": "petra",
-  "البترا": "petra",
-
-  // Jordan - Wadi Rum
-  "wadi rum": "wadi rum",
-  "وادي رم": "wadi rum",
-
-  // Jordan - Dead Sea
-  "dead sea": "dead sea",
-  "mar morto": "dead sea",
-  "mar muerto": "dead sea",
-  "البحر الميت": "dead sea",
-
-  // Jordan - Jerash
-  "jerash": "jerash",
-  "gerasa": "jerash",
-  "جرش": "jerash",
-
-  // Jordan - Aqaba
-  "aqaba": "aqaba",
-  "العقبة": "aqaba",
-  "عقبة": "aqaba",
-
-  // UAE - Dubai
-  "dubai": "dubai",
-  "dubái": "dubai",
-  "دبي": "dubai",
-  "دبى": "dubai",
-
-  // UAE - Dubai Airport
-  "aeropuerto de dubái": "dubai airport",
-  "aeropuerto de dubai": "dubai airport",
-  "aeroporto de dubai": "dubai airport",
-  "dubai airport": "dubai airport",
-  "dubai international airport": "dubai airport",
-
-  // UAE - Old Dubai
-  "dubái antiguo": "old dubai",
-  "dubai antigo": "old dubai",
-  "old dubai": "old dubai",
-  "bastakiya": "old dubai",
-  "bur dubai": "old dubai",
-  "deira": "old dubai",
-
-  // UAE - Jumeirah
-  "jumeirah": "jumeirah",
-  "jumeira": "jumeirah",
-  "palm jumeirah": "jumeirah",
-  "palmera jumeirah": "jumeirah",
-  "burj al arab": "jumeirah",
-
-  // UAE - Burj Khalifa
-  "burj khalifa": "burj khalifa",
-  "khalifa": "burj khalifa",
-  "dubai mall": "burj khalifa",
-  "downtown dubai": "burj khalifa",
-  "centro de dubái": "burj khalifa",
-
-  // UAE - Dubai Marina
-  "dubai marina": "dubai marina",
-  "marina de dubái": "dubai marina",
-  "marina de dubai": "dubai marina",
-
-  // UAE - Dubai Desert
-  "safari": "dubai desert",
-  "desierto de dubái": "dubai desert",
-  "desierto de dubai": "dubai desert",
-  "deserto de dubai": "dubai desert",
-  "dubai desert": "dubai desert",
-  "dunas": "dubai desert",
-
-  // UAE - Yas Island / Abu Dhabi attractions
-  "yas island": "yas island",
-  "ferrari world": "yas island",
-  "louvre": "yas island",
-  "sheikh zayed": "yas island",
-
-  // UAE - Abu Dhabi
-  "abu dhabi": "abu dhabi",
-  "أبوظبي": "abu dhabi",
-  "أبو ظبي": "abu dhabi",
-  "ابوظبي": "abu dhabi",
-  "ابو ظبي": "abu dhabi",
-
-  // Morocco - Marrakech
-  "marrakech": "marrakech",
-  "marraquexe": "marrakech",
-  "marrakesh": "marrakech",
-  "مراكش": "marrakech",
-
-  // Morocco - Casablanca
-  "casablanca": "casablanca",
-  "الدار البيضاء": "casablanca",
-
-  // Morocco - Fes
-  "fes": "fes",
-  "fez": "fes",
-  "فاس": "fes",
-
-  // Morocco - Rabat
-  "rabat": "rabat",
-  "الرباط": "rabat",
-
-  // Holy Land - Jerusalem
-  "jerusalem": "jerusalem",
-  "jerusalém": "jerusalem",
-  "jerusaleme": "jerusalem",
-  "gerusalemme": "jerusalem",
-  "القدس": "jerusalem",
-  "أورشليم": "jerusalem",
-
-  // Holy Land - Bethlehem
-  "bethlehem": "bethlehem",
-  "belém": "bethlehem",
-  "betlemme": "bethlehem",
-  "بيت لحم": "bethlehem",
-
-  // Holy Land - Nazareth
-  "nazareth": "nazareth",
-  "nazaré": "nazareth",
-  "nazaret": "nazareth",
-  "الناصرة": "nazareth",
-
-  // Holy Land - Tel Aviv
-  "tel aviv": "tel aviv",
-  "تل أبيب": "tel aviv",
-
-  // Holy Land - Galilee
-  "galilee": "galilee",
-  "galileia": "galilee",
-  "galilea": "galilee",
-  "الجليل": "galilee",
-
-  // Greece - Athens
-  "athens": "athens",
-  "atenas": "athens",
-  "atene": "athens",
-  "أثينا": "athens",
-  "اثينا": "athens",
-
-  // Greece - Mykonos
-  "mykonos": "mykonos",
-  "miconos": "mykonos",
-  "ميكونوس": "mykonos",
-
-  // Greece - Santorini
-  "santorini": "santorini",
-  "سانتوريني": "santorini",
-
-  // Greece - Crete
-  "crete": "crete",
-  "creta": "crete",
-  "heraklion": "crete",
-  "كريت": "crete",
-
-  // Tunisia - Tunis
-  "tunis": "tunis",
-  "tunes": "tunis",
-  "tunisia": "tunis",
-  "تونس": "tunis",
-
-  // Tunisia - Carthage
-  "carthage": "carthage",
-  "cartago": "carthage",
-  "قرطاج": "carthage",
-
-  // Tunisia - Sidi Bou Said
-  "sidi bou said": "sidi bou said",
-  "سيدي بوسعيد": "sidi bou said",
-  "سيدي بو سعيد": "sidi bou said",
-
-  // Tunisia - Hammamet
-  "hammamet": "hammamet",
-  "الحمامات": "hammamet",
-
-  // Tunisia - Testour
-  "testour": "testour",
-  "تستور": "testour",
-
-  // Tunisia - Dougga
-  "dougga": "dougga",
-  "دقة": "dougga",
-
-  // Tunisia - El Jem
-  "el jem": "el jem",
-  "el djem": "el jem",
-  "الجم": "el jem",
-
-  // Tunisia - Matmata
-  "matmata": "matmata",
-  "مطماطة": "matmata",
-
-  // Tunisia - Douz
-  "douz": "douz",
-  "دوز": "douz",
-
-  // Tunisia - Chott el Jerid
-  "chott el jerid": "chott el jerid",
-  "شط الجريد": "chott el jerid",
-
-  // Tunisia - Tozeur
-  "tozeur": "tozeur",
-  "توزر": "tozeur",
-
-  // Tunisia - Kairouan
-  "kairouan": "kairouan",
-  "القيروان": "kairouan"
+  "cairo": "cairo", "القاهرة": "cairo", "قاهرة": "cairo",
+  "giza": "giza", "guiza": "giza", "الجيزة": "giza", "جيزة": "giza",
+  "pirâmide": "pyramids", "pirámide": "pyramids", "pyramid": "pyramids", "piramide": "pyramids", "piramidi": "pyramids", "الأهرامات": "pyramids",
+  "esfinge": "sphinx", "sphinx": "sphinx", "أبو الهول": "sphinx",
+  "luxor": "luxor", "الأقصر": "luxor",
+  "aswan": "aswan", "أسوان": "aswan",
+  "alexandria": "alexandria", "الإسكندرية": "alexandria",
+  "hurghada": "hurghada", "الغردقة": "hurghada",
+  "sharm": "sharm", "شرم الشيخ": "sharm",
+  "siwa": "siwa", "سيوة": "siwa",
+  "abu simbel": "abu simbel", "أبو سمبل": "abu simbel",
+  "kom ombo": "kom ombo", "كوم أمبو": "kom ombo",
+  "edfu": "edfu", "إدفو": "edfu",
+  "philae": "philae", "فيلة": "philae",
+  "vales dos reis": "valley of the kings", "valle de los reyes": "valley of the kings", "valley of the kings": "valley of the kings",
+  "istanbul": "istanbul", "إسطنبول": "istanbul",
+  "cappadocia": "cappadocia", "كبادوكيا": "cappadocia",
+  "pamukkale": "pamukkale", "باموكالي": "pamukkale",
+  "ephesus": "ephesus", "أفسس": "ephesus",
+  "antalya": "antalya", "أنطاليا": "antalya",
+  "ankara": "ankara", "أنقرة": "ankara",
+  "konya": "konya", "قونية": "konya",
+  "bursa": "bursa", "بورصة": "bursa",
+  "izmir": "izmir", "إزمير": "izmir",
+  "kusadasi": "kusadasi", "كوشاداسي": "kusadasi",
+  "canakkale": "canakkale", "جناق قلعة": "canakkale",
+  "troy": "troy", "طروادة": "troy",
+  "amman": "amman", "عمان": "amman",
+  "petra": "petra", "البتراء": "petra",
+  "wadi rum": "wadi rum", "وادي رم": "wadi rum",
+  "dead sea": "dead sea", "البحر الميت": "dead sea",
+  "jerash": "jerash", "جرش": "jerash",
+  "aqaba": "aqaba", "العقبة": "aqaba",
+  "dubai": "dubai", "دبي": "dubai",
+  "dubai airport": "dubai airport", "old dubai": "old dubai",
+  "jumeirah": "jumeirah", "burj khalifa": "burj khalifa",
+  "dubai marina": "dubai marina", "dubai desert": "dubai desert",
+  "yas island": "yas island", "abu dhabi": "abu dhabi",
+  "marrakech": "marrakech", "مراكش": "marrakech",
+  "casablanca": "casablanca", "الدار البيضاء": "casablanca",
+  "fes": "fes", "فاس": "fes", "rabat": "rabat", "الرباط": "rabat",
+  "jerusalem": "jerusalem", "القدس": "jerusalem",
+  "bethlehem": "bethlehem", "بيت لحم": "bethlehem",
+  "nazareth": "nazareth", "الناصرة": "nazareth",
+  "tel aviv": "tel aviv", "تل أبيب": "tel aviv",
+  "galilee": "galilee", "الجليل": "galilee",
+  "athens": "athens", "أثينا": "athens",
+  "mykonos": "mykonos", "ميكونوس": "mykonos",
+  "santorini": "santorini", "سانتوريني": "santorini",
+  "crete": "crete", "كريت": "crete",
+  "tunis": "tunis", "تونس": "tunis",
+  "carthage": "carthage", "قرطاج": "carthage",
+  "sidi bou said": "sidi bou said", "سيدي بوسعيد": "sidi bou said",
+  "hammamet": "hammamet", "الحمامات": "hammamet",
+  "testour": "testour", "تستور": "testour",
+  "dougga": "dougga", "دقة": "dougga",
+  "el jem": "el jem", "الجم": "el jem",
+  "matmata": "matmata", "مطماطة": "matmata",
+  "douz": "douz", "دوز": "douz",
+  "chott el jerid": "chott el jerid", "شط الجريد": "chott el jerid",
+  "tozeur": "tozeur", "توزر": "tozeur",
+  "kairouan": "kairouan", "القيروان": "kairouan"
 };
 
 const getCurvePoints = (from, to, numPoints = 50) => {
@@ -505,7 +188,6 @@ const getCurvePoints = (from, to, numPoints = 50) => {
   const dLat = lat2 - lat1;
   const dLng = lng2 - lng1;
 
-  // Curvature amount: scale perpendicular vector by distance
   const curvature = 0.15;
   const pLat = -dLng * curvature;
   const pLng = dLat * curvature;
@@ -524,357 +206,103 @@ const getCurvePoints = (from, to, numPoints = 50) => {
 
 const CITY_TRANSLATIONS = {
   ar: {
-    "cairo": "القاهرة",
-    "giza": "الجيزة",
-    "pyramids": "الأهرامات",
-    "sphinx": "أبو الهول",
-    "luxor": "الأقصر",
-    "aswan": "أسوان",
-    "alexandria": "الإسكندرية",
-    "hurghada": "الغردقة",
-    "sharm": "شرم الشيخ",
-    "siwa": "سيوة",
-    "abu simbel": "أبو سمبل",
-    "kom ombo": "كوم أمبو",
-    "edfu": "إدفو",
-    "philae": "فيلة",
-    "valley of the kings": "وادي الملوك",
-    "istanbul": "إسطنبول",
-    "cappadocia": "كبادوكيا",
-    "pamukkale": "باموكالي",
-    "ephesus": "أفسس",
-    "antalya": "أنطاليا",
-    "ankara": "أنقرة",
-    "konya": "قونية",
-    "bursa": "بورصة",
-    "izmir": "إزمير",
-    "kusadasi": "كوشاداسي",
-    "canakkale": "جناق قلعة",
-    "troy": "طروادة",
-    "amman": "عمان",
-    "petra": "البتراء",
-    "wadi rum": "وادي رم",
-    "dead sea": "البحر الميت",
-    "jerash": "جرش",
-    "aqaba": "العقبة",
-    "dubai": "دبي",
-    "dubai airport": "مطار دبي",
-    "old dubai": "دبي القديمة",
-    "jumeirah": "جميرا",
-    "burj khalifa": "برج خليفة",
-    "dubai marina": "مرسى دبي",
-    "dubai desert": "صحراء دبي",
-    "yas island": "جزيرة ياس",
-    "abu dhabi": "أبوظبي",
-    "marrakech": "مراكش",
-    "casablanca": "الدار البيضاء",
-    "fes": "فاس",
-    "rabat": "الرباط",
-    "jerusalem": "القدس",
-    "bethlehem": "بيت لحم",
-    "nazareth": "الناصرة",
-    "tel aviv": "تل أبيب",
-    "galilee": "الجليل",
-    "athens": "أثينا",
-    "mykonos": "ميكونوس",
-    "santorini": "سانتوريني",
-    "crete": "كريت",
-    "tunis": "تونس",
-    "carthage": "قرطاج",
-    "sidi bou said": "سيدي بوسعيد",
-    "hammamet": "الحمامات",
-    "testour": "تستور",
-    "dougga": "دقة",
-    "el jem": "الجم",
-    "matmata": "مطماطة",
-    "douz": "دوز",
-    "chott el jerid": "شط الجريد",
-    "tozeur": "توزر",
+    "cairo": "القاهرة", "giza": "الجيزة", "pyramids": "الأهرامات", "sphinx": "أبو الهول",
+    "luxor": "الأقصر", "aswan": "أسوان", "alexandria": "الإسكندرية", "hurghada": "الغردقة",
+    "sharm": "شرم الشيخ", "siwa": "سيوة", "abu simbel": "أبو سمبل", "kom ombo": "كوم أمبو",
+    "edfu": "إدفو", "philae": "فيلة", "valley of the kings": "وادي الملوك", "istanbul": "إسطنبول",
+    "cappadocia": "كبادوكيا", "pamukkale": "باموكالي", "ephesus": "أفسس", "antalya": "أنطاليا",
+    "ankara": "أنقرة", "konya": "قونية", "bursa": "بورصة", "izmir": "إزمير",
+    "kusadasi": "كوشاداسي", "canakkale": "جناق قلعة", "troy": "طروادة", "amman": "عمان",
+    "petra": "البتراء", "wadi rum": "وادي رم", "dead sea": "البحر الميت", "jerash": "جرش",
+    "aqaba": "العقبة", "dubai": "دبي", "dubai airport": "مطار دبي", "old dubai": "دبي القديمة",
+    "jumeirah": "جميرا", "burj khalifa": "برج خليفة", "dubai marina": "مرسى دبي",
+    "dubai desert": "صحراء دبي", "yas island": "جزيرة ياس", "abu dhabi": "أبوظبي",
+    "marrakech": "مراكش", "casablanca": "الدار البيضاء", "fes": "فاس", "rabat": "الرباط",
+    "jerusalem": "القدس", "bethlehem": "بيت لحم", "nazareth": "الناصرة", "tel aviv": "تل أبيب",
+    "galilee": "الجليل", "athens": "أثينا", "mykonos": "ميكونوس", "santorini": "سانتوريني",
+    "crete": "كريت", "tunis": "تونس", "carthage": "قرطاج", "sidi bou said": "سيدي بوسعيد",
+    "hammamet": "الحمامات", "testour": "تستور", "dougga": "دقة", "el jem": "الجم",
+    "matmata": "مطماطة", "douz": "دوز", "chott el jerid": "شط الجريد", "tozeur": "توزر",
     "kairouan": "القيروان"
   },
   es: {
-    "cairo": "El Cairo",
-    "giza": "Giza",
-    "pyramids": "Pirámides",
-    "sphinx": "Esfinge",
-    "luxor": "Lúxor",
-    "aswan": "Aswán",
-    "alexandria": "Alejandría",
-    "hurghada": "Hurghada",
-    "sharm": "Sharm El Sheikh",
-    "siwa": "Siwa",
-    "abu simbel": "Abu Simbel",
-    "kom ombo": "Kom Ombo",
-    "edfu": "Edfu",
-    "philae": "Philae",
-    "valley of the kings": "Valle de los Reyes",
-    "istanbul": "Estambul",
-    "cappadocia": "Capadocia",
-    "pamukkale": "Pamukkale",
-    "ephesus": "Éfeso",
-    "antalya": "Antalya",
-    "ankara": "Ankara",
-    "konya": "Konya",
-    "bursa": "Bursa",
-    "izmir": "Esmirna",
-    "kusadasi": "Kusadasi",
-    "canakkale": "Canakkale",
-    "troy": "Troya",
-    "amman": "Amán",
-    "petra": "Petra",
-    "wadi rum": "Wadi Rum",
-    "dead sea": "Mar Muerto",
-    "jerash": "Jerash",
-    "aqaba": "Áqaba",
-    "dubai": "Dubái",
-    "dubai airport": "Aeropuerto de Dubái",
-    "old dubai": "Dubái Antiguo",
-    "jumeirah": "Jumeirah",
-    "burj khalifa": "Burj Khalifa",
-    "dubai marina": "Marina de Dubái",
-    "dubai desert": "Desierto de Dubái",
-    "yas island": "Isla de Yas",
-    "abu dhabi": "Abu Dabi",
-    "marrakech": "Marrakech",
-    "casablanca": "Casablanca",
-    "fes": "Fez",
-    "rabat": "Rabat",
-    "jerusalem": "Jerusalén",
-    "bethlehem": "Belén",
-    "nazareth": "Nazaret",
-    "tel aviv": "Tel Aviv",
-    "galilee": "Galilea",
-    "athens": "Atenas",
-    "mykonos": "Miconos",
-    "santorini": "Santorini",
-    "crete": "Creta",
-    "tunis": "Túnez",
-    "carthage": "Cartago",
-    "sidi bou said": "Sidi Bou Said",
-    "hammamet": "Hammamet",
-    "testour": "Testour",
-    "dougga": "Dougga",
-    "el jem": "El Jem",
-    "matmata": "Matmata",
-    "douz": "Douz",
-    "chott el jerid": "Chott el Jerid",
-    "tozeur": "Tozeur",
+    "cairo": "El Cairo", "giza": "Giza", "pyramids": "Pirámides", "sphinx": "Esfinge",
+    "luxor": "Lúxor", "aswan": "Aswán", "alexandria": "Alejandría", "hurghada": "Hurghada",
+    "sharm": "Sharm El Sheikh", "siwa": "Siwa", "abu simbel": "Abu Simbel", "kom ombo": "Kom Ombo",
+    "edfu": "Edfu", "philae": "Philae", "valley of the kings": "Valle de los Reyes", "istanbul": "Estambul",
+    "cappadocia": "Capadocia", "pamukkale": "Pamukkale", "ephesus": "Éfeso", "antalya": "Antalya",
+    "ankara": "Ankara", "konya": "Konya", "bursa": "Bursa", "izmir": "Esmirna",
+    "kusadasi": "Kusadasi", "canakkale": "Canakkale", "troy": "Troya", "amman": "Amán",
+    "petra": "Petra", "wadi rum": "Wadi Rum", "dead sea": "Mar Muerto", "jerash": "Jerash",
+    "aqaba": "Áqaba", "dubai": "Dubái", "dubai airport": "Aeropuerto de Dubái", "old dubai": "Dubái Antiguo",
+    "jumeirah": "Jumeirah", "burj khalifa": "Burj Khalifa", "dubai marina": "Marina de Dubái",
+    "dubai desert": "Desierto de Dubái", "yas island": "Isla de Yas", "abu dhabi": "Abu Dabi",
+    "marrakech": "Marrakech", "casablanca": "Casablanca", "fes": "Fez", "rabat": "Rabat",
+    "jerusalem": "Jerusalén", "bethlehem": "Belém", "nazareth": "Nazaret", "tel aviv": "Tel Aviv",
+    "galilee": "Galilea", "athens": "Atenas", "mykonos": "Miconos", "santorini": "Santorini",
+    "crete": "Creta", "tunis": "Túnez", "carthage": "Cartago", "sidi bou said": "Sidi Bou Said",
+    "hammamet": "Hammamet", "testour": "Testour", "dougga": "Dougga", "el jem": "El Jem",
+    "matmata": "Matmata", "douz": "Douz", "chott el jerid": "Chott el Jerid", "tozeur": "Tozeur",
     "kairouan": "Kairuán"
   },
-  pt: {
-    "cairo": "Cairo",
-    "giza": "Giza",
-    "pyramids": "Pirâmides",
-    "sphinx": "Esfinge",
-    "luxor": "Luxor",
-    "aswan": "Assuã",
-    "alexandria": "Alexandria",
-    "hurghada": "Hurghada",
-    "sharm": "Sharm El Sheikh",
-    "siwa": "Siwa",
-    "abu simbel": "Abu Simbel",
-    "kom ombo": "Kom Ombo",
-    "edfu": "Edfu",
-    "philae": "Philae",
-    "valley of the kings": "Vales dos Reis",
-    "istanbul": "Istambul",
-    "cappadocia": "Capadócia",
-    "pamukkale": "Pamukkale",
-    "ephesus": "Éfeso",
-    "antalya": "Antália",
-    "ankara": "Ancara",
-    "konya": "Konya",
-    "bursa": "Bursa",
-    "izmir": "Esmirna",
-    "kusadasi": "Kusadasi",
-    "canakkale": "Canakkale",
-    "troy": "Troia",
-    "amman": "Amã",
-    "petra": "Petra",
-    "wadi rum": "Wadi Rum",
-    "dead sea": "Mar Morto",
-    "jerash": "Jerash",
-    "aqaba": "Ácaba",
-    "dubai": "Dubai",
-    "dubai airport": "Aeroporto de Dubai",
-    "old dubai": "Dubai Antigo",
-    "jumeirah": "Jumeirah",
-    "burj khalifa": "Burj Khalifa",
-    "dubai marina": "Marina de Dubai",
-    "dubai desert": "Deserto de Dubai",
-    "yas island": "Ilha de Yas",
-    "abu dhabi": "Abu Dhabi",
-    "marrakech": "Marraquexe",
-    "casablanca": "Casablanca",
-    "fes": "Fez",
-    "rabat": "Rabat",
-    "jerusalem": "Jerusalém",
-    "bethlehem": "Belém",
-    "nazareth": "Nazaré",
-    "tel aviv": "Tel Aviv",
-    "galilee": "Galileia",
-    "athens": "Atenas",
-    "mykonos": "Miconos",
-    "santorini": "Santorini",
-    "crete": "Creta",
-    "tunis": "Túnis",
-    "carthage": "Cartago",
-    "sidi bou said": "Sidi Bou Said",
-    "hammamet": "Hammamet",
-    "testour": "Testour",
-    "dougga": "Dougga",
-    "el jem": "El Jem",
-    "matmata": "Matmata",
-    "douz": "Douz",
-    "chott el jerid": "Chott el Jerid",
-    "tozeur": "Tozeur",
-    "kairouan": "Kairouan"
-  },
-  it: {
-    "cairo": "Il Cairo",
-    "giza": "Giza",
-    "pyramids": "Piramidi",
-    "sphinx": "Sfinge",
-    "luxor": "Luxor",
-    "aswan": "Assuan",
-    "alexandria": "Alessandria",
-    "hurghada": "Hurghada",
-    "sharm": "Sharm El Sheikh",
-    "siwa": "Siwa",
-    "abu simbel": "Abu Simbel",
-    "kom ombo": "Kom Ombo",
-    "edfu": "Edfu",
-    "philae": "Philae",
-    "valley of the kings": "Valle dei Re",
-    "istanbul": "Istanbul",
-    "cappadocia": "Cappadocia",
-    "pamukkale": "Pamukkale",
-    "ephesus": "Efeso",
-    "antalya": "Antalya",
-    "ankara": "Ankara",
-    "konya": "Konya",
-    "bursa": "Bursa",
-    "izmir": "Smirne",
-    "kusadasi": "Kusadasi",
-    "canakkale": "Canakkale",
-    "troy": "Troia",
-    "amman": "Amman",
-    "petra": "Petra",
-    "wadi rum": "Wadi Rum",
-    "dead sea": "Mar Morto",
-    "jerash": "Jerash",
-    "aqaba": "Aqaba",
-    "dubai": "Dubai",
-    "dubai airport": "Aeroporto di Dubai",
-    "old dubai": "Antica Dubai",
-    "jumeirah": "Jumeirah",
-    "burj khalifa": "Burj Khalifa",
-    "dubai marina": "Marina di Dubai",
-    "dubai desert": "Deserto di Dubai",
-    "yas island": "Isola di Yas",
-    "abu dhabi": "Abu Dhabi",
-    "marrakech": "Marrakech",
-    "casablanca": "Casablanca",
-    "fes": "Fes",
-    "rabat": "Rabat",
-    "jerusalem": "Gerusalemme",
-    "bethlehem": "Betlemme",
-    "nazareth": "Nazareth",
-    "tel aviv": "Tel Aviv",
-    "galilee": "Galilea",
-    "athens": "Atene",
-    "mykonos": "Mykonos",
-    "santorini": "Santorini",
-    "crete": "Creta",
-    "tunis": "Tunisi",
-    "carthage": "Cartagine",
-    "sidi bou said": "Sidi Bou Said",
-    "hammamet": "Hammamet",
-    "testour": "Testour",
-    "dougga": "Dougga",
-    "el jem": "El Jem",
-    "matmata": "Matmata",
-    "douz": "Douz",
-    "chott el jerid": "Chott el Jerid",
-    "tozeur": "Tozeur",
-    "kairouan": "Kairouan"
-  },
   en: {
-    "cairo": "Cairo",
-    "giza": "Giza",
-    "pyramids": "Pyramids",
-    "sphinx": "Sphinx",
-    "luxor": "Luxor",
-    "aswan": "Aswan",
-    "alexandria": "Alexandria",
-    "hurghada": "Hurghada",
-    "sharm": "Sharm El Sheikh",
-    "siwa": "Siwa",
-    "abu simbel": "Abu Simbel",
-    "kom ombo": "Kom Ombo",
-    "edfu": "Edfu",
-    "philae": "Philae",
-    "valley of the kings": "Valley of the Kings",
-    "istanbul": "Istanbul",
-    "cappadocia": "Cappadocia",
-    "pamukkale": "Pamukkale",
-    "ephesus": "Ephesus",
-    "antalya": "Antalya",
-    "ankara": "Ankara",
-    "konya": "Konya",
-    "bursa": "Bursa",
-    "izmir": "Izmir",
-    "kusadasi": "Kusadasi",
-    "canakkale": "Canakkale",
-    "troy": "Troy",
-    "amman": "Amman",
-    "petra": "Petra",
-    "wadi rum": "Wadi Rum",
-    "dead sea": "Dead Sea",
-    "jerash": "Jerash",
-    "aqaba": "Aqaba",
-    "dubai": "Dubai",
-    "dubai airport": "Dubai Airport",
-    "old dubai": "Old Dubai",
-    "jumeirah": "Jumeirah",
-    "burj khalifa": "Burj Khalifa",
-    "dubai marina": "Dubai Marina",
-    "dubai desert": "Dubai Desert",
-    "yas island": "Yas Island",
-    "abu dhabi": "Abu Dhabi",
-    "marrakech": "Marrakech",
-    "casablanca": "Casablanca",
-    "fes": "Fes",
-    "rabat": "Rabat",
-    "jerusalem": "Jerusalem",
-    "bethlehem": "Bethlehem",
-    "nazareth": "Nazareth",
-    "tel aviv": "Tel Aviv",
-    "galilee": "Galilee",
-    "athens": "Athens",
-    "mykonos": "Mykonos",
-    "santorini": "Santorini",
-    "crete": "Crete",
-    "tunis": "Tunis",
-    "carthage": "Carthage",
-    "sidi bou said": "Sidi Bou Said",
-    "hammamet": "Hammamet",
-    "testour": "Testour",
-    "dougga": "Dougga",
-    "el jem": "El Jem",
-    "matmata": "Matmata",
-    "douz": "Douz",
-    "chott el jerid": "Chott el Jerid",
-    "tozeur": "Tozeur",
+    "cairo": "Cairo", "giza": "Giza", "pyramids": "Pyramids", "sphinx": "Sphinx",
+    "luxor": "Luxor", "aswan": "Aswan", "alexandria": "Alexandria", "hurghada": "Hurghada",
+    "sharm": "Sharm El Sheikh", "siwa": "Siwa", "abu simbel": "Abu Simbel", "kom ombo": "Kom Ombo",
+    "edfu": "Edfu", "philae": "Philae", "valley of the kings": "Valley of the Kings", "istanbul": "Istanbul",
+    "cappadocia": "Cappadocia", "pamukkale": "Pamukkale", "ephesus": "Ephesus", "antalya": "Antalya",
+    "ankara": "Ankara", "konya": "Konya", "bursa": "Bursa", "izmir": "Izmir",
+    "kusadasi": "Kusadasi", "canakkale": "Canakkale", "troy": "Troy", "amman": "Amman",
+    "petra": "Petra", "wadi rum": "Wadi Rum", "dead sea": "Dead Sea", "jerash": "Jerash",
+    "aqaba": "Aqaba", "dubai": "Dubai", "dubai airport": "Dubai Airport", "old dubai": "Old Dubai",
+    "jumeirah": "Jumeirah", "burj khalifa": "Burj Khalifa", "dubai marina": "Dubai Marina",
+    "dubai desert": "Dubai Desert", "yas island": "Yas Island", "abu dhabi": "Abu Dhabi",
+    "marrakech": "Marrakech", "casablanca": "Casablanca", "fes": "Fes", "rabat": "Rabat",
+    "jerusalem": "Jerusalem", "bethlehem": "Bethlehem", "nazareth": "Nazareth", "tel aviv": "Tel Aviv",
+    "galilee": "Galilee", "athens": "Athens", "mykonos": "Mykonos", "santorini": "Santorini",
+    "crete": "Crete", "tunis": "Tunis", "carthage": "Carthage", "sidi bou said": "Sidi Bou Said",
+    "hammamet": "Hammamet", "testour": "Testour", "dougga": "Dougga", "el jem": "El Jem",
+    "matmata": "Matmata", "douz": "Douz", "chott el jerid": "Chott el Jerid", "tozeur": "Tozeur",
     "kairouan": "Kairouan"
   }
 };
 
 const RouteMap = ({ itinerary }) => {
+  const [sectionRef, isVisible] = useInViewport({ rootMargin: '200px', once: false });
+  const [leafletInstance, setLeafletInstance] = useState(null);
   const { t, i18n } = useTranslation();
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const animationRef = useRef(null);
+
+  // Lazy load Leaflet library dynamically only when map section enters near-viewport
+  useEffect(() => {
+    if (!isVisible || leafletInstance) return undefined;
+    let active = true;
+
+    Promise.all([
+      import('leaflet'),
+      import('leaflet/dist/leaflet.css')
+    ]).then(([leafletModule]) => {
+      if (!active) return;
+      const L = leafletModule.default || leafletModule;
+      
+      delete L.Icon.Default.prototype._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      });
+
+      setLeafletInstance(L);
+    }).catch(() => {
+      // Ignore load error gracefully
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [isVisible, leafletInstance]);
 
   const locations = useMemo(() => {
     const rawItinerary = Array.isArray(itinerary)
@@ -924,26 +352,8 @@ const RouteMap = ({ itinerary }) => {
       const translatedTexts = [];
       rawTexts.forEach((text) => {
         translatedTexts.push(text);
-        
-        // Try English translation first to enforce 100% standard route matching across all active locales
         const t1En = t(text, { lng: 'en' });
         if (t1En && t1En !== text) translatedTexts.push(t1En);
-
-        const t2En = t(`data.${text}`, { lng: 'en' });
-        if (t2En && t2En !== `data.${text}`) translatedTexts.push(t2En);
-
-        const t3En = t(`trip.${text}`, { lng: 'en' });
-        if (t3En && t3En !== `trip.${text}`) translatedTexts.push(t3En);
-
-        // Also try current locale translation
-        const t1 = t(text);
-        if (t1 && t1 !== text) translatedTexts.push(t1);
-
-        const t2 = t(`data.${text}`);
-        if (t2 && t2 !== `data.${text}`) translatedTexts.push(t2);
-
-        const t3 = t(`trip.${text}`);
-        if (t3 && t3 !== `trip.${text}`) translatedTexts.push(t3);
       });
 
       const texts = translatedTexts.map((s) => String(s).toLowerCase());
@@ -961,7 +371,6 @@ const RouteMap = ({ itinerary }) => {
         }
       });
 
-      // Prioritize longer, more specific keywords (e.g. "palm jumeirah" over "dubai")
       dayMatches.sort((a, b) => b.keyword.length - a.keyword.length);
 
       let matchedCoords = null;
@@ -981,9 +390,8 @@ const RouteMap = ({ itinerary }) => {
         }
       }
 
-      // Default fallback if no keyword matched in single-destination or obscure itinerary
       if (!matchedCoords) {
-        matchedCoords = [41.0082, 28.9784]; // Istanbul fallback
+        matchedCoords = [41.0082, 28.9784];
         matchedName = 'Istanbul';
       }
 
@@ -1009,13 +417,19 @@ const RouteMap = ({ itinerary }) => {
   }, [itinerary, t, i18n.language]);
 
   useEffect(() => {
-    if (!mapContainerRef.current || locations.length === 0) return;
+    if (!isVisible || !leafletInstance || !mapContainerRef.current || locations.length === 0) return undefined;
 
+    const L = leafletInstance;
     const map = L.map(mapContainerRef.current, {
       zoomControl: true,
-      scrollWheelZoom: false,
+      scrollWheelZoom: false, // Disable scroll wheel hijacking by default until clicked
       attributionControl: false,
     }).setView(locations[0].coords, 10);
+
+    // Enable scroll wheel zoom on click to prevent page scroll trapping
+    map.once('focus', () => {
+      map.scrollWheelZoom.enable();
+    });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '',
@@ -1024,7 +438,6 @@ const RouteMap = ({ itinerary }) => {
 
     mapRef.current = map;
 
-    // Markers
     const markers = [];
     locations.forEach((loc) => {
       const marker = L.marker(loc.coords)
@@ -1033,7 +446,6 @@ const RouteMap = ({ itinerary }) => {
       markers.push(marker);
     });
 
-    // Bounds & Zoom handling
     const latlngs = locations.map((l) => l.coords);
     if (latlngs.length === 1) {
       map.setView(latlngs[0], 11);
@@ -1052,7 +464,6 @@ const RouteMap = ({ itinerary }) => {
       }
     }
 
-    // Animation / curved line if more than 1 location
     if (locations.length > 1) {
       const pathPoints = [];
       for (let i = 0; i < latlngs.length - 1; i++) {
@@ -1068,7 +479,6 @@ const RouteMap = ({ itinerary }) => {
         dashArray: '8, 8',
       }).addTo(map);
 
-      // Plane icon
       const planeIcon = L.divIcon({
         className: 'plane-marker',
         html: `
@@ -1085,7 +495,7 @@ const RouteMap = ({ itinerary }) => {
       const plane = L.marker(pathPoints[0], { icon: planeIcon }).addTo(map);
 
       let currentIndex = 0;
-      const speed = 0.15; // Control speed (smaller = slower)
+      const speed = 0.15;
       const animate = () => {
         if (pathPoints.length < 2) return;
         
@@ -1118,13 +528,15 @@ const RouteMap = ({ itinerary }) => {
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       map.remove();
+      mapRef.current = null;
     };
-  }, [locations]);
+  }, [isVisible, leafletInstance, locations]);
 
   if (locations.length === 0) return null;
 
   return (
     <motion.div
+      ref={sectionRef}
       variants={fadeInUp}
       initial="hidden"
       whileInView="visible"
@@ -1138,11 +550,18 @@ const RouteMap = ({ itinerary }) => {
         <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50" style={{ fontFamily: "'Playfair Display', serif" }}>
           {t('tour.routeMapTitle', 'Interactive Itinerary Map')}
         </h2>
-        <div className="w-24 h-1 bg-gold-500 mx-auto mt-3"></div>
+        <div className="w-24 h-1 bg-gold-500 mx-auto mt-3" />
       </div>
 
-      <div className="rounded-2xl overflow-hidden shadow-xl border border-obsidian-900/5 h-[450px] relative z-10">
-        <div ref={mapContainerRef} className="w-full h-full" style={{ direction: 'ltr' }} />
+      <div className="rounded-2xl overflow-hidden shadow-xl border border-obsidian-900/5 h-[450px] relative z-10 bg-obsidian-900/50">
+        {(!isVisible || !leafletInstance) ? (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-gold-400 font-semibold bg-obsidian-950/60 rounded-2xl">
+            <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs uppercase tracking-widest">{t('tour.loadingMap', 'Loading interactive route map...')}</span>
+          </div>
+        ) : (
+          <div ref={mapContainerRef} className="w-full h-full" style={{ direction: 'ltr' }} />
+        )}
       </div>
     </motion.div>
   );

@@ -84,6 +84,8 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
                     alt="Dunas Travel"
                     width="201"
                     height="100"
+                    fetchPriority="high"
+                    decoding="async"
                     className="dunas-logo"
                   />
                   {renderAnimatedWord(t("home.heroTitle2", slide.titlePart2))}

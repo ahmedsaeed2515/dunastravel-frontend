@@ -1535,20 +1535,13 @@ html[dir="rtl"] .dropdown-item:hover {
 
 }
 
-/* Off-screen rendering optimization: skips rendering work until scrolled into view (desktop only to prevent mobile scroll layout thrashing) */
+/* Off-screen rendering optimization: skips rendering work until scrolled into view */
 .content-auto {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 600px;
+  contain-intrinsic-size: 1px 500px;
 }
 
-@media (max-width: 768px) {
-  .content-auto {
-    content-visibility: visible !important;
-    contain-intrinsic-size: none !important;
-  }
-}
-
-/* ── Continuous GPU Marquee Animations ────────────────────────────── */
+/* ── Continuous GPU Marquee Animations (Idle by default until in viewport) ────────── */
 @keyframes continuousMarqueeLeft {
   0% {
     transform: translate3d(0, 0, 0);
@@ -1569,35 +1562,82 @@ html[dir="rtl"] .dropdown-item:hover {
 
 .animate-continuous-marquee-left {
   animation: continuousMarqueeLeft 65s linear infinite;
-  will-change: transform;
+  animation-play-state: paused;
 }
 
 .animate-continuous-marquee-right {
   animation: continuousMarqueeRight 65s linear infinite;
+  animation-play-state: paused;
+}
+
+.animate-continuous-marquee-left[data-active="true"],
+.animate-continuous-marquee-right[data-active="true"],
+.animate-continuous-marquee-left.is-visible,
+.animate-continuous-marquee-right.is-visible {
+  animation-play-state: running;
   will-change: transform;
 }
 
 .animate-continuous-marquee-left:hover,
 .animate-continuous-marquee-right:hover {
-  animation-play-state: paused;
+  animation-play-state: paused !important;
 }
 
 .tour-marquee-track {
   animation: tourMarquee 75s linear infinite;
+  animation-play-state: paused;
+}
+
+.tour-marquee-track[data-active="true"],
+.tour-marquee-track.is-visible {
+  animation-play-state: running;
   will-change: transform;
 }
 
-@media (max-width: 768px) {
-  /* Keep smooth GPU marquee scrolling active on mobile while maintaining touch scrollability */
+.marquee-track {
+  animation: marquee 65s linear infinite;
+  width: max-content;
+  animation-play-state: paused;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.marquee-track[data-active="true"],
+.marquee-track.is-visible {
+  animation-play-state: running;
+  will-change: transform;
+}
+
+.photo-showcase-marquee-track,
+.video-showcase-marquee-track,
+.dunas-marquee-track {
+  animation-play-state: paused;
+}
+
+.photo-showcase-marquee-track[data-active="true"],
+.photo-showcase-marquee-track.is-visible,
+.video-showcase-marquee-track[data-active="true"],
+.video-showcase-marquee-track.is-visible,
+.dunas-marquee-track[data-active="true"],
+.dunas-marquee-track.is-visible {
+  animation-play-state: running;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
   .animate-continuous-marquee-left,
   .animate-continuous-marquee-right,
   .photo-showcase-marquee-track,
   .video-showcase-marquee-track,
   .marquee-track,
-  .tour-marquee-track {
-    will-change: transform;
+  .tour-marquee-track,
+  .dunas-marquee-track {
+    animation: none !important;
+    animation-play-state: paused !important;
+    will-change: auto !important;
   }
 }
+
 
 /* ── Travelik index-3dark Hero Section Signature Styles & Animations ───── */
 @keyframes heroZoomAnimation {
