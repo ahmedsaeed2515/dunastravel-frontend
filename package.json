@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
-    "gsap": "^3.15.0",
     "i18next": "^26.2.0",
     "i18next-browser-languagedetector": "^8.2.1",
     "leaflet": "^1.9.4",

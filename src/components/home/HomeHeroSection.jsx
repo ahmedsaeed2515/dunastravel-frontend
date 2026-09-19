@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { FaPlay, FaTimes } from "react-icons/fa";
-import gsap from "gsap";
 import "./HomeHeroSection.css";
 
 const SLIDE_DATA = [
@@ -39,172 +38,25 @@ const SLIDE_DATA = [
 ];
 
 function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
-  const slideRef = useRef(null);
-
-  useEffect(() => {
-    if (!slideRef.current) return;
-
-    const slideEl = slideRef.current;
-    const bg = slideEl.querySelector(".slider-bg");
-
-    if (!isActive) {
-      const elsToReset = slideEl.querySelectorAll(
-        ".hero-heading-1, .hero-heading-2, .dunas-logo, .slider-contect-des, .defult-btn a, .circle__video, .char"
-      );
-      gsap.killTweensOf(elsToReset);
-      gsap.set(elsToReset, { opacity: 0, y: 0 });
-
-      if (bg) {
-        bg.style.animation = "none";
-      }
-      return;
-    }
-
-    // --- Active Slide Animation ---
-    if (bg) {
-      bg.style.animation = "none";
-      void bg.offsetWidth; // Force reflow to reliably restart CSS keyframe animation
-      bg.style.animation = "heroCinematicCreepZoom 8.0s cubic-bezier(0.37, 0, 0.63, 1) forwards";
-    }
-
-    const heading1 = slideEl.querySelector(".hero-heading-1");
-    const heading2 = slideEl.querySelector(".hero-heading-2");
-    const logo = slideEl.querySelector(".dunas-logo");
-    const desc = slideEl.querySelector(".slider-contect-des");
-    const btn = slideEl.querySelector(".defult-btn a");
-    const circle = slideEl.querySelector(".circle__video");
-
-    const chars1 = heading1 ? heading1.querySelectorAll(".char") : [];
-    const chars2 = heading2 ? heading2.querySelectorAll(".char") : [];
-
-    const allAnimatableEls = [heading1, heading2, logo, desc, btn, circle, ...chars1, ...chars2].filter(Boolean);
-    gsap.killTweensOf(allAnimatableEls);
-
-    // Make parent headings visible so child character spans are displayed
-    if (heading1) gsap.set(heading1, { opacity: 1, y: 0 });
-    if (heading2) gsap.set(heading2, { opacity: 1, y: 0 });
-
-    // 1. Heading 1: Fast glide down from top (-45px) with character/word stagger
-    if (heading1) {
-      if (chars1.length > 0) {
-        gsap.fromTo(
-          chars1,
-          { opacity: 0, y: -45 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.03,
-            ease: "power3.out",
-          }
-        );
-      } else {
-        gsap.fromTo(
-          heading1,
-          { opacity: 0, y: -50 },
-          { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }
-        );
-      }
-    }
-
-    // 2. Heading 2 ("JOURNEY"): Smoothly glides down from top (-45px) with character/word stagger
-    if (heading2) {
-      if (chars2.length > 0) {
-        gsap.fromTo(
-          chars2,
-          { opacity: 0, y: -45 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            delay: 0.12,
-            stagger: 0.03,
-            ease: "power3.out",
-          }
-        );
-      } else {
-        gsap.fromTo(
-          heading2,
-          { opacity: 0, y: -50 },
-          { opacity: 1, y: 0, duration: 1.0, delay: 0.12, ease: "power3.out" }
-        );
-      }
-    }
-
-    // 3. Logo Image: Rises up from bottom (+50px)
-    if (logo) {
-      gsap.fromTo(
-        logo,
-        { opacity: 0, y: 50, scale: 0.9 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1.0,
-          delay: 0.22,
-          ease: "power3.out",
-        }
-      );
-    }
-
-    // 4. Description paragraph: Rises up from bottom (+50px)
-    if (desc) {
-      gsap.fromTo(
-        desc,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.0,
-          delay: 0.32,
-          ease: "power3.out",
-        }
-      );
-    }
-
-    // 5. Button: Rises up from bottom (+50px)
-    if (btn) {
-      gsap.fromTo(
-        btn,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.0,
-          delay: 0.44,
-          ease: "power3.out",
-        }
-      );
-    }
-
-    // 6. Rotating Circle Video Badge: Rises up from bottom (+50px)
-    if (circle) {
-      gsap.fromTo(
-        circle,
-        { opacity: 0, y: 50, scale: 0.85 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1.0,
-          delay: 0.54,
-          ease: "power3.out",
-        }
-      );
-    }
-  }, [isActive]);
-
-  const renderAnimatedWord = (word) => {
+  const renderAnimatedWord = (word, startCharIdx = 0) => {
     if (!word) return null;
     if (isRtl) {
       return word.split(" ").map((w, idx) => (
-        <span key={idx} className="char ar-word" style={{ display: 'inline-block', marginLeft: '0.3em' }}>
+        <span
+          key={idx}
+          className="char ar-word"
+          style={{ display: 'inline-block', marginLeft: '0.3em', '--char-index': startCharIdx + idx }}
+        >
           {w}
         </span>
       ));
     }
     return word.split("").map((char, index) => (
-      <span key={index} className="char" style={{ display: 'inline-block' }}>
+      <span
+        key={index}
+        className="char"
+        style={{ display: 'inline-block', '--char-index': startCharIdx + index }}
+      >
         {char === " " ? "\u00A0" : char}
       </span>
     ));
@@ -213,7 +65,6 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
   return (
     <div
       className={`hero-slide ${isActive ? "active" : ""}`}
-      ref={slideRef}
     >
       <div className="slider-section d-flex align-items-center">
         <div

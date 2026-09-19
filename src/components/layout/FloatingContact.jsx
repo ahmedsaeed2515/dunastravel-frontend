@@ -19,12 +19,22 @@ const FloatingContact = () => {
       return;
     }
 
+    let ticking = false;
+    let currentScrolled = false;
+
+    const updateScrollState = () => {
+      const pastHero = window.scrollY >= 500;
+      if (pastHero !== currentScrolled) {
+        currentScrolled = pastHero;
+        setIsScrolledPastHero(pastHero);
+      }
+      ticking = false;
+    };
+
     const handleScroll = () => {
-      // Hide in Hero section (first 500px on home page), reveal as user scrolls to next section
-      if (window.scrollY >= 500) {
-        setIsScrolledPastHero(true);
-      } else {
-        setIsScrolledPastHero(false);
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateScrollState);
       }
     };
 

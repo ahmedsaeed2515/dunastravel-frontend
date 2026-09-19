@@ -148,7 +148,6 @@ export default defineConfig(({ mode }) => {
             }
             if (normalizedId.includes('node_modules/framer-motion')) return 'vendor-motion';
             if (normalizedId.includes('node_modules/swiper')) return 'vendor-swiper';
-            if (normalizedId.includes('node_modules/gsap')) return 'vendor-gsap';
             if (
               normalizedId.includes('node_modules/i18next') ||
               normalizedId.includes('node_modules/react-i18next') ||

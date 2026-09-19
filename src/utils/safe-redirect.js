@@ -11,6 +11,7 @@ export function getSafeRedirectUrl(url, fallback = '/dashboard') {
   const trimmed = url.trim();
 
   // Reject control characters like \r, \n, etc.
+  // eslint-disable-next-line no-control-regex
   if (/[\r\n\0-\x1F]/.test(trimmed)) {
     return fallback;
   }

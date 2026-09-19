@@ -64,6 +64,91 @@
   pointer-events: auto;
 }
 
+/* Keyframe Animations replacing GSAP for immediate initial render and pixel-perfect timing */
+@keyframes heroFadeSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-45px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroLogoRise {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroCircleRise {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hero-slide:not(.active) .hero-heading-1,
+.hero-slide:not(.active) .hero-heading-2,
+.hero-slide:not(.active) .dunas-logo,
+.hero-slide:not(.active) .slider-contect-des,
+.hero-slide:not(.active) .defult-btn a,
+.hero-slide:not(.active) .circle__video,
+.hero-slide:not(.active) .char {
+  opacity: 0;
+}
+
+.hero-slide.active .hero-heading-1 .char {
+  animation: heroFadeSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--char-index, 0) * 0.03s);
+}
+
+.hero-slide.active .hero-heading-2 .char {
+  animation: heroFadeSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.12s + var(--char-index, 0) * 0.03s);
+}
+
+.hero-slide.active .dunas-logo {
+  animation: heroLogoRise 1.0s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.22s;
+}
+
+.hero-slide.active .slider-contect-des {
+  animation: heroFadeSlideUp 1.0s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.32s;
+}
+
+.hero-slide.active .defult-btn a {
+  animation: heroFadeSlideUp 1.0s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.44s;
+}
+
+.hero-slide.active .circle__video {
+  animation: heroCircleRise 1.0s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.54s;
+}
+
 .main-slider-wrpper .slider-section {
   height: 100%;
   width: 100%;

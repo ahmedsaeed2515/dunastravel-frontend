@@ -6,6 +6,41 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ── Search Hero Background Parallax & Zoom (CSS-only) ──────────────────── */
+@keyframes searchBgScrollZoom {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    transform: scale(1.1) translateY(-12px);
+  }
+}
+
+.search-hero-bg-parallax {
+  will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+  .search-hero-bg-parallax {
+    animation: searchBgScrollZoom linear both;
+    animation-timeline: scroll(root);
+    animation-range: entry 0% exit 100%;
+  }
+}
+
+@supports not (animation-timeline: scroll()) {
+  .search-hero-bg-parallax {
+    animation: searchBgScrollZoom 16s ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-hero-bg-parallax {
+    animation: none !important;
+    transform: scale(1) translateY(0) !important;
+  }
+}
+
 /* ── RTL & Arabic Typography Global Enhancements ────────────────────────── */
 [dir="rtl"] {
   direction: rtl;

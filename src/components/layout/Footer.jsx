@@ -124,8 +124,6 @@ const Footer = () => {
             {/* Phone */}
             <a
               href="tel:+3374664302"
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label="Call us"
               className="w-10 h-10 rounded-full bg-[#007AFF] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(0,122,255,0.6)] transition-all duration-300"
             >
@@ -134,8 +132,6 @@ const Footer = () => {
             {/* Email */}
             <a
               href="mailto:info@dunas-travel.com"
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label="Email us"
               className="w-10 h-10 rounded-full bg-[#EA4335] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(234,67,53,0.6)] transition-all duration-300"
             >

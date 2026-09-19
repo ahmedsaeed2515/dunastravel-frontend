@@ -803,18 +803,10 @@ const HomeExperienceSection = () => {
       <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-0">
         {/* Background Image with Dynamic Pulsing Motion & Rich Glow */}
         <div className="absolute inset-0 overflow-hidden">
-          <motion.img
+          <img
             src="/images/pyramids-search-bg.webp"
             alt="Search tours and holiday packages background"
-            className="w-full h-full object-cover object-center"
-            initial={{ scale: 1 }}
-            animate={{ scale: [1, 1.1, 1], y: [0, -12, 0] }}
-            transition={{
-              duration: 16,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut"
-            }}
+            className="search-hero-bg-parallax w-full h-full object-cover object-center"
             fetchPriority="high"
             loading="eager"
             decoding="sync"
@@ -1905,7 +1897,7 @@ const HomeExperienceSection = () => {
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
                 style={{
-                  backgroundImage: "url('https://res.cloudinary.com/degbrq3ck/image/upload/w_800,c_limit,q_auto:good,f_webp/v1783071610/bus1_lprkiy.jpg')"
+                  backgroundImage: "url('https://res.cloudinary.com/degbrq3ck/image/upload/w_600,c_limit,q_auto:eco,f_auto/v1783071610/bus1_lprkiy.jpg')"
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
@@ -1959,12 +1951,22 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* 2. Photo Showcase Carousel */}
-      <Suspense fallback={<div className="py-16 text-center text-slate-400">Loading gallery...</div>}>
+      <Suspense fallback={
+        <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
+          <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
+          <span className="text-sm font-semibold tracking-wider uppercase">Loading Photo Gallery...</span>
+        </div>
+      }>
         <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
       </Suspense>
 
       {/* 3. Video Showcase Carousel */}
-      <Suspense fallback={<div className="py-16 text-center text-slate-400">Loading videos...</div>}>
+      <Suspense fallback={
+        <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
+          <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
+          <span className="text-sm font-semibold tracking-wider uppercase">Loading Video Showcase...</span>
+        </div>
+      }>
         <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
       </Suspense>
 
