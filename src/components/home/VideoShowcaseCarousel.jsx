@@ -224,7 +224,6 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
             className="video-showcase-marquee-track flex gap-6 px-4"
             data-active={isVisible && isPlaying && !activeVideo ? "true" : "false"}
             style={{
-              animationPlayState: !isVisible || !isPlaying || activeVideo || prefersReducedMotion ? 'paused' : undefined,
               animation: prefersReducedMotion ? 'none' : undefined,
             }}
           >

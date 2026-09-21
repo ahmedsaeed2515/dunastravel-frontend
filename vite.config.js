@@ -139,12 +139,18 @@ export default defineConfig(({ mode }) => {
             if (
               normalizedId.includes('node_modules/react/') ||
               normalizedId.includes('node_modules/react-dom/') ||
-              normalizedId.includes('node_modules/react-router/') ||
-              normalizedId.includes('node_modules/react-router-dom/') ||
-              normalizedId.includes('node_modules/react-helmet-async/') ||
               normalizedId.includes('node_modules/scheduler/')
             ) {
-              return 'vendor-react';
+              return 'vendor-react-core';
+            }
+            if (
+              normalizedId.includes('node_modules/react-router/') ||
+              normalizedId.includes('node_modules/react-router-dom/')
+            ) {
+              return 'vendor-router';
+            }
+            if (normalizedId.includes('node_modules/react-helmet-async/')) {
+              return 'vendor-helmet';
             }
             if (normalizedId.includes('node_modules/framer-motion')) return 'vendor-motion';
             if (normalizedId.includes('node_modules/swiper')) return 'vendor-swiper';

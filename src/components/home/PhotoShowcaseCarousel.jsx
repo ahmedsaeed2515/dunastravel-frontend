@@ -138,15 +138,15 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
         .photo-showcase-marquee-track {
           display: flex;
           width: max-content;
-          animation: photoShowcaseContinuous 35s linear infinite !important;
-          animation-play-state: paused !important;
+          animation: photoShowcaseContinuous 35s linear infinite;
+          animation-play-state: paused;
         }
         .photo-showcase-marquee-track[data-active="true"] {
-          animation-play-state: running !important;
+          animation-play-state: running;
           will-change: transform;
         }
         .photo-showcase-marquee-track:hover {
-          animation-play-state: paused !important;
+          animation-play-state: paused;
         }
         @media (prefers-reduced-motion: reduce) {
           .photo-showcase-marquee-track {
@@ -196,10 +196,6 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
             style={{
               gap: "20px",
               paddingLeft: "20px",
-            }}
-            onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
-            onMouseLeave={e => {
-              if (isVisible) e.currentTarget.style.animationPlayState = 'running';
             }}
           >
             {(() => {

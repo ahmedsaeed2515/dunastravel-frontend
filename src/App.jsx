@@ -6,8 +6,6 @@ import Layout from "./components/layout/Layout";
 import Logo from "./components/ui/Logo";
 import { trackEvent } from "./utils/analytics";
 import { ConsentProvider } from "./privacy/consent";
-import CookieConsentBanner from "./components/privacy/CookieConsentBanner";
-import CookiePreferencesModal from "./components/privacy/CookiePreferencesModal";
 
 // ── Stale Chunk / Deployment Recovery Helpers ─────────────────────────────
 const isChunkLoadFailed = (error) => {
@@ -179,6 +177,8 @@ const ResetPassword = lazyWithRetry(() => import("./pages/auth/ResetPassword"));
 const VerifyEmail = lazyWithRetry(() => import("./pages/auth/VerifyEmail"));
 const UserDashboard = lazyWithRetry(() => import("./pages/user/UserDashboard"));
 const CookiePolicy = lazyWithRetry(() => import("./pages/legal/CookiePolicy"));
+const CookieConsentBanner = lazyWithRetry(() => import("./components/privacy/CookieConsentBanner"));
+const CookiePreferencesModal = lazyWithRetry(() => import("./components/privacy/CookiePreferencesModal"));
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 
@@ -302,8 +302,10 @@ function App() {
     <ErrorBoundary>
       <ConsentProvider>
         <ScrollProgressBar />
-        <CookieConsentBanner />
-        <CookiePreferencesModal />
+        <Suspense fallback={null}>
+          <CookieConsentBanner />
+          <CookiePreferencesModal />
+        </Suspense>
 
         <Suspense fallback={<FallbackLoader />}>
           <Routes location={location} key={location.pathname}>

@@ -13,6 +13,7 @@ import { useServices } from "../../hooks/useServices";
 import { transportation as fallbackTransportation } from "../../data/transportation";
 import AnimatedCounter from "../common/AnimatedCounter";
 import HomeHeroSection from "./HomeHeroSection";
+import useInViewport from "../../hooks/useInViewport";
 import { useCurrency } from "../../context/CurrencyContext";
 import api from "../../utils/api";
 import {
@@ -345,6 +346,8 @@ const HomeExperienceSection = () => {
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const [isAllToursPopupOpen, setIsAllToursPopupOpen] = useState(false);
+  const [destSectionRef, isDestSectionVisible] = useInViewport({ threshold: 0.05 });
+  const [transportSectionRef, isTransportSectionVisible] = useInViewport({ threshold: 0.05 });
   const pkgMarqueeRef = useRef(null);
   const destMarqueeRef = useRef(null);
   const pkgHoveredRef = useRef(false);
@@ -1225,7 +1228,7 @@ const HomeExperienceSection = () => {
       </section>
 
 {/* Destination Tours Marquee Section */}
-      <section className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative">
+      <section ref={destSectionRef} className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative">
         <div className="container mx-auto px-6">
           <div className="text-center mb-10 max-w-3xl mx-auto">
             <span className="text-[#B45309] dark:text-[#F5A623] uppercase tracking-widest text-caption block mb-2 font-bold">
@@ -1245,7 +1248,7 @@ const HomeExperienceSection = () => {
             ref={destMarqueeRef} 
             className="overflow-x-auto md:overflow-hidden w-full relative py-4 scrollbar-none snap-x snap-mandatory md:snap-none"
           >
-            <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left">
+            <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left" data-active={isDestSectionVisible ? "true" : "false"}>
             {(() => {
               const infiniteList = buildInfiniteMarqueeList(destinationToursForMarquee, 'dest');
               return infiniteList.map((tData, idx) => {
@@ -1524,123 +1527,7 @@ const HomeExperienceSection = () => {
       </section>
 
 
-      {/* Packages Tours Marquee */}
-      <section className="py-16 md:py-20 relative overflow-hidden bg-ivory-100 dark:bg-obsidian-950 content-auto">
-        <div className="container mx-auto px-6 mb-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.span 
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-[#B45309] dark:text-[#F5A623] text-caption font-bold uppercase tracking-widest mb-3 shadow-sm"
-            >
-              <span>✨</span> {t("home.packageTripsSub", "تجارب مصممة بعناية فائقة لتلبي أعلى تطلعات عشاق الفخامة والتميز")}
-            </motion.span>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-3xl md:text-5xl lg:text-6xl text-obsidian-900 dark:text-white font-serif tracking-tight mb-2"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
-              {t("home.packageTripsTitle", "رحلات الباقات الخاصة بنا")}
-            </motion.h2>
-          </div>
-        </div>
 
-        {/* Marquee Strip */}
-        <div className="relative group/marquee w-full">
-          <div 
-            dir="ltr" 
-            ref={pkgMarqueeRef} 
-            className="overflow-x-auto md:overflow-hidden w-full relative py-4 scrollbar-none snap-x snap-mandatory md:snap-none"
-          >
-            <div className="flex w-max gap-5 px-5 animate-continuous-marquee-right">
-            {(() => {
-              const infiniteList = buildInfiniteMarqueeList(packagesToursForMarquee, 'pkg');
-              return infiniteList.map((tData, idx) => {
-                const tourImg =
-                  resolveTourHeroImage(tData) ||
-                  tData.heroImage ||
-                  (Array.isArray(tData.images) && tData.images[0]) ||
-                  tData.image ||
-                  '/imgs/egyothero.webp';
-                const rawPkgDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
-                const pkgDestName = t(`nav.${rawPkgDest}`, tData.badge || rawPkgDest.charAt(0).toUpperCase() + rawPkgDest.slice(1));
-
-                return (
-                  <Link
-                    key={tData.uKey || `pkg-tour-${idx}`}
-                    to={tData.link || "/tours"}
-                    tabIndex={tData.isDuplicate ? -1 : undefined}
-                    aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className={`min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500 ${tData.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
-                  >
-                    <img
-                      src={getOptimizedImageUrl(tourImg, 300, 355)}
-                      alt={tData.title}
-                      width="300"
-                      height="355"
-                      className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.08] opacity-90 group-hover:opacity-100"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-900/60 to-transparent"></div>
-
-                    {/* Destination Badge (الوجهة) */}
-                    <div className="package-badge-text absolute top-3.5 left-3.5 rtl:left-auto rtl:right-3.5 z-20 bg-gold-500/95 backdrop-blur-md text-xs font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 border border-gold-300/40">
-                      <FaMapMarkerAlt className="text-xs text-obsidian-950" />
-                      <span>{pkgDestName}</span>
-                    </div>
-
-                    {/* Bottom Content Container */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full z-10">
-                      <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                        {/* Tour Title (اسم الرحلة) */}
-                        <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2 font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
-                          {tData.title}
-                        </h3>
-
-                        {/* Duration & Price */}
-                        <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
-                          <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
-                            <FaClock className="text-gold-400 text-xs" />
-                            <span>{tData.duration}</span>
-                          </span>
-                          {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
-                            <span className="text-gold-400 font-bold text-xs">
-                              {formatPrice(tData.price)}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Button: عرض التفاصيل */}
-                        <div className="w-full bg-gradient-to-r from-gold-500 via-amber-400 to-yellow-500 text-obsidian-950 font-extrabold text-xs py-2.5 px-4 rounded-xl text-center shadow-lg flex items-center justify-center gap-2 group-hover:brightness-110 transition-all duration-300">
-                          <span>{t("common.viewDetails", isAr ? "عرض التفاصيل" : "View Details")}</span>
-                          <FaArrowRight className="text-xs rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              });
-            })()}
-          </div>
-        </div>
-      </div>
-
-        <div className="flex justify-center mt-12">
-          <Link to="/tours">
-            <button 
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-amber-400 hover:from-amber-400 hover:to-gold-500 text-black font-extrabold text-base md:text-lg px-8 py-3.5 rounded-full shadow-[0_4px_20px_rgba(245,166,35,0.4)] hover:shadow-[0_6px_25px_rgba(245,166,35,0.6)] hover:scale-105 transition-all duration-300 border border-gold-600/30 cursor-pointer"
-              style={{ color: '#000000', fontWeight: 800 }}
-            >
-              {t("home.exploreAllTours", isAr ? "استكشف جميع البرامج والرحلات" : "Explore All Programs & Tours")} →
-            </button>
-          </Link>
-        </div>
-      </section>
 
       {/* Transportation & Transfers (Vehicles Marquee Slider Only) */}
       <section className="py-12 bg-ivory-50 dark:bg-obsidian-950 relative overflow-hidden content-auto">

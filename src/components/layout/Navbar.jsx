@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import LoginModal from '../auth/LoginModal';
 import Logo from '../ui/Logo';
+
+const LoginModal = lazy(() => import('../auth/LoginModal'));
 import CurrencySelector from '../ui/CurrencySelector';
 import LanguageSelector from '../ui/LanguageSelector';
 import CustomerNotificationBell from '../ui/CustomerNotificationBell';
@@ -661,7 +662,11 @@ const Navbar = () => {
         </AnimatePresence>
       </div>
 
-      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      {isLoginModalOpen && (
+        <Suspense fallback={null}>
+          <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+        </Suspense>
+      )}
     </header>
     </>
   );
