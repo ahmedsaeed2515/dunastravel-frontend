@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import ConsentGate from '../privacy/ConsentGate';
 import useInViewport from '../../hooks/useInViewport';
+import { resolveLocalizedText } from '../../utils/titleHelper';
 
 function extractYouTubeId(url) {
   if (!url) return null;
@@ -61,7 +62,8 @@ function getEmbedInfo(url) {
 
 export default function VideoShowcaseCarousel({ videos = [], loading = false }) {
   const [sectionRef, isVisible] = useInViewport({ threshold: 0.05 });
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n?.language || 'ar';
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [activeVideo, setActiveVideo] = useState(null);
@@ -230,7 +232,7 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
             {infiniteVideos.map((video, index) => {
               const embed = getEmbedInfo(video.url || video.videoUrl || video.secureUrl);
               const poster = video.posterUrl || video.thumbnailUrl || embed?.thumbnailUrl || video.url;
-              const videoTitle = video.title || video.alt || 'Dunas Travel Video';
+              const videoTitle = resolveLocalizedText(video.title || video.alt, t, lang) || 'Dunas Travel Video';
 
               return (
                 <div
@@ -320,6 +322,9 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
             >
               {(() => {
                 const activeEmbed = getEmbedInfo(activeVideo.url || activeVideo.videoUrl || activeVideo.secureUrl);
+                const activeVideoTitle = resolveLocalizedText(activeVideo.title || activeVideo.alt, t, lang) || 'Dunas Travel Video';
+                const activeVideoDescription = resolveLocalizedText(activeVideo.description, t, lang);
+
                 if (activeEmbed) {
                   return (
                     <ConsentGate
@@ -330,7 +335,7 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
                     >
                       <iframe
                         src={activeEmbed.embedUrl}
-                        title={activeVideo.title || activeVideo.alt || 'Dunas Travel Video'}
+                        title={activeVideoTitle}
                         className="w-full aspect-video object-contain bg-black border-0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
@@ -364,11 +369,11 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
                     <span>{t('home.videoBadge', 'TRAVEL STORIES')}</span>
                   </div>
                   <h4 className="text-white text-lg font-bold truncate">
-                    {activeVideo.title || activeVideo.alt || 'Dunas Travel Video'}
+                    {resolveLocalizedText(activeVideo.title || activeVideo.alt, t, lang) || 'Dunas Travel Video'}
                   </h4>
-                  {activeVideo.description && (
+                  {resolveLocalizedText(activeVideo.description, t, lang) && (
                     <p className="text-white/70 text-xs line-clamp-2">
-                      {activeVideo.description}
+                      {resolveLocalizedText(activeVideo.description, t, lang)}
                     </p>
                   )}
                 </div>

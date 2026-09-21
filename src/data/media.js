@@ -38,42 +38,138 @@ export const galleryImages = rawGalleryImages.map((img) => ({
 export const videos = [
   {
     publicId: "Despu%C3%A9s_de_una_intensa_jornada_en_Bogot%C3%A1__en_Dunas_Travel_compartimos_una_cena_exclusiva_con_nuestros_partners_estrat%C3%A9gicos._480P_SD_sv2pei",
-    title: "Dinner with Partners in Bogotá",
-    description: "An exclusive dinner event celebrating our strategic partnerships after a successful day in Colombia."
+    title: {
+      ar: "عشاء خاص مع الشركاء في بوغوتا",
+      en: "Dinner with Partners in Bogotá",
+      es: "Cena con Socios en Bogotá",
+      pt: "Jantar com Parceiros em Bogotá",
+      it: "Cena con i Partner a Bogotá"
+    },
+    description: {
+      ar: "لقاء عشاء حصري للاحتفال بشراكاتنا الإستراتيجية بعد حدث ناجح في كولومبيا.",
+      en: "An exclusive dinner event celebrating our strategic partnerships after a successful event in Colombia.",
+      es: "Un evento de cena exclusivo celebrando nuestras alianzas estratégicas tras un exitoso evento en Colombia.",
+      pt: "Um evento exclusivo de jantar celebrando nossas parcerias estratégicas após um evento de sucesso na Colômbia.",
+      it: "Un evento cenacolo esclusivo per celebrare le nostre partnership strategiche dopo un successo in Colombia."
+    }
   },
   {
     publicId: "Somos_Dunas_Travel_Group__480P_SD_gxfsxm",
-    title: "Dunas Travel Group Presentation",
-    description: "A comprehensive presentation showcasing our premium services, values, and commitment to luxury travel."
+    title: {
+      ar: "العرض التقديمي لمجموعة دوناس ترافيل",
+      en: "Dunas Travel Group Presentation",
+      es: "Presentación del Grupo Dunas Travel",
+      pt: "Apresentação do Grupo Dunas Travel",
+      it: "Presentazione del Gruppo Dunas Travel"
+    },
+    description: {
+      ar: "استعراض شامل لخدماتنا الفاخرة وقيمنا والتزامنا بتقديم أعلى معايير السفر والسياحة.",
+      en: "A comprehensive presentation showcasing our premium services, values, and commitment to luxury travel.",
+      es: "Una presentación completa que muestra nuestros servicios de alta gama, valores y compromiso con los viajes de lujo.",
+      pt: "Uma apresentação abrangente demonstrando nossos serviços premium, valores e compromisso com viagens de luxo.",
+      it: "Una presentazione completa che mostra i nostri servizi di alto livello, i valori e l'impegno per i viaggi di lusso."
+    }
   },
   {
     publicId: "VID-20260611-WA0001_az82kl",
-    title: "Nile Cruise Memories",
-    description: "Scenic views and luxury moments captured on board our premium Nile Cruise journey."
+    title: {
+      ar: "ذكريات رحلة كروز النيل",
+      en: "Nile Cruise Memories",
+      es: "Recuerdos del Crucero por el Nilo",
+      pt: "Memórias do Cruzeiro no Nilo",
+      it: "Ricordi della Crociera sul Nilo"
+    },
+    description: {
+      ar: "مشاهد بانورامية ولحظات فاخرة تم التقاطها على متن رحلاتنا البحرية الخالدة في نهر النيل.",
+      en: "Scenic views and luxury moments captured on board our premium Nile Cruise journey.",
+      es: "Vistas panorámicas y momentos de lujo capturados a bordo de nuestro crucero por el Nilo.",
+      pt: "Vistas panorâmicas e momentos de luxo capturados a bordo da nossa viagem de cruzeiro no Nilo.",
+      it: "Viste panoramiche e momenti di lusso immortalati a bordo della nostra crociera sul Nilo."
+    }
   },
   {
     publicId: "VID-20260623-WA0112_xmyc5z",
-    title: "Desert Adventure",
-    description: "Thrilling dune bashing and traditional desert camp experience in Dubai's golden dunes."
+    title: {
+      ar: "مغامرة الصحراء وسحر الكثبان",
+      en: "Desert Adventure",
+      es: "Aventura en el Desierto",
+      pt: "Aventura no Deserto",
+      it: "Avventura nel Deserto"
+    },
+    description: {
+      ar: "تجربة سفاري مثيرة بين الكثبان الذهبية وعشاء سفاري تقليدي في دبي.",
+      en: "Thrilling dune bashing and traditional desert camp experience in Dubai's golden dunes.",
+      es: "Emocionante recorrido por las dunas y experiencia en un campamento tradicional en Dubái.",
+      pt: "Emocionante passeio pelas dunas e experiência em acampamento tradicional nas dunas de Dubai.",
+      it: "Emozionante tour tra le dune ed esperienza in un campo tradizionale nel deserto di Dubai."
+    }
   },
   {
     publicId: "VID-20260611-WA0000_mwgayg",
-    title: "Egypt Historical Sites Walkthrough",
-    description: "Discovering ancient relics, pyramids, and columns with our expert guides."
+    title: {
+      ar: "جولة بين آثار ومعابد مصر الخالدة",
+      en: "Egypt Historical Sites Walkthrough",
+      es: "Recorrido por los Sitios Históricos de Egipto",
+      pt: "Passeio pelos Sítios Históricos do Egito",
+      it: "Tour dei Siti Storici dell'Egitto"
+    },
+    description: {
+      ar: "استكشاف الأهرامات والمعابد التاريخية برفقة أفضل مرشدينا السياحيين.",
+      en: "Discovering ancient relics, pyramids, and columns with our expert guides.",
+      es: "Descubriendo reliquias antiguas, pirámides y templos con nuestros guías expertos.",
+      pt: "Descobrindo relíquias antigas, pirâmides e templos com nossos guias especialistas.",
+      it: "Alla scoperta di antiche reliquie, piramidi e templi con le nostre guide esperte."
+    }
   },
   {
     publicId: "%EF%B8%8F_Viagem_inteligente_come%C3%A7a_no_planejamento_certo_480P_SD_s3dyjb",
-    title: "Smart Travel Planning Guide",
-    description: "Pro tips on how to prepare for your next holiday with expert advice from Dunas Travel advisors."
+    title: {
+      ar: "دليل التخطيط الذكي للسفر",
+      en: "Smart Travel Planning Guide",
+      es: "Guía de Planificación Inteligente de Viajes",
+      pt: "Guia de Planejamento Inteligente de Viagem",
+      it: "Guida alla Pianificazione Intelligente dei Viaggi"
+    },
+    description: {
+      ar: "نصائح ذهبية وكيفية الاستعداد لعطلتك القادمة مع خبراء دوناس ترافيل.",
+      en: "Pro tips on how to prepare for your next holiday with expert advice from Dunas Travel advisors.",
+      es: "Consejos profesionales sobre cómo prepararse para sus próximas vacaciones con asesores de Dunas Travel.",
+      pt: "Dicas profissionais sobre como se preparar para suas próximas férias com especialistas da Dunas Travel.",
+      it: "Consigli di esperti su come prepararsi per la prossima vacanza con gli consulenti Dunas Travel."
+    }
   },
   {
     publicId: "VID-20260623-WA0109_lxcv2r",
-    title: "Palace and Luxury Hotels Tour",
-    description: "A tour of selected 5-star accommodations, pool suites, and stunning room views."
+    title: {
+      ar: "جولة الفنادق والقصور الفاخرة",
+      en: "Palace and Luxury Hotels Tour",
+      es: "Tour de Palacios y Hoteles de Lujo",
+      pt: "Tour por Palácios e Hotéis de Luxo",
+      it: "Tour di Palazzi e Hotel di Lusso"
+    },
+    description: {
+      ar: "استعراض لأفخم الفنادق 5 نجوم والأجنحة الملكية مع إطلالات ساحرة.",
+      en: "A tour of selected 5-star accommodations, pool suites, and stunning room views.",
+      es: "Un recorrido por alojamientos de 5 estrellas, suites con piscina y vistas espectaculares.",
+      pt: "Um passeio por acomodações 5 estrelas selecionadas, suítes com piscina e vistas deslumbrantes.",
+      it: "Un tour di sistemazioni a 5 stelle selezionate, suite con piscina e viste mozzafiato."
+    }
   },
   {
     publicId: "Temos_grande_honra_em_receber_este_reconhecimento_da_Lusanova_como__Melhores_Parceiros_2025_._480P_SD_rgbhr5",
-    title: "Lusanova Best Partners 2025 Award",
-    description: "Celebrating our recognition as a top travel partner by Lusanova in 2025."
+    title: {
+      ar: "جائزة لوزانوفا لأفضل شريك 2025",
+      en: "Lusanova Best Partners 2025 Award",
+      es: "Premio Lusanova Mejores Socios 2025",
+      pt: "Prêmio Lusanova Melhores Parceiros 2025",
+      it: "Premio Lusanova Migliori Partner 2025"
+    },
+    description: {
+      ar: "الاحتفال بتكريمنا كأفضل شريك سياحي من لوزانوفا لعام 2025.",
+      en: "Celebrating our recognition as a top travel partner by Lusanova in 2025.",
+      es: "Celebrando nuestro reconocimiento como uno de los mejores socios de viajes por Lusanova en 2025.",
+      pt: "Celebrando nosso reconhecimento como um dos melhores parceiros de viagem pela Lusanova em 2025.",
+      it: "Festeggiando il nostro riconoscimento come uno dei migliori partner di viaggio da Lusanova nel 2025."
+    }
   }
 ];
