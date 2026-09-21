@@ -122,13 +122,10 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
   // Build seamless infinite marquee items (2 sets for optimal DOM size)
   const infiniteVideos = useMemo(() => {
     if (!videos || videos.length === 0) return [];
-    let base = [...videos];
-    while (base.length < 6 && videos.length > 0) {
-      base = [...base, ...videos];
-    }
+    let base = videos.slice(0, 6);
     return [
-      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v1-${v.id || i}-${i}`, isDuplicate: false })),
-      ...base.map((v, i) => ({ ...v, _origIdx: i % videos.length, _key: `v2-${v.id || i}-${i}`, isDuplicate: true })),
+      ...base.map((v, i) => ({ ...v, _origIdx: i, _key: `v1-${v.id || i}-${i}`, isDuplicate: false })),
+      ...base.map((v, i) => ({ ...v, _origIdx: i, _key: `v2-${v.id || i}-${i}`, isDuplicate: true })),
     ];
   }, [videos]);
 

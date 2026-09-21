@@ -131,7 +131,7 @@ const _packagesData = [
     tag2Key: "egyptPackages.honeymooners.tag2",
     tag3Key: "egyptPackages.honeymooners.tag3",
     price: 1650,
-    image: "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=600&q=65&fm=webp",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600/v1783023886/3776ecde-249e-4183-9840-e9fd900ad96b_xvmumu.jpg",
     link: "/programs/honeymooners",
     featured: false,
   },
@@ -149,7 +149,7 @@ const _packagesData = [
     tag2Key: "egyptPackages.religious.tag2",
     tag3Key: "egyptPackages.religious.tag3",
     price: 1390,
-    image: "https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=600&q=65&fm=webp",
+    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_600/v1783026771/5_upvijm.jpg",
     link: "/programs/religious",
     featured: false,
   },
@@ -1050,9 +1050,10 @@ const HomeExperienceSection = () => {
                   <img
                     src="/images/plane-icon.webp"
                     alt="Dunas Travel Jet"
-                    className="w-20 sm:w-28 md:w-36 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
+                    className="w-20 sm:w-28 md:w-36 aspect-[2/1] object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
                     width="160"
                     height="80"
+                    style={{ aspectRatio: '2 / 1' }}
                   />
                 </div>
               </div>

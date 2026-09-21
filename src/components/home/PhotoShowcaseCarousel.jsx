@@ -18,12 +18,9 @@ const getOptimizedImageUrl = (url, width = 500, height = 650) => {
   return url;
 };
 
-const buildInfiniteMarqueeList = (items, prefix = 'gal', maxVisible = 8) => {
+const buildInfiniteMarqueeList = (items, prefix = 'gal', maxVisible = 6) => {
   if (!Array.isArray(items) || items.length === 0) return [];
-  let base = items.slice(0, maxVisible);
-  while (base.length < 4 && items.length > 0) {
-    base = [...base, ...items].slice(0, maxVisible);
-  }
+  let base = items.slice(0, Math.min(6, maxVisible));
   return [
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: false, uKey: `${prefix}-set1-${tItem.id || i}-${i}` })),
     ...base.map((tItem, i) => ({ ...tItem, origIdx: i, isDuplicate: true, uKey: `${prefix}-set2-${tItem.id || i}-${i}` })),

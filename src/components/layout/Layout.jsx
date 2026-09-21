@@ -13,13 +13,28 @@ const Layout = () => {
   const [loadWidgets, setLoadWidgets] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const handle = window.requestIdleCallback(() => setLoadWidgets(true), { timeout: 1500 });
-      return () => window.cancelIdleCallback(handle);
-    } else {
-      const timer = setTimeout(() => setLoadWidgets(true), 800);
-      return () => clearTimeout(timer);
-    }
+    let timer;
+    const enableWidgets = () => {
+      setLoadWidgets(true);
+      cleanup();
+    };
+
+    const cleanup = () => {
+      window.removeEventListener('pointerdown', enableWidgets);
+      window.removeEventListener('scroll', enableWidgets);
+      window.removeEventListener('keydown', enableWidgets);
+      window.removeEventListener('touchstart', enableWidgets);
+      if (timer) clearTimeout(timer);
+    };
+
+    window.addEventListener('pointerdown', enableWidgets, { passive: true });
+    window.addEventListener('scroll', enableWidgets, { passive: true });
+    window.addEventListener('keydown', enableWidgets, { passive: true });
+    window.addEventListener('touchstart', enableWidgets, { passive: true });
+
+    timer = setTimeout(enableWidgets, 3500);
+
+    return cleanup;
   }, []);
 
   return (

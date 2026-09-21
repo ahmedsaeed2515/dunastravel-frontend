@@ -67,11 +67,11 @@ export default function LuxuryHeroSection({
             repeatType: 'reverse',
             ease: 'easeInOut'
           }}
-          src={bgImage || 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85'}
+          src={bgImage || 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920/v1783026771/8_mpyvu4.jpg'}
           onError={(e) => {
             if (!e.currentTarget.dataset.fallback) {
               e.currentTarget.dataset.fallback = 'true';
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85';
+              e.currentTarget.src = 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920/v1783026771/8_mpyvu4.jpg';
             }
           }}
           alt={title}
