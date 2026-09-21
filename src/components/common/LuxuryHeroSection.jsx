@@ -112,12 +112,11 @@ export default function LuxuryHeroSection({
         )}
 
         {/* Headline */}
-        <motion.h1
-          variants={itemVariants}
+        <h1
           className="text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.25] tracking-tight mb-3 sm:mb-4 font-serif text-balance drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
         >
           {title}
-        </motion.h1>
+        </h1>
 
         {/* Subtitle / English Tagline */}
         {subtitle && (

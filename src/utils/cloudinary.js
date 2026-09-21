@@ -8,34 +8,51 @@ export function getOptimizedCloudinaryUrl(url, options = {}) {
   if (!url || typeof url !== 'string') return url;
   if (!url.includes('res.cloudinary.com')) return url;
 
-  const { width = 800, quality = 'auto:eco', format = 'auto', crop } = options;
+  const { width = 600, quality = 'auto:eco', format = 'auto', crop = 'limit' } = options;
 
-  // Build transformation string
-  const transforms = [];
-  if (format) transforms.push(`f_${format}`);
-  if (quality) transforms.push(`q_${quality}`);
-  if (width) transforms.push(`w_${width}`);
-  if (crop) transforms.push(`c_${crop}`);
+  if (!url.includes('/image/upload/')) return url;
 
-  const transformString = transforms.join(',');
+  const [prefix, afterUpload] = url.split('/image/upload/');
+  if (!afterUpload) return url;
 
-  // Check if URL already has transformations between /upload/ and /v... or public ID
-  if (url.includes('/image/upload/')) {
-    // If it already has transformations (e.g., /upload/v1234 or /upload/w_100/v1234)
-    const parts = url.split('/image/upload/');
-    const afterUpload = parts[1];
+  const segments = afterUpload.split('/');
+  const firstSegment = segments[0];
 
-    // Check if afterUpload already starts with parameters like f_auto or v123
-    if (afterUpload.startsWith('f_auto') || afterUpload.startsWith('q_auto') || afterUpload.startsWith('w_') || afterUpload.startsWith('e_')) {
-      // Replace existing parameters if needed, or if it doesn't have w_, inject w_
-      if (!afterUpload.includes('w_') && width) {
-        return parts[0] + '/image/upload/' + transformString + '/' + afterUpload;
-      }
-      return url;
-    }
+  // Check if the first segment is a version tag (e.g., v1783029636) or public ID (no transformation parameters)
+  const isVersionOrPublicId = /^v\d+$/.test(firstSegment) || !firstSegment.includes('_');
 
-    return parts[0] + '/image/upload/' + transformString + '/' + afterUpload;
+  if (isVersionOrPublicId) {
+    const transformStr = `f_${format},q_${quality},w_${width}${crop ? `,c_${crop}` : ''}`;
+    return `${prefix}/image/upload/${transformStr}/${segments.join('/')}`;
   }
 
-  return url;
+  // First segment contains transformations (e.g., "c_limit,q_auto,w_1920" or "f_auto,q_auto,w_1200,c_fill")
+  let transformTokens = firstSegment.split(',');
+
+  let hasWidth = false;
+  let hasQuality = false;
+  let hasFormat = false;
+
+  transformTokens = transformTokens.map((token) => {
+    if (token.startsWith('w_')) {
+      hasWidth = true;
+      return width ? `w_${width}` : token;
+    }
+    if (token.startsWith('q_')) {
+      hasQuality = true;
+      return quality ? `q_${quality}` : token;
+    }
+    if (token.startsWith('f_')) {
+      hasFormat = true;
+      return format ? `f_${format}` : token;
+    }
+    return token;
+  });
+
+  if (!hasWidth && width) transformTokens.push(`w_${width}`);
+  if (!hasQuality && quality) transformTokens.push(`q_${quality}`);
+  if (!hasFormat && format) transformTokens.push(`f_${format}`);
+
+  segments[0] = transformTokens.join(',');
+  return `${prefix}/image/upload/${segments.join('/')}`;
 }

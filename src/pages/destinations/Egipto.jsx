@@ -8,6 +8,7 @@ import Button from '../../components/ui/Button';
 import TourCard from '../../components/tour/TourCard';
 import { useTours } from '../../hooks/useTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -78,6 +79,11 @@ export default function Egipto() {
             'Discover Egypt in grand style. From the majestic Pyramids of Giza to the temples of Luxor and the Red Sea coast, embark on an unforgettable luxury journey.'
           )}
         />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+        <link rel="preconnect" href="https://ar.scoopempire.com" />
+        <link rel="preconnect" href="https://sft-nationaltours.com" />
+        <link rel="preconnect" href="https://hl-tourism.com" />
+        <link rel="preload" as="image" href="/imgs/egyothero.webp" fetchpriority="high" />
       </Helmet>
 
       {/* Luxury Hero Section */}
@@ -108,7 +114,17 @@ export default function Egipto() {
 
       {/* Top Section: 9 Essential Standalone Trips (الرحلات الأساسية الـ 9) */}
       <section className="container mx-auto px-6 mt-16" id="tours-grid">
-
+        <div className="text-center mb-10">
+          <span className="inline-block font-body text-gold-500 tracking-[0.2em] uppercase text-sm mb-2 font-bold">
+            {t('dest.egypt.toursSubtitle', 'Handpicked Packages & Itineraries')}
+          </span>
+          <h2
+            className="text-display-md text-obsidian-900 dark:text-ivory-50 font-display font-bold text-3xl md:text-4xl"
+            style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
+          >
+            {t('dest.egypt.toursTitle', 'أبرز برامج ورحلات مصر الفاخرة')}
+          </h2>
+        </div>
 
         {/* 9 Base Standalone Tours Grid */}
         <motion.div
@@ -117,8 +133,8 @@ export default function Egipto() {
           initial="hidden"
           animate="visible"
         >
-          {baseClassic9Tours.map((tour) => (
-            <TourCard key={tour.id || tour.slug} tour={tour} />
+          {baseClassic9Tours.map((tour, index) => (
+            <TourCard key={tour.id || tour.slug} tour={tour} index={index} />
           ))}
         </motion.div>
       </section>
@@ -178,10 +194,13 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/classic/classic-program" className="block w-full h-full overflow-hidden">
                 <img
-                  src="https://res.cloudinary.com/degbrq3ck/image/upload/w_600,h_450,c_fill,q_60,f_webp/v1783029636/Classic_Program_gfal0s.jpg"
+                  src={getOptimizedCloudinaryUrl("https://res.cloudinary.com/degbrq3ck/image/upload/v1783029636/Classic_Program_gfal0s.jpg", { width: 500, quality: 'auto:eco' })}
                   alt="Classic Program"
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="255"
                 />
               </Link>
             </div>
@@ -230,10 +249,13 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/honeymooners" className="block w-full h-full overflow-hidden">
                 <img
-                  src="https://hl-tourism.com/media/typecms/Honeymoon_Planning_Guide_2025_Complete_Resource.webp"
+                  src={getOptimizedCloudinaryUrl("https://res.cloudinary.com/nclvl0iu/image/upload/v1790018507/photo-1510414842594-a61c69b5ae57.webp", { width: 500, quality: 'auto:eco' })}
                   alt="Honeymoon in Egypt"
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="255"
                 />
               </Link>
             </div>
@@ -282,10 +304,13 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/religious" className="block w-full h-full overflow-hidden">
                 <img
-                  src="https://sft-nationaltours.com/wp-content/uploads/2024/11/holy-family-egypt_tg_1397-870x555.jpg"
+                  src={getOptimizedCloudinaryUrl("https://res.cloudinary.com/nclvl0iu/image/upload/v1790018506/55e7c5bc-ffec-4f75-a030-ffcc0ff396a2.webp", { width: 500, quality: 'auto:eco' })}
                   alt="Holy Family Journey"
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="255"
                 />
               </Link>
             </div>
@@ -334,10 +359,13 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/multi-country" className="block w-full h-full overflow-hidden">
                 <img
-                  src="https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg"
+                  src={getOptimizedCloudinaryUrl("https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg", { width: 500, quality: 'auto:eco' })}
                   alt="Multi-Country Tours"
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="255"
                 />
               </Link>
             </div>
@@ -386,10 +414,17 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/extension" className="block w-full h-full overflow-hidden">
                 <img
-                  src="https://ar.scoopempire.com/wp-content/uploads/sites/4/2026/03/pexels-vika-glitter-392079-18895967-scaled-1.jpg"
+                  src={getOptimizedCloudinaryUrl("https://ar.scoopempire.com/wp-content/uploads/sites/4/2026/03/pexels-vika-glitter-392079-18895967-scaled-1.jpg", { width: 500, quality: 'auto:eco' })}
                   alt="Egypt Extensions"
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="255"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://res.cloudinary.com/degbrq3ck/image/upload/v1783026771/8_mpyvu4.jpg';
+                  }}
                 />
               </Link>
             </div>

@@ -15,6 +15,7 @@ import {
 import { useCurrency } from '../../context/CurrencyContext';
 import { useWishlist } from '../../hooks/useWishlist';
 import { trackEvent } from '../../utils/analytics';
+import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary';
 import { 
   resolveTourTitle, 
   resolveTourDuration, 
@@ -70,9 +71,6 @@ const cardVariants = {
   }
 };
 
-
-
-
 const contentStaggerVariants = {
   hidden: { opacity: 0, y: 15 },
   visible: { 
@@ -85,6 +83,8 @@ const contentStaggerVariants = {
 const TourCard = ({
   tour,
   linkBase = '/tours',
+  index = 0,
+  loading
 }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || 'en';
@@ -103,10 +103,12 @@ const TourCard = ({
 
   const resolvePrice = (tData) => Number(tData?.price ?? tData?.basePriceUsd ?? 0);
   const displayPrice = resolvePrice(tour);
-  const tourImage =
+  const rawTourImage =
     resolveTourHeroImage(tour) ||
     (typeof tour.heroImageUrl === 'string' ? tour.heroImageUrl.trim() : null) ||
     (Array.isArray(tour.images) && tour.images.length > 0 ? (typeof tour.images[0] === 'string' ? tour.images[0] : tour.images[0]?.imageUrl) : null);
+
+  const tourImage = rawTourImage ? getOptimizedCloudinaryUrl(rawTourImage, { width: 500, quality: 'auto:eco', crop: 'limit' }) : null;
 
   const codeText = resolveLocalizedText(tour.code, t, lang);
   const minPaxText = resolveLocalizedText(tour.minPax, t, lang);
@@ -159,6 +161,8 @@ const TourCard = ({
     e.stopPropagation();
     await toggleFavorite(tour);
   };
+
+  const imageLoadingAttr = loading || (index < 2 ? "eager" : "lazy");
 
   return (
     <motion.div
@@ -219,7 +223,7 @@ const TourCard = ({
               src={tourImage}
               alt={`${title} — ${destinationText}`}
               className="w-full h-full object-cover"
-              loading="eager"
+              loading={imageLoadingAttr}
               decoding="async"
               width="400"
               height="255"
