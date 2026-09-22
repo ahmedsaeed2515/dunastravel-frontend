@@ -561,7 +561,7 @@ const TailorTour = () => {
   const DEST_HERO_MAP = {
     egypt: '/imgs/egyothero.webp',
     turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    jordan: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/11_xydddd.jpg',
+    jordan: 'https://www.touristsecrets.com/wp-content/uploads/2023/09/jordan-travel-guide-best-places-to-visit-in-jordan-tips-1693570205.jpeg',
     dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
     morocco: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
     greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',

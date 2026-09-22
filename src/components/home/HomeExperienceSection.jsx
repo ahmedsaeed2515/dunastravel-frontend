@@ -70,7 +70,7 @@ const _destinationsData = [
     id: "jordan",
     nameKey: "home.destJordan",
     descKey: "home.destJordanDesc",
-    image: "https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/11_xydddd.jpg",
+    image: "https://www.touristsecrets.com/wp-content/uploads/2023/09/jordan-travel-guide-best-places-to-visit-in-jordan-tips-1693570205.jpeg",
   },
   {
     id: "morocco",
@@ -401,8 +401,8 @@ const HomeExperienceSection = () => {
         : null;
       const image = v.heroImage || v.image || v.heroImageUrl || firstImage || (
         normalizedCat === 'bus' ? '/imgs/transportation/bus1.jpeg' :
-        normalizedCat === 'coaster' ? '/imgs/transportation/costar.jpeg' :
-        '/imgs/transportation/privte.jpeg'
+          normalizedCat === 'coaster' ? '/imgs/transportation/costar.jpeg' :
+            '/imgs/transportation/privte.jpeg'
       );
 
       const price = Number(v.pricePerDay || v.pricePerTrip || v.price || v.basePriceUsd || 0);
@@ -412,8 +412,8 @@ const HomeExperienceSection = () => {
         id: v.id || v._id || `trans-${idx}`,
         name: resolveLocalizedText(v.name || v.title, t, lang) || (
           normalizedCat === 'bus' ? 'Luxury Tour Bus' :
-          normalizedCat === 'coaster' ? 'Executive Coaster' :
-          'VIP Private Transfer'
+            normalizedCat === 'coaster' ? 'Executive Coaster' :
+              'VIP Private Transfer'
         ),
         image,
         heroImage: image,
@@ -433,7 +433,7 @@ const HomeExperienceSection = () => {
   const DEST_HERO_MAP = {
     egypt: '/imgs/egyothero.webp',
     turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    jordan: 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800,c_fill/v1783026771/11_xydddd.jpg',
+    jordan: 'https://www.touristsecrets.com/wp-content/uploads/2023/09/jordan-travel-guide-best-places-to-visit-in-jordan-tips-1693570205.jpeg',
     dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
     morocco: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
     greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
@@ -826,7 +826,7 @@ const HomeExperienceSection = () => {
         {/* Search Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           {/* Search Form Box */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 45, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: '-40px' }}
@@ -1017,7 +1017,7 @@ const HomeExperienceSection = () => {
               <h2 className="text-display-lg text-obsidian-900 mb-6">
                 {t("home.aboutTitle", "Experiencias exclusivas, diseñadas a medida")}
               </h2>
-              <p 
+              <p
                 className="text-body-lg text-black dark:text-white font-bold mb-8 leading-relaxed"
                 style={{ fontWeight: 700 }}
               >
@@ -1123,7 +1123,7 @@ const HomeExperienceSection = () => {
                 {t("home.discoverMagic", "اكتشف السحر")}
               </span>
             </div>
-            
+
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wide font-serif drop-shadow-lg uppercase">
               {t("home.destTitle", "الوجهات وجولاتها")}
             </h2>
@@ -1201,7 +1201,7 @@ const HomeExperienceSection = () => {
 
                   {/* Top Badge: Country Name in Ultra-Luxury Gold Box with Bold Black Text */}
                   <div className="absolute top-0 ltr:right-8 rtl:left-8 z-20">
-                    <div 
+                    <div
                       className="px-7 py-3 rounded-b-2xl font-extrabold text-2xl sm:text-3xl font-serif shadow-[0_8px_25px_rgba(245,166,35,0.45)] flex items-center justify-center tracking-wide border-b-2 border-x-2 border-[#B38728]/70 hover:brightness-110 transition-all duration-300"
                       style={{ background: 'linear-gradient(135deg, #FFE082 0%, #F5A623 45%, #D4AF37 80%, #B38728 100%)' }}
                     >
@@ -1232,7 +1232,7 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-{/* Destination Tours Marquee Section */}
+      {/* Destination Tours Marquee Section */}
       <section ref={destSectionRef} className="py-12 bg-ivory-100 dark:bg-obsidian-950 overflow-hidden relative">
         <div className="container mx-auto px-6">
           <div className="text-center mb-10 max-w-3xl mx-auto">
@@ -1248,79 +1248,79 @@ const HomeExperienceSection = () => {
 
         {/* Marquee Strip */}
         <div className="relative group/marquee w-full">
-          <div 
-            dir="ltr" 
-            ref={destMarqueeRef} 
+          <div
+            dir="ltr"
+            ref={destMarqueeRef}
             className="overflow-x-auto md:overflow-hidden w-full relative py-4 scrollbar-none snap-x snap-mandatory md:snap-none"
           >
             <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left" data-active={isDestSectionVisible ? "true" : "false"}>
-            {(() => {
-              const infiniteList = buildInfiniteMarqueeList(destinationToursForMarquee, 'dest');
-              return infiniteList.map((tData, idx) => {
-                const resolvedTitle = resolveTourTitle(tData, t, lang);
-                const resolvedDuration = resolveTourDuration(tData, t, lang);
-                const rawDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
-                const resolvedDest = t(`nav.${rawDest}`, rawDest.charAt(0).toUpperCase() + rawDest.slice(1));
-                const imageUrl = tourImageUrl(tData);
+              {(() => {
+                const infiniteList = buildInfiniteMarqueeList(destinationToursForMarquee, 'dest');
+                return infiniteList.map((tData, idx) => {
+                  const resolvedTitle = resolveTourTitle(tData, t, lang);
+                  const resolvedDuration = resolveTourDuration(tData, t, lang);
+                  const rawDest = tData.destination === 'holy-land' ? 'holyland' : (tData.destination || 'egypt');
+                  const resolvedDest = t(`nav.${rawDest}`, rawDest.charAt(0).toUpperCase() + rawDest.slice(1));
+                  const imageUrl = tourImageUrl(tData);
 
-                return (
-                  <Link
-                    key={`dest-tour-${tData.id || idx}-${idx}`}
-                    to={tData.link || `/tours/${tData.slug || tData.id}`}
-                    tabIndex={tData.isDuplicate ? -1 : undefined}
-                    aria-hidden={tData.isDuplicate ? "true" : undefined}
-                    className={`min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500 ${tData.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
-                  >
-                    <img
-                      src={getOptimizedImageUrl(imageUrl, 300, 355)}
-                      alt={resolvedTitle}
-                      width="300"
-                      height="330"
-                      className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.06]"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent"></div>
+                  return (
+                    <Link
+                      key={`dest-tour-${tData.id || idx}-${idx}`}
+                      to={tData.link || `/tours/${tData.slug || tData.id}`}
+                      tabIndex={tData.isDuplicate ? -1 : undefined}
+                      aria-hidden={tData.isDuplicate ? "true" : undefined}
+                      className={`min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 group relative rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_36px_rgba(245,166,35,0.3)] transition-all duration-500 h-[340px] sm:h-[355px] border border-white/15 hover:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500 ${tData.isDuplicate ? 'hidden md:block' : 'block snap-start'}`}
+                    >
+                      <img
+                        src={getOptimizedImageUrl(imageUrl, 300, 355)}
+                        alt={resolvedTitle}
+                        width="300"
+                        height="330"
+                        className="w-full h-full object-cover cinematic-transition group-hover:scale-[1.06]"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent"></div>
 
-                    <div className="package-badge-text absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
-                      {resolvedDest}
-                    </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full">
-                      <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                        <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2">
-                          {resolvedTitle}
-                        </h3>
-
-                        <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
-                          <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
-                            <FaClock className="text-gold-400 text-xs" />
-                            <span>{resolvedDuration}</span>
-                          </span>
-                          {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
-                            <span className="text-gold-400 font-bold text-xs">
-                              {formatPrice(tData.price)}
-                            </span>
-                          )}
-                        </div>
-
-                        {Number.isFinite(Number(tData.rating)) && Number.isFinite(Number(tData.reviewCount)) ? (
-                          <div className="flex items-center gap-1 text-gold-400">
-                            <FaStar size={11} />
-                            <span className="text-ivory-50 text-xs font-semibold">
-                              {Number(tData.rating).toFixed(1)} <span className="text-ivory-300 font-normal">({tData.reviewCount})</span>
-                            </span>
-                          </div>
-                        ) : null}
+                      <div className="package-badge-text absolute top-3 left-3 bg-gold-500/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase">
+                        {resolvedDest}
                       </div>
-                    </div>
-                  </Link>
-                );
-              });
-            })()}
+
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end h-full">
+                        <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+                          <h3 className="text-base sm:text-lg text-white font-bold mb-1.5 leading-snug line-clamp-2">
+                            {resolvedTitle}
+                          </h3>
+
+                          <div className="flex items-center justify-between text-xs text-white mb-3 pt-2 border-t border-white/20">
+                            <span className="text-[12px] font-extrabold text-white flex items-center gap-1.5 drop-shadow-sm">
+                              <FaClock className="text-gold-400 text-xs" />
+                              <span>{resolvedDuration}</span>
+                            </span>
+                            {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
+                              <span className="text-gold-400 font-bold text-xs">
+                                {formatPrice(tData.price)}
+                              </span>
+                            )}
+                          </div>
+
+                          {Number.isFinite(Number(tData.rating)) && Number.isFinite(Number(tData.reviewCount)) ? (
+                            <div className="flex items-center gap-1 text-gold-400">
+                              <FaStar size={11} />
+                              <span className="text-ivory-50 text-xs font-semibold">
+                                {Number(tData.rating).toFixed(1)} <span className="text-ivory-300 font-normal">({tData.reviewCount})</span>
+                              </span>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                });
+              })()}
+            </div>
           </div>
         </div>
-      </div>
 
         <div className="flex justify-center mt-12">
           <Link to="/tours">
@@ -1338,7 +1338,7 @@ const HomeExperienceSection = () => {
       <section className="py-16 md:py-24 relative overflow-hidden bg-ivory-50 dark:bg-obsidian-950">
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           {/* Container Card with Top Header Background & Royal Gold Accents */}
-          <div 
+          <div
             className="relative rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-10 md:p-16 overflow-hidden border border-gold-500/30 shadow-[0_20px_60px_rgba(4,20,70,0.35)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
             style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
           >
@@ -1355,7 +1355,7 @@ const HomeExperienceSection = () => {
             <div className="relative z-10">
               {/* Header */}
               <div className="text-center mb-12 sm:mb-16 max-w-3xl mx-auto">
-                <motion.span 
+                <motion.span
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -1363,7 +1363,7 @@ const HomeExperienceSection = () => {
                 >
                   <span className="text-amber-400">✨</span> {t("home.ourPackages", "Discover Egypt Packages")}
                 </motion.span>
-                <motion.h2 
+                <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -1396,11 +1396,10 @@ const HomeExperienceSection = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: idx * 0.1 }}
-                      className={`group relative rounded-3xl overflow-hidden cursor-pointer flex flex-col justify-between border transition-all duration-500 backdrop-blur-xl ${
-                        isHero 
-                          ? "lg:col-span-2 min-h-[380px] sm:min-h-[420px] bg-gradient-to-br from-[#121c3b]/90 via-[#0d152d]/90 to-[#070c1b]/90 border-gold-500/40 hover:border-gold-400 shadow-[0_12px_40px_rgba(245,166,35,0.2)] hover:shadow-[0_16px_50px_rgba(245,166,35,0.35)]" 
+                      className={`group relative rounded-3xl overflow-hidden cursor-pointer flex flex-col justify-between border transition-all duration-500 backdrop-blur-xl ${isHero
+                          ? "lg:col-span-2 min-h-[380px] sm:min-h-[420px] bg-gradient-to-br from-[#121c3b]/90 via-[#0d152d]/90 to-[#070c1b]/90 border-gold-500/40 hover:border-gold-400 shadow-[0_12px_40px_rgba(245,166,35,0.2)] hover:shadow-[0_16px_50px_rgba(245,166,35,0.35)]"
                           : "min-h-[360px] bg-gradient-to-br from-[#121c3b]/80 via-[#0a1127]/80 to-[#060a17]/80 border-white/10 hover:border-gold-500/50 hover:shadow-[0_12px_36px_rgba(245,166,35,0.25)] hover:-translate-y-2"
-                      }`}
+                        }`}
                       onClick={() => handlePackageClick(pkg.id)}
                     >
                       {/* Background Image with High Clarity & Gradient Overlay */}
@@ -1417,7 +1416,7 @@ const HomeExperienceSection = () => {
                       {/* Top Floating Badges */}
                       <div className="relative z-10 p-6 sm:p-8 flex items-center justify-between gap-4">
                         {pkg.badge && (
-                          <span 
+                          <span
                             className="package-badge-text inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gold-500 text-caption uppercase tracking-wider shadow-lg backdrop-blur-md"
                             style={{ color: '#000000', fontWeight: 900 }}
                           >
@@ -1438,8 +1437,8 @@ const HomeExperienceSection = () => {
                         {(pkg.tag1 || pkg.tag2 || pkg.tag3) && (
                           <div className="flex flex-wrap gap-2 mb-3">
                             {[pkg.tag1, pkg.tag2, pkg.tag3].filter(Boolean).map((tText, tIdx) => (
-                              <span 
-                                key={tIdx} 
+                              <span
+                                key={tIdx}
                                 className="text-[11px] font-semibold text-white bg-black/50 backdrop-blur-md border border-white/30 px-2.5 py-1 rounded-full shadow-sm"
                               >
                                 {tText}
@@ -1448,7 +1447,7 @@ const HomeExperienceSection = () => {
                           </div>
                         )}
 
-                        <h3 
+                        <h3
                           className={`${isHero ? "text-2xl sm:text-4xl" : "text-xl sm:text-2xl"} text-white font-serif font-bold mb-2 group-hover:text-gold-300 transition-colors duration-300`}
                           style={{ fontFamily: "'Playfair Display', serif" }}
                         >
@@ -1461,8 +1460,8 @@ const HomeExperienceSection = () => {
 
                         {/* Footer Actions */}
                         <div className="flex items-center justify-end pt-4 border-t border-white/20 group-hover:border-gold-500/40 transition-colors">
-                          <Link 
-                            to={pkg.link} 
+                          <Link
+                            to={pkg.link}
                             onClick={(e) => e.stopPropagation()}
                             className="explore-program-btn inline-flex items-center gap-2 px-6 py-2.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.3)] hover:shadow-2xl hover:scale-105 transition-all duration-300 text-xs border-2 border-white/80 cursor-pointer"
                             style={{ background: 'linear-gradient(135deg, #FFE082 0%, #F5A623 50%, #D4AF37 100%)', color: '#000000' }}
@@ -1493,7 +1492,7 @@ const HomeExperienceSection = () => {
                       <h3 className="text-2xl md:text-3xl text-white font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
                         {livePackageCards.find(p => p.id === activePackage)?.name} — {t("nav.tours", "Tours")}
                       </h3>
-                      <button 
+                      <button
                         onClick={() => setActivePackage(null)}
                         className="w-9 h-9 rounded-full bg-white/10 hover:bg-gold-500 hover:text-obsidian-900 text-white flex items-center justify-center transition-all"
                       >
@@ -1513,7 +1512,7 @@ const HomeExperienceSection = () => {
                     </div>
 
                     <div className="flex justify-center mt-10">
-                      <Link 
+                      <Link
                         to={livePackageCards.find(p => p.id === activePackage)?.link || "/tours"}
                         className="explore-program-btn inline-flex items-center gap-2 px-8 py-3.5 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-2xl hover:scale-105 transition-all duration-300 text-xs font-black border-2 border-white/80 cursor-pointer"
                         style={{ background: 'linear-gradient(135deg, #FFE082 0%, #F5A623 50%, #D4AF37 100%)', color: '#000000' }}
@@ -1565,11 +1564,10 @@ const HomeExperienceSection = () => {
               <button
                 key={tab}
                 onClick={() => setVehicleFilter(tab)}
-                className={`px-6 py-2 rounded-full border-2 transition-all duration-300 font-semibold tracking-wide cursor-pointer ${
-                  vehicleFilter === tab
+                className={`px-6 py-2 rounded-full border-2 transition-all duration-300 font-semibold tracking-wide cursor-pointer ${vehicleFilter === tab
                     ? "bg-obsidian-900 dark:bg-obsidian-900 text-white border-gold-500 shadow-[0_0_15px_rgba(245,166,35,0.4)] scale-105"
                     : "bg-obsidian-900/70 dark:bg-obsidian-900/70 text-white/80 border-transparent hover:border-gold-500/50 hover:text-white"
-                }`}
+                  }`}
               >
                 {tab === "all"
                   ? t("home.allVehicles", "All")
@@ -1668,13 +1666,13 @@ const HomeExperienceSection = () => {
       {/* Services Section */}
       <section className="py-20 lg:py-28 relative overflow-hidden bg-white dark:bg-obsidian-950 border-t border-gray-100 dark:border-white/5 content-auto">
         {/* Decorative backdrop elements */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03]" 
-          style={{ 
-            background: 'radial-gradient(circle at 10% 20%, rgb(30,58,138) 0%, transparent 40%), radial-gradient(circle at 90% 80%, #F5A623 0%, transparent 40%)' 
-          }} 
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03]"
+          style={{
+            background: 'radial-gradient(circle at 10% 20%, rgb(30,58,138) 0%, transparent 40%), radial-gradient(circle at 90% 80%, #F5A623 0%, transparent 40%)'
+          }}
         />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent" />
-        
+
         <div className="container mx-auto px-6 relative z-10">
           {/* Section Header */}
           <motion.div
@@ -1698,7 +1696,7 @@ const HomeExperienceSection = () => {
 
           {/* Dynamic Expanding Panels */}
           <div className="flex flex-col md:flex-row gap-8 w-full max-w-5xl mx-auto min-h-[500px] md:h-[550px]">
-            
+
             {/* Hotels Card */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -1709,14 +1707,14 @@ const HomeExperienceSection = () => {
             >
               <Link to="/services" className="absolute inset-0 z-20" aria-label={t('nav.hotelsTab', 'Hotels')} />
               {/* Background Image with Muted Overlay */}
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
                 style={{
                   backgroundImage: "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80')"
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
-              
+
               {/* Golden Overlay Light Leak */}
               <div className="absolute inset-0 bg-gold-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
@@ -1732,13 +1730,13 @@ const HomeExperienceSection = () => {
                 {/* Custom Palace Door SVG Icon */}
                 <div className="w-16 h-16 rounded-2xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center shrink-0 shadow-lg backdrop-blur-md transition-all duration-500 group-hover:bg-gold-500 group-hover:text-obsidian-900 group-hover:scale-110">
                   <svg className="w-9 h-9 text-gold-400 group-hover:text-obsidian-900 transition-colors duration-500" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M12 52V28C12 16.9543 20.9543 8 32 8C43.0457 8 52 16.9543 52 28V52" strokeLinecap="round"/>
-                    <path d="M6 52H58" strokeLinecap="round"/>
-                    <path d="M22 52V30C22 24.4772 26.4772 20 32 20C37.5228 20 42 24.4772 42 30V52" strokeLinecap="round"/>
-                    <circle cx="32" cy="30" r="4" fill="currentColor"/>
-                    <path d="M32 34V42" strokeLinecap="round"/>
-                    <line x1="32" y1="8" x2="32" y2="14" strokeLinecap="round"/>
-                    <path d="M28 14H36" strokeLinecap="round"/>
+                    <path d="M12 52V28C12 16.9543 20.9543 8 32 8C43.0457 8 52 16.9543 52 28V52" strokeLinecap="round" />
+                    <path d="M6 52H58" strokeLinecap="round" />
+                    <path d="M22 52V30C22 24.4772 26.4772 20 32 20C37.5228 20 42 24.4772 42 30V52" strokeLinecap="round" />
+                    <circle cx="32" cy="30" r="4" fill="currentColor" />
+                    <path d="M32 34V42" strokeLinecap="round" />
+                    <line x1="32" y1="8" x2="32" y2="14" strokeLinecap="round" />
+                    <path d="M28 14H36" strokeLinecap="round" />
                   </svg>
                 </div>
 
@@ -1748,7 +1746,7 @@ const HomeExperienceSection = () => {
                   <p className="text-white group-hover:text-gold-300 text-sm leading-relaxed font-body font-semibold max-w-sm transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] opacity-95">
                     {t('home.servicesHotelsDesc', 'Luxury 5-star accommodations and handpicked boutique hotels across all destinations')}
                   </p>
-                  
+
                   {/* Action Link */}
                   <div className="inline-flex items-center gap-2 text-xs font-extrabold text-white group-hover:text-gold-400 transition-colors pt-2 uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
                     <span>{t('services.explore', 'Explore')}</span>
@@ -1768,14 +1766,14 @@ const HomeExperienceSection = () => {
               className="relative flex-1 md:hover:grow-[1.4] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group rounded-3xl overflow-hidden cursor-pointer shadow-card hover:shadow-card-lg border border-gold-200/20 flex flex-col justify-end"
             >
               {/* Background Image with Muted Overlay */}
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
                 style={{
                   backgroundImage: "url('https://res.cloudinary.com/degbrq3ck/image/upload/w_600,c_limit,q_auto:eco,f_auto/v1783071610/bus1_lprkiy.jpg')"
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-black/40 opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
-              
+
               {/* Golden Overlay Light Leak */}
               <div className="absolute inset-0 bg-gold-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
@@ -1792,15 +1790,15 @@ const HomeExperienceSection = () => {
                 {/* Custom Windrose / Navigator SVG Icon */}
                 <div className="w-16 h-16 rounded-2xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center shrink-0 shadow-lg backdrop-blur-md transition-all duration-500 group-hover:bg-gold-500 group-hover:text-obsidian-900 group-hover:scale-110">
                   <svg className="w-9 h-9 text-gold-400 group-hover:text-obsidian-900 transition-colors duration-500" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <circle cx="32" cy="32" r="24" strokeDasharray="4 4" strokeLinecap="round"/>
-                    <path d="M32 12L36 28L32 32L28 28Z" fill="currentColor" opacity="0.3"/>
-                    <path d="M32 52L28 36L32 32L36 36Z" fill="currentColor" opacity="0.3"/>
-                    <path d="M12 32L28 28L32 32L28 36Z" fill="currentColor" opacity="0.3"/>
-                    <path d="M52 32L36 36L32 32L36 28Z" fill="currentColor" opacity="0.3"/>
-                    <path d="M32 10V22" strokeLinecap="round"/>
-                    <path d="M30 14L32 10L34 14" strokeLinecap="round" strokeJoin="round"/>
-                    <path d="M16 48C28 48 24 24 48 20" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-                    <circle cx="48" cy="20" r="3" fill="currentColor"/>
+                    <circle cx="32" cy="32" r="24" strokeDasharray="4 4" strokeLinecap="round" />
+                    <path d="M32 12L36 28L32 32L28 28Z" fill="currentColor" opacity="0.3" />
+                    <path d="M32 52L28 36L32 32L36 36Z" fill="currentColor" opacity="0.3" />
+                    <path d="M12 32L28 28L32 32L28 36Z" fill="currentColor" opacity="0.3" />
+                    <path d="M52 32L36 36L32 32L36 28Z" fill="currentColor" opacity="0.3" />
+                    <path d="M32 10V22" strokeLinecap="round" />
+                    <path d="M30 14L32 10L34 14" strokeLinecap="round" strokeJoin="round" />
+                    <path d="M16 48C28 48 24 24 48 20" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                    <circle cx="48" cy="20" r="3" fill="currentColor" />
                   </svg>
                 </div>
 
@@ -1810,7 +1808,7 @@ const HomeExperienceSection = () => {
                   <p className="text-white group-hover:text-gold-300 text-sm leading-relaxed font-body font-semibold max-w-sm transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] opacity-95">
                     {t('home.servicesTransportDesc', 'Private luxury vehicles, airport transfers, and chauffeur-driven tours with expert drivers')}
                   </p>
-                  
+
                   {/* Action Link */}
                   <div className="inline-flex items-center gap-2 text-xs font-extrabold text-white group-hover:text-gold-400 transition-colors pt-2 uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
                     <span>{t('services.explore', 'Explore')}</span>
@@ -1857,7 +1855,7 @@ const HomeExperienceSection = () => {
       </div>
 
       {/* Contact Info Section */}
-      <section 
+      <section
         className="py-20 lg:py-32 relative overflow-hidden content-auto"
         style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
       >
@@ -1874,7 +1872,7 @@ const HomeExperienceSection = () => {
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
-            
+
             {/* Left Column: Visual Focal Point + Typography Heading */}
             <div className="lg:col-span-2 space-y-8 text-center lg:text-start">
               <motion.div
@@ -1888,13 +1886,13 @@ const HomeExperienceSection = () => {
                   <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
                   {t('home.contactSub', 'Get In Touch')}
                 </div>
-                
+
                 <h2 className="text-display-lg text-white font-display leading-tight tracking-wide gold-text-glow">
                   {t('home.contactTitle', "We're Here to Help")}
                 </h2>
-                
+
                 <p className="text-body-md text-white leading-relaxed font-body max-w-md mx-auto lg:mx-0">
-                  {i18n.language === 'ar' 
+                  {i18n.language === 'ar'
                     ? "فريق مستشاري السفر الفاخر لدينا متاح دائمًا لتصميم رحلتك المخصصة والإجابة على أي استفسارات على مدار الساعة."
                     : "Our dedicated travel advisors are standing by 24/7 to design your bespoke itinerary, answer questions, or provide support at any point of your journey."
                   }
@@ -1912,7 +1910,7 @@ const HomeExperienceSection = () => {
                 {/* Glowing Circles */}
                 <div className="absolute inset-0 rounded-full border border-[#F5A623]/25 animate-ring-slow" />
                 <div className="absolute inset-4 rounded-full border border-[#F5A623]/40 animate-ring-fast" />
-                
+
                 {/* Center visual box */}
                 <div className="w-28 h-28 rounded-3xl bg-gradient-to-tr from-[#C9A227] to-[#F5A623] p-0.5 shadow-[#F5A623]/20 shadow-2xl relative flex items-center justify-center border border-white/10 group hover:rotate-6 transition-transform duration-500">
                   <div className="absolute inset-[2px] bg-[#061D5D] rounded-[22px] flex items-center justify-center overflow-hidden">
@@ -1939,7 +1937,7 @@ const HomeExperienceSection = () => {
                   <FaWhatsapp className="w-5 h-5 group-hover:rotate-12 transition-transform text-white" />
                   {i18n.language === 'ar' ? "تحدث معنا عبر واتساب" : "Chat on WhatsApp"}
                 </a>
-                
+
                 <Link
                   to="/contact"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 glassmorphism-card text-white font-medium uppercase tracking-wider text-xs px-8 py-4 rounded-full hover:bg-white/10 transition-all duration-300"
@@ -1952,7 +1950,7 @@ const HomeExperienceSection = () => {
 
             {/* Right Column: 3 Contact Cards */}
             <div className="lg:col-span-3 space-y-6">
-              
+
               {/* Card 1: Address */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
@@ -1973,10 +1971,10 @@ const HomeExperienceSection = () => {
                     First floor, Flat 102 – 103<br />
                     Haram - Giza – Egypt
                   </p>
-                  <a 
-                    href="https://maps.google.com/?q=5+Hussein+Said+St,+Old+Hadayk+El+Ahram,+Haram,+Giza,+Egypt" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                  <a
+                    href="https://maps.google.com/?q=5+Hussein+Said+St,+Old+Hadayk+El+Ahram,+Haram,+Giza,+Egypt"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-white hover:text-white/80 transition-colors pt-2 group/link"
                   >
                     {i18n.language === 'ar' ? "عرض على الخريطة" : "Open in Google Maps"}
@@ -2000,7 +1998,7 @@ const HomeExperienceSection = () => {
                 <div className="space-y-2 flex-grow">
                   <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest block">02 / {t('contact.phoneLabel', 'Phone')}</span>
                   <h3 className="text-lg font-bold text-white tracking-wide font-display">{t('home.contactPhone', 'Call Us')}</h3>
-                  
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                     <a
                       href="tel:+20233746643"
@@ -2035,7 +2033,7 @@ const HomeExperienceSection = () => {
                 <div className="space-y-2 flex-grow">
                   <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest block">03 / {t('contact.emailLabel', 'Email')}</span>
                   <h3 className="text-lg font-bold text-white tracking-wide font-display">{t('home.contactEmail', 'Email Us')}</h3>
-                  
+
                   <div className="pt-2">
                     <a
                       href="mailto:info@dunas-travel.com"
@@ -2191,12 +2189,12 @@ const HomeExperienceSection = () => {
       </AnimatePresence>
 
       {/* Our Brands Logos - White Background */}
-      <section 
+      <section
         className="w-full bg-white dark:bg-white py-12 sm:py-16 content-auto our-brands-section"
         style={{ backgroundColor: '#ffffff', color: '#000000' }}
       >
         <div className="max-w-6xl mx-auto px-6">
-          <h3 
+          <h3
             className="text-center text-obsidian-900 dark:text-obsidian-900 text-xl sm:text-2xl font-bold mb-10 our-brands-title"
             style={{ color: '#000000' }}
           >
