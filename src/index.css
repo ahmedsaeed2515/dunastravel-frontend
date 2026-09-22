@@ -149,20 +149,9 @@ html[data-scroll-locked] {
     color: #e8e4e0 !important;
   }
 
-  .dark a[class*="bg-gradient-to-r"][class*="from-gold"],
-  .dark button[class*="bg-gradient-to-r"][class*="from-gold"],
   .dark a[class*="bg-gradient-to-r"][class*="from-rose"],
   .dark button[class*="bg-gradient-to-r"][class*="from-rose"] {
     color: #fff !important;
-  }
-
-  .dark a[class*="bg-gradient-to-r"][class*="from-gold"],
-  .dark button[class*="bg-gradient-to-r"][class*="from-gold"] {
-    color: #ffffff !important;
-  }
-
-  .dark .gold-btn-text {
-    color: #ffffff !important;
   }
 
   /* Tailor form - fixed light mode design, unaffected by dark mode */
