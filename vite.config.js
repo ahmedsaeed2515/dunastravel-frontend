@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // Custom plugin to convert render-blocking CSS link tags to preloaded async link tags
 function asyncCssPlugin() {
@@ -114,7 +115,16 @@ export default defineConfig(({ mode }) => {
   const apiOrigin = new URL(upstreamApi).origin;
 
   return {
-    plugins: [react(), asyncCssPlugin(), devLoggerPlugin()],
+    plugins: [
+      react(),
+      asyncCssPlugin(),
+      devLoggerPlugin(),
+      visualizer({
+        filename: 'stats.html',
+        open: false,
+        gzipSize: true
+      })
+    ],
     base: '/',
     server: {
       watch: {

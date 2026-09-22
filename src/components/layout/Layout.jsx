@@ -1,9 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
-import Footer from './Footer';
 import { JaiderChatProvider } from '../../context/JaiderChatContext';
 
+const Footer = lazy(() => import('./Footer'));
 const FloatingContact = lazy(() => import('./FloatingContact'));
 const BackgroundMusic = lazy(() => import('../ui/BackgroundMusic'));
 const FloatingGuideR = lazy(() => import('../ui/FloatingGuideR'));
@@ -45,7 +45,9 @@ const Layout = () => {
           <Outlet />
         </main>
 
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
         {loadWidgets && (
           <Suspense fallback={null}>
             <FloatingContact />

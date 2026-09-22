@@ -348,6 +348,8 @@ const HomeExperienceSection = () => {
   const [isAllToursPopupOpen, setIsAllToursPopupOpen] = useState(false);
   const [destSectionRef, isDestSectionVisible] = useInViewport({ threshold: 0.05 });
   const [transportSectionRef, isTransportSectionVisible] = useInViewport({ threshold: 0.05 });
+  const [photoSectionRef, isPhotoSectionVisible] = useInViewport({ threshold: 0.05, rootMargin: '250px', once: true });
+  const [videoSectionRef, isVideoSectionVisible] = useInViewport({ threshold: 0.05, rootMargin: '250px', once: true });
   const pkgMarqueeRef = useRef(null);
   const destMarqueeRef = useRef(null);
   const pkgHoveredRef = useRef(false);
@@ -1820,24 +1822,36 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* 2. Photo Showcase Carousel */}
-      <Suspense fallback={
-        <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
-          <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
-          <span className="text-sm font-semibold tracking-wider uppercase">Loading Photo Gallery...</span>
-        </div>
-      }>
-        <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
-      </Suspense>
+      <div ref={photoSectionRef}>
+        {isPhotoSectionVisible ? (
+          <Suspense fallback={
+            <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
+              <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
+              <span className="text-sm font-semibold tracking-wider uppercase">Loading Photo Gallery...</span>
+            </div>
+          }>
+            <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
+          </Suspense>
+        ) : (
+          <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70" />
+        )}
+      </div>
 
       {/* 3. Video Showcase Carousel */}
-      <Suspense fallback={
-        <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
-          <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
-          <span className="text-sm font-semibold tracking-wider uppercase">Loading Video Showcase...</span>
-        </div>
-      }>
-        <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
-      </Suspense>
+      <div ref={videoSectionRef}>
+        {isVideoSectionVisible ? (
+          <Suspense fallback={
+            <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
+              <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
+              <span className="text-sm font-semibold tracking-wider uppercase">Loading Video Showcase...</span>
+            </div>
+          }>
+            <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
+          </Suspense>
+        ) : (
+          <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70" />
+        )}
+      </div>
 
       {/* Contact Info Section */}
       <section 

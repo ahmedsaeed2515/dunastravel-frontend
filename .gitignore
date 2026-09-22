@@ -38,6 +38,7 @@ server.cjs
 
 # Audit reports
 lighthouse_*.json
+stats.html
 
 # Temporary backups and coverage
 originals-backup/
