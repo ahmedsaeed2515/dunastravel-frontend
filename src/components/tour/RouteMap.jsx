@@ -442,7 +442,16 @@ const RouteMap = ({ itinerary }) => {
     locations.forEach((loc) => {
       const marker = L.marker(loc.coords)
         .addTo(map)
-        .bindPopup(`<div style="font-family: sans-serif; padding: 4px;"><b>${loc.name}</b><br/><div style="margin-top: 4px; font-size: 12px; color: #444; line-height: 1.4;">${loc.description || ''}</div></div>`);
+        .bindPopup(`
+          <div style="font-family: 'Cairo', 'Inter', sans-serif; padding: 6px 4px; min-width: 170px;">
+            <div style="font-size: 15px; font-weight: 900; color: #0b1739; border-bottom: 2px solid #f59e0b; padding-bottom: 4px; margin-bottom: 6px;">
+              📍 ${loc.name}
+            </div>
+            <div style="font-size: 13px; font-weight: 700; color: #1e293b; line-height: 1.5;">
+              ${loc.description || ''}
+            </div>
+          </div>
+        `);
       markers.push(marker);
     });
 
@@ -473,23 +482,29 @@ const RouteMap = ({ itinerary }) => {
       }
 
       L.polyline(pathPoints, {
-        color: '#f5a623',
-        weight: 3,
-        opacity: 0.8,
+        color: '#000000',
+        weight: 7,
+        opacity: 0.7,
+      }).addTo(map);
+
+      L.polyline(pathPoints, {
+        color: '#f59e0b',
+        weight: 4,
+        opacity: 1,
         dashArray: '8, 8',
       }).addTo(map);
 
       const planeIcon = L.divIcon({
         className: 'plane-marker',
         html: `
-          <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; transition: transform 0.1s ease;">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="#f5a623" stroke="#041446" stroke-width="1.5" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.45));">
+          <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: #0b1739; border: 2.5px solid #f59e0b; border-radius: 50%; box-shadow: 0 0 14px rgba(245,158,11,0.85); transition: transform 0.1s ease;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#f59e0b" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));">
               <path d="M21,16V14L13,9V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V9L2,14V16L10,13.5V19L8,20.5V22L11.5,21L15,22V20.5L13,19V13.5L21,16Z" />
             </svg>
           </div>
         `,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15],
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
       });
 
       const plane = L.marker(pathPoints[0], { icon: planeIcon }).addTo(map);
@@ -544,20 +559,23 @@ const RouteMap = ({ itinerary }) => {
       className="mt-16 w-full"
     >
       <div className="mb-10 text-center">
-        <span className="text-gold-500 uppercase tracking-[4px] font-semibold block mb-3">
+        <span className="text-gold-600 dark:text-gold-400 font-extrabold text-xs md:text-sm tracking-[4px] uppercase block mb-3 drop-shadow-sm">
           {t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE')}
         </span>
-        <h2 className="text-display-lg text-obsidian-900 dark:text-ivory-50" style={{ fontFamily: "'Playfair Display', serif" }}>
+        <h2
+          className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white leading-snug"
+          style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
+        >
           {t('tour.routeMapTitle', 'Interactive Itinerary Map')}
         </h2>
-        <div className="w-24 h-1 bg-gold-500 mx-auto mt-3" />
+        <div className="w-28 h-1.5 bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 rounded-full mx-auto mt-3 shadow-[0_0_12px_rgba(245,166,35,0.6)]" />
       </div>
 
-      <div className="rounded-2xl overflow-hidden shadow-xl border border-obsidian-900/5 h-[450px] relative z-10 bg-obsidian-900/50">
+      <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-500/40 dark:border-gold-500/60 h-[480px] md:h-[520px] relative z-10 bg-slate-900 [&_.leaflet-tile-pane]:dark:filter [&_.leaflet-tile-pane]:dark:brightness-[0.85] [&_.leaflet-tile-pane]:dark:contrast-[1.15] [&_.leaflet-tile-pane]:dark:invert-[0.9] [&_.leaflet-tile-pane]:dark:hue-rotate-[180deg]">
         {(!isVisible || !leafletInstance) ? (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-gold-400 font-semibold bg-obsidian-950/60 rounded-2xl">
-            <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin" />
-            <span className="text-xs uppercase tracking-widest">{t('tour.loadingMap', 'Loading interactive route map...')}</span>
+          <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-gold-400 font-bold bg-slate-900 rounded-2xl">
+            <div className="w-9 h-9 border-3 border-gold-500 border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs font-black uppercase tracking-widest text-gold-300">{t('tour.loadingMap', 'Loading interactive route map...')}</span>
           </div>
         ) : (
           <div ref={mapContainerRef} className="w-full h-full" style={{ direction: 'ltr' }} />
