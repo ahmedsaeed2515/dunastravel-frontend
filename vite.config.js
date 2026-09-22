@@ -128,7 +128,20 @@ export default defineConfig(({ mode }) => {
     base: '/',
     server: {
       watch: {
-        ignored: ['**/.claude/**', '**/.git/**']
+        ignored: [
+          '**/.claude/**',
+          '**/.git/**',
+          '**/stats.html',
+          '**/dist/**',
+          '**/frontend_runtime.log',
+          '**/*.webp',
+          '**/*.png',
+          '**/*.jpg',
+          '**/*.jpeg',
+          '**/*.svg',
+          '**/*.mp4',
+          '**/*.webm'
+        ]
       },
       // Production API intentionally rejects localhost origins. Proxy local
       // browser requests through Vite so the app can be exercised locally
