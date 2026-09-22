@@ -122,7 +122,7 @@ export default function LuxuryHeroSection({
         {subtitle && (
           <motion.p
             variants={itemVariants}
-            className="text-xs xs:text-sm sm:text-lg md:text-xl font-bold text-gold-300 tracking-widest uppercase mb-4 sm:mb-6 font-sans drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]"
+            className="text-xs xs:text-sm sm:text-lg md:text-xl font-bold text-white tracking-widest uppercase mb-4 sm:mb-6 font-sans drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]"
           >
             {subtitle}
           </motion.p>
@@ -165,25 +165,25 @@ export default function LuxuryHeroSection({
               <a
                 href={primaryCta.link || '#'}
                 onClick={(e) => handleCtaClick(e, primaryCta)}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 hover:from-gold-400 hover:to-amber-300 border border-gold-300/80 !text-black dark:!text-black font-extrabold text-sm sm:text-lg shadow-xl shadow-gold-500/30 hover:scale-105 hover:shadow-gold-500/50 active:scale-95 transition-all duration-300 group cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 hover:from-gold-400 hover:to-amber-300 border border-gold-300/80 text-obsidian-950 font-extrabold dark:bg-gradient-to-r dark:from-[#0d0e1c] dark:via-[#181a33] dark:to-[#0d0e1c] dark:border-2 dark:border-gold-400 dark:shadow-[0_0_25px_rgba(245,166,35,0.4)] dark:!text-white text-sm sm:text-lg shadow-xl shadow-gold-500/30 hover:scale-105 active:scale-95 transition-all duration-300 group cursor-pointer"
               >
-                <span className="!text-black dark:!text-black font-extrabold">{primaryCta.text}</span>
+                <span className="text-obsidian-950 dark:!text-white font-extrabold">{primaryCta.text}</span>
                 {isRtl ? (
-                  <FaArrowLeft className="text-xs sm:text-sm !text-black dark:!text-black group-hover:-translate-x-1 transition-transform" />
+                  <FaArrowLeft className="text-xs sm:text-sm text-obsidian-950 dark:!text-white group-hover:-translate-x-1 transition-transform" />
                 ) : (
-                  <FaArrowRight className="text-xs sm:text-sm !text-black dark:!text-black group-hover:translate-x-1 transition-transform" />
+                  <FaArrowRight className="text-xs sm:text-sm text-obsidian-950 dark:!text-white group-hover:translate-x-1 transition-transform" />
                 )}
               </a>
             ) : (
               <Link
                 to={primaryCta.link || '/tours'}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 hover:from-gold-400 hover:to-amber-300 border border-gold-300/80 !text-black dark:!text-black font-extrabold text-sm sm:text-lg shadow-xl shadow-gold-500/30 hover:scale-105 hover:shadow-gold-500/50 active:scale-95 transition-all duration-300 group cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 hover:from-gold-400 hover:to-amber-300 border border-gold-300/80 text-obsidian-950 font-extrabold dark:bg-gradient-to-r dark:from-[#0d0e1c] dark:via-[#181a33] dark:to-[#0d0e1c] dark:border-2 dark:border-gold-400 dark:shadow-[0_0_25px_rgba(245,166,35,0.4)] dark:!text-white text-sm sm:text-lg shadow-xl shadow-gold-500/30 hover:scale-105 active:scale-95 transition-all duration-300 group cursor-pointer"
               >
-                <span className="!text-black dark:!text-black font-extrabold">{primaryCta.text}</span>
+                <span className="text-obsidian-950 dark:!text-white font-extrabold">{primaryCta.text}</span>
                 {isRtl ? (
-                  <FaArrowLeft className="text-xs sm:text-sm !text-black dark:!text-black group-hover:-translate-x-1 transition-transform" />
+                  <FaArrowLeft className="text-xs sm:text-sm text-obsidian-950 dark:!text-white group-hover:-translate-x-1 transition-transform" />
                 ) : (
-                  <FaArrowRight className="text-xs sm:text-sm !text-black dark:!text-black group-hover:translate-x-1 transition-transform" />
+                  <FaArrowRight className="text-xs sm:text-sm text-obsidian-950 dark:!text-white group-hover:translate-x-1 transition-transform" />
                 )}
               </Link>
             )
@@ -194,16 +194,16 @@ export default function LuxuryHeroSection({
               <a
                 href={secondaryCta.link || '#'}
                 onClick={(e) => handleCtaClick(e, secondaryCta)}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-amber-400 via-gold-400 to-amber-500 hover:from-amber-300 hover:to-gold-300 border border-gold-300/80 !text-black dark:!text-black font-extrabold text-sm sm:text-lg shadow-lg shadow-gold-500/25 hover:scale-105 hover:shadow-gold-400/40 active:scale-95 transition-all duration-300 cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-amber-400 via-gold-400 to-amber-500 hover:from-amber-300 hover:to-gold-300 border border-gold-300/80 text-obsidian-950 font-extrabold dark:bg-gradient-to-r dark:from-[#0d0e1c] dark:via-[#181a33] dark:to-[#0d0e1c] dark:border-2 dark:border-gold-400 dark:shadow-[0_0_20px_rgba(245,166,35,0.3)] dark:!text-white text-sm sm:text-lg shadow-lg shadow-gold-500/25 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
               >
-                <span className="!text-black dark:!text-black font-extrabold">{secondaryCta.text}</span>
+                <span className="text-obsidian-950 dark:!text-white font-extrabold">{secondaryCta.text}</span>
               </a>
             ) : (
               <Link
                 to={secondaryCta.link || '/tailor-tour'}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-amber-400 via-gold-400 to-amber-500 hover:from-amber-300 hover:to-gold-300 border border-gold-300/80 !text-black dark:!text-black font-extrabold text-sm sm:text-lg shadow-lg shadow-gold-500/25 hover:scale-105 hover:shadow-gold-400/40 active:scale-95 transition-all duration-300 cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-amber-400 via-gold-400 to-amber-500 hover:from-amber-300 hover:to-gold-300 border border-gold-300/80 text-obsidian-950 font-extrabold dark:bg-gradient-to-r dark:from-[#0d0e1c] dark:via-[#181a33] dark:to-[#0d0e1c] dark:border-2 dark:border-gold-400 dark:shadow-[0_0_20px_rgba(245,166,35,0.3)] dark:!text-white text-sm sm:text-lg shadow-lg shadow-gold-500/25 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
               >
-                <span className="!text-black dark:!text-black font-extrabold">{secondaryCta.text}</span>
+                <span className="text-obsidian-950 dark:!text-white font-extrabold">{secondaryCta.text}</span>
               </Link>
             )
           )}

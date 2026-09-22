@@ -158,11 +158,11 @@ html[data-scroll-locked] {
 
   .dark a[class*="bg-gradient-to-r"][class*="from-gold"],
   .dark button[class*="bg-gradient-to-r"][class*="from-gold"] {
-    color: #1a1a2e !important;
+    color: #ffffff !important;
   }
 
   .dark .gold-btn-text {
-    color: #1a1a2e !important;
+    color: #ffffff !important;
   }
 
   /* Tailor form - fixed light mode design, unaffected by dark mode */
