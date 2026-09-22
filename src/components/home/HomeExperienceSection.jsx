@@ -11,7 +11,7 @@ const VideoShowcaseCarousel = lazy(() => import("./VideoShowcaseCarousel"));
 import { useDestinations } from "../../hooks/useDestinations";
 import { useServices } from "../../hooks/useServices";
 import { transportation as fallbackTransportation } from "../../data/transportation";
-import AnimatedCounter from "../common/AnimatedCounter";
+const AnimatedCounter = lazy(() => import("../common/AnimatedCounter"));
 import HomeHeroSection from "./HomeHeroSection";
 import useInViewport from "../../hooks/useInViewport";
 import { useCurrency } from "../../context/CurrencyContext";
@@ -23,7 +23,7 @@ import {
   resolveTourDuration,
   resolveTourHeroImage,
 } from "../../utils/titleHelper";
-import TourCard from "../tour/TourCard";
+const TourCard = lazy(() => import("../tour/TourCard"));
 import {
   FaCalendarAlt,
   FaSuitcase,
@@ -1096,7 +1096,9 @@ const HomeExperienceSection = () => {
               >
                 <s.icon className="stat-icon" />
                 <div className="n">
-                  <AnimatedCounter value={s.count} suffix={s.suffix} />
+                  <Suspense fallback={<span>{s.count}{s.suffix}</span>}>
+                    <AnimatedCounter value={s.count} suffix={s.suffix} />
+                  </Suspense>
                 </div>
                 <div className="l">
                   {t(s.labelKey)}
@@ -1501,11 +1503,12 @@ const HomeExperienceSection = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {activePackageTours.slice(0, 6).map((tour) => (
-                        <TourCard
-                          key={tour.id}
-                          tour={tour}
-                          linkBase={tour.linkBase || "/tours"}
-                        />
+                        <Suspense key={tour.id} fallback={<div className="h-64 bg-primary-800/20 rounded-xl animate-pulse" />}>
+                          <TourCard
+                            tour={tour}
+                            linkBase={tour.linkBase || "/tours"}
+                          />
+                        </Suspense>
                       ))}
                     </div>
 

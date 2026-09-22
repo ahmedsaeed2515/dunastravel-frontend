@@ -6,6 +6,9 @@ import Layout from "./components/layout/Layout";
 import Logo from "./components/ui/Logo";
 import { trackEvent } from "./utils/analytics";
 import { ConsentProvider } from "./privacy/consent";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { variants } from "./animations/variants";
+import { syncDocumentDirection } from "./i18n";
 
 // ── Stale Chunk / Deployment Recovery Helpers ─────────────────────────────
 const isChunkLoadFailed = (error) => {
@@ -159,9 +162,7 @@ const ClassicProgramDetails = lazyWithRetry(() => import("./pages/programs/Class
 const JordanProgramDetails = lazyWithRetry(() => import("./pages/programs/JordanProgramDetails"));
 const DubaiProgramDetails = lazyWithRetry(() => import("./pages/programs/DubaiProgramDetails"));
 const TurkeyProgramDetails = lazyWithRetry(() => import("./pages/programs/TurkeyProgramDetails"));
-const Transportation = lazyWithRetry(
-  () => import("./pages/transportation/Transportation"),
-);
+const Transportation = lazyWithRetry(() => import("./pages/transportation/Transportation"));
 const TailorTour = lazyWithRetry(() => import("./pages/TailorTour"));
 const FAQ = lazyWithRetry(() => import("./pages/FAQ"));
 const Invoice = lazyWithRetry(() => import("./pages/Invoice"));
@@ -179,8 +180,6 @@ const UserDashboard = lazyWithRetry(() => import("./pages/user/UserDashboard"));
 const CookiePolicy = lazyWithRetry(() => import("./pages/legal/CookiePolicy"));
 const CookieConsentBanner = lazyWithRetry(() => import("./components/privacy/CookieConsentBanner"));
 const CookiePreferencesModal = lazyWithRetry(() => import("./components/privacy/CookiePreferencesModal"));
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-
 
 const PageTransition = ({ children }) => (
   <motion.div
@@ -191,8 +190,6 @@ const PageTransition = ({ children }) => (
     {children}
   </motion.div>
 );
-
-import { variants } from "./animations/variants";
 
 const CinematicLoader = ({ onComplete }) => (
   <motion.div
@@ -276,8 +273,6 @@ const ScrollProgressBar = React.memo(function ScrollProgressBar() {
     />
   );
 });
-
-import { syncDocumentDirection } from "./i18n";
 
 function App() {
   const location = useLocation();
