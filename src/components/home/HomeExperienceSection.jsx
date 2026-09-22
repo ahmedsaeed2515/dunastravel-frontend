@@ -809,7 +809,7 @@ const HomeExperienceSection = () => {
         {/* Background Image with Dynamic Pulsing Motion & Rich Glow */}
         <div className="absolute inset-0 overflow-hidden">
           <img
-            src="/images/pyramids-search-bg.webp"
+            src="https://res.cloudinary.com/nclvl0iu/image/upload/v1790040263/pyramids-search-bg_compressed.webp"
             alt="Search tours and holiday packages background"
             className="search-hero-bg-parallax w-full h-full object-cover object-center"
             loading="lazy"
