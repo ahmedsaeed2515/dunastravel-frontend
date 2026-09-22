@@ -20,7 +20,11 @@ const isChunkLoadFailed = (error) => {
     msg.includes('importing a module script failed') ||
     msg.includes('error loading dynamically imported module') ||
     msg.includes('cannot read properties of undefined') ||
-    msg.includes('reading \'default\'')
+    msg.includes('reading \'default\'') ||
+    msg.includes('unexpected token') ||
+    msg.includes('expected a javascript module') ||
+    msg.includes('syntaxerror') ||
+    msg.includes('failed to load resource')
   );
 };
 
