@@ -309,7 +309,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   const heroHighlights = config.tags
     ? config.tags.map((tagKey, idx) => t(tagKey, config.tagsDefault?.[idx] || ''))
     : [];
-  const heroImage = effectiveLandingPage?.heroImageUrl || config.heroImage || '/imgs/destinations/egypt.webp';
+  const heroImage = landingPage?.heroImageUrl || effectiveLandingPage?.heroImageUrl || config.heroImage || '/imgs/destinations/egypt.webp';
 
   // Jordan specific matrices
   const isJordan = slug === 'jordan';

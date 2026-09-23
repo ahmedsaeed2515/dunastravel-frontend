@@ -14,6 +14,10 @@ const Destinations = () => {
   const loading = destsLoading && toursLoading;
   const destinationsList = Array.isArray(destinations) ? destinations : [];
 
+  const mainHeroBgImage = destinationsList.find((d) => d?.heroImageUrl || d?.image)?.heroImageUrl 
+    || destinationsList.find((d) => d?.heroImageUrl || d?.image)?.image
+    || "https://res.cloudinary.com/degbrq3ck/image/upload/e_upscale,e_enhance,e_sharpen:120,f_auto,q_auto:best/v1783026771/5_upvijm.jpg";
+
   return <main className="min-h-screen bg-obsidian-50 pb-24">
     <Helmet>
       <title>{t('destinations.title', 'All Destinations | Luxury Travel')}</title>
@@ -24,7 +28,7 @@ const Destinations = () => {
     <LuxuryHeroSection
       badge={t('destinations.worldCurated', 'The World, Curated')}
       title={t('destinations.heading', 'Our Destinations')}
-      bgImage="https://res.cloudinary.com/degbrq3ck/image/upload/e_upscale,e_enhance,e_sharpen:120,f_auto,q_auto:best/v1783026771/5_upvijm.jpg"
+      bgImage={mainHeroBgImage}
       primaryCta={{
         text: t('destinations.exploreTours', 'Explore Tours & Packages ←'),
         link: '#tours-grid'
@@ -104,7 +108,9 @@ const Destinations = () => {
                     alt={destination.name} 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     onError={(e) => {
-                      e.currentTarget.src = LOCAL_DEST_IMAGES[targetSlug] || '/imgs/egyothero.webp';
+                      if (cardImage !== '/imgs/egyothero.webp') {
+                        e.currentTarget.src = LOCAL_DEST_IMAGES[targetSlug] || '/imgs/egyothero.webp';
+                      }
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/30 to-transparent flex flex-col justify-end p-8 md:p-12">
