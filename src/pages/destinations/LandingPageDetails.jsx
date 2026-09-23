@@ -294,7 +294,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
 
   const rawToursToDisplay = providedTours.length > 0
     ? providedTours
-    : (matchedCatalogTours.length > 0 ? matchedCatalogTours : (allCatalogTours || []));
+    : matchedCatalogTours;
 
   const sortedTours = [...rawToursToDisplay].sort((a, b) => {
     if (a.isFeatured && !b.isFeatured) return -1;
@@ -434,10 +434,10 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
               🕊️
             </div>
             <h3 className="text-2xl font-serif font-bold text-obsidian-900 dark:text-ivory-50 mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
-              {t('destinations.toursComingSoonTitle', 'رحلات مخصصة قادمة قريباً')}
+              {t('destinations.toursComingSoonTitle', 'برامج ورحلات هذه الوجهة ستضاف قريباً جداً')}
             </h3>
             <p className="text-body-md text-obsidian-600 dark:text-ivory-300 leading-relaxed mb-8 max-w-xl mx-auto">
-              {t('destinations.toursComingSoonDesc', 'يقوم خبراؤنا حالياً بإعداد باقات وجولات حصرية لهذه الوجهة. يمكنك التواصل معنا لتصميم رحلة مخصصة بالكامل وفق رغباتك.')}
+              {t('destinations.toursComingSoonDesc', 'يقوم فريقنا حالياً بتنسيق وإعداد أفخم الرحلات والبرامج السياحية لهذه الوجهة. يمكنك التواصل معنا الآن لتصميم رحلة مخصصة لك بالكامل!')}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/tailor-a-tour">
