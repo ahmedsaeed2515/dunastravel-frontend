@@ -57,7 +57,7 @@ function readDestinations(response) {
 
 const destinationsCache = new Map();
 const pendingDestinationsRequests = new Map();
-const DESTINATIONS_CACHE_TTL_MS = 300_000; // 5 minutes
+const DESTINATIONS_CACHE_TTL_MS = 10_000; // 10 seconds
 
 export function useDestinations() {
   const { i18n } = useTranslation();

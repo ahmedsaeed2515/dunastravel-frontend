@@ -587,7 +587,7 @@ const TailorTour = () => {
 
     (publishedDestinations || []).forEach((destination) => {
       const slug = destination.slug || destination.id;
-      const heroImg = DEST_HERO_MAP[slug] || destination.heroImageUrl || destination.image;
+      const heroImg = destination.heroImageUrl || destination.image || DEST_HERO_MAP[slug];
       const dynamicCount = (allLiveTours || []).filter(t => t && (t.destination === slug || (slug.includes('holy') && (t.destination === 'holy-land' || t.destination === 'holyland')))).length;
       const exactCount = DEST_TOUR_COUNTS[slug] !== undefined ? DEST_TOUR_COUNTS[slug] : destination.toursCount;
       const toursCount = exactCount !== undefined ? exactCount : dynamicCount;
