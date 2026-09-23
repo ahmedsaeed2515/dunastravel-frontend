@@ -280,11 +280,25 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
     : [];
 
   const targetSlug = (slug === 'egipto' || slug === 'egito') ? 'egypt' : slug;
+  const filteredProvidedTours = providedTours.filter((tour) => {
+    if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
+      const s = String(tour?.slug || tour?.id || '').toLowerCase();
+      if (s.includes('holy-family')) return false;
+    }
+    return true;
+  });
+
   const matchedCatalogTours = (allCatalogTours || []).filter((tour) => {
     const tourDest = String(tour.destination || tour.country || '').toLowerCase();
     const tourCategory = String(tour.category || tour.type || '').toLowerCase();
-    if (targetSlug === 'holy-land' || targetSlug === 'holyland' || targetSlug === 'religious') {
-      return tourDest.includes('holy') || tourCategory.includes('religious');
+    const tourSlug = String(tour.slug || tour.id || '').toLowerCase();
+
+    if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
+      if (tourSlug.includes('holy-family')) return false;
+      return tourDest === 'holy-land' || tourDest === 'holyland' || tourDest === 'holy land';
+    }
+    if (targetSlug === 'religious') {
+      return tourCategory.includes('religious') || tourDest.includes('coptic') || tourSlug.includes('holy-family');
     }
     if (targetSlug === 'multi-country' || targetSlug === 'multi_country') {
       return tourDest.includes('multi') || tourCategory.includes('multi');
@@ -292,8 +306,8 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
     return tourDest === targetSlug || tourDest.includes(targetSlug) || targetSlug.includes(tourDest);
   });
 
-  const rawToursToDisplay = providedTours.length > 0
-    ? providedTours
+  const rawToursToDisplay = filteredProvidedTours.length > 0
+    ? filteredProvidedTours
     : matchedCatalogTours;
 
   const sortedTours = [...rawToursToDisplay].sort((a, b) => {

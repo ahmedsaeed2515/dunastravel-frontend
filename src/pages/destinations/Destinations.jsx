@@ -60,12 +60,26 @@ const Destinations = () => {
             const destSlug = String(destination?.slug || destination?.id || '').toLowerCase();
             const targetSlug = (destSlug === 'egipto' || destSlug === 'egito') ? 'egypt' : destSlug;
 
-            const providedTours = Array.isArray(destination?.tours) ? destination.tours : [];
+            const providedToursRaw = Array.isArray(destination?.tours) ? destination.tours : [];
+            const providedTours = providedToursRaw.filter((tour) => {
+              if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
+                const s = String(tour?.slug || tour?.id || '').toLowerCase();
+                if (s.includes('holy-family')) return false;
+              }
+              return true;
+            });
+
             const matchedTours = (allTours || []).filter((tour) => {
               const tourDest = String(tour.destination || tour.country || '').toLowerCase();
               const tourCategory = String(tour.category || tour.type || '').toLowerCase();
-              if (targetSlug === 'holy-land' || targetSlug === 'holyland' || targetSlug === 'religious') {
-                return tourDest.includes('holy') || tourCategory.includes('religious');
+              const tourSlug = String(tour.slug || tour.id || '').toLowerCase();
+
+              if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
+                if (tourSlug.includes('holy-family')) return false;
+                return tourDest === 'holy-land' || tourDest === 'holyland' || tourDest === 'holy land';
+              }
+              if (targetSlug === 'religious') {
+                return tourCategory.includes('religious') || tourDest.includes('coptic') || tourSlug.includes('holy-family');
               }
               if (targetSlug === 'multi-country' || targetSlug === 'multi_country') {
                 return tourDest.includes('multi') || tourCategory.includes('multi');
