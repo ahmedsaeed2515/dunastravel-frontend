@@ -240,52 +240,52 @@ const Navbar = () => {
                           exit="exit"
                           role="menu"
                           aria-label={t('nav.profile', 'User Profile')}
-                          className={`absolute top-full ${isRtl ? 'left-0' : 'right-0'} mt-2 w-52 bg-white dark:bg-obsidian-900 border border-obsidian-200 dark:border-gold-500/30 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 z-[10000] text-start`}
+                          className={`absolute top-full ${isRtl ? 'left-0' : 'right-0'} mt-2 w-56 bg-white dark:bg-[#0C1C48] border border-gray-200 dark:border-gold-500/30 rounded-2xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] z-[10000] text-start`}
                         >
-                          <div className="px-4 py-3 border-b border-obsidian-100 dark:border-obsidian-800 bg-obsidian-50/50 dark:bg-obsidian-800/50">
-                            <p className="text-xs font-bold text-obsidian-900 dark:text-ivory-50 truncate">
+                          <div className="px-4 py-3 border-b border-gray-100 dark:border-white/10 bg-gray-50/90 dark:bg-white/5">
+                            <p className="text-xs font-bold text-gray-900 dark:text-ivory-50 truncate">
                               {user.name}
                             </p>
-                            <p className="text-[10px] text-obsidian-400 dark:text-ivory-400 truncate">
+                            <p className="text-[11px] font-medium text-gray-500 dark:text-ivory-400 truncate mt-0.5">
                               {user.email}
                             </p>
                           </div>
-                          <div className="p-1">
+                          <div className="p-1.5 space-y-0.5">
                             <Link
                               to="/dashboard"
                               role="menuitem"
                               onClick={() => setProfileDropdownOpen(false)}
-                              className="w-full px-3 py-2 text-xs font-semibold text-obsidian-800 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-amber-50 dark:hover:bg-gold-500/10 rounded-xl transition-colors flex items-center gap-2.5"
+                              className="w-full px-3 py-2.5 text-xs font-semibold text-gray-700 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-gold-50/80 dark:hover:bg-gold-500/10 rounded-xl transition-all duration-200 flex items-center gap-2.5 group"
                             >
-                              <FaUserCircle className="text-gold-500 shrink-0" size={14} />
+                              <FaUserCircle className="text-gold-500 shrink-0 group-hover:scale-110 transition-transform" size={14} />
                               <span>{t('user.tabOverview', 'My Dashboard')}</span>
                             </Link>
                             <Link
                               to="/profile"
                               role="menuitem"
                               onClick={() => setProfileDropdownOpen(false)}
-                              className="w-full px-3 py-2 text-xs font-semibold text-obsidian-800 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-amber-50 dark:hover:bg-gold-500/10 rounded-xl transition-colors flex items-center gap-2.5"
+                              className="w-full px-3 py-2.5 text-xs font-semibold text-gray-700 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-gold-50/80 dark:hover:bg-gold-500/10 rounded-xl transition-all duration-200 flex items-center gap-2.5 group"
                             >
-                              <FaUserCircle className="text-gold-500 shrink-0" size={14} />
+                              <FaUserCircle className="text-gold-500 shrink-0 group-hover:scale-110 transition-transform" size={14} />
                               <span>{t('nav.myProfile', 'My Profile')}</span>
                             </Link>
                             <Link
                               to="/bookings"
                               role="menuitem"
                               onClick={() => setProfileDropdownOpen(false)}
-                              className="w-full px-3 py-2 text-xs font-semibold text-obsidian-800 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-amber-50 dark:hover:bg-gold-500/10 rounded-xl transition-colors flex items-center gap-2.5"
+                              className="w-full px-3 py-2.5 text-xs font-semibold text-gray-700 dark:text-ivory-200 hover:text-gold-600 dark:hover:text-gold-400 hover:bg-gold-50/80 dark:hover:bg-gold-500/10 rounded-xl transition-all duration-200 flex items-center gap-2.5 group"
                             >
-                              <FaBookmark className="text-gold-500 shrink-0" size={14} />
+                              <FaBookmark className="text-gold-500 shrink-0 group-hover:scale-110 transition-transform" size={14} />
                               <span>{t('nav.myBookings', 'My Bookings')}</span>
                             </Link>
-                            <div className="my-1 border-t border-obsidian-100 dark:border-obsidian-800" />
+                            <div className="my-1 border-t border-gray-100 dark:border-white/10" />
                             <button
                               type="button"
                               role="menuitem"
                               onClick={handleLogout}
-                              className="w-full px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/15 rounded-xl transition-colors flex items-center gap-2.5 cursor-pointer"
+                              className="w-full px-3 py-2.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/15 rounded-xl transition-all duration-200 flex items-center gap-2.5 cursor-pointer group"
                             >
-                              <FaSignOutAlt className="shrink-0" size={13} />
+                              <FaSignOutAlt className="shrink-0 group-hover:scale-110 transition-transform" size={13} />
                               <span>{t('nav.logout', 'Logout')}</span>
                             </button>
                           </div>
