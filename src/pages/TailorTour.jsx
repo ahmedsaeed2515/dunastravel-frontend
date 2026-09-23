@@ -627,6 +627,13 @@ const TailorTour = () => {
       }
     });
 
+    // Append any dynamic destinations created via dashboard that aren't in fixed DESIRED_ORDER
+    cardMap.forEach((card, key) => {
+      if (!DESIRED_ORDER.includes(key)) {
+        result.push(card);
+      }
+    });
+
     return result;
   }, [publishedDestinations, allLiveTours, t]);
 
