@@ -559,15 +559,17 @@ const TailorTour = () => {
   const isFlying = animationState === 'flying-forward' || animationState === 'flying-backward';
 
   const DEST_HERO_MAP = {
-    egypt: '/imgs/egyothero.webp',
-    turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    jordan: 'https://www.touristsecrets.com/wp-content/uploads/2023/09/jordan-travel-guide-best-places-to-visit-in-jordan-tips-1693570205.jpeg',
-    dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    morocco: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    tunisia: 'https://images.unsplash.com/photo-1580502304784-8985b7eb7260?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    'holy-land': 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
-    holyland: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=480&h=320&q=60&fm=webp',
+    egypt: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
+    egipto: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
+    egito: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
+    turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
+    jordan: 'https://cdn.al-ain.com/lg/images/2022/11/24/62-021616-best-tourist-areas-jordan-4.jpeg',
+    dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
+    morocco: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
+    greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1920&q=80',
+    tunisia: 'https://images.unsplash.com/photo-1580502304784-8985b7eb7260?auto=format&fit=crop&w=1920&q=80',
+    'holy-land': 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1920&q=80',
+    holyland: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1920&q=80',
   };
 
   const DEST_TOUR_COUNTS = {

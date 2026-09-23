@@ -71,7 +71,7 @@ export default function Egipto() {
     return result.length > 0 ? result : tourList;
   }, [liveTours]);
 
-  const dynamicHeroImage = landingPage?.heroImageUrl || '/imgs/egyothero.webp';
+  const dynamicHeroImage = landingPage?.heroImageUrl || 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp';
   const heroTitle = landingPage?.title || t('dest.egypt.headline', 'مصر.. حيث يلتقي التاريخ الخالد برغد الرفاهية');
   const heroSubtitle = landingPage?.subtitle || t('dest.egypt.subtitle', 'Egypt: Where Eternal History Meets Pure Luxury');
   const heroDesc = landingPage?.description || landingPage?.brief || t(
@@ -472,7 +472,7 @@ export default function Egipto() {
       <section className="relative py-24 mt-24 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url(/imgs/egyothero.webp)' }}
+          style={{ backgroundImage: 'url(https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp)' }}
         />
 
         <div className="relative z-10 container mx-auto px-6 text-center max-w-3xl">

@@ -45,7 +45,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'اكتشف السيق العجيب والبتراء الوردية، وعش تجربة التخييم الفاخر تحت نجوم وادي رم، والاسترخاء في أفضل منتجعات البحر الميت.',
     tags: ['dest.jordan.tag1', 'dest.jordan.tag2', 'dest.jordan.tag3'],
     tagsDefault: ['🏛️ VIP Petra Entry & Guided Tour', '🌌 Luxury Bubble Camps in Wadi Rum', '🌊 Dead Sea Luxury Wellness Resorts'],
-    heroImage: '/images/jordan-petra.webp',
+    heroImage: 'https://cdn.al-ain.com/lg/images/2022/11/24/62-021616-best-tourist-areas-jordan-4.jpeg',
     hotelCities: ['amman', 'petra', 'wadiRum', 'aqaba', 'deadSea'],
   },
   turkey: {
@@ -59,7 +59,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'استمتع بجولات القصور العثمانية في إسطنبول، وركوب المناطيد فوق مداخن كابادوكيا، والاستجمام في منتجعات الريفيرا التركية.',
     tags: ['dest.turkey.tag1', 'dest.turkey.tag2', 'dest.turkey.tag3'],
     tagsDefault: ['🎈 Private Cappadocia Hot Air Balloon Flights', '🛥️ Private Luxury Yacht Cruises on the Bosphorus', '🏰 Royal Cave Hotel Stays'],
-    heroImage: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85',
+    heroImage: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
   },
   dubai: {
     badge: 'dest.dubai.badge',
@@ -72,7 +72,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'عش تجربة الفخامة العالمية بين أشهر أفق معماري في العالم، والجزر الاصطناعية، وسفاري الصحراء الـ VIP.',
     tags: ['dest.dubai.tag1', 'dest.dubai.tag2', 'dest.dubai.tag3'],
     tagsDefault: ['🏙️ VIP Burj Khalifa & Observation Deck Tickets', '🏎️ Luxury Sports Car & Private Yacht Cruise', '🏜️ Royal Desert Safari with VIP Dinner'],
-    heroImage: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=85',
+    heroImage: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
   },
   morocco: {
     badge: 'dest.morocco.badge',
@@ -85,7 +85,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'اكتشف أسواق مراكش وفاس الفاسحة، واستمتع بإقامة في أفخم الرياضات التراثية، ومغامرات الكثبان الذهبية في مرزوكة.',
     tags: ['dest.morocco.tag1', 'dest.morocco.tag2', 'dest.morocco.tag3'],
     tagsDefault: ['🏰 Stays in Historic Luxury Riads', '🐫 Luxury Sahara Desert Safari in Merzouga', '🎨 Exclusive Tours in Marrakech & Fes Souks'],
-    heroImage: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=85',
+    heroImage: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
   },
   tunisia: {
     badge: 'dest.tunisia.badge',
@@ -98,7 +98,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'استمتع بجولات بين آثار قرطاج الشامخة، والأزقة البيضاء والزرقاء ساحرة الجمال في سيدي بوسعيد، وواحات توزر الصحراوية.',
     tags: ['dest.tunisia.tag1', 'dest.tunisia.tag2', 'dest.tunisia.tag3'],
     tagsDefault: ['🏛️ El Jem Amphitheatre & Legendary Carthage', '🌊 Sidi Bou Said Blue & White Coastal Views', '🌴 Tozeur Oases & Luxury Sahara Camping'],
-    heroImage: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=85',
+    heroImage: '/imgs/destinations/tunisia.webp',
   },
   greece: {
     badge: 'dest.greece.badge',
@@ -111,7 +111,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'رحلة خيالية بين بيوت سانتوريني البيضاء وشواطئ ميكونوس الفاخرة وآثار أثينا الأسطورية.',
     tags: ['dest.greece.tag1', 'dest.greece.tag2', 'dest.greece.tag3'],
     tagsDefault: ['🌅 Luxury Private Pool Suites in Santorini', '🏛️ VIP Acropolis & Ancient Ruins Tours', '🛥️ Private Yacht Cruises in Mykonos & Crete'],
-    heroImage: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1920&q=85',
+    heroImage: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1920&q=80',
   },
   egypt: {
     badge: 'dest.egypt.badge',
@@ -124,7 +124,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'Embark on a legendary journey through time across Cairo, Luxor, Aswan, and Red Sea luxury resorts.',
     tags: ['dest.egypt.tag1', 'dest.egypt.tag2', 'dest.egypt.tag3'],
     tagsDefault: ['🚢 5-Star Deluxe Nile Cruises', '👑 Private Egyptologist Guides', '🐫 Luxury Desert Safaris'],
-    heroImage: '/imgs/egyothero.webp',
+    heroImage: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
   },
   egipto: {
     badge: 'dest.egypt.badge',
@@ -137,7 +137,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'Embark on a legendary journey through time across Cairo, Luxor, Aswan, and Red Sea luxury resorts.',
     tags: ['dest.egypt.tag1', 'dest.egypt.tag2', 'dest.egypt.tag3'],
     tagsDefault: ['🚢 5-Star Deluxe Nile Cruises', '👑 Private Egyptologist Guides', '🐫 Luxury Desert Safaris'],
-    heroImage: '/imgs/egyothero.webp',
+    heroImage: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
   },
   'multi-country': {
     badge: 'nav.multiCountry',

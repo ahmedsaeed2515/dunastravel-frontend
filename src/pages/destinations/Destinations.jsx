@@ -70,22 +70,23 @@ const Destinations = () => {
             });
 
             const LOCAL_DEST_IMAGES = {
-              dubai: '/imgs/destinations/dubai.webp',
-              morocco: '/imgs/destinations/morocco.webp',
-              egypt: '/imgs/egyothero.webp',
-              egipto: '/imgs/egyothero.webp',
-              egito: '/imgs/egyothero.webp',
-              jordan: '/imgs/destinations/jordan.webp',
-              turkey: '/imgs/destinations/turkey.webp',
-              tunisia: '/imgs/destinations/tunisia.webp',
+              dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
+              morocco: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
+              egypt: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
+              egipto: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
+              egito: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
+              jordan: 'https://cdn.al-ain.com/lg/images/2022/11/24/62-021616-best-tourist-areas-jordan-4.jpeg',
+              turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
+              greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1920&q=80',
+              tunisia: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=85',
               'holy-land': '/images/holy-land.webp',
               holyland: '/images/holy-land.webp',
             };
 
             const destTours = providedTours.length > 0 ? providedTours : matchedTours;
-            const cardImage = LOCAL_DEST_IMAGES[targetSlug]
-              || destination.heroImageUrl 
+            const cardImage = destination.heroImageUrl 
               || destination.image 
+              || LOCAL_DEST_IMAGES[targetSlug]
               || '/imgs/egyothero.webp';
 
             return (
