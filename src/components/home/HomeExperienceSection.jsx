@@ -814,22 +814,23 @@ const HomeExperienceSection = () => {
       <HomeHeroSection />
 
       {/* Search Section */}
-      <section id="search-section" className="relative w-full py-20 md:py-28 overflow-hidden mt-0">
+      <section id="search-section" className="relative w-full py-14 sm:py-20 md:py-28 min-h-[460px] sm:min-h-[520px] md:min-h-0 flex items-center justify-center overflow-hidden mt-0">
         {/* Background Image with Dynamic Pulsing Motion & Rich Glow */}
         <div className="absolute inset-0 overflow-hidden">
           <img
             src="https://res.cloudinary.com/nclvl0iu/image/upload/v1790040263/pyramids-search-bg_compressed.webp"
             alt="Search tours and holiday packages background"
-            className="search-hero-bg-parallax w-full h-full object-cover object-center"
-            loading="lazy"
+            className="search-hero-bg-parallax w-full h-full object-cover object-[center_35%] sm:object-[center_30%] md:object-center transition-all duration-700"
+            loading="eager"
             decoding="async"
+            fetchPriority="high"
             width="1440"
             height="600"
           />
-          {/* Ambient light glows */}
-          <div className="hidden md:block absolute -top-20 -left-20 w-[450px] h-[450px] bg-amber-500/20 rounded-full blur-[110px] pointer-events-none" />
-          <div className="hidden md:block absolute -bottom-20 -right-20 w-[450px] h-[450px] bg-blue-600/20 rounded-full blur-[110px] pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-b from-obsidian-950/60 via-obsidian-950/40 to-obsidian-950/75" />
+          {/* Ambient light glows for mobile & desktop */}
+          <div className="absolute -top-16 -left-16 sm:-top-20 sm:-left-20 w-[280px] sm:w-[450px] h-[280px] sm:h-[450px] bg-amber-500/25 rounded-full blur-[80px] sm:blur-[110px] pointer-events-none" />
+          <div className="absolute -bottom-16 -right-16 sm:-bottom-20 sm:-right-20 w-[280px] sm:w-[450px] h-[280px] sm:h-[450px] bg-blue-600/25 rounded-full blur-[80px] sm:blur-[110px] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-obsidian-950/50 via-obsidian-950/35 to-obsidian-950/70 sm:from-obsidian-950/60 sm:via-obsidian-950/40 sm:to-obsidian-950/75" />
         </div>
 
         {/* Search Content */}

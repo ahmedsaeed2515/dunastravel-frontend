@@ -20,17 +20,37 @@ html {
   will-change: transform;
 }
 
-@supports (animation-timeline: scroll()) {
+@keyframes searchBgScrollZoomMobile {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 768px) {
   .search-hero-bg-parallax {
-    animation: searchBgScrollZoom linear both;
-    animation-timeline: scroll(root);
-    animation-range: entry 0% exit 100%;
+    animation: searchBgScrollZoomMobile 12s ease-in-out infinite alternate !important;
+    object-position: center 35% !important;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 769px) {
+    .search-hero-bg-parallax {
+      animation: searchBgScrollZoom linear both;
+      animation-timeline: scroll(root);
+      animation-range: entry 0% exit 100%;
+    }
   }
 }
 
 @supports not (animation-timeline: scroll()) {
-  .search-hero-bg-parallax {
-    animation: searchBgScrollZoom 16s ease-in-out infinite alternate;
+  @media (min-width: 769px) {
+    .search-hero-bg-parallax {
+      animation: searchBgScrollZoom 16s ease-in-out infinite alternate;
+    }
   }
 }
 
