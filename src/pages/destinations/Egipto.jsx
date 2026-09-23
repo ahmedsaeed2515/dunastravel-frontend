@@ -10,6 +10,8 @@ import { useTours } from '../../hooks/useTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary';
 
+import useLandingPage from '../../hooks/useLandingPage';
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -32,6 +34,7 @@ export default function Egipto() {
   const lang = i18n.language || 'en';
   const isRtl = lang.startsWith('ar');
   const navigate = useNavigate();
+  const { landingPage } = useLandingPage('egypt', { destinationOnly: true });
   const { tours: allLiveTours = [] } = useTours({ limit: 70 });
   const liveTours = useMemo(() => {
     const list = (allLiveTours || []).filter(t => {
@@ -68,6 +71,14 @@ export default function Egipto() {
     return result.length > 0 ? result : tourList;
   }, [liveTours]);
 
+  const dynamicHeroImage = landingPage?.heroImageUrl || '/imgs/egyothero.webp';
+  const heroTitle = landingPage?.title || t('dest.egypt.headline', 'مصر.. حيث يلتقي التاريخ الخالد برغد الرفاهية');
+  const heroSubtitle = landingPage?.subtitle || t('dest.egypt.subtitle', 'Egypt: Where Eternal History Meets Pure Luxury');
+  const heroDesc = landingPage?.description || landingPage?.brief || t(
+    'dest.egypt.desc',
+    'انطلق في رحلة أسطورية عبر الزمن؛ استمتع بزيارة أهرامات الجيزة الخالدة، وواجهات معابد الأقصر وأسوان الملكية، وابحر في نيل مصر على متن أفخم الفنادق العائمة مع استرخاء ساحر على شواطئ البحر الأحمر.'
+  );
+
   return (
     <div className="w-full min-h-screen bg-obsidian-50 dark:bg-[#0c0d19] pb-24 text-start">
       <Helmet>
@@ -83,18 +94,15 @@ export default function Egipto() {
         <link rel="preconnect" href="https://ar.scoopempire.com" />
         <link rel="preconnect" href="https://sft-nationaltours.com" />
         <link rel="preconnect" href="https://hl-tourism.com" />
-        <link rel="preload" as="image" href="/imgs/egyothero.webp" fetchpriority="high" />
+        <link rel="preload" as="image" href={dynamicHeroImage} fetchpriority="high" />
       </Helmet>
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection
         badge={t('dest.egypt.badge', '🏛️ أسرار 7000 عام من الحضارة')}
-        title={t('dest.egypt.headline', 'مصر.. حيث يلتقي التاريخ الخالد برغد الرفاهية')}
-        subtitle={t('dest.egypt.subtitle', 'Egypt: Where Eternal History Meets Pure Luxury')}
-        description={t(
-          'dest.egypt.desc',
-          'انطلق في رحلة أسطورية عبر الزمن؛ استمتع بزيارة أهرامات الجيزة الخالدة، وواجهات معابد الأقصر وأسوان الملكية، وابحر في نيل مصر على متن أفخم الفنادق العائمة مع استرخاء ساحر على شواطئ البحر الأحمر.'
-        )}
+        title={heroTitle}
+        subtitle={heroSubtitle}
+        description={heroDesc}
         highlights={[
           t('dest.egypt.tag1', '🚢 رحلات نيلية 5 نجوم ديلوكس'),
           t('dest.egypt.tag2', '👑 إرشاد سياحي خاص باللغات العالمية'),
@@ -108,7 +116,7 @@ export default function Egipto() {
           text: t('dest.egypt.ctaSecondary', 'صمّم رحلتك الخاصة'),
           link: '/tailor-tour'
         }}
-        bgImage="/imgs/egyothero.webp"
+        bgImage={dynamicHeroImage}
         zoomDuration={12}
       />
 
