@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
@@ -12,6 +12,7 @@ import CurrencySelector from '../ui/CurrencySelector';
 import LanguageSelector from '../ui/LanguageSelector';
 import CustomerNotificationBell from '../ui/CustomerNotificationBell';
 import { useActiveLocales } from '../../hooks/useActiveLocales';
+import { useDestinations } from '../../hooks/useDestinations';
 import { syncDocumentDirection } from '../../i18n';
 import { useClickOutside } from '../../hooks/useClickOutside';
 
@@ -106,6 +107,41 @@ const Navbar = () => {
     setMobileActiveDropdown(mobileActiveDropdown === name ? null : name);
   };
 
+  const { destinations: liveDestinations } = useDestinations();
+
+  const destinationSubItems = useMemo(() => {
+    const items = [
+      { name: t('nav.allDestinations', { defaultValue: 'All Destinations' }), path: '/destinations' },
+    ];
+    
+    const addedSlugs = new Set();
+    const defaultStaticSlugs = ['egypt', 'turkey', 'dubai', 'jordan', 'morocco', 'tunisia', 'greece', 'holyland'];
+
+    (liveDestinations || []).forEach((d) => {
+      const slug = String(d.slug || d.id || '').toLowerCase();
+      if (!slug || addedSlugs.has(slug)) return;
+      addedSlugs.add(slug);
+
+      const navKey = (slug === 'holy-land' || slug === 'holyland') ? 'holyland' : slug;
+      const displayName = d.title || d.name || t(`nav.${navKey}`, slug.charAt(0).toUpperCase() + slug.slice(1));
+      items.push({
+        name: displayName,
+        path: `/destinations/${slug === 'holy-land' ? 'holyland' : slug}`,
+      });
+    });
+
+    if (addedSlugs.size === 0) {
+      defaultStaticSlugs.forEach((slug) => {
+        items.push({
+          name: t(`nav.${slug}`, slug.charAt(0).toUpperCase() + slug.slice(1)),
+          path: `/destinations/${slug}`,
+        });
+      });
+    }
+
+    return items;
+  }, [liveDestinations, t]);
+
   const navLinks = [
     { name: t('nav.home'), path: '/' },
     { name: t('nav.blogs'), path: '/blogs' },
@@ -124,17 +160,7 @@ const Navbar = () => {
     },
     {
       name: t('nav.destinations'),
-      dropdown: [
-        { name: t('nav.allDestinations', { defaultValue: 'All Destinations' }), path: '/destinations' },
-        { name: t('nav.egypt'), path: '/destinations/egypt' },
-        { name: t('nav.turkey'), path: '/destinations/turkey' },
-        { name: t('nav.dubai'), path: '/destinations/dubai' },
-        { name: t('nav.jordan'), path: '/destinations/jordan' },
-        { name: t('nav.morocco'), path: '/destinations/morocco' },
-        { name: t('nav.tunisia'), path: '/destinations/tunisia' },
-        { name: t('nav.greece'), path: '/destinations/greece' },
-        { name: t('nav.holyland', { defaultValue: 'Holy Land' }), path: '/destinations/holyland' },
-      ]
+      dropdown: destinationSubItems
     },
     { name: t('nav.about'), path: '/about' },
     { name: t('nav.contact'), path: '/contact' },
