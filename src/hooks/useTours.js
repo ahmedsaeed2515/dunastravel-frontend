@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
-
-const toursCache = new Map();
-const pendingRequests = new Map();
-const CACHE_TTL_MS = 60_000;
+import {
+  fetchWithSmartCache,
+  getCachedEntry,
+  subscribeToQueryKey,
+  invalidateQueries,
+  abortQuery,
+  CACHE_POLICIES,
+} from '../utils/apiCache';
 const ALLOWED_FILTERS = new Set([
   'destination',
   'category',
@@ -192,102 +196,97 @@ function parseToursResponse(response, filters, lang) {
 export function useTours(filters = {}) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
-  const filterKey = JSON.stringify(filters);
-  const cacheKey = `${lang}:${filterKey}`;
+
+  // Build clean normalized filters
+  const cleanFilters = {};
+  Object.entries(filters || {}).forEach(([key, value]) => {
+    if (ALLOWED_FILTERS.has(key) && value !== undefined && value !== null && value !== '') {
+      cleanFilters[key] = String(value);
+    }
+  });
+
+  const queryKey = ['tours', { lang, ...cleanFilters }];
+
   const [toursState, setToursState] = useState(() => {
-    const cached = toursCache.get(cacheKey);
+    const cached = getCachedEntry(queryKey);
     return cached?.data || {
       tours: [],
       total: 0,
-      page: 1,
-      limit: 12,
+      page: Number(cleanFilters.page || 1),
+      limit: Number(cleanFilters.limit || 12),
       totalPages: 1,
       hasNextPage: false,
       hasPrevPage: false,
     };
   });
-  const [loading, setLoading] = useState(() => !toursCache.has(cacheKey));
+  const [loading, setLoading] = useState(() => !getCachedEntry(queryKey));
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
   const retry = () => {
-    toursCache.delete(cacheKey);
+    invalidateQueries(queryKey);
     setRetryCount((c) => c + 1);
   };
 
+  // Subscribe to background revalidation or cache invalidations
+  useEffect(() => {
+    const unsubscribe = subscribeToQueryKey(queryKey, (updatedData, isErr) => {
+      if (!isErr && updatedData) {
+        setToursState(updatedData);
+        setLoading(false);
+        setError(null);
+      }
+    });
+    return unsubscribe;
+  }, [JSON.stringify(queryKey)]);
+
   useEffect(() => {
     let isMounted = true;
-    const currentFilters = JSON.parse(filterKey);
-    const fetchTours = async () => {
-      try {
-        await Promise.resolve();
-        const fresh = toursCache.get(cacheKey);
-        if (fresh && Date.now() - fresh.timestamp < CACHE_TTL_MS) {
-          if (isMounted) {
-            setToursState(fresh.data);
-            setLoading(false);
-          }
-          return;
-        }
-        setLoading(true);
-        setError(null);
-        let request = pendingRequests.get(cacheKey);
-        if (!request) {
-          const params = new URLSearchParams({ lang });
-          Object.entries(currentFilters).forEach(([key, value]) => {
-            if (ALLOWED_FILTERS.has(key) && value !== undefined && value !== null && value !== '') {
-              params.set(key, String(value));
-            }
-          });
-          request = api
-            .get(`/tours?${params.toString()}`)
-            .then((response) => parseToursResponse(response, currentFilters, lang))
-            .then(({ items, meta }) => {
-              const result = { tours: items, ...meta };
-              toursCache.set(cacheKey, { data: result, timestamp: Date.now() });
-              return result;
-            })
-            .catch((err) => {
-              const emptyResult = {
-                tours: [],
-                total: 0,
-                page: Number(currentFilters.page || 1),
-                limit: Number(currentFilters.limit || 12),
-                totalPages: 1,
-                hasNextPage: false,
-                hasPrevPage: false,
-              };
-              if (isMounted) setError(err);
-              return emptyResult;
-            })
-            .finally(() => pendingRequests.delete(cacheKey));
-          pendingRequests.set(cacheKey, request);
-        }
-        const resultData = await request;
-        if (isMounted) setToursState(resultData);
-      } catch (requestError) {
-        if (isMounted) {
-          setError(requestError);
-          setToursState({
-            tours: [],
-            total: 0,
-            page: 1,
-            limit: 12,
-            totalPages: 1,
-            hasNextPage: false,
-            hasPrevPage: false,
-          });
-        }
-      } finally {
-        if (isMounted) setLoading(false);
+
+    const cached = getCachedEntry(queryKey);
+    if (cached) {
+      setToursState(cached.data);
+      if (!cached.isStale) {
+        setLoading(false);
       }
+    } else {
+      setLoading(true);
+    }
+
+    const fetcher = async ({ signal } = {}) => {
+      const params = new URLSearchParams({ lang });
+      Object.entries(cleanFilters).forEach(([key, value]) => {
+        params.set(key, value);
+      });
+
+      const response = await api.get(`/tours?${params.toString()}`, { signal });
+      const { items, meta } = parseToursResponse(response, cleanFilters, lang);
+      return { tours: items, ...meta };
     };
 
-    void fetchTours();
+    fetchWithSmartCache(queryKey, fetcher, {
+      policy: CACHE_POLICIES.TOUR_CATALOG,
+    })
+      .then((result) => {
+        if (isMounted) {
+          setToursState(result);
+          setError(null);
+          setLoading(false);
+        }
+      })
+      .catch((requestError) => {
+        if (requestError.name === 'AbortError') return;
+        if (isMounted) {
+          setError(requestError);
+          setLoading(false);
+        }
+      });
+
     return () => {
       isMounted = false;
+      abortQuery(queryKey);
     };
-  }, [cacheKey, filterKey, lang, retryCount]);
+  }, [JSON.stringify(queryKey), lang, retryCount]);
 
   return {
     tours: toursState.tours,

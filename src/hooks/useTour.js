@@ -3,6 +3,12 @@ import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
 import { resolveDestinationSlug } from '../utils/destinationHelper';
+import {
+  fetchWithSmartCache,
+  getCachedEntry,
+  abortQuery,
+  CACHE_POLICIES,
+} from '../utils/apiCache';
 
 export function getFallbackTour() {
   return null;
@@ -108,8 +114,18 @@ function normalizeTour(data, lang = 'en', fallback = null) {
 export function useTour(slug) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
-  const [tour, setTour] = useState(null);
-  const [loading, setLoading] = useState(Boolean(slug));
+  const queryKey = slug ? ['tour', slug, lang] : null;
+
+  const [tour, setTour] = useState(() => {
+    if (!queryKey) return null;
+    const cached = getCachedEntry(queryKey);
+    return cached ? cached.data : null;
+  });
+  const [loading, setLoading] = useState(() => {
+    if (!queryKey) return false;
+    const cached = getCachedEntry(queryKey);
+    return !cached;
+  });
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -121,31 +137,45 @@ export function useTour(slug) {
       return undefined;
     }
 
-    setLoading(true);
+    const currentKey = ['tour', slug, lang];
+    const cached = getCachedEntry(currentKey);
+    if (cached) {
+      setTour(cached.data);
+      if (!cached.isStale) {
+        setLoading(false);
+      }
+    } else {
+      setLoading(true);
+    }
 
-    const fetchTour = async () => {
-      try {
-        const result = normalizeTour(
-          await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`),
-          lang
-        );
+    fetchWithSmartCache(
+      currentKey,
+      async ({ signal } = {}) => {
+        const raw = await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`, { signal });
+        return normalizeTour(raw, lang);
+      },
+      { policy: CACHE_POLICIES.TOUR_DETAILS }
+    )
+      .then((data) => {
         if (isMounted) {
-          setTour(result);
+          setTour(data);
           setError(null);
+          setLoading(false);
         }
-      } catch (requestError) {
+      })
+      .catch((requestError) => {
+        if (requestError.name === 'AbortError') return;
         if (isMounted) {
           const errorMsg = requestError?.response?.data?.message || requestError?.message || 'Tour not found';
           setError(typeof errorMsg === 'string' ? errorMsg : String(errorMsg));
           setTour(null);
+          setLoading(false);
         }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-    void fetchTour();
+      });
+
     return () => {
       isMounted = false;
+      abortQuery(currentKey);
     };
   }, [slug, lang]);
 

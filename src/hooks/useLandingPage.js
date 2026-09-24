@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
+import {
+  fetchWithSmartCache,
+  getCachedEntry,
+  abortQuery,
+  CACHE_POLICIES,
+} from '../utils/apiCache';
 
 function normalizeLandingPage(value) {
   if (!value || typeof value !== 'object') {
@@ -81,41 +87,77 @@ const destinationSlugAliases = {
 export function useLandingPage(slug, { destinationOnly = false } = {}) {
   const { i18n } = useTranslation();
   const locale = supportedLocale(i18n.language);
-  const [landingPage, setLandingPage] = useState(null);
-  const [loading, setLoading] = useState(Boolean(slug));
+
+  const endpoint = destinationOnly ? '/destinations' : '/tour-landing-pages';
+  const canonicalSlug = slug
+    ? (destinationOnly ? (destinationSlugAliases[String(slug).toLowerCase()] || slug) : slug)
+    : null;
+
+  const queryKey = canonicalSlug ? ['landing-page', destinationOnly ? 'dest' : 'lp', canonicalSlug, locale] : null;
+
+  const [landingPage, setLandingPage] = useState(() => {
+    if (!queryKey) return null;
+    const cached = getCachedEntry(queryKey);
+    return cached ? cached.data : null;
+  });
+  const [loading, setLoading] = useState(() => {
+    if (!queryKey) return false;
+    const cached = getCachedEntry(queryKey);
+    return !cached;
+  });
   const [error, setError] = useState(null);
   const [reloadNonce, setReloadNonce] = useState(0);
 
   useEffect(() => {
     let active = true;
-    if (!slug) return undefined;
+    if (!canonicalSlug || !queryKey) {
+      setLandingPage(null);
+      setLoading(false);
+      return undefined;
+    }
 
-    const endpoint = destinationOnly ? '/destinations' : '/tour-landing-pages';
-    const canonicalSlug = destinationOnly
-      ? (destinationSlugAliases[String(slug).toLowerCase()] || slug)
-      : slug;
-    const load = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        setLandingPage(null);
-        const page = normalizeLandingPage(
-          await api.get(`${endpoint}/${encodeURIComponent(canonicalSlug)}?locale=${encodeURIComponent(locale)}`),
-        );
-        if (active) setLandingPage(page);
-      } catch (reason) {
-        if (active) {
-          setLandingPage(null);
-          setError(reason);
-        }
-      } finally {
-        if (active) setLoading(false);
+    const cached = getCachedEntry(queryKey);
+    if (cached) {
+      setLandingPage(cached.data);
+      if (!cached.isStale) {
+        setLoading(false);
       }
-    };
+    } else {
+      setLoading(true);
+    }
 
-    void load();
-    return () => { active = false; };
-  }, [destinationOnly, locale, slug, reloadNonce]);
+    fetchWithSmartCache(
+      queryKey,
+      async ({ signal } = {}) => {
+        const raw = await api.get(
+          `${endpoint}/${encodeURIComponent(canonicalSlug)}?locale=${encodeURIComponent(locale)}`,
+          { signal }
+        );
+        return normalizeLandingPage(raw);
+      },
+      { policy: CACHE_POLICIES.DESTINATIONS }
+    )
+      .then((page) => {
+        if (active) {
+          setLandingPage(page);
+          setError(null);
+          setLoading(false);
+        }
+      })
+      .catch((reason) => {
+        if (reason.name === 'AbortError') return;
+        if (active) {
+          setError(reason);
+          setLandingPage(null);
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+      abortQuery(queryKey);
+    };
+  }, [destinationOnly, locale, canonicalSlug, reloadNonce]);
 
   return { landingPage, loading, error, retry: () => setReloadNonce((value) => value + 1) };
 }

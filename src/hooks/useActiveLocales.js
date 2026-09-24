@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../utils/api';
 
 const DEFAULT_LOCALES = [
@@ -9,43 +9,42 @@ const DEFAULT_LOCALES = [
   { code: 'it', label: 'Italiano', flag: '🇮🇹', dir: 'ltr' },
 ];
 
-let cachedLocales = null;
-let lastFetchTime = 0;
-const CACHE_TTL_MS = 300_000; // 5 minutes
+import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
 
 export function useActiveLocales() {
+  const queryKey = ['settings', 'public', 'locales'];
+  const cached = getCachedEntry(queryKey);
+
   const [activeCodes, setActiveCodes] = useState(() => {
-    return cachedLocales || ['en', 'ar', 'es', 'pt', 'it'];
+    return cached?.data || ['en', 'ar', 'es', 'pt', 'it'];
   });
-  const [loading, setLoading] = useState(!cachedLocales);
+  const [loading, setLoading] = useState(!cached);
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchActiveLocales = async () => {
       try {
-        if (cachedLocales && Date.now() - lastFetchTime < CACHE_TTL_MS) {
-          if (isMounted) {
-            setActiveCodes(cachedLocales);
-            setLoading(false);
-          }
-          return;
-        }
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) setLoading(true);
 
-        const data = await api.get('/settings/public/locales');
-        const list = Array.isArray(data?.locales) && data.locales.length > 0
-          ? data.locales
-          : ['en', 'ar', 'es', 'pt', 'it'];
-
-        cachedLocales = list;
-        lastFetchTime = Date.now();
+        const list = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            const data = await api.get('/settings/public/locales', { signal });
+            return Array.isArray(data?.locales) && data.locales.length > 0
+              ? data.locales
+              : ['en', 'ar', 'es', 'pt', 'it'];
+          },
+          CACHE_POLICIES.STATIC_CONFIG
+        );
 
         if (isMounted) {
           setActiveCodes(list);
         }
       } catch {
-        // Resilient fallback to all default locales on network error or offline
-        if (isMounted && !cachedLocales) {
+        // Resilient fallback to default locales on network error or offline
+        if (isMounted && !cached) {
           setActiveCodes(['en', 'ar', 'es', 'pt', 'it']);
         }
       } finally {
@@ -57,6 +56,7 @@ export function useActiveLocales() {
 
     return () => {
       isMounted = false;
+      abortQuery(queryKey);
     };
   }, []);
 

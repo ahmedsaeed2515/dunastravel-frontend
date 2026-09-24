@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fa';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
+import { fetchWithSmartCache, invalidateQueries, CACHE_POLICIES } from '../../utils/apiCache';
 
 const AVATAR_GRADIENTS = [
   'from-amber-500 to-orange-600',
@@ -147,7 +148,11 @@ export default function ReviewsMap({ tourId }) {
     if (!tourId) return undefined;
     let active = true;
 
-    api.get(`/tours/${encodeURIComponent(tourId)}/reviews`)
+    fetchWithSmartCache(
+      ['reviews', tourId],
+      () => api.get(`/tours/${encodeURIComponent(tourId)}/reviews`),
+      { policy: CACHE_POLICIES.REVIEWS }
+    )
       .then((response) => {
         if (!active) return;
         const items = Array.isArray(response?.items)
@@ -250,6 +255,7 @@ export default function ReviewsMap({ tourId }) {
       };
 
       const response = await api.post(`/tours/${encodeURIComponent(tourId)}/reviews`, payload);
+      invalidateQueries(['reviews', tourId]);
       const newReviewId = response?.id || `local-${Date.now()}`;
 
       // Optimistic Instant Feedback (Google Maps Experience):

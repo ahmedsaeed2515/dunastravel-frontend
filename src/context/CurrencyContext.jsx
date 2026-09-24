@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
 import api from '../utils/api';
+import { fetchWithSmartCache, CACHE_POLICIES } from '../utils/apiCache';
 const defaultCurrencyContext = {
   currency: 'USD',
   setCurrency: () => {},
@@ -29,7 +30,11 @@ export const CurrencyProvider = ({ children }) => {
     let isMounted = true;
     const fetchRate = async () => {
       try {
-        const data = await api.get('/currency/rates');
+        const data = await fetchWithSmartCache(
+          '/currency/rates',
+          () => api.get('/currency/rates'),
+          { policy: CACHE_POLICIES.CURRENCY }
+        );
         const eur = data?.rates?.EUR || data?.EUR;
         if (eur && isMounted) {
           setEurRate(eur);

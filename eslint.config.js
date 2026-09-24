@@ -33,6 +33,8 @@ export default defineConfig([
       'react-refresh/only-export-components': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/refs': 'warn',
     },
   },
 ]);

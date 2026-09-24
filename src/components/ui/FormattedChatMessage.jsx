@@ -96,12 +96,12 @@ const FormattedChatMessage = ({ text, isStreaming = false }) => {
         }
 
         // Check if block is a numbered list
-        const isNumberedList = lines.length > 0 && lines.every((line) => /^\s*\d+[\.\)]\s+/.test(line.trim()));
+        const isNumberedList = lines.length > 0 && lines.every((line) => /^\s*\d+[.)]\s+/.test(line.trim()));
         if (isNumberedList) {
           return (
             <ol key={bIdx} className="space-y-1.5 my-1.5 pl-1 pr-1">
               {lines.map((line, lIdx) => {
-                const match = line.match(/^\s*(\d+)[\.\)]\s+(.*)/);
+                const match = line.match(/^\s*(\d+)[.)]\s+(.*)/);
                 const num = match ? match[1] : lIdx + 1;
                 const clean = match ? match[2] : line;
                 return (

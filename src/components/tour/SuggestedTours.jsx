@@ -40,7 +40,7 @@ export default function SuggestedTours({ currentDestination = 'egypt', currentSl
         id: tour.id || tour.slug,
         slug: tour.slug,
         destination: getTourDestinationSlug(tour),
-        price: tour.price ?? Number(tour.basePriceUsd) ?? 0,
+        price: tour.price ?? (tour.basePriceUsd != null ? Number(tour.basePriceUsd) : 0),
         rating: tour.rating || 4.9,
         image,
         link: `/tours/${tour.slug}`

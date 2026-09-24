@@ -13,6 +13,8 @@
  *  5. Guest Token: attaches header 'x-guest-token' from localStorage ('dunas_guest_token') on all requests.
  */
 
+import { clearPrivateUserCache, fetchWithSmartCache, CACHE_POLICIES } from './apiCache';
+
 const rawApiUrl = import.meta.env.DEV
   ? '/api'
   : import.meta.env.VITE_API_URL ||
@@ -98,6 +100,7 @@ async function fetchCsrfToken() {
 /** Clears the cached CSRF token (call after logout) */
 export function clearCsrfToken() {
   _csrfToken = null;
+  clearPrivateUserCache();
 }
 
 /**
@@ -166,6 +169,7 @@ function addRefreshSubscriber(callback) {
 }
 
 function notifyUnauthorized() {
+  clearPrivateUserCache();
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('auth:unauthorized'));
   }
@@ -381,7 +385,23 @@ export async function apiRequest(path, options = {}, { raw = false, _retry = fal
 // ── Convenience Methods ───────────────────────────────────────────────────────
 
 export const api = {
-  get: (path, options = {}) => apiRequest(path, { ...options, method: 'GET' }),
+  get: (path, options = {}) => {
+    if (options.useCache || options.cachePolicy) {
+      const policy = options.cachePolicy || CACHE_POLICIES.TOUR_CATALOG;
+      const key = options.cacheKey || path;
+      return fetchWithSmartCache(
+        key,
+        (fetchOpts) =>
+          apiRequest(path, {
+            ...options,
+            signal: fetchOpts?.signal || options.signal,
+            method: 'GET',
+          }),
+        { policy }
+      );
+    }
+    return apiRequest(path, { ...options, method: 'GET' });
+  },
   post: (path, body, options = {}) =>
     apiRequest(path, { ...options, method: 'POST', body }),
   patch: (path, body, options = {}) =>

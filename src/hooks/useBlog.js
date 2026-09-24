@@ -3,28 +3,28 @@ import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
 import { blogs as fallbackBlogs } from '../data/blogs';
+import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
 
 /**
  * Hook to fetch a single blog post by slug from GET /api/blogs/:slug with resilient fallback to full static catalog
+ * Uses smart caching (SWR + in-flight deduplication + normalization).
  * @param {string} slug
  */
-const blogCache = new Map();
-const pendingBlogRequests = new Map();
-const BLOG_CACHE_TTL_MS = 300_000; // 5 minutes
-
 export function useBlog(slug) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
-  const cacheKey = slug ? `${slug}:${lang}` : null;
+  const queryKey = slug ? ['blog', slug, lang] : null;
 
   const initialFallback = slug ? fallbackBlogs.find((b) => b.slug === slug || b.id === slug) || null : null;
-  const [blog, setBlog] = useState(initialFallback);
-  const [loading, setLoading] = useState(true);
+  const cached = queryKey ? getCachedEntry(queryKey) : null;
+
+  const [blog, setBlog] = useState(cached ? cached.data : initialFallback);
+  const [loading, setLoading] = useState(queryKey ? !cached : false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
-    if (!slug || !cacheKey) {
+    if (!slug || !queryKey) {
       return;
     }
 
@@ -32,47 +32,37 @@ export function useBlog(slug) {
 
     const fetchBlog = async () => {
       try {
-        await Promise.resolve();
-
-        // 1. Serve from cache
-        const cached = blogCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < BLOG_CACHE_TTL_MS) {
-          if (isMounted) {
-            setBlog(cached.data);
-            setLoading(false);
-          }
-          return;
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) {
+          setLoading(true);
         }
-
-        setLoading(true);
         setError(null);
 
-        // 2. Deduplicate
-        let request = pendingBlogRequests.get(cacheKey);
-        if (!request) {
-          request = api
-            .get(`/blogs/${encodeURIComponent(slug)}?locale=${encodeURIComponent(lang)}`)
-            .then((data) => {
-              if (data && (data.title || data.slug || data.id)) {
-                const merged = fallbackItem ? { ...fallbackItem, ...data } : data;
-                blogCache.set(cacheKey, { data: merged, timestamp: Date.now() });
-                return merged;
+        const data = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            try {
+              const res = await api.get(`/blogs/${encodeURIComponent(slug)}?locale=${encodeURIComponent(lang)}`, { signal });
+              if (res && (res.title || res.slug || res.id)) {
+                return fallbackItem ? { ...fallbackItem, ...res } : res;
               }
               if (fallbackItem) return fallbackItem;
               throw new Error('Invalid blog response');
-            })
-            .catch(() => fallbackItem)
-            .finally(() => pendingBlogRequests.delete(cacheKey));
-          pendingBlogRequests.set(cacheKey, request);
-        }
+            } catch {
+              return fallbackItem;
+            }
+          },
+          CACHE_POLICIES.CMS_CONTENT
+        );
 
-        const data = await request;
         if (isMounted) {
           setBlog(data || fallbackItem);
         }
       } catch (err) {
+        if (err?.name === 'AbortError' || err?.code === 'ERR_CANCELED') return;
         if (isMounted) {
           setBlog(fallbackItem);
+          setError(err);
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -80,17 +70,18 @@ export function useBlog(slug) {
     };
 
     void fetchBlog();
+
     return () => {
       isMounted = false;
+      abortQuery(queryKey);
     };
-  }, [cacheKey, slug, lang]);
+  }, [slug, lang]);
 
   return {
     blog,
     loading,
     error,
     retry: () => {
-      if (cacheKey) blogCache.delete(cacheKey);
       setLoading(true);
     },
   };

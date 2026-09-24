@@ -843,6 +843,7 @@ export const JaiderChatProvider = ({ children }) => {
         submitLead,
         requestHandoff,
         leadFormState,
+        setLeadFormState,
         handoffState,
         clearMessages: startNewChat,
         startNewChat,

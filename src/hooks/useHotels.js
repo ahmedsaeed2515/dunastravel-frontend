@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
+import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
 
 function supportedLocale(language) {
   const locale = (language || 'en').split('-')[0];
@@ -9,29 +10,41 @@ function supportedLocale(language) {
 
 export function useHotel(slug) {
   const { i18n } = useTranslation();
-  const [hotel, setHotel] = useState(null);
-  const [loading, setLoading] = useState(Boolean(slug));
+  const lang = supportedLocale(i18n.language);
+  const queryKey = slug ? ['hotel', slug, lang] : null;
+
+  const cached = queryKey ? getCachedEntry(queryKey) : null;
+  const [hotel, setHotel] = useState(cached ? cached.data : null);
+  const [loading, setLoading] = useState(queryKey ? !cached : false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let active = true;
-    if (!slug) {
+    if (!slug || !queryKey) {
       setHotel(null);
       setLoading(false);
-      return () => {
-        active = false;
-      };
+      return;
     }
     const fetchHotel = async () => {
-      setLoading(true);
-      setError(null);
       try {
-        const item = await api.get(`/hotels/${encodeURIComponent(slug)}?locale=${supportedLocale(i18n.language)}`);
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) setLoading(true);
+        setError(null);
+
+        const data = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            const item = await api.get(`/hotels/${encodeURIComponent(slug)}?locale=${lang}`, { signal });
+            return item || null;
+          },
+          CACHE_POLICIES.TOUR_DETAILS
+        );
+
         if (active) {
-          setHotel(item || null);
-          setError(null);
+          setHotel(data || null);
         }
       } catch (requestError) {
+        if (requestError?.name === 'AbortError' || requestError?.code === 'ERR_CANCELED') return;
         if (active) {
           setHotel(null);
           setError(requestError);
@@ -43,8 +56,9 @@ export function useHotel(slug) {
     void fetchHotel();
     return () => {
       active = false;
+      abortQuery(queryKey);
     };
-  }, [slug, i18n.language]);
+  }, [slug, lang]);
 
   return {
     hotel,
@@ -55,29 +69,44 @@ export function useHotel(slug) {
 
 export function useHotels({ destinationSlug, limit = 24 } = {}) {
   const { i18n } = useTranslation();
-  const [hotels, setHotels] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const lang = supportedLocale(i18n.language);
+  const queryKey = ['hotels', lang, { destinationSlug: destinationSlug || '', limit }];
+
+  const cached = getCachedEntry(queryKey);
+  const [hotels, setHotels] = useState(cached ? cached.data : []);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let active = true;
     const fetchHotels = async () => {
-      setLoading(true);
-      setError(null);
       try {
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) setLoading(true);
+        setError(null);
+
         const queryParams = new URLSearchParams({
-          locale: supportedLocale(i18n.language),
+          locale: lang,
           limit: String(limit),
         });
         if (destinationSlug) {
           queryParams.set('destinationSlug', destinationSlug);
         }
-        const data = await api.get(`/hotels?${queryParams.toString()}`);
+
+        const data = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            const res = await api.get(`/hotels?${queryParams.toString()}`, { signal });
+            return Array.isArray(res) ? res : [];
+          },
+          CACHE_POLICIES.TOUR_CATALOG
+        );
+
         if (active) {
           setHotels(Array.isArray(data) ? data : []);
-          setError(null);
         }
       } catch (err) {
+        if (err?.name === 'AbortError' || err?.code === 'ERR_CANCELED') return;
         if (active) {
           setHotels([]);
           setError(err);
@@ -89,8 +118,9 @@ export function useHotels({ destinationSlug, limit = 24 } = {}) {
     void fetchHotels();
     return () => {
       active = false;
+      abortQuery(queryKey);
     };
-  }, [destinationSlug, limit, i18n.language]);
+  }, [destinationSlug, limit, lang]);
 
   return {
     hotels,

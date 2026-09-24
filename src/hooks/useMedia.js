@@ -32,9 +32,7 @@ function normalizeAssets(response, isSpecific = false) {
   };
 }
 
-const mediaCache = new Map();
-const pendingMediaRequests = new Map();
-const MEDIA_CACHE_TTL_MS = 300_000; // 5 minutes
+import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
 
 export function useMedia(optionsOrTourId = null) {
   let tourId = null;
@@ -48,77 +46,57 @@ export function useMedia(optionsOrTourId = null) {
   }
 
   const isSpecific = Boolean(tourId || category);
-  const cacheKey = category
-    ? `category:${category}`
-    : tourId
-    ? `tour:${tourId}`
-    : 'global';
+  const queryKey = ['media', category || (tourId ? `tour:${tourId}` : 'global')];
+  const cached = getCachedEntry(queryKey);
 
   const [galleryImages, setGalleryImages] = useState(() => {
-    const cached = mediaCache.get(cacheKey);
     return cached?.data?.galleryImages || (isSpecific ? [] : DEFAULT_GALLERY_IMAGES);
   });
   const [videos, setVideos] = useState(() => {
-    const cached = mediaCache.get(cacheKey);
     return cached?.data?.videos || [];
   });
-  const [loading, setLoading] = useState(() => !mediaCache.has(cacheKey));
+  const [loading, setLoading] = useState(() => !cached);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
     const fetchMedia = async () => {
       try {
-        const cached = mediaCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < MEDIA_CACHE_TTL_MS) {
-          if (isMounted) {
-            setGalleryImages(cached.data.galleryImages);
-            setVideos(cached.data.videos);
-            setLoading(false);
-          }
-          return;
-        }
-
-        if (!cached) {
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) {
           setLoading(true);
         }
         setError(null);
 
-        // 2. Deduplicate concurrent requests
-        let request = pendingMediaRequests.get(cacheKey);
-        if (!request) {
-          let url = '/media';
-          if (category) {
-            url = `/media?category=${encodeURIComponent(category)}`;
-          } else if (tourId) {
-            url = `/media/tours/${encodeURIComponent(tourId)}`;
-          }
+        let url = '/media';
+        if (category) {
+          url = `/media?category=${encodeURIComponent(category)}`;
+        } else if (tourId) {
+          url = `/media/tours/${encodeURIComponent(tourId)}`;
+        }
 
-          request = api
-            .get(url)
-            .then((raw) => {
-              const result = normalizeAssets(raw, isSpecific);
-              mediaCache.set(cacheKey, { data: result, timestamp: Date.now() });
-              return result;
-            })
-            .catch(() => {
-              const fallback = {
+        const result = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            try {
+              const raw = await api.get(url, { signal });
+              return normalizeAssets(raw, isSpecific);
+            } catch {
+              return {
                 galleryImages: isSpecific ? [] : DEFAULT_GALLERY_IMAGES,
                 videos: [],
               };
-              mediaCache.set(cacheKey, { data: fallback, timestamp: Date.now() });
-              return fallback;
-            })
-            .finally(() => pendingMediaRequests.delete(cacheKey));
-          pendingMediaRequests.set(cacheKey, request);
-        }
+            }
+          },
+          CACHE_POLICIES.STATIC_CONFIG
+        );
 
-        const result = await request;
         if (isMounted) {
           setGalleryImages(result.galleryImages);
           setVideos(result.videos);
         }
       } catch (requestError) {
+        if (requestError?.name === 'AbortError' || requestError?.code === 'ERR_CANCELED') return;
         if (isMounted) {
           setError(requestError?.status === 404 ? null : requestError);
           if (!isSpecific) {
@@ -129,11 +107,14 @@ export function useMedia(optionsOrTourId = null) {
         if (isMounted) setLoading(false);
       }
     };
+
     void fetchMedia();
+
     return () => {
       isMounted = false;
+      abortQuery(queryKey);
     };
-  }, [cacheKey, isSpecific, category, tourId]);
+  }, [category, tourId, isSpecific]);
 
   return {
     galleryImages,
@@ -141,7 +122,6 @@ export function useMedia(optionsOrTourId = null) {
     loading,
     error,
     retry: () => {
-      mediaCache.delete(cacheKey);
       setLoading(true);
     },
   };

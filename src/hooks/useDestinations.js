@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
+import {
+  fetchWithSmartCache,
+  getCachedEntry,
+  subscribeToQueryKey,
+  invalidateQueries,
+  abortQuery,
+  CACHE_POLICIES,
+} from '../utils/apiCache';
 
 const DEST_FALLBACK_IMAGES = {
   egypt: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
@@ -54,84 +62,82 @@ function readDestinations(response) {
       tours: Array.isArray(item.tours) ? item.tours : [],
     };
   }).filter(Boolean);
-}
-
-const destinationsCache = new Map();
-const pendingDestinationsRequests = new Map();
-const DESTINATIONS_CACHE_TTL_MS = 10_000; // 10 seconds
-
 export function useDestinations() {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
-  const cacheKey = lang;
+  const queryKey = ['destinations', lang];
+
   const [destinations, setDestinations] = useState(() => {
-    const cached = destinationsCache.get(cacheKey);
-    return cached?.data || [];
+    const cached = getCachedEntry(queryKey);
+    return cached?.data || staticDestinations;
   });
-  const [loading, setLoading] = useState(() => !destinationsCache.has(cacheKey));
+  const [loading, setLoading] = useState(() => !getCachedEntry(queryKey));
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
-    const fetchDestinations = async () => {
-      try {
-        const cached = destinationsCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < DESTINATIONS_CACHE_TTL_MS) {
-          if (isMounted) {
-            setDestinations(cached.data);
-            setLoading(false);
-          }
-          return;
-        }
-
-        if (!cached) {
-          setLoading(true);
-        }
+    const unsubscribe = subscribeToQueryKey(queryKey, (updated, isErr) => {
+      if (!isErr && updated) {
+        setDestinations(updated);
+        setLoading(false);
         setError(null);
+      }
+    });
+    return unsubscribe;
+  }, [lang]);
 
-        let request = pendingDestinationsRequests.get(cacheKey);
-        if (!request) {
-          request = api
-            .get(`/destinations?locale=${encodeURIComponent(lang)}`)
-            .then((res) => {
-              const items = readDestinations(res);
-              const result = items.length > 0 ? items : staticDestinations;
-              destinationsCache.set(cacheKey, { data: result, timestamp: Date.now() });
-              return result;
-            })
-            .catch(() => {
-              destinationsCache.set(cacheKey, { data: staticDestinations, timestamp: Date.now() });
-              return staticDestinations;
-            })
-            .finally(() => pendingDestinationsRequests.delete(cacheKey));
-          pendingDestinationsRequests.set(cacheKey, request);
+  useEffect(() => {
+    let isMounted = true;
+
+    const cached = getCachedEntry(queryKey);
+    if (cached) {
+      setDestinations(cached.data);
+      if (!cached.isStale) {
+        setLoading(false);
+      }
+    } else {
+      setLoading(true);
+    }
+
+    fetchWithSmartCache(
+      queryKey,
+      async ({ signal } = {}) => {
+        try {
+          const res = await api.get(`/destinations?locale=${encodeURIComponent(lang)}`, { signal });
+          const items = readDestinations(res);
+          return items.length > 0 ? items : staticDestinations;
+        } catch {
+          return staticDestinations;
         }
-
-        const items = await request;
+      },
+      { policy: CACHE_POLICIES.DESTINATIONS }
+    )
+      .then((items) => {
         if (isMounted) {
           setDestinations(items);
+          setError(null);
+          setLoading(false);
         }
-      } catch (requestError) {
+      })
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
         if (isMounted) {
-          const cached = destinationsCache.get(cacheKey);
-          setDestinations(cached?.data || staticDestinations);
+          setDestinations(staticDestinations);
+          setLoading(false);
         }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-    void fetchDestinations();
+      });
+
     return () => {
       isMounted = false;
+      abortQuery(queryKey);
     };
-  }, [cacheKey, lang]);
+  }, [lang]);
 
   return {
     destinations,
     loading,
     error,
     retry: () => {
-      destinationsCache.delete(cacheKey);
+      invalidateQueries(queryKey);
       setLoading(true);
     },
   };

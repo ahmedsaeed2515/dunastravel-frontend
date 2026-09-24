@@ -133,56 +133,44 @@ function localeFor(language) {
   return ['en', 'ar', 'es', 'pt', 'it'].includes(locale) ? locale : 'en';
 }
 
-const servicesCache = new Map();
-const pendingServicesRequests = new Map();
-const SERVICES_CACHE_TTL_MS = 300_000; // 5 minutes
+import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
 
 export function useServices(category = null) {
   const { i18n } = useTranslation();
   const lang = localeFor(i18n.language);
-  const cacheKey = `${category || 'all'}:${lang}`;
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryKey = ['services', category || 'all', lang];
+
+  const cached = getCachedEntry(queryKey);
+  const [services, setServices] = useState(cached ? cached.data : []);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
     const fetchServices = async () => {
       try {
-        await Promise.resolve();
-
-        // 1. Serve from in-memory cache
-        const cached = servicesCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < SERVICES_CACHE_TTL_MS) {
-          if (isMounted) {
-            setServices(cached.data);
-            setLoading(false);
-          }
-          return;
-        }
-
-        setLoading(true);
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) setLoading(true);
         setError(null);
 
-        // 2. Deduplicate
-        let request = pendingServicesRequests.get(cacheKey);
-        if (!request) {
-          request = (async () => {
-            let items;
+        const items = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            let resItems;
             if (category === 'hotels') {
-              items = readItems(await api.get(`/hotels?locale=${lang}`), 'hotels')
+              resItems = readItems(await api.get(`/hotels?locale=${lang}`, { signal }), 'hotels')
                 .map(transformHotelToService);
             } else if (category === 'transportation') {
-              items = readItems(await api.get(`/transportation/services?locale=${lang}`), 'transportation')
+              resItems = readItems(await api.get(`/transportation/services?locale=${lang}`, { signal }), 'transportation')
                 .map(transformTransportToService);
             } else if (category) {
               const params = new URLSearchParams({ lang, category, limit: '30' });
-              items = readItems(await api.get(`/tours?${params.toString()}`), 'tour services')
+              resItems = readItems(await api.get(`/tours?${params.toString()}`, { signal }), 'tour services')
                 .map((tour) => transformTourToService(tour, category));
             } else {
               const [hotelsResult, transportResult] = await Promise.allSettled([
-                api.get(`/hotels?locale=${lang}`),
-                api.get(`/transportation/services?locale=${lang}`),
+                api.get(`/hotels?locale=${lang}`, { signal }),
+                api.get(`/transportation/services?locale=${lang}`, { signal }),
               ]);
               const hotels = hotelsResult.status === 'fulfilled'
                 ? readItems(hotelsResult.value, 'hotels').map(transformHotelToService)
@@ -190,17 +178,16 @@ export function useServices(category = null) {
               const transportation = transportResult.status === 'fulfilled'
                 ? readItems(transportResult.value, 'transportation').map(transformTransportToService)
                 : [];
-              items = [...hotels, ...transportation];
+              resItems = [...hotels, ...transportation];
             }
-            servicesCache.set(cacheKey, { data: items, timestamp: Date.now() });
-            return items;
-          })().finally(() => pendingServicesRequests.delete(cacheKey));
-          pendingServicesRequests.set(cacheKey, request);
-        }
+            return resItems;
+          },
+          CACHE_POLICIES.TOUR_CATALOG
+        );
 
-        const items = await request;
         if (isMounted) setServices(items);
       } catch (requestError) {
+        if (requestError?.name === 'AbortError' || requestError?.code === 'ERR_CANCELED') return;
         if (isMounted) {
           setError(requestError);
           setServices([]);
@@ -209,16 +196,20 @@ export function useServices(category = null) {
         if (isMounted) setLoading(false);
       }
     };
+
     void fetchServices();
-    return () => { isMounted = false; };
-  }, [cacheKey, category, lang]);
+
+    return () => {
+      isMounted = false;
+      abortQuery(queryKey);
+    };
+  }, [category, lang]);
 
   return {
     services,
     loading,
     error,
     retry: () => {
-      servicesCache.delete(cacheKey);
       setLoading(true);
     }
   };

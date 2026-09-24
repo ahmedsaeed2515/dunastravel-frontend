@@ -3,58 +3,45 @@ import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 import { supportedLocale } from '../utils/locale';
 import { blogs as fallbackBlogs } from '../data/blogs';
+import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
 
 /**
  * Hook to fetch blog posts from GET /api/blogs with resilient fallback to full static catalog
+ * Uses smart caching (SWR + in-flight deduplication + normalization).
  * @param {Object} filters Query params (category, tag, limit, page)
  */
-const blogsCache = new Map();
-const pendingBlogsRequests = new Map();
-const BLOGS_CACHE_TTL_MS = 300_000; // 5 minutes
-
 export function useBlogs(filters = {}) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
 
-  const [blogs, setBlogs] = useState(fallbackBlogs);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const queryKey = ['blogs', lang, filters];
+  const cached = getCachedEntry(queryKey);
 
-  const filterKey = JSON.stringify(filters);
-  const cacheKey = `${lang}:${filterKey}`;
+  const [blogs, setBlogs] = useState(cached ? cached.data : fallbackBlogs);
+  const [loading, setLoading] = useState(!cached);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
-    const currentFilters = filterKey ? JSON.parse(filterKey) : {};
 
     const fetchBlogs = async () => {
       try {
-        await Promise.resolve();
-
-        // 1. Serve from in-memory cache if fresh
-        const cached = blogsCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < BLOGS_CACHE_TTL_MS) {
-          if (isMounted) {
-            setBlogs(cached.data);
-            setLoading(false);
-          }
-          return;
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) {
+          setLoading(true);
         }
-
-        setLoading(true);
         setError(null);
 
-        // 2. Deduplicate concurrent requests
-        let request = pendingBlogsRequests.get(cacheKey);
-        if (!request) {
-          const params = new URLSearchParams({ locale: lang });
-          Object.entries(currentFilters).forEach(([k, v]) => {
-            if (v !== undefined && v !== null) params.append(k, v);
-          });
+        const params = new URLSearchParams({ locale: lang });
+        Object.entries(filters || {}).forEach(([k, v]) => {
+          if (v !== undefined && v !== null && v !== '') params.append(k, v);
+        });
 
-          request = api
-            .get(`/blogs?${params.toString()}`)
-            .then((res) => {
+        const data = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            try {
+              const res = await api.get(`/blogs?${params.toString()}`, { signal });
               const items = Array.isArray(res)
                 ? res
                 : Array.isArray(res?.items)
@@ -69,22 +56,22 @@ export function useBlogs(filters = {}) {
               const mergedMap = new Map();
               fallbackBlogs.forEach((b) => mergedMap.set(b.slug || b.id, b));
               items.forEach((b) => mergedMap.set(b.slug || b.id, { ...mergedMap.get(b.slug || b.id), ...b }));
-              const result = Array.from(mergedMap.values());
-              blogsCache.set(cacheKey, { data: result, timestamp: Date.now() });
-              return result;
-            })
-            .catch(() => fallbackBlogs)
-            .finally(() => pendingBlogsRequests.delete(cacheKey));
-          pendingBlogsRequests.set(cacheKey, request);
-        }
+              return Array.from(mergedMap.values());
+            } catch {
+              return fallbackBlogs;
+            }
+          },
+          CACHE_POLICIES.CMS_CONTENT
+        );
 
-        const items = await request;
         if (isMounted) {
-          setBlogs(items && items.length > 0 ? items : fallbackBlogs);
+          setBlogs(data && data.length > 0 ? data : fallbackBlogs);
         }
       } catch (err) {
+        if (err?.name === 'AbortError' || err?.code === 'ERR_CANCELED') return;
         if (isMounted) {
           setBlogs(fallbackBlogs);
+          setError(err);
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -92,17 +79,18 @@ export function useBlogs(filters = {}) {
     };
 
     void fetchBlogs();
+
     return () => {
       isMounted = false;
+      abortQuery(queryKey);
     };
-  }, [cacheKey, filterKey, lang]);
+  }, [lang, JSON.stringify(filters)]);
 
   return {
     blogs,
     loading,
     error,
     retry: () => {
-      blogsCache.delete(cacheKey);
       setLoading(true);
     },
   };

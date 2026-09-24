@@ -27,6 +27,8 @@ import {
   getTourDestinationSlug, 
   getDestinationName 
 } from '../../utils/destinationHelper';
+import api from '../../utils/api';
+import { prefetchQuery, CACHE_POLICIES } from '../../utils/apiCache';
 
 const marketFlag = (market) => {
   const flags = { Brasil: '🇧🇷', Italia: '🇮🇹', Spain: '🇪🇸', Egypt: '🇪🇬' };
@@ -162,11 +164,26 @@ const TourCard = ({
     await toggleFavorite(tour);
   };
 
+  const handlePrefetch = () => {
+    const slug = tour?.slug || tour?.id;
+    if (!slug) return;
+    prefetchQuery(
+      ['tour', slug, lang],
+      async () => {
+        const raw = await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`);
+        return raw;
+      },
+      { policy: CACHE_POLICIES.TOUR_DETAILS }
+    );
+  };
+
   const imageLoadingAttr = loading || (index < 2 ? "eager" : "lazy");
 
   return (
     <motion.div
       onClick={handleCardClick}
+      onMouseEnter={handlePrefetch}
+      onFocus={handlePrefetch}
       className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
       variants={cardVariants}
       initial="hidden"
