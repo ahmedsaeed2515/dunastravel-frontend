@@ -243,9 +243,14 @@ const Services = () => {
                           <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
                             <div>
                               <span className="text-caption text-obsidian-400 dark:text-ivory-400 block">{t('tourCard.from', 'From')}</span>
-                              <span className="text-body-lg font-semibold text-obsidian-900 dark:text-gold-400">{formatPrice(item.price)}</span>
+                              <span className="text-body-lg font-extrabold text-obsidian-900 dark:text-gold-400">{formatPrice(item.category === 'hotels' ? 0 : item.price)}</span>
                             </div>
-                            <Button variant="outline-gold" className="px-4 py-2 text-sm group-hover:bg-gold-500 group-hover:text-obsidian-900 group-hover:shadow-[0_0_15px_rgba(201,162,39,0.4)] transition-all">{t('tourCard.viewDetails', 'View Details')}</Button>
+                            <Button
+                              variant="blue"
+                              className={item.category === 'hotels' ? 'px-4 py-2 text-sm bg-[#1e3a8a] text-white hover:bg-[#1d4ed8] transition-all font-extrabold rounded-xl shadow-sm' : 'px-4 py-2 text-sm group-hover:bg-gold-500 group-hover:text-obsidian-900 group-hover:shadow-[0_0_15px_rgba(201,162,39,0.4)] transition-all'}
+                            >
+                              {t('tourCard.viewDetails', 'View Details')}
+                            </Button>
                           </div>
                         </>
                       )}

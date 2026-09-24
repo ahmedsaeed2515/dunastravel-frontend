@@ -313,13 +313,13 @@ const HotelDetails = () => {
               {t('tourCard.startingFrom', 'Rooms From')}
             </div>
             <div className="text-3xl font-semibold text-gold-400 mb-3">
-              {formatPrice(apiHotel?.pricePerNight && apiHotel.pricePerNight > 0 ? apiHotel.pricePerNight : 75)}
+              {formatPrice(0)}
               <span className="text-sm font-normal text-slate-300"> / {t('hotel.night', 'night')}</span>
             </div>
             <a href="#rooms">
-              <Button variant="glass" className="w-full px-6 py-2.5 text-xs uppercase font-bold">
+              <button className="w-full px-6 py-2.5 text-xs uppercase font-extrabold tracking-wider text-white bg-[#1e3a8a] hover:bg-[#1d4ed8] rounded-xl shadow-md transition-all">
                 {t('hotel.room.viewRooms', 'View Available Rooms')}
-              </Button>
+              </button>
             </a>
           </div>
         </div>
@@ -453,43 +453,87 @@ const HotelDetails = () => {
           {roomTypes.map((room) => (
             <div
               key={room.id}
-              className="bg-white dark:bg-obsidian-800 rounded-2xl overflow-hidden shadow-sm border border-slate-200/65 dark:border-obsidian-700 flex flex-col justify-between hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-[#0d162a] rounded-3xl overflow-hidden shadow-xl dark:shadow-2xl border-2 border-slate-200/90 dark:border-blue-900/60 flex flex-col justify-between hover:border-gold-500 dark:hover:border-gold-400 hover:shadow-2xl hover:shadow-gold-500/10 transition-all duration-500 group transform hover:-translate-y-1.5"
             >
               <div>
-                <div className="relative h-56 overflow-hidden">
-                  <img src={room.image} alt={room.name} className="w-full h-full object-cover" />
-                  <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 bg-slate-900/85 backdrop-blur-sm text-gold-500 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                    {room.view}
+                {/* Image Section */}
+                <div className="relative h-60 overflow-hidden">
+                  <img
+                    src={room.image}
+                    alt={room.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d162a]/90 via-[#0d162a]/30 to-transparent" />
+
+                  {/* View Badge (Gold & Royal Blue Glassmorphism) */}
+                  <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 z-10 flex items-center gap-1.5 bg-slate-950/90 dark:bg-[#070e1c]/90 backdrop-blur-md text-amber-300 border border-gold-500/50 text-[11px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                    <span>{room.view}</span>
+                  </div>
+
+                  {/* Top Right Royal Blue Pill */}
+                  <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-10 bg-[#1e3a8a]/90 text-white backdrop-blur-md border border-amber-400/40 text-xs font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                    <FaUserFriends className="text-amber-300" />
+                    <span>{room.capacity}</span>
+                  </div>
+
+                  {/* Bottom Image Overlay Strip */}
+                  <div className="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between text-white">
+                    <span className="text-xs font-bold text-amber-300 drop-shadow flex items-center gap-1.5">
+                      <FaBed className="text-gold-400 text-sm" /> {room.bed}
+                    </span>
+                    <span className="text-[10px] font-extrabold tracking-widest uppercase bg-amber-900/80 text-amber-200 px-2.5 py-0.5 rounded-md border border-amber-600/40">
+                      {t('hotel.overview.luxuriousComfort', 'Luxury Suite')}
+                    </span>
                   </div>
                 </div>
+
+                {/* Content Section */}
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">{room.name}</h3>
-                  <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-300 mb-6 font-semibold">
-                    <span className="flex items-center gap-1">
-                      <FaUserFriends className="text-gold-500" /> {room.capacity}
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-gold-400 transition-colors leading-tight font-display mb-4">
+                    {room.name}
+                  </h3>
+
+                  {/* Feature Badges: Royal Blue, Gold, Brown & White */}
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    {/* Royal Blue Badge */}
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-100 text-xs font-extrabold shadow-2xs">
+                      <FaUserFriends className="text-blue-700 dark:text-blue-400 text-sm shrink-0" />
+                      <span>{room.capacity}</span>
                     </span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <FaBed className="text-gold-500" /> {room.bed}
+
+                    {/* Gold Badge */}
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-300/80 dark:border-amber-800/80 text-amber-950 dark:text-amber-200 text-xs font-extrabold shadow-2xs">
+                      <FaBed className="text-amber-600 dark:text-gold-400 text-sm shrink-0" />
+                      <span>{room.bed}</span>
+                    </span>
+
+                    {/* Terracotta/Brown Accent Badge */}
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#5c2c16]/10 dark:bg-[#5c2c16]/40 border border-[#8b4513]/30 text-[#6b3e26] dark:text-[#f59e0b] text-xs font-extrabold shadow-2xs">
+                      <FaStar className="text-[#b45309] dark:text-amber-400 text-xs shrink-0" />
+                      <span>5 Star Service</span>
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-6 bg-slate-50 dark:bg-obsidian-700/50 border-t border-slate-100 dark:border-obsidian-600 flex justify-between items-center">
+              {/* Footer Section (Royal Blue View Details Button & $0 Price Display) */}
+              <div className="p-5 sm:p-6 bg-slate-100 dark:bg-[#070e1c] border-t-2 border-slate-200/90 dark:border-blue-900/60 flex items-center justify-between gap-3">
                 <div>
-                  <span className="block text-[10px] text-slate-400 dark:text-slate-300 uppercase tracking-wider font-bold mb-0.5">
+                  <span className="block text-[11px] text-slate-600 dark:text-slate-400 uppercase tracking-widest font-black mb-0.5">
                     {t('tourCard.startingFrom', 'Price')}
                   </span>
-                  <span className="text-lg font-bold text-slate-900 dark:text-white">
-                    {t('tourCard.from', 'From')} {formatPrice(room.price)}
-                    <span className="text-xs text-slate-400 font-normal"> / {t('hotel.night', 'night')}</span>
-                  </span>
+                  <div className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
+                    <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t('tourCard.from', 'From')}</span>
+                    <span className="text-[#1e3a8a] dark:text-gold-400 font-extrabold">{formatPrice(0)}</span>
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">/ {t('hotel.night', 'night')}</span>
+                  </div>
                 </div>
+
                 <Link to={`${basePath}/hotels/${currentSlug}/${room.id}`}>
-                  <Button variant="outline-gold" className="px-4 py-2 text-xs uppercase font-bold">
+                  <button className="px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white bg-[#1e3a8a] hover:bg-[#1d4ed8] dark:bg-[#1e40af] dark:hover:bg-[#2563eb] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95">
                     {t('tourCard.viewDetails', 'View Details')}
-                  </Button>
+                  </button>
                 </Link>
               </div>
             </div>
@@ -724,10 +768,10 @@ const HotelDetails = () => {
       </section>
 
       {/* Reviews Section */}
-      <section className="bg-white dark:bg-obsidian-900 py-16 border-t border-slate-200 dark:border-obsidian-700 text-left rtl:text-right">
+      <section className="bg-white dark:bg-[#0b1222] py-16 border-t border-slate-200 dark:border-blue-900/40 text-left rtl:text-right">
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="text-center mb-10">
-            <span className="text-gold-600 uppercase tracking-widest text-xs font-semibold block mb-2">
+            <span className="text-gold-600 dark:text-gold-400 uppercase tracking-widest text-xs font-bold block mb-2">
               {t('hotel.gallery.subtitle', 'GUEST FEEDBACK')}
             </span>
             <h2 className="text-3xl font-display font-semibold text-slate-900 dark:text-white">
@@ -737,29 +781,29 @@ const HotelDetails = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-12">
-            <div className="bg-slate-50 dark:bg-obsidian-800 p-6 rounded-xl border border-slate-200/60 dark:border-obsidian-700 text-center">
-              <span className="text-5xl font-bold text-slate-900 dark:text-white">5.0</span>
-              <div className="flex justify-center gap-0.5 text-gold-500 my-2 text-lg">
+            <div className="bg-slate-50 dark:bg-[#0f172a] p-6 rounded-2xl border border-slate-200 dark:border-blue-900/60 shadow-md dark:shadow-xl text-center">
+              <span className="text-5xl font-black text-slate-900 dark:text-white">5.0</span>
+              <div className="flex justify-center gap-1 text-amber-400 my-3 text-xl">
                 <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
               </div>
-              <span className="text-xs uppercase tracking-wider font-bold text-slate-400">
+              <span className="text-xs uppercase tracking-wider font-extrabold text-slate-600 dark:text-slate-300">
                 {t('hotel.room.reviewsCountVal', 'Based on {{count}} reviews', { count: reviews.length })}
               </span>
             </div>
 
             <div className="md:col-span-2 space-y-4">
               {reviews.map((rev, idx) => (
-                <div key={idx} className="p-5 bg-slate-50 dark:bg-obsidian-800 rounded-xl border border-slate-100 dark:border-obsidian-700">
+                <div key={idx} className="p-6 bg-slate-50 dark:bg-[#0f172a] rounded-2xl border border-slate-200 dark:border-blue-900/60 shadow-md dark:shadow-xl">
                   <div className="flex justify-between items-center mb-2">
-                    <h4 className="font-semibold text-slate-900 dark:text-white">{rev.name}</h4>
-                    <span className="text-xs text-slate-400">{rev.date}</span>
+                    <h4 className="font-bold text-slate-900 dark:text-white text-base">{rev.name}</h4>
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{rev.date}</span>
                   </div>
-                  <div className="flex gap-0.5 mb-2.5 text-gold-500">
+                  <div className="flex gap-1 mb-3 text-amber-400">
                     {[...Array(rev.rating)].map((_, rIdx) => (
                       <FaStar key={rIdx} />
                     ))}
                   </div>
-                  <p className="text-slate-600 dark:text-slate-200 text-sm leading-relaxed">{rev.text}</p>
+                  <p className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed font-medium">{rev.text}</p>
                 </div>
               ))}
             </div>
@@ -767,19 +811,19 @@ const HotelDetails = () => {
 
           <form
             onSubmit={handleReviewSubmit}
-            className="bg-slate-50 dark:bg-obsidian-800 p-6 rounded-xl border border-slate-200 dark:border-obsidian-700"
+            className="bg-slate-50 dark:bg-[#0f172a] p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-blue-900/60 shadow-md dark:shadow-xl space-y-4"
           >
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
               {t('tour.leaveReview', 'Write a Review')}
             </h3>
             {reviewSubmitted && (
-              <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm font-medium flex items-center gap-2">
+              <div className="mb-4 p-3 bg-green-100 dark:bg-green-950/80 text-green-800 dark:text-green-200 border border-green-300 dark:border-green-800 rounded-xl text-sm font-bold flex items-center gap-2">
                 <FaCheckCircle /> {t('booking.reservationConfirmed', 'Review submitted successfully!')}
               </div>
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-300 mb-1.5 font-bold">
+                <label className="block text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 font-extrabold">
                   {t('booking.fullName', 'Name')}
                 </label>
                 <input
@@ -788,17 +832,17 @@ const HotelDetails = () => {
                   placeholder={t('booking.fullName', 'Your Name')}
                   value={newReview.name}
                   onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                  className="w-full p-3 rounded-lg border border-slate-300 dark:border-obsidian-600 text-slate-900 dark:text-white text-sm bg-white dark:bg-obsidian-700 outline-none"
+                  className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 text-sm bg-white dark:bg-[#1e293b] outline-none focus:border-blue-600 dark:focus:border-gold-400 transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-300 mb-1.5 font-bold">
+                <label className="block text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 font-extrabold">
                   {t('tour.tourType', 'Rating')}
                 </label>
                 <select
                   value={newReview.rating}
                   onChange={(e) => setNewReview({ ...newReview, rating: e.target.value })}
-                  className="w-full p-3 rounded-lg border border-slate-300 dark:border-obsidian-600 text-slate-900 dark:text-white text-sm bg-white dark:bg-obsidian-700 outline-none"
+                  className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm bg-white dark:bg-[#1e293b] outline-none focus:border-blue-600 dark:focus:border-gold-400 transition-colors"
                 >
                   <option value="5">⭐⭐⭐⭐⭐ ({t('booking.guests', '5 Stars')})</option>
                   <option value="4">⭐⭐⭐⭐ ({t('booking.guests', '4 Stars')})</option>
@@ -808,8 +852,8 @@ const HotelDetails = () => {
                 </select>
               </div>
             </div>
-            <div className="mb-4">
-              <label className="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-300 mb-1.5 font-bold">
+            <div>
+              <label className="block text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 font-extrabold">
                 {t('booking.specialRequirements', 'Comment')}
               </label>
               <textarea
@@ -818,12 +862,12 @@ const HotelDetails = () => {
                 placeholder={t('booking.specialRequestPlaceholder', 'Share your experience at Sol Pyramid Hotel...')}
                 value={newReview.text}
                 onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}
-                className="w-full p-3 rounded-lg border border-slate-300 dark:border-obsidian-600 text-slate-900 dark:text-white text-sm bg-white dark:bg-obsidian-700 outline-none resize-none"
+                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 text-sm bg-white dark:bg-[#1e293b] outline-none resize-none focus:border-blue-600 dark:focus:border-gold-400 transition-colors"
               />
             </div>
-            <Button type="submit" variant="gold-glow" className="px-5 py-2.5 text-xs uppercase font-bold">
+            <button type="submit" className="px-6 py-3 text-xs uppercase font-extrabold tracking-wider text-white bg-[#1e3a8a] hover:bg-[#1d4ed8] dark:bg-[#1e40af] dark:hover:bg-[#2563eb] rounded-xl shadow-md transition-all">
               {t('tour.submitReview', 'Submit Review')}
-            </Button>
+            </button>
           </form>
         </div>
       </section>

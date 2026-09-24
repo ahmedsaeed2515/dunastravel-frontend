@@ -28,6 +28,7 @@ import {
   FaFacebook,
   FaInstagram,
   FaGlobe,
+  FaPaperPlane,
 } from 'react-icons/fa';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useHotel } from '../../hooks/useHotels';
@@ -401,7 +402,7 @@ const RoomDetails = () => {
               {t('tourCard.startingFrom', 'Price')}
             </div>
             <div className="text-3xl font-semibold text-gold-400 mb-1">
-              {formatPrice(room.price)}
+              {formatPrice(0)}
               <span className="text-sm font-normal text-slate-300"> / {t('hotel.night', 'night')}</span>
             </div>
             <div className="text-[11px] text-slate-400">
@@ -416,74 +417,74 @@ const RoomDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-12 text-left rtl:text-right">
             {/* Room Features Bar */}
-            <div className="bg-white dark:bg-obsidian-800 p-5 md:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-obsidian-700 grid grid-cols-2 sm:grid-cols-3 gap-6">
-              <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-300 block mb-1 font-bold">
+            <div className="bg-white dark:bg-[#0d162a] p-6 md:p-8 rounded-3xl shadow-xl dark:shadow-2xl border-2 border-slate-200/90 dark:border-blue-900/60 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+              <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
+                <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                   {t('hotel.room.priceLabel', 'Price')}
                 </span>
-                <span className="text-lg font-bold text-slate-900 dark:text-white">
-                  {formatPrice(room.price)} / {t('hotel.night', 'night')}
+                <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+                  {formatPrice(0)} / {t('hotel.night', 'night')}
                 </span>
               </div>
-              <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-300 block mb-1 font-bold">
+              <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
+                <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                   {t('hotel.room.capacityLabel', 'Capacity')}
                 </span>
-                <span className="text-lg font-bold text-slate-900 dark:text-white">{room.capacity}</span>
+                <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">{room.capacity}</span>
               </div>
-              <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-300 block mb-1 font-bold">
+              <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
+                <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                   {t('hotel.room.bedTypeLabel', 'Bed Type')}
                 </span>
-                <span className="text-lg font-bold text-slate-900 dark:text-white">{room.bed}</span>
+                <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">{room.bed}</span>
               </div>
               {room.view && (
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-300 block mb-1 font-bold">
+                <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
+                  <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                     {t('hotel.room.viewLabel', 'View')}
                   </span>
-                  <span className="text-lg font-bold text-slate-900 dark:text-white">{room.view}</span>
+                  <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">{room.view}</span>
                 </div>
               )}
-              <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-300 block mb-1 font-bold">
+              <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
+                <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                   {t('hotel.room.smokingLabel', 'Smoking')}
                 </span>
-                <span className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <FaBan className="text-red-500 text-sm" /> {room.smokingAllowed ? (isAr ? 'مسموح' : 'Allowed') : (isAr ? 'غير مسموح' : t('hotel.room.notAllowed', 'Not allowed'))}
+                <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <FaBan className="text-red-500 text-sm shrink-0" /> {room.smokingAllowed ? (isAr ? 'مسموح' : 'Allowed') : (isAr ? 'غير مسموح' : t('hotel.room.notAllowed', 'Not allowed'))}
                 </span>
               </div>
-              <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-300 block mb-1 font-bold">
+              <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
+                <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                   {t('hotel.room.petsLabel', 'Pets')}
                 </span>
-                <span className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <FaPaw className="text-red-500 text-sm" /> {room.petsAllowed ? (isAr ? 'مسموح' : 'Allowed') : (isAr ? 'غير مسموح' : t('hotel.room.notAllowed', 'Not allowed'))}
+                <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <FaPaw className="text-red-500 text-sm shrink-0" /> {room.petsAllowed ? (isAr ? 'مسموح' : 'Allowed') : (isAr ? 'غير مسموح' : t('hotel.room.notAllowed', 'Not allowed'))}
                 </span>
               </div>
             </div>
 
             {/* Amenities Section */}
-            <div className="bg-white dark:bg-obsidian-800 p-5 md:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-obsidian-700">
-              <h2 className="text-2xl font-display font-semibold text-slate-900 dark:text-white mb-6 pb-3 border-b border-slate-100 dark:border-obsidian-700 flex items-center gap-3">
+            <div className="bg-white dark:bg-[#0d162a] p-6 md:p-8 rounded-3xl shadow-xl dark:shadow-2xl border-2 border-slate-200/90 dark:border-blue-900/60">
+              <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-6 pb-3 border-b border-slate-200 dark:border-blue-900/40 flex items-center gap-3">
                 <span className="w-1.5 h-6 bg-gold-500 rounded-full" />
                 {t('hotel.room.amenities', 'Room Amenities')}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {roomAmenitiesList.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3.5 py-1 text-slate-800 dark:text-slate-200">
-                    <div className="w-9 h-9 rounded-lg bg-gold-500/10 flex items-center justify-center shrink-0">
+                  <div key={idx} className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-[#0f172a] border border-slate-200/80 dark:border-blue-900/40 shadow-xs">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-gold-400 flex items-center justify-center shrink-0 text-base font-bold">
                       {item.icon}
                     </div>
-                    <span className="text-[15px] font-medium pt-1.5">{item.label}</span>
+                    <span className="text-sm sm:text-[15px] font-bold text-slate-900 dark:text-slate-100">{item.label}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Room Gallery Grid */}
-            <div className="bg-white dark:bg-obsidian-800 p-5 md:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-obsidian-700">
-              <h2 className="text-2xl font-display font-semibold text-slate-900 dark:text-white mb-6 pb-3 border-b border-slate-100 dark:border-obsidian-700 flex items-center gap-3">
+            <div className="bg-white dark:bg-[#0d162a] p-6 md:p-8 rounded-3xl shadow-xl dark:shadow-2xl border-2 border-slate-200/90 dark:border-blue-900/60">
+              <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-6 pb-3 border-b border-slate-200 dark:border-blue-900/40 flex items-center gap-3">
                 <span className="w-1.5 h-6 bg-gold-500 rounded-full" />
                 {t('hotel.room.galleryTitle', 'Room Gallery')}
               </h2>
@@ -491,12 +492,12 @@ const RoomDetails = () => {
                 {room.gallery.map((url, idx) => (
                   <div
                     key={idx}
-                    className="h-32 sm:h-40 rounded-xl overflow-hidden cursor-pointer relative group border border-slate-100 shadow-sm"
+                    className="h-36 sm:h-44 rounded-2xl overflow-hidden cursor-pointer relative group border-2 border-slate-200 dark:border-blue-900/50 shadow-md hover:border-gold-500 transition-all duration-300"
                     onClick={() => setActiveImage(url)}
                   >
                     <img src={url} alt={`${room.name} Interior ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <FaSearchPlus className="text-white text-xl" />
+                    <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <FaSearchPlus className="text-white text-2xl drop-shadow-md" />
                     </div>
                   </div>
                 ))}
@@ -504,41 +505,41 @@ const RoomDetails = () => {
             </div>
 
             {/* Reviews Section */}
-            <div className="bg-white dark:bg-obsidian-800 p-5 md:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-obsidian-700">
-              <h2 className="text-2xl font-display font-semibold text-slate-900 dark:text-white mb-6 pb-3 border-b border-slate-100 dark:border-obsidian-700 flex items-center gap-3">
+            <div className="bg-white dark:bg-[#0d162a] p-5 md:p-8 rounded-2xl shadow-md dark:shadow-xl border border-slate-200 dark:border-blue-900/60">
+              <h2 className="text-2xl font-display font-semibold text-slate-900 dark:text-white mb-6 pb-3 border-b border-slate-100 dark:border-blue-900/40 flex items-center gap-3">
                 <span className="w-1.5 h-6 bg-gold-500 rounded-full" />
                 {t('hotel.room.reviewsTitle', 'Room Reviews')}
               </h2>
 
               <div className="space-y-6 mb-10">
                 {reviews.map((rev, idx) => (
-                  <div key={idx} className="p-6 bg-slate-50 dark:bg-obsidian-700/50 rounded-xl border border-slate-100 dark:border-obsidian-600 text-left rtl:text-right">
+                  <div key={idx} className="p-6 bg-slate-50 dark:bg-[#0f172a] rounded-xl border border-slate-200 dark:border-blue-900/60 shadow-sm text-left rtl:text-right">
                     <div className="flex justify-between items-center mb-3">
-                      <h4 className="font-semibold text-slate-900 dark:text-white">{rev.name}</h4>
-                      <span className="text-xs text-slate-400">{rev.date}</span>
+                      <h4 className="font-bold text-slate-900 dark:text-white text-base">{rev.name}</h4>
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{rev.date}</span>
                     </div>
-                    <div className="flex gap-1 mb-3 text-gold-500">
+                    <div className="flex gap-1 mb-3 text-amber-400">
                       {[...Array(rev.rating)].map((_, rIdx) => (
                         <FaStar key={rIdx} />
                       ))}
                     </div>
-                    <p className="text-[14px] text-slate-700 dark:text-slate-200 leading-relaxed">{rev.text}</p>
+                    <p className="text-[14px] font-medium text-slate-700 dark:text-slate-200 leading-relaxed">{rev.text}</p>
                   </div>
                 ))}
               </div>
 
-              <form onSubmit={handleReviewSubmit} className="bg-slate-50 dark:bg-obsidian-700/50 p-6 rounded-xl border border-slate-200/60 dark:border-obsidian-600 text-left rtl:text-right">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+              <form onSubmit={handleReviewSubmit} className="bg-slate-50 dark:bg-[#0f172a] p-6 rounded-xl border border-slate-200 dark:border-blue-900/60 text-left rtl:text-right space-y-4">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
                   {t('tour.leaveReview', 'Write a Review')}
                 </h3>
                 {reviewSubmitted && (
-                  <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm font-medium flex items-center gap-2">
+                  <div className="mb-4 p-3 bg-green-100 dark:bg-green-950/80 text-green-800 dark:text-green-200 border border-green-300 dark:border-green-800 rounded-xl text-sm font-bold flex items-center gap-2">
                     <FaCheckCircle /> {t('hotel.room.reviewSuccess', 'Review submitted successfully!')}
                   </div>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-300 mb-1.5 font-bold">
+                    <label className="block text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 font-extrabold">
                       {t('booking.fullName', 'Name')}
                     </label>
                     <input
@@ -547,17 +548,17 @@ const RoomDetails = () => {
                       placeholder={t('booking.fullName', 'Name')}
                       value={newReview.name}
                       onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                      className="w-full p-3 rounded-lg border border-slate-300 dark:border-obsidian-600 text-slate-900 dark:text-white text-sm bg-white dark:bg-obsidian-700 outline-none"
+                      className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 text-sm bg-white dark:bg-[#1e293b] outline-none focus:border-blue-600 dark:focus:border-gold-400 transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-300 mb-1.5 font-bold">
+                    <label className="block text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 font-extrabold">
                       {t('hotel.room.ratingLabel', 'Rating')}
                     </label>
                     <select
                       value={newReview.rating}
                       onChange={(e) => setNewReview({ ...newReview, rating: e.target.value })}
-                      className="w-full p-3 rounded-lg border border-slate-300 dark:border-obsidian-600 text-slate-900 dark:text-white text-sm bg-white dark:bg-obsidian-700 outline-none"
+                      className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm bg-white dark:bg-[#1e293b] outline-none focus:border-blue-600 dark:focus:border-gold-400 transition-colors"
                     >
                       <option value="5">{t('hotel.room.starsOption5', '⭐⭐⭐⭐⭐ (5 Stars)')}</option>
                       <option value="4">{t('hotel.room.starsOption4', '⭐⭐⭐⭐ (4 Stars)')}</option>
@@ -567,8 +568,8 @@ const RoomDetails = () => {
                     </select>
                   </div>
                 </div>
-                <div className="mb-4">
-                  <label className="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-300 mb-1.5 font-bold">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 font-extrabold">
                     {t('hotel.room.commentLabel', 'Comment')}
                   </label>
                   <textarea
@@ -577,42 +578,45 @@ const RoomDetails = () => {
                     placeholder={t('hotel.room.commentPlaceholder', 'Share your experience with this room...')}
                     value={newReview.text}
                     onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}
-                    className="w-full p-3 rounded-lg border border-slate-300 dark:border-obsidian-600 text-slate-900 dark:text-white text-sm bg-white dark:bg-obsidian-700 outline-none resize-none"
+                    className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 text-sm bg-white dark:bg-[#1e293b] outline-none focus:border-blue-600 dark:focus:border-gold-400 transition-colors"
                   />
                 </div>
-                <Button type="submit" variant="gold-glow" className="px-5 py-2 text-sm uppercase font-semibold">
-                  {t('tour.submitReview', 'Submit Review')}
-                </Button>
+                <button
+                  type="submit"
+                  className="px-6 py-3 rounded-xl bg-blue-900 hover:bg-blue-800 text-white font-bold text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <FaPaperPlane /> {t('hotel.room.submitReview', 'Submit Review')}
+                </button>
               </form>
             </div>
           </div>
 
           {/* Booking Sidebar Form */}
           <div className="lg:col-span-1">
-            <div className="bg-slate-900 text-white p-5 md:p-8 rounded-2xl border border-slate-800 shadow-xl sticky top-24 text-left rtl:text-right">
-              <h3 className="text-xl font-display font-semibold text-gold-400 mb-2">
+            <div className="bg-[#0d162a] dark:bg-[#0b1222] text-white p-6 md:p-8 rounded-3xl border-2 border-slate-800 dark:border-blue-900/80 shadow-2xl sticky top-24 text-left rtl:text-right">
+              <h3 className="text-xl font-display font-bold text-gold-400 mb-2">
                 {t('hotel.room.requestBooking', 'Reserve Your Stay')}
               </h3>
-              <p className="text-slate-300 text-xs mb-6">
+              <p className="text-slate-300 text-xs mb-6 font-medium">
                 {t('hotel.room.bookingDesc', 'Official direct booking with instant reservation reference code and VIP concierge confirmation.')}
               </p>
 
               {requestSent ? (
-                <div className="bg-slate-800/90 border border-gold-500/40 p-6 rounded-2xl text-center space-y-4 shadow-xl animate-in fade-in zoom-in-95 duration-200">
-                  <div className="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto text-2xl">
+                <div className="bg-[#17233d] border border-gold-500/40 p-6 rounded-2xl text-center space-y-4 shadow-xl animate-in fade-in zoom-in-95 duration-200">
+                  <div className="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto text-2xl font-bold">
                     ✓
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-400 block mb-1">
+                    <span className="text-[10px] uppercase font-extrabold tracking-widest text-emerald-400 block mb-1">
                       {t('hotel.room.confirmedTitle', 'Reservation Received')}
                     </span>
-                    <h4 className="font-display font-semibold text-white text-lg">
+                    <h4 className="font-display font-bold text-white text-lg">
                       {room.name}
                     </h4>
                   </div>
 
                   {/* Reference Code Pill */}
-                  <div className="p-3.5 rounded-xl bg-slate-900 border border-gold-500/30 text-center">
+                  <div className="p-3.5 rounded-xl bg-[#0b1222] border border-gold-500/40 text-center">
                     <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold mb-1">
                       {t('hotel.room.refCode', 'Official Reservation Code')}
                     </span>
@@ -638,7 +642,7 @@ const RoomDetails = () => {
                   </div>
 
                   {/* Details Summary */}
-                  <div className="text-xs text-slate-300 space-y-1.5 p-3 rounded-xl bg-slate-900/60 border border-slate-700/60 text-left rtl:text-right font-sans">
+                  <div className="text-xs text-slate-300 space-y-1.5 p-3.5 rounded-xl bg-[#070e1c] border border-slate-700/80 text-left rtl:text-right font-sans">
                     <div className="flex justify-between">
                       <span className="text-slate-400">{t('hotel.room.checkInLabel', 'Check-in')}:</span>
                       <span className="font-semibold text-white font-mono">{bookingForm.checkInDate}</span>
@@ -653,7 +657,7 @@ const RoomDetails = () => {
                     </div>
                     <div className="flex justify-between border-t border-slate-700/60 pt-1.5">
                       <span className="font-bold text-slate-200">{t('hotel.room.estimatedTotal', 'Total Amount')}:</span>
-                      <span className="font-black text-gold-400 font-mono text-sm">{formatPrice(estimatedTotal)}</span>
+                      <span className="font-black text-gold-400 font-mono text-sm">{formatPrice(0)}</span>
                     </div>
                   </div>
 
@@ -664,7 +668,7 @@ const RoomDetails = () => {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
+                    className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 font-extrabold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
                   >
                     <FaWhatsapp className="text-base" />
                     <span>{t('hotel.room.chatConcierge', 'VIP Concierge WhatsApp')}</span>
@@ -672,7 +676,7 @@ const RoomDetails = () => {
 
                   <Button
                     variant="outline-gold"
-                    className="w-full text-xs uppercase py-2"
+                    className="w-full text-xs uppercase py-2.5 font-bold"
                     onClick={() => {
                       setRequestSent(false);
                       setConfirmedBooking(null);
@@ -684,7 +688,7 @@ const RoomDetails = () => {
               ) : (
                 <form onSubmit={handleBookingSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-gold-500 font-bold mb-1">
+                    <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                       {t('booking.fullName', 'Full Name')}
                     </label>
                     <input
@@ -694,11 +698,11 @@ const RoomDetails = () => {
                       placeholder={t('hotel.room.fullNamePlaceholder', 'Enter Full Name')}
                       value={bookingForm.fullName}
                       onChange={handleInputChange}
-                      className="w-full p-3.5 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 text-sm outline-none focus:border-gold-500"
+                      className="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-gold-500 font-bold mb-1">
+                    <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                       {t('booking.email', 'Email Address')}
                     </label>
                     <input
@@ -708,11 +712,11 @@ const RoomDetails = () => {
                       placeholder={t('hotel.room.emailPlaceholder', 'your.email@example.com')}
                       value={bookingForm.email}
                       onChange={handleInputChange}
-                      className="w-full p-3.5 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 text-sm outline-none focus:border-gold-500"
+                      className="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-gold-500 font-bold mb-1">
+                    <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                       {t('booking.phone', 'Phone Number')}
                     </label>
                     <input
@@ -722,13 +726,13 @@ const RoomDetails = () => {
                       placeholder={t('hotel.room.phonePlaceholder', 'e.g. +1 555-0199')}
                       value={bookingForm.phone}
                       onChange={handleInputChange}
-                      className="w-full p-3.5 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 text-sm outline-none focus:border-gold-500"
+                      className="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-gold-500 font-bold mb-1">
+                      <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                         {t('hotel.room.checkInLabel', 'Check-in')}
                       </label>
                       <input
@@ -738,11 +742,11 @@ const RoomDetails = () => {
                         value={bookingForm.checkInDate}
                         min={todayStr}
                         onChange={handleInputChange}
-                        className="w-full p-3 bg-slate-800 border border-slate-700 text-white text-xs outline-none focus:border-gold-500 rounded-lg"
+                        className="w-full p-3 bg-[#17233d] border border-blue-900/60 text-white text-xs outline-none focus:border-gold-400 rounded-xl"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-gold-500 font-bold mb-1">
+                      <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                         {t('hotel.room.checkOutLabel', 'Check-out')}
                       </label>
                       <input
@@ -752,38 +756,38 @@ const RoomDetails = () => {
                         value={bookingForm.checkOutDate}
                         min={bookingForm.checkInDate || todayStr}
                         onChange={handleInputChange}
-                        className="w-full p-3 bg-slate-800 border border-slate-700 text-white text-xs outline-none focus:border-gold-500 rounded-lg"
+                        className="w-full p-3 bg-[#17233d] border border-blue-900/60 text-white text-xs outline-none focus:border-gold-400 rounded-xl"
                       />
                     </div>
                   </div>
 
                   {/* Real-time Nights & Pricing Summary */}
                   {bookingForm.checkInDate && bookingForm.checkOutDate && (
-                    <div className="p-3.5 rounded-xl bg-slate-800/80 border border-gold-500/30 space-y-1.5 text-xs">
+                    <div className="p-4 rounded-2xl bg-[#070e1c] border border-gold-500/40 space-y-2 text-xs">
                       <div className="flex items-center justify-between text-slate-300">
-                        <span>{t('hotel.room.nights', 'Duration')}:</span>
+                        <span className="font-medium">{t('hotel.room.nights', 'Duration')}:</span>
                         <span className="font-bold text-white font-mono">{nightsCount} {t('hotel.room.nightsCount', 'Nights')}</span>
                       </div>
                       <div className="flex items-center justify-between text-slate-300">
-                        <span>{t('hotel.room.ratePerNight', 'Rate per Night')}:</span>
-                        <span className="font-bold text-gold-400 font-mono">{formatPrice(unitPrice)}</span>
+                        <span className="font-medium">{t('hotel.room.ratePerNight', 'Rate per Night')}:</span>
+                        <span className="font-bold text-gold-400 font-mono">{formatPrice(0)}</span>
                       </div>
-                      <div className="flex items-center justify-between text-slate-200 border-t border-slate-700/60 pt-1.5">
+                      <div className="flex items-center justify-between text-slate-200 border-t border-slate-700/60 pt-2">
                         <span className="font-bold">{t('hotel.room.estimatedTotal', 'Estimated Total')}:</span>
-                        <span className="font-black text-sm text-gold-400 font-mono">{formatPrice(estimatedTotal)}</span>
+                        <span className="font-black text-sm text-gold-400 font-mono">{formatPrice(0)}</span>
                       </div>
                     </div>
                   )}
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-gold-500 font-bold mb-1">
+                    <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                       {t('hotel.room.guestsLabel', 'Number of Guests')}
                     </label>
                     <select
                       name="guests"
                       value={bookingForm.guests}
                       onChange={handleInputChange}
-                      className="w-full p-3.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-gold-500"
+                      className="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white text-sm outline-none focus:border-gold-400 transition-colors"
                     >
                       <option value="1">{t('hotel.room.guest1', '1 Guest')}</option>
                       <option value="2">{t('hotel.room.guests2', '2 Guests')}</option>
@@ -793,7 +797,7 @@ const RoomDetails = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider text-gold-500 font-bold mb-1">
+                    <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                       {t('hotel.room.specialRequestsLabel', 'Special Requests (Optional)')}
                     </label>
                     <textarea
@@ -802,13 +806,17 @@ const RoomDetails = () => {
                       placeholder={t('hotel.room.specialRequestsPlaceholder', 'Any specific requests or requirements...')}
                       value={bookingForm.specialRequests}
                       onChange={handleInputChange}
-                      className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 text-xs outline-none focus:border-gold-500 resize-none"
+                      className="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white placeholder:text-slate-400 text-xs outline-none focus:border-gold-400 resize-none transition-colors"
                     />
                   </div>
 
-                  <Button type="submit" variant="gold-glow" className="w-full py-3.5 text-sm uppercase font-semibold text-center" disabled={isSending}>
+                  <button
+                    type="submit"
+                    disabled={isSending}
+                    className="w-full py-4 px-6 text-xs uppercase font-extrabold tracking-wider text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-slate-700 rounded-xl shadow-lg transition-all text-center"
+                  >
                     {isSending ? t('common.sending', 'Confirming Reservation...') : t('hotel.room.requestBookingBtn', 'Reserve Room Now')}
-                  </Button>
+                  </button>
                 </form>
               )}
             </div>
@@ -817,31 +825,31 @@ const RoomDetails = () => {
       </section>
 
       {/* Footer Contact Card */}
-      <section className="container mx-auto px-6 py-6 max-w-6xl mt-12 border-t border-slate-200 dark:border-obsidian-700">
-        <div className="bg-slate-900 text-white p-5 md:p-8 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-6 text-left rtl:text-right">
+      <section className="container mx-auto px-6 py-6 max-w-6xl mt-12 border-t border-slate-200 dark:border-blue-900/40">
+        <div className="bg-[#0d162a] dark:bg-[#0b1222] text-white p-6 md:p-8 rounded-3xl border-2 border-slate-800 dark:border-blue-900/60 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 text-left rtl:text-right">
           <div>
-            <h3 className="text-xl font-display font-semibold text-gold-400 mb-2">Sol Pyramid Hotel</h3>
-            <p className="text-xs text-slate-400 max-w-md">{hotelContact.location}</p>
+            <h3 className="text-2xl font-display font-bold text-gold-400 mb-2">Sol Pyramid Hotel</h3>
+            <p className="text-xs text-slate-300 max-w-md font-medium">{hotelContact.location}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-slate-300">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-slate-200 font-medium">
             <div>
-              <span className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+              <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mb-1">
                 📞 {t('booking.phone', 'Phone')}
               </span>
-              <span className="font-semibold block">{hotelContact.telephones.join(' / ')}</span>
+              <span className="font-bold block">{hotelContact.telephones.join(' / ')}</span>
             </div>
             <div>
-              <span className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+              <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mb-1">
                 📱 {t('hotel.room.cellLabel', 'Cell')}
               </span>
-              <span className="font-semibold block">{hotelContact.cell}</span>
+              <span className="font-bold block">{hotelContact.cell}</span>
             </div>
             <div>
-              <span className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+              <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mb-1">
                 ✉️ {t('booking.email', 'Email')}
               </span>
-              <span className="font-semibold block">{hotelContact.email}</span>
+              <span className="font-bold block">{hotelContact.email}</span>
             </div>
           </div>
 
@@ -850,28 +858,28 @@ const RoomDetails = () => {
               href={hotelContact.facebook}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
               aria-label="Facebook"
             >
-              <FaFacebook size={18} />
+              <FaFacebook size={20} />
             </a>
             <a
               href={hotelContact.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
               aria-label="Instagram"
             >
-              <FaInstagram size={18} />
+              <FaInstagram size={20} />
             </a>
             <a
               href={hotelContact.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
               aria-label="Website"
             >
-              <FaGlobe size={18} />
+              <FaGlobe size={20} />
             </a>
           </div>
         </div>
