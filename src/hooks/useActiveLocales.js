@@ -30,7 +30,7 @@ export function useActiveLocales() {
 
         const list = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             const data = await api.get('/settings/public/locales', { signal });
             return Array.isArray(data?.locales) && data.locales.length > 0
               ? data.locales

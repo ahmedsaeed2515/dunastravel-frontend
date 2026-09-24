@@ -33,7 +33,7 @@ export function useHotel(slug) {
 
         const data = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             const item = await api.get(`/hotels/${encodeURIComponent(slug)}?locale=${lang}`, { signal });
             return item || null;
           },
@@ -95,7 +95,7 @@ export function useHotels({ destinationSlug, limit = 24 } = {}) {
 
         const data = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             const res = await api.get(`/hotels?${queryParams.toString()}`, { signal });
             return Array.isArray(res) ? res : [];
           },

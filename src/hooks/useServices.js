@@ -155,7 +155,7 @@ export function useServices(category = null) {
 
         const items = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             let resItems;
             if (category === 'hotels') {
               resItems = readItems(await api.get(`/hotels?locale=${lang}`, { signal }), 'hotels')

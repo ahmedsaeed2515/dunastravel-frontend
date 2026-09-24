@@ -271,8 +271,18 @@ export async function apiRequest(path, options = {}, { raw = false, _retry = fal
     });
   }
 
+  // Safely extract and validate AbortSignal to avoid "Failed to convert value to 'AbortSignal'" browser errors
+  let rawSignal = options.signal;
+  while (rawSignal && typeof rawSignal === 'object' && !('aborted' in rawSignal) && 'signal' in rawSignal) {
+    rawSignal = rawSignal.signal;
+  }
+  const validSignal = (rawSignal && typeof rawSignal === 'object' && ('aborted' in rawSignal || typeof rawSignal.aborted === 'boolean'))
+    ? rawSignal
+    : undefined;
+
   let res = await fetch(url, {
     ...options,
+    signal: validSignal,
     method,
     headers,
     credentials: 'include', // Always send cookies (HttpOnly auth token)

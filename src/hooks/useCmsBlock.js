@@ -28,7 +28,7 @@ export function useCmsBlock(key) {
 
         const res = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             const response = await api.get(`/cms/${encodeURIComponent(key)}?lang=${lang}`, { signal });
             return response?.content || response;
           },

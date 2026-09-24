@@ -77,7 +77,7 @@ export function useMedia(optionsOrTourId = null) {
 
         const result = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             try {
               const raw = await api.get(url, { signal });
               return normalizeAssets(raw, isSpecific);

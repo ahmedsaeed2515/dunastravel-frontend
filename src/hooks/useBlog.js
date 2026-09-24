@@ -40,7 +40,7 @@ export function useBlog(slug) {
 
         const data = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             try {
               const res = await api.get(`/blogs/${encodeURIComponent(slug)}?locale=${encodeURIComponent(lang)}`, { signal });
               if (res && (res.title || res.slug || res.id)) {

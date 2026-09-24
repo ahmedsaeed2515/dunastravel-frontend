@@ -39,7 +39,7 @@ export function useBlogs(filters = {}) {
 
         const data = await fetchWithSmartCache(
           queryKey,
-          async (signal) => {
+          async ({ signal } = {}) => {
             try {
               const res = await api.get(`/blogs?${params.toString()}`, { signal });
               const items = Array.isArray(res)
