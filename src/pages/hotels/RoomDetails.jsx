@@ -230,6 +230,8 @@ const RoomDetails = () => {
     window.scrollTo(0, 0);
   }, [roomSlug]);
 
+  const isDefaultHotel = !hotelSlug || currentHotelSlug === 'sol-pyramid-hotel';
+
   if (loading) {
     return (
       <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto">
@@ -238,7 +240,7 @@ const RoomDetails = () => {
     );
   }
 
-  if (error || (!loading && !apiHotel)) {
+  if (!apiHotel && !isDefaultHotel && error) {
     return (
       <div className="w-full min-h-[60vh] flex items-center justify-center p-6">
         <ErrorState

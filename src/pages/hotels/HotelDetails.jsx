@@ -71,6 +71,8 @@ const HotelDetails = () => {
     window.scrollTo(0, 0);
   }, [currentSlug]);
 
+  const isDefaultHotel = !slug || currentSlug === 'sol-pyramid-hotel';
+
   if (loading) {
     return (
       <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto">
@@ -79,7 +81,7 @@ const HotelDetails = () => {
     );
   }
 
-  if (error || (!apiHotel && currentSlug !== 'sol-pyramid-hotel')) {
+  if (!apiHotel && !isDefaultHotel && error) {
     return (
       <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto flex items-center justify-center">
         <ErrorState
