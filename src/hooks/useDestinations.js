@@ -62,6 +62,8 @@ function readDestinations(response) {
       tours: Array.isArray(item.tours) ? item.tours : [],
     };
   }).filter(Boolean);
+}
+
 export function useDestinations() {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);

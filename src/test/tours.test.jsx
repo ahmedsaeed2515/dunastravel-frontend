@@ -37,7 +37,7 @@ describe('Prompt 02: Tours Catalog, Localization & Reviews Integration', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(api.get).toHaveBeenCalledWith(expect.stringContaining('/tours?'));
+    expect(api.get).toHaveBeenCalledWith(expect.stringContaining('/tours?'), expect.anything());
     const callUrl = vi.mocked(api.get).mock.calls[0][0];
     expect(callUrl).toContain('lang=es');
     expect(callUrl).toContain('destination=egypt');
@@ -83,7 +83,7 @@ describe('Prompt 02: Tours Catalog, Localization & Reviews Integration', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(api.get).toHaveBeenCalledWith('/tours/greece-odyssey?lang=es');
+    expect(api.get).toHaveBeenCalledWith('/tours/greece-odyssey?lang=es', expect.anything());
     expect(result.current.tour.title).toBe('Greece Odyssey');
     expect(result.current.tour.city).toBe('Athens');
     expect(result.current.tour.minPax).toBe('2');
@@ -193,7 +193,7 @@ describe('Prompt 02: Tours Catalog, Localization & Reviews Integration', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(api.get).toHaveBeenCalledWith('/cms/home_banner?lang=es');
+    expect(api.get).toHaveBeenCalledWith('/cms/home_banner?lang=es', expect.anything());
     expect(result.current.data).toEqual({ title: 'Welcome Banner' });
   });
 
@@ -207,7 +207,7 @@ describe('Prompt 02: Tours Catalog, Localization & Reviews Integration', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(api.get).toHaveBeenCalledWith('/media/tours/tour-123');
+    expect(api.get).toHaveBeenCalledWith('/media/tours/tour-123', expect.anything());
     expect(result.current.galleryImages.length).toBe(1);
   });
 
@@ -221,7 +221,7 @@ describe('Prompt 02: Tours Catalog, Localization & Reviews Integration', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(api.get).toHaveBeenCalledWith('/media?category=transport');
+    expect(api.get).toHaveBeenCalledWith('/media?category=transport', expect.anything());
     expect(result.current.galleryImages.length).toBe(1);
     expect(result.current.galleryImages[0].url).toBe('/imgs/transportation-hero.png');
   });
