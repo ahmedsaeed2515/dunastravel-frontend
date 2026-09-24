@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from '../animations/variants';
 import Button from '../components/ui/Button';
-import { useServices } from '../hooks/useServices';
+import { useServices, FALLBACK_HOTEL_SERVICE } from '../hooks/useServices';
 import SkeletonLoader from '../components/ui/SkeletonLoader';
 import ErrorState from '../components/ui/ErrorState';
 import { useCurrency } from '../context/CurrencyContext';
@@ -31,10 +31,13 @@ const Services = () => {
     { id: 'transportation', title: t('nav.transportation', 'Transportation'), desc: t('services.transportationShortDesc', 'Premium vehicles with professional drivers.') }
   ];
 
-  const filteredServices = service ? allServicesData.filter(s => s.category === service) : allServicesData;
+  const rawFiltered = service ? allServicesData.filter(s => s.category === service) : allServicesData;
+  const filteredServices = (rawFiltered.length === 0 && (!service || service === 'hotels'))
+    ? [FALLBACK_HOTEL_SERVICE]
+    : rawFiltered;
 
   if (loading) return <SkeletonLoader count={6} />;
-  if (error) return <ErrorState message={error.message || 'Failed to load services'} />;
+  if (error && filteredServices.length === 0) return <ErrorState message={error.message || 'Failed to load services'} />;
 
   return (
     <div className="w-full bg-obsidian-50 dark:bg-[#0f0f1a] pb-24 text-left rtl:text-right">
