@@ -103,15 +103,11 @@ function devLoggerPlugin() {
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-  // Keep local development fully integrated with the local Nest API. An
-  // explicit VITE_API_URL still wins (useful for staging/remote testing),
-  // while production builds retain the deployed API as their default.
-  const upstreamApi = env.VITE_API_URL || (
-    mode === 'development'
-      ? 'http://localhost:5000/api'
-      : 'https://dunastravel-backend-seven.vercel.app/api'
-  );
+  const envDir = path.resolve(__dirname);
+  const env = { ...loadEnv(mode, process.cwd(), ''), ...loadEnv(mode, envDir, '') };
+  // Keep local development fully integrated. VITE_API_URL wins (e.g. http://localhost:5000/api if running local backend),
+  // defaulting to the live deployed API so local frontend works immediately out of the box.
+  const upstreamApi = env.VITE_API_URL || 'https://dunastravel-backend-seven.vercel.app/api';
   const apiOrigin = new URL(upstreamApi).origin;
 
   return {

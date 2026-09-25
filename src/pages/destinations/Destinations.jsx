@@ -10,8 +10,8 @@ import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 const Destinations = () => {
   const { t } = useTranslation();
   const { destinations, loading: destsLoading, error } = useDestinations();
-  const { tours: allTours, loading: toursLoading } = useTours();
-  const loading = destsLoading && toursLoading;
+  const { tours: allTours, loading: toursLoading } = useTours({ limit: 100 });
+  const loading = destsLoading || toursLoading;
   const destinationsList = Array.isArray(destinations) ? destinations : [];
 
   const mainHeroBgImage = destinationsList.find((d) => d?.heroImageUrl || d?.image)?.heroImageUrl 
@@ -69,22 +69,36 @@ const Destinations = () => {
               return true;
             });
 
+            const DEST_ALIASES = {
+              'united arab emirates': 'dubai',
+              'uae': 'dubai',
+              'emirates': 'dubai',
+              'holy land': 'holy-land',
+              'holyland': 'holy-land',
+            };
+            const normalizeDestStr = (str) => {
+              const clean = String(str || '').toLowerCase().trim();
+              return DEST_ALIASES[clean] || clean;
+            };
+
             const matchedTours = (allTours || []).filter((tour) => {
-              const tourDest = String(tour.destination || tour.country || '').toLowerCase();
+              const rawDest = String(tour.destination || tour.country || '').toLowerCase();
+              const tourDest = normalizeDestStr(rawDest);
+              const normalizedTarget = normalizeDestStr(targetSlug);
               const tourCategory = String(tour.category || tour.type || '').toLowerCase();
               const tourSlug = String(tour.slug || tour.id || '').toLowerCase();
 
-              if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
+              if (normalizedTarget === 'holy-land') {
                 if (tourSlug.includes('holy-family')) return false;
-                return tourDest === 'holy-land' || tourDest === 'holyland' || tourDest === 'holy land';
+                return tourDest === 'holy-land';
               }
-              if (targetSlug === 'religious') {
+              if (normalizedTarget === 'religious') {
                 return tourCategory.includes('religious') || tourDest.includes('coptic') || tourSlug.includes('holy-family');
               }
-              if (targetSlug === 'multi-country' || targetSlug === 'multi_country') {
+              if (normalizedTarget === 'multi-country' || normalizedTarget === 'multi_country') {
                 return tourDest.includes('multi') || tourCategory.includes('multi');
               }
-              return tourDest === targetSlug || tourDest.includes(targetSlug) || targetSlug.includes(tourDest);
+              return tourDest === normalizedTarget || tourDest.includes(normalizedTarget) || normalizedTarget.includes(tourDest);
             });
 
             const LOCAL_DEST_IMAGES = {
@@ -93,7 +107,7 @@ const Destinations = () => {
               egypt: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
               egipto: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
               egito: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
-              jordan: 'https://cdn.al-ain.com/lg/images/2022/11/24/62-021616-best-tourist-areas-jordan-4.jpeg',
+              jordan: 'https://res.cloudinary.com/nclvl0iu/image/upload/w_800,h_533,c_fill,q_auto,f_auto/v1790354904/272930_compressed_f3rjnj_compressed.webp',
               turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
               greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1920&q=80',
               tunisia: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=85',

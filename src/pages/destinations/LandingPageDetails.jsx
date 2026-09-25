@@ -45,7 +45,7 @@ const DEST_FALLBACK_DATA = {
     descDefault: 'اكتشف السيق العجيب والبتراء الوردية، وعش تجربة التخييم الفاخر تحت نجوم وادي رم، والاسترخاء في أفضل منتجعات البحر الميت.',
     tags: ['dest.jordan.tag1', 'dest.jordan.tag2', 'dest.jordan.tag3'],
     tagsDefault: ['🏛️ VIP Petra Entry & Guided Tour', '🌌 Luxury Bubble Camps in Wadi Rum', '🌊 Dead Sea Luxury Wellness Resorts'],
-    heroImage: 'https://cdn.al-ain.com/lg/images/2022/11/24/62-021616-best-tourist-areas-jordan-4.jpeg',
+    heroImage: 'https://res.cloudinary.com/nclvl0iu/image/upload/w_1200,q_auto,f_auto/v1790354904/272930_compressed_f3rjnj_compressed.webp',
     hotelCities: ['amman', 'petra', 'wadiRum', 'aqaba', 'deadSea'],
   },
   turkey: {
@@ -288,22 +288,36 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
     return true;
   });
 
+  const DEST_ALIASES = {
+    'united arab emirates': 'dubai',
+    'uae': 'dubai',
+    'emirates': 'dubai',
+    'holy land': 'holy-land',
+    'holyland': 'holy-land',
+  };
+  const normalizeDestStr = (str) => {
+    const clean = String(str || '').toLowerCase().trim();
+    return DEST_ALIASES[clean] || clean;
+  };
+
   const matchedCatalogTours = (allCatalogTours || []).filter((tour) => {
-    const tourDest = String(tour.destination || tour.country || '').toLowerCase();
+    const rawDest = String(tour.destination || tour.country || '').toLowerCase();
+    const tourDest = normalizeDestStr(rawDest);
+    const normalizedTarget = normalizeDestStr(targetSlug);
     const tourCategory = String(tour.category || tour.type || '').toLowerCase();
     const tourSlug = String(tour.slug || tour.id || '').toLowerCase();
 
-    if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
+    if (normalizedTarget === 'holy-land') {
       if (tourSlug.includes('holy-family')) return false;
-      return tourDest === 'holy-land' || tourDest === 'holyland' || tourDest === 'holy land';
+      return tourDest === 'holy-land';
     }
-    if (targetSlug === 'religious') {
+    if (normalizedTarget === 'religious') {
       return tourCategory.includes('religious') || tourDest.includes('coptic') || tourSlug.includes('holy-family');
     }
-    if (targetSlug === 'multi-country' || targetSlug === 'multi_country') {
+    if (normalizedTarget === 'multi-country' || normalizedTarget === 'multi_country') {
       return tourDest.includes('multi') || tourCategory.includes('multi');
     }
-    return tourDest === targetSlug || tourDest.includes(targetSlug) || targetSlug.includes(tourDest);
+    return tourDest === normalizedTarget || tourDest.includes(normalizedTarget) || normalizedTarget.includes(tourDest);
   });
 
   const rawToursToDisplay = filteredProvidedTours.length > 0

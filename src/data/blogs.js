@@ -306,7 +306,7 @@ export const blogs = [
     "category": "History",
     "date": "Jun 10, 2026",
     "excerpt": "Explore the luxury of our custom Romantic Arabian Nights Honeym... program in Egypt. Discover why this 10 Days / 9 Nights itinerary is perfect for your travel d",
-    "img": "https://cdn.al-ain.com/lg/images/2023/11/27/143-145009-best-honeymoon-places-egypt-6.jpeg",
+    "img": "https://res.cloudinary.com/nclvl0iu/image/upload/v1790018507/photo-1510414842594-a61c69b5ae57.webp",
     "content": [
       "Few places on earth capture the imagination quite like Egypt. From the towering heights of the Great Pyramid of Giza to the serene flow of the Nile River, this ancient land is a living testament to human history and architectural grandeur. The \"Romantic Arabian Nights Honeymoon\" package by Dunas Travel offers a carefully curated 10 Days / 9 Nights itinerary designed to immerse you in the magic of the pharaohs. Whether you are gazing at the Sphinx, exploring the subterranean tombs in the Valley of the Kings, or relaxing by the crystal-clear waters of the Red Sea, every moment of this journey promises to be extraordinary. Written in a captivating storytelling tone, this travel guide will walk you through the key experiences that make this trip a must-book experience.",
       "## Why Visit Egypt",

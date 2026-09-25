@@ -293,6 +293,12 @@ const getOptimizedImageUrl = (url, width = 400, height = 450) => {
 const getThumbnailUrl = (url, size = 48) => {
   if (!url || typeof url !== 'string') return url;
   try {
+    if (url.includes('holy-land.webp')) {
+      return '/images/holy-land-thumb.webp';
+    }
+    if (url.includes('jordan.webp') || url.includes('jordan-4.jpeg')) {
+      return '/images/jordan-thumb.webp';
+    }
     if (url.includes('images.unsplash.com')) {
       const parsedUrl = new URL(url);
       parsedUrl.searchParams.set('w', size.toString());
@@ -435,7 +441,7 @@ const HomeExperienceSection = () => {
     egipto: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
     egito: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
     turkey: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=80',
-    jordan: 'https://cdn.al-ain.com/lg/images/2022/11/24/62-021616-best-tourist-areas-jordan-4.jpeg',
+    jordan: 'https://res.cloudinary.com/nclvl0iu/image/upload/w_800,h_533,c_fill,q_auto,f_auto/v1790354904/272930_compressed_f3rjnj_compressed.webp',
     dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80',
     morocco: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1920&q=80',
     greece: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1920&q=80',

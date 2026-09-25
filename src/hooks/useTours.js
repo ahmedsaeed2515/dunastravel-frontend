@@ -260,7 +260,50 @@ export function useTours(filters = {}) {
       });
 
       const response = await api.get(`/tours?${params.toString()}`, { signal });
-      const { items, meta } = parseToursResponse(response, cleanFilters, lang);
+      let { items, meta } = parseToursResponse(response, cleanFilters, lang);
+
+      // If a category filter was specified (e.g. Classic, Religious, Honeymoon, Extension)
+      // and returned few items, fetch broad catalog to ensure all relevant tours are included
+      if (cleanFilters.category && items.length < 3) {
+        try {
+          const catLower = cleanFilters.category.toLowerCase();
+          const broadParams = new URLSearchParams({ lang, limit: '70' });
+          const broadRes = await api.get(`/tours?${broadParams.toString()}`, { signal });
+          const { items: allItems } = parseToursResponse(broadRes, {}, lang);
+
+          const matchedBroad = allItems.filter((t) => {
+            const searchStr = `${t.category || ''} ${t.slug || ''} ${t.title || ''} ${t.country || ''} ${t.destination || ''}`.toLowerCase();
+            if (catLower === 'classic') {
+              return searchStr.includes('classic') || searchStr.includes('clásico') || searchStr.includes('classico') || (t.country || '').toLowerCase().includes('egypt');
+            }
+            if (catLower === 'religious') {
+              return searchStr.includes('religious') || searchStr.includes('holy') || searchStr.includes('coptic') || searchStr.includes('دين');
+            }
+            if (catLower === 'honeymoon') {
+              return searchStr.includes('honeymoon') || searchStr.includes('romance') || searchStr.includes('luna');
+            }
+            if (catLower === 'extension') {
+              return searchStr.includes('extension') || searchStr.includes('escape') || searchStr.includes('hurghada') || searchStr.includes('sharm');
+            }
+            return searchStr.includes(catLower);
+          });
+
+          if (matchedBroad.length > items.length) {
+            items = matchedBroad;
+            meta = {
+              total: items.length,
+              page: Number(cleanFilters.page || 1),
+              limit: Number(cleanFilters.limit || 12),
+              totalPages: Math.ceil(items.length / Number(cleanFilters.limit || 12)),
+              hasNextPage: false,
+              hasPrevPage: false,
+            };
+          }
+        } catch (err) {
+          // Keep initial fetched items if broad fetch fails
+        }
+      }
+
       return { tours: items, ...meta };
     };
 
