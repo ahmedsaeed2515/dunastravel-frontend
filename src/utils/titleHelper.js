@@ -184,7 +184,9 @@ const TAG_FALLBACK_DICTIONARY = {
   '7 Nights / 8 Days': { ar: '7 ليالٍ / 8 أيام', en: '7 Nights / 8 Days', es: '7 Noches / 8 Días', pt: '7 Noites / 8 Dias', it: '7 Notti / 8 Giorni' },
   '7 ليالٍ / 8 أيام': { ar: '7 ليالٍ / 8 أيام', en: '7 Nights / 8 Days', es: '7 Noches / 8 Días', pt: '7 Noites / 8 Dias', it: '7 Notti / 8 Giorni' },
   '2 Pax': { ar: 'فردان', en: '2 Pax', es: '2 Pax', pt: '2 Pax', it: '2 Pax' },
-  'فردان': { ar: 'فردان', en: '2 Pax', es: '2 Pax', pt: '2 Pax', it: '2 Pax' }
+  'فردان': { ar: 'فردان', en: '2 Pax', es: '2 Pax', pt: '2 Pax', it: '2 Pax' },
+  'Giza • Pyramids View': { ar: 'الجيزة • إطلالة على الأهرامات', en: 'Giza • Pyramids View', es: 'Giza • Vista a las Pirámides', pt: 'Gizé • Vista para as Pirâmides', it: 'Giza • Vista sulle Piramidi' },
+  'Giza, Egypt': { ar: 'الجيزة، مصر', en: 'Giza, Egypt', es: 'Guiza, Egipto', pt: 'Gizé, Egito', it: 'Giza, Egitto' }
 };
 
 export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {

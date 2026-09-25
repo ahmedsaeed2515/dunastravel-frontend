@@ -108,9 +108,9 @@ const HotelDetails = () => {
       (apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug || ''}` : '05 Rawdet al Ahram, Haram, Giza, Egypt'),
     telephones: apiHotel?.phone ? [apiHotel.phone] : ['+2 02 33775511'],
     cell: apiHotel?.phone || '(+2) 01149401111',
-    email: apiHotel?.email || 'info@dunastravel.com',
-    facebook: 'https://www.facebook.com/dunastravel',
-    instagram: 'https://www.instagram.com/dunastravel',
+    email: apiHotel?.email || 'info@solpyramid-egypt.com',
+    facebook: 'https://www.facebook.com/people/Solpyramid-Hotel/61584597357251/?rdid=nHbjJUmnT0fCQTG3&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1aiB2ma5oi%2F',
+    instagram: 'https://www.instagram.com/solpyramidhotel',
     website: apiHotel?.website || 'https://dunastravel.com/',
   };
 
@@ -280,9 +280,9 @@ const HotelDetails = () => {
                 </span>
               </div>
               <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-gold-500" />
-              <div className="flex items-center gap-1 text-white text-[11px] md:text-xs font-semibold uppercase tracking-widest">
+              <div className="flex items-center gap-1.5 text-white dark:text-gold-300 text-[11px] md:text-xs font-bold uppercase tracking-widest bg-black/40 dark:bg-slate-900/80 px-3 py-1 rounded-full border border-gold-500/40 backdrop-blur-xs shadow-md">
                 <FaMapMarkerAlt className="text-sm shrink-0 text-gold-400" />
-                <span>{apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug}` : t('hotel.overview.gizaEgypt', 'Giza, Egypt')}</span>
+                <span>{apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug}` : (isAr ? 'الجيزة • إطلالة على الأهرامات' : t('hotel.overview.gizaPyramidsView', 'Giza • Pyramids View'))}</span>
               </div>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-display-xl text-white font-display font-semibold drop-shadow-lg mb-3 leading-tight">
@@ -467,9 +467,9 @@ const HotelDetails = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0d162a]/90 via-[#0d162a]/30 to-transparent" />
 
-                  {/* View Badge (Gold & Royal Blue Glassmorphism) */}
-                  <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 z-10 flex items-center gap-1.5 bg-slate-950/90 dark:bg-[#070e1c]/90 backdrop-blur-md text-amber-300 border border-gold-500/50 text-[11px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  {/* View Badge (Vibrant Gold/Amber High Contrast) */}
+                  <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 z-10 flex items-center gap-1.5 bg-amber-400 dark:bg-amber-400 text-obsidian-950 text-[11px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-xl border border-gold-300">
+                    <span className="w-2 h-2 rounded-full bg-obsidian-900 animate-pulse" />
                     <span>{room.view}</span>
                   </div>
 
@@ -923,13 +923,12 @@ const HotelDetails = () => {
               <FaInstagram size={18} />
             </a>
             <a
-              href={hotelInfo.website}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`mailto:${hotelInfo.email}`}
               className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
-              aria-label="Website"
+              aria-label="Email"
+              title="Email"
             >
-              <FaGlobe size={18} />
+              <FaEnvelope size={18} />
             </a>
           </div>
         </div>

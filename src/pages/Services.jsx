@@ -214,7 +214,7 @@ const Services = () => {
                     className="bg-ivory-50 dark:bg-[#1a1a30] rounded-2xl overflow-hidden shadow-card group h-full flex flex-col transition-all border border-obsidian-200/40 dark:border-gray-700"
                   >
                     <div className="relative h-60 overflow-hidden">
-                      <div className="absolute top-4 left-4 z-10 bg-gold-500 text-obsidian-900 text-caption uppercase px-3 py-1 rounded-full shadow-md font-bold">
+                      <div className="absolute top-4 left-4 z-10 bg-amber-400 dark:bg-amber-400 text-obsidian-950 text-caption uppercase px-3.5 py-1.5 rounded-full shadow-lg font-black tracking-wider border border-gold-300/80">
                         {resolveLocalizedText(item.location, t, lang)}
                       </div>
                       {isSiwa && (

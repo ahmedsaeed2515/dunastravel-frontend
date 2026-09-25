@@ -28,6 +28,7 @@ import {
   FaFacebook,
   FaInstagram,
   FaGlobe,
+  FaEnvelope,
   FaPaperPlane,
 } from 'react-icons/fa';
 import { useCurrency } from '../../context/CurrencyContext';
@@ -349,7 +350,7 @@ const RoomDetails = () => {
     telephones: ['+2 02 33775511', '+2 02 33775522'],
     cell: '(+2) 01149401111',
     email: 'info@solpyramid-egypt.com',
-    facebook: 'https://www.facebook.com/share/1aiB2ma5oi/',
+    facebook: 'https://www.facebook.com/people/Solpyramid-Hotel/61584597357251/?rdid=nHbjJUmnT0fCQTG3&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1aiB2ma5oi%2F',
     instagram: 'https://www.instagram.com/solpyramidhotel',
     website: 'https://www.solpyramid-egypt.com/',
   };
@@ -875,13 +876,12 @@ const RoomDetails = () => {
               <FaInstagram size={20} />
             </a>
             <a
-              href={hotelContact.website}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`mailto:${hotelContact.email}`}
               className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
-              aria-label="Website"
+              aria-label="Email"
+              title="Email"
             >
-              <FaGlobe size={20} />
+              <FaEnvelope size={20} />
             </a>
           </div>
         </div>
