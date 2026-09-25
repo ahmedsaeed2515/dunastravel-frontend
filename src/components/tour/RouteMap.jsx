@@ -267,7 +267,7 @@ const CITY_TRANSLATIONS = {
   }
 };
 
-const RouteMap = ({ itinerary }) => {
+const RouteMap = ({ itinerary, highlights, tourTitle }) => {
   const [sectionRef, isVisible] = useInViewport({ rootMargin: '200px', once: false });
   const [leafletInstance, setLeafletInstance] = useState(null);
   const { t, i18n } = useTranslation();
@@ -305,17 +305,9 @@ const RouteMap = ({ itinerary }) => {
   }, [isVisible, leafletInstance]);
 
   const locations = useMemo(() => {
-    const rawItinerary = Array.isArray(itinerary)
-      ? itinerary
-      : Array.isArray(itinerary?.days)
-        ? itinerary.days
-        : Array.isArray(itinerary?.itinerary)
-          ? itinerary.itinerary
-          : [];
-    if (rawItinerary.length === 0) return [];
     const extracted = [];
-
     const langCode = (i18n.language || 'en').split('-')[0].toLowerCase();
+    const langTranslations = CITY_TRANSLATIONS[langCode] || CITY_TRANSLATIONS['en'];
 
     const extractText = (val) => {
       if (!val) return '';
@@ -330,10 +322,71 @@ const RouteMap = ({ itinerary }) => {
           val.pt,
           val.title,
           val.description,
+          val.text,
         ].filter(Boolean).join(' ');
       }
       return String(val);
     };
+
+    const addOrUpdateLocation = (dbKey, descText) => {
+      const coords = COORDINATES_DATABASE[dbKey];
+      if (!coords) return;
+
+      const translatedName = langTranslations[dbKey] || (dbKey.charAt(0).toUpperCase() + dbKey.slice(1));
+      const cleanDesc = (descText || '').trim();
+
+      const existingLoc = extracted.find(
+        (item) => item.coords[0] === coords[0] && item.coords[1] === coords[1]
+      );
+
+      if (existingLoc) {
+        if (cleanDesc && !existingLoc.descriptions.includes(cleanDesc)) {
+          existingLoc.descriptions.push(cleanDesc);
+        }
+      } else {
+        extracted.push({
+          name: translatedName,
+          coords: coords,
+          descriptions: cleanDesc ? [cleanDesc] : [translatedName],
+        });
+      }
+    };
+
+    // 1. Scan Key Highlights
+    const rawHighlights = Array.isArray(highlights) ? highlights.filter(Boolean) : [];
+    rawHighlights.forEach((hlItem) => {
+      const itemText = extractText(hlItem);
+      if (!itemText) return;
+      const translatedItem = t(itemText, { defaultValue: itemText });
+      const textToSearch = `${itemText} ${translatedItem}`.toLowerCase();
+
+      const itemMatches = [];
+      Object.keys(KEYWORDS_MAP).forEach((keyword) => {
+        const index = textToSearch.indexOf(keyword);
+        if (index !== -1) {
+          itemMatches.push({
+            keyword,
+            dbKey: KEYWORDS_MAP[keyword],
+            index,
+          });
+        }
+      });
+
+      itemMatches.sort((a, b) => b.keyword.length - a.keyword.length);
+
+      if (itemMatches.length > 0) {
+        addOrUpdateLocation(itemMatches[0].dbKey, translatedItem || itemText);
+      }
+    });
+
+    // 2. Scan Itinerary (regardless of whether highlights found matches)
+    const rawItinerary = Array.isArray(itinerary)
+      ? itinerary
+      : Array.isArray(itinerary?.days)
+        ? itinerary.days
+        : Array.isArray(itinerary?.itinerary)
+          ? itinerary.itinerary
+          : [];
 
     rawItinerary.forEach((day, idx) => {
       const dayNum = day.day || day.dayLabel || idx + 1;
@@ -373,48 +426,56 @@ const RouteMap = ({ itinerary }) => {
 
       dayMatches.sort((a, b) => b.keyword.length - a.keyword.length);
 
-      let matchedCoords = null;
-      let matchedName = null;
-
       if (dayMatches.length > 0) {
-        for (let i = 0; i < dayMatches.length; i++) {
-          const match = dayMatches[i];
-          const coords = COORDINATES_DATABASE[match.dbKey];
-          if (coords) {
-            matchedCoords = coords;
-            const langTranslations = CITY_TRANSLATIONS[langCode] || CITY_TRANSLATIONS['en'];
-            const translatedName = langTranslations[match.dbKey];
-            matchedName = translatedName || (match.dbKey.charAt(0).toUpperCase() + match.dbKey.slice(1));
-            break;
-          }
-        }
-      }
-
-      if (!matchedCoords) {
-        matchedCoords = [41.0082, 28.9784];
-        matchedName = 'Istanbul';
-      }
-
-      const rawTitle = extractText(day.title) || extractText(day.titleDefault) || `${t('tour.day', 'Day')} ${dayNum}`;
-      const firstLineTitle = rawTitle.split('\n')[0].replace(/^اليوم\s+\S+\s*—?\s*/i, '').trim();
-
-      const lastLoc = extracted[extracted.length - 1];
-      if (lastLoc && lastLoc.coords[0] === matchedCoords[0] && lastLoc.coords[1] === matchedCoords[1]) {
-        lastLoc.descriptions.push(`${t('tour.day', 'Day')} ${dayNum}: ${firstLineTitle}`);
-      } else {
-        extracted.push({
-          name: matchedName,
-          coords: matchedCoords,
-          descriptions: [`${t('tour.day', 'Day')} ${dayNum}: ${firstLineTitle}`],
-        });
+        const rawTitle = extractText(day.title) || extractText(day.titleDefault) || `${t('tour.day', 'Day')} ${dayNum}`;
+        const firstLineTitle = rawTitle.split('\n')[0].replace(/^اليوم\s+\S+\s*—?\s*/i, '').trim();
+        addOrUpdateLocation(dayMatches[0].dbKey, `${t('tour.day', 'Day')} ${dayNum}: ${firstLineTitle}`);
       }
     });
 
+    // 3. Fallback coordinates if zero or only 1 location extracted
+    const contextSearch = `${tourTitle || ''} ${JSON.stringify(highlights || '')} ${JSON.stringify(itinerary || '')}`.toLowerCase();
+
+    let fallbackKey1 = 'cairo';
+    let fallbackKey2 = 'luxor';
+
+    if (contextSearch.includes('turkey') || contextSearch.includes('تركيا') || contextSearch.includes('turquía') || contextSearch.includes('türkiye') || contextSearch.includes('istanbul')) {
+      fallbackKey1 = 'istanbul';
+      fallbackKey2 = 'cappadocia';
+    } else if (contextSearch.includes('jordan') || contextSearch.includes('أردن') || contextSearch.includes('jordania') || contextSearch.includes('petra')) {
+      fallbackKey1 = 'amman';
+      fallbackKey2 = 'petra';
+    } else if (contextSearch.includes('dubai') || contextSearch.includes('uae') || contextSearch.includes('دبي') || contextSearch.includes('إمارات')) {
+      fallbackKey1 = 'dubai';
+      fallbackKey2 = 'abu dhabi';
+    } else if (contextSearch.includes('morocco') || contextSearch.includes('مغرب') || contextSearch.includes('marruecos')) {
+      fallbackKey1 = 'marrakech';
+      fallbackKey2 = 'fes';
+    } else if (contextSearch.includes('greece') || contextSearch.includes('يونان') || contextSearch.includes('grecia')) {
+      fallbackKey1 = 'athens';
+      fallbackKey2 = 'santorini';
+    }
+
+    if (extracted.length === 0) {
+      addOrUpdateLocation(fallbackKey1, langTranslations[fallbackKey1] || fallbackKey1);
+      addOrUpdateLocation(fallbackKey2, langTranslations[fallbackKey2] || fallbackKey2);
+    } else if (extracted.length === 1) {
+      const firstCoords = extracted[0].coords;
+      const fb1Coords = COORDINATES_DATABASE[fallbackKey1];
+      const fb2Coords = COORDINATES_DATABASE[fallbackKey2];
+
+      if (fb1Coords && (fb1Coords[0] !== firstCoords[0] || fb1Coords[1] !== firstCoords[1])) {
+        addOrUpdateLocation(fallbackKey1, langTranslations[fallbackKey1] || fallbackKey1);
+      } else if (fb2Coords && (fb2Coords[0] !== firstCoords[0] || fb2Coords[1] !== firstCoords[1])) {
+        addOrUpdateLocation(fallbackKey2, langTranslations[fallbackKey2] || fallbackKey2);
+      }
+    }
+
     return extracted.map((item) => ({
       ...item,
-      description: item.descriptions.join('<br/>'),
+      description: item.descriptions.join('<br/>• '),
     }));
-  }, [itinerary, t, i18n.language]);
+  }, [itinerary, highlights, tourTitle, t, i18n.language]);
 
   useEffect(() => {
     if (!isVisible || !leafletInstance || !mapContainerRef.current || locations.length === 0) return undefined;
@@ -482,29 +543,23 @@ const RouteMap = ({ itinerary }) => {
       }
 
       L.polyline(pathPoints, {
-        color: '#000000',
-        weight: 7,
-        opacity: 0.7,
-      }).addTo(map);
-
-      L.polyline(pathPoints, {
-        color: '#f59e0b',
-        weight: 4,
-        opacity: 1,
+        color: '#f5a623',
+        weight: 3.5,
+        opacity: 0.9,
         dashArray: '8, 8',
       }).addTo(map);
 
       const planeIcon = L.divIcon({
         className: 'plane-marker',
         html: `
-          <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: #0b1739; border: 2.5px solid #f59e0b; border-radius: 50%; box-shadow: 0 0 14px rgba(245,158,11,0.85); transition: transform 0.1s ease;">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="#f59e0b" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));">
+          <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: transform 0.1s linear; pointer-events: none; will-change: transform;">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="#f5a623" stroke="#041446" stroke-width="1.5" style="filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.55));">
               <path d="M21,16V14L13,9V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V9L2,14V16L10,13.5V19L8,20.5V22L11.5,21L15,22V20.5L13,19V13.5L21,16Z" />
             </svg>
           </div>
         `,
-        iconSize: [36, 36],
-        iconAnchor: [18, 18],
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
       });
 
       const plane = L.marker(pathPoints[0], { icon: planeIcon }).addTo(map);

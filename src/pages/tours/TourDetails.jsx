@@ -347,15 +347,6 @@ const TourDetails = () => {
               </motion.div>
             )}
 
-            {/* Interactive Route Map */}
-            {tour.itinerary && tour.itinerary.length > 0 && (
-              <div className="mt-16">
-                <Suspense fallback={<div className="h-64 flex items-center justify-center text-gold-500 font-semibold bg-obsidian-900/50 rounded-2xl animate-pulse">Loading map route...</div>}>
-                  <RouteMap itinerary={tour.itinerary} tourTitle={title} />
-                </Suspense>
-              </div>
-            )}
-
           </div>
 
           {/* Sidebar - Booking Form */}
@@ -366,6 +357,15 @@ const TourDetails = () => {
           </div>
 
         </div>
+
+        {/* Interactive Route Map (Full Width Section) */}
+        {((tour.highlights && tour.highlights.length > 0) || (tour.itinerary && tour.itinerary.length > 0)) && (
+          <div className="mt-20 w-full">
+            <Suspense fallback={<div className="h-64 flex items-center justify-center text-gold-500 font-semibold bg-obsidian-900/50 rounded-2xl animate-pulse">Loading map route...</div>}>
+              <RouteMap itinerary={tour.itinerary} highlights={tour.highlights} tourTitle={title} />
+            </Suspense>
+          </div>
+        )}
 
         {/* Hotels Section */}
         {tour.hotels && (
