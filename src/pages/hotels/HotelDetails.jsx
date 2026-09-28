@@ -18,6 +18,7 @@ import {
   FaEnvelope,
   FaFacebook,
   FaInstagram,
+  FaWhatsapp,
   FaGlobe,
   FaBan,
   FaPaw,
@@ -882,28 +883,15 @@ const HotelDetails = () => {
             <p className="text-xs text-slate-400 max-w-md">{hotelInfo.location}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-slate-300">
-            <div>
-              <span className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">
-                📞 {t('booking.phone', 'Phone')}
-              </span>
-              <span className="font-semibold block">{hotelInfo.telephones.join(' / ')}</span>
-            </div>
-            <div>
-              <span className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">
-                📱 {t('booking.phone', 'Cell')}
-              </span>
-              <span className="font-semibold block">{hotelInfo.cell}</span>
-            </div>
-            <div>
-              <span className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">
-                ✉️ {t('booking.email', 'Email')}
-              </span>
-              <span className="font-semibold block">{hotelInfo.email}</span>
-            </div>
-          </div>
-
-          <div className="flex gap-4">
+          <div className="flex items-center gap-3">
+            <a
+              href="tel:+20233775511"
+              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+              aria-label="Call Hotel"
+              title="Call (+2) 02 33775511"
+            >
+              <FaPhoneAlt size={16} />
+            </a>
             <a
               href={hotelInfo.facebook}
               target="_blank"
@@ -923,10 +911,20 @@ const HotelDetails = () => {
               <FaInstagram size={18} />
             </a>
             <a
-              href={`mailto:${hotelInfo.email}`}
+              href="https://wa.me/201149401111"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all text-slate-300"
+              aria-label="WhatsApp"
+              title="WhatsApp"
+            >
+              <FaWhatsapp size={18} />
+            </a>
+            <a
+              href="mailto:info@solpyramidhotel.com"
               className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
               aria-label="Email"
-              title="Email"
+              title="Email info@solpyramidhotel.com"
             >
               <FaEnvelope size={18} />
             </a>

@@ -16,6 +16,7 @@ import {
   FaLock,
   FaShieldAlt,
   FaPhoneAlt,
+  FaEnvelope,
   FaStar,
   FaCheck,
   FaTimes,
@@ -835,28 +836,15 @@ const RoomDetails = () => {
             <p className="text-xs text-slate-300 max-w-md font-medium">{hotelContact.location}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-slate-200 font-medium">
-            <div>
-              <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mb-1">
-                📞 {t('booking.phone', 'Phone')}
-              </span>
-              <span className="font-bold block">{hotelContact.telephones.join(' / ')}</span>
-            </div>
-            <div>
-              <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mb-1">
-                📱 {t('hotel.room.cellLabel', 'Cell')}
-              </span>
-              <span className="font-bold block">{hotelContact.cell}</span>
-            </div>
-            <div>
-              <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mb-1">
-                ✉️ {t('booking.email', 'Email')}
-              </span>
-              <span className="font-bold block">{hotelContact.email}</span>
-            </div>
-          </div>
-
-          <div className="flex gap-4">
+          <div className="flex items-center gap-3">
+            <a
+              href="tel:+20233775511"
+              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
+              aria-label="Call Hotel"
+              title="Call (+2) 02 33775511"
+            >
+              <FaPhoneAlt size={18} />
+            </a>
             <a
               href={hotelContact.facebook}
               target="_blank"
@@ -876,10 +864,20 @@ const RoomDetails = () => {
               <FaInstagram size={20} />
             </a>
             <a
-              href={`mailto:${hotelContact.email}`}
+              href="https://wa.me/201149401111"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all text-slate-200 shadow-md"
+              aria-label="WhatsApp"
+              title="WhatsApp"
+            >
+              <FaWhatsapp size={20} />
+            </a>
+            <a
+              href="mailto:info@solpyramidhotel.com"
               className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
               aria-label="Email"
-              title="Email"
+              title="Email info@solpyramidhotel.com"
             >
               <FaEnvelope size={20} />
             </a>
