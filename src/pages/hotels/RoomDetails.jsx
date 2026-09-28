@@ -29,7 +29,6 @@ import {
   FaFacebook,
   FaInstagram,
   FaGlobe,
-  FaEnvelope,
   FaPaperPlane,
 } from 'react-icons/fa';
 import { useCurrency } from '../../context/CurrencyContext';
