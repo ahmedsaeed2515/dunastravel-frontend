@@ -27,6 +27,30 @@ const buildInfiniteMarqueeList = (items, prefix = 'gal', maxVisible = 6) => {
   ];
 };
 
+function getDailySeed() {
+  const now = new Date();
+  return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+}
+
+function seededShuffle(array, seed) {
+  const result = [...array];
+  let m = result.length;
+  let t, i;
+  let s = seed;
+  const rng = () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+
+  while (m) {
+    i = Math.floor(rng() * m--);
+    t = result[m];
+    result[m] = result[i];
+    result[i] = t;
+  }
+  return result;
+}
+
 export default function PhotoShowcaseCarousel({ photos = [], loading = false }) {
   const [sectionRef, isVisible] = useInViewport({ threshold: 0.05 });
   const { t, i18n } = useTranslation();
@@ -63,6 +87,13 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
     });
   }, [photos]);
 
+  // Select 15 featured photos for the current 24-hour day using deterministic daily seed
+  const featuredPhotos = useMemo(() => {
+    if (normalizedPhotos.length <= 15) return normalizedPhotos;
+    const seed = getDailySeed();
+    return seededShuffle(normalizedPhotos, seed).slice(0, 15);
+  }, [normalizedPhotos]);
+
   const openLightbox = (index) => {
     setActiveGalleryIndex(index);
     setZoomScale(1);
@@ -73,7 +104,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
     if (e) e.stopPropagation();
     setZoomScale(1);
     setActiveGalleryIndex((prev) =>
-      prev === normalizedPhotos.length - 1 ? 0 : prev + 1
+      prev === featuredPhotos.length - 1 ? 0 : prev + 1
     );
   };
 
@@ -81,7 +112,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
     if (e) e.stopPropagation();
     setZoomScale(1);
     setActiveGalleryIndex((prev) =>
-      prev === 0 ? normalizedPhotos.length - 1 : prev - 1
+      prev === 0 ? featuredPhotos.length - 1 : prev - 1
     );
   };
 
@@ -99,7 +130,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [isLightboxOpen, isRtl, normalizedPhotos.length]);
+  }, [isLightboxOpen, isRtl, featuredPhotos.length]);
 
   if (loading && (!photos || photos.length === 0)) {
     return (
@@ -196,9 +227,9 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
             }}
           >
             {(() => {
-              const infiniteImages = buildInfiniteMarqueeList(normalizedPhotos, 'gal', Math.max(12, normalizedPhotos.length));
+              const infiniteImages = buildInfiniteMarqueeList(featuredPhotos, 'gal', featuredPhotos.length);
               return infiniteImages.map((img, idx) => {
-                const originalIndex = typeof img.origIdx === 'number' ? img.origIdx : (idx % Math.max(1, normalizedPhotos.length));
+                const originalIndex = typeof img.origIdx === 'number' ? img.origIdx : (idx % Math.max(1, featuredPhotos.length));
                 return (
                   <div
                     key={img.uKey || `gal-${idx}`}
@@ -307,8 +338,8 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
               animate={{ opacity: 1, scale: zoomScale }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              src={normalizedPhotos[activeGalleryIndex]?.url}
-              alt={normalizedPhotos[activeGalleryIndex]?.label}
+              src={featuredPhotos[activeGalleryIndex]?.url}
+              alt={featuredPhotos[activeGalleryIndex]?.label}
               className="max-w-[90vw] max-h-[90vh] object-contain shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-md cursor-zoom-in"
               onClick={(e) => e.stopPropagation()}
               onWheel={(e) => {
@@ -350,7 +381,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
 
             <div className="absolute bottom-10 left-0 right-0 text-center text-ivory-50">
               <p className="font-display text-2xl mb-1">
-                {normalizedPhotos[activeGalleryIndex]?.label}
+                {featuredPhotos[activeGalleryIndex]?.label}
               </p>
               <p className="text-gold-500 tracking-widest text-xs uppercase">
                 {t('mediaGallery.subheading', 'Visual Journey')}
