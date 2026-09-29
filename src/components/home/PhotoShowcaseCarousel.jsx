@@ -41,7 +41,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
   // Normalize photos coming from backend API with fallback
   const normalizedPhotos = useMemo(() => {
     const source = (Array.isArray(photos) && photos.length > 0) ? photos : defaultGalleryImages;
-    return source.slice(0, 12).map((item, idx) => {
+    return source.map((item, idx) => {
       const url = item.optimizedUrl || item.secureUrl || item.url || item.src;
       const isRawFilename = (str) => {
         if (!str || typeof str !== 'string') return true;
@@ -196,7 +196,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
             }}
           >
             {(() => {
-              const infiniteImages = buildInfiniteMarqueeList(normalizedPhotos, 'gal', 8);
+              const infiniteImages = buildInfiniteMarqueeList(normalizedPhotos, 'gal', Math.max(12, normalizedPhotos.length));
               return infiniteImages.map((img, idx) => {
                 const originalIndex = typeof img.origIdx === 'number' ? img.origIdx : (idx % Math.max(1, normalizedPhotos.length));
                 return (
