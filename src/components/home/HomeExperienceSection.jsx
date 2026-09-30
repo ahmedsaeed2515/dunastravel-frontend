@@ -1440,11 +1440,6 @@ const HomeExperienceSection = () => {
                             <span style={{ color: '#000000', fontWeight: 900 }}>{pkg.badge}</span>
                           </span>
                         )}
-                        {pkg.duration && (
-                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 text-white font-medium text-caption border border-white/30 backdrop-blur-md shadow-md">
-                            <FaClock className="text-gold-400 text-xs" /> {pkg.duration}
-                          </span>
-                        )}
                       </div>
 
                       {/* Content Container */}
