@@ -101,10 +101,13 @@ export default function LuxuryHeroSection({
 
         {/* Eyebrow Glass Badge */}
         {badge && (
-          <motion.div variants={itemVariants} className="inline-block mb-4 sm:mb-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gold-500/20 border border-gold-500/50 backdrop-blur-xl shadow-xl shadow-gold-500/20">
-              <FaCompass className="text-gold-400 text-xs sm:text-sm" />
-              <span className="text-[11px] xs:text-xs sm:text-sm font-bold tracking-wider text-gold-300 uppercase">
+          <motion.div variants={itemVariants} className="inline-block max-w-full mb-4 sm:mb-6 px-2">
+            <div
+              className="inline-flex items-center justify-center gap-2 sm:gap-2.5 max-w-[94vw] sm:max-w-max px-3.5 py-2 xs:px-4.5 xs:py-2.5 sm:px-6 sm:py-3 rounded-full border border-[#F5A623]/60 backdrop-blur-xl shadow-xl shadow-black/50 text-center transition-all duration-300"
+              style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
+            >
+              <FaCompass className="text-[#F5A623] text-xs sm:text-base animate-pulse shrink-0" />
+              <span className="text-[11px] xs:text-xs sm:text-base font-extrabold tracking-wider text-[#F5A623] uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] leading-snug sm:leading-normal">
                 {badge}
               </span>
             </div>
@@ -122,7 +125,7 @@ export default function LuxuryHeroSection({
         {subtitle && (
           <motion.p
             variants={itemVariants}
-            className="text-xs xs:text-sm sm:text-lg md:text-xl font-bold text-gold-300 tracking-widest uppercase mb-4 sm:mb-6 font-sans drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]"
+            className="text-sm xs:text-base sm:text-xl md:text-2xl font-black text-gold-400 tracking-widest uppercase mb-4 sm:mb-6 font-sans drop-shadow-[0_4px_16px_rgba(0,0,0,1)] [text-shadow:_0_2px_12px_rgba(245,166,35,0.7),_0_4px_24px_rgba(0,0,0,0.95)]"
           >
             {subtitle}
           </motion.p>

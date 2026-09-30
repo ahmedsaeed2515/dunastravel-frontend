@@ -371,16 +371,17 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
           <div className="container mx-auto px-6 py-24 md:py-36">
             <Link
               to={destinationOnly ? '/destinations' : '/programs'}
-              className="text-xs font-semibold uppercase tracking-widest text-gold-400 hover:text-gold-300 transition-colors inline-flex items-center gap-1.5"
+              className="text-[11px] xs:text-xs sm:text-sm font-black uppercase tracking-widest text-[#F5A623] hover:text-white transition-colors inline-flex items-center gap-2 max-w-[94vw] px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full border border-[#F5A623]/60 backdrop-blur-md shadow-lg"
+              style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
             >
-              <FaCompass className="text-[11px]" />
-              <span>{destinationOnly ? t('destinations.all', 'All destinations') : t('programs.all', 'All programs')}</span>
+              <FaCompass className="text-[#F5A623] text-xs shrink-0" />
+              <span className="drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)] leading-snug">{destinationOnly ? t('destinations.all', 'All destinations') : t('programs.all', 'All programs')}</span>
             </Link>
-            <h1 className="mt-4 max-w-4xl text-display-xl font-display" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <h1 className="mt-4 max-w-4xl text-display-xl font-display drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]" style={{ fontFamily: "'Playfair Display', serif" }}>
               {heroTitle}
             </h1>
             {heroSubtitle && (
-              <p className="mt-3 max-w-2xl text-xl text-gold-300 font-medium">{heroSubtitle}</p>
+              <p className="mt-3 max-w-2xl text-xl sm:text-2xl text-gold-400 font-black tracking-widest uppercase drop-shadow-[0_4px_16px_rgba(0,0,0,1)] [text-shadow:_0_2px_12px_rgba(245,166,35,0.7),_0_4px_24px_rgba(0,0,0,0.95)]">{heroSubtitle}</p>
             )}
             {effectiveLandingPage.brief && (
               <p className="mt-5 max-w-3xl leading-relaxed text-ivory-200 text-body-lg">{effectiveLandingPage.brief}</p>

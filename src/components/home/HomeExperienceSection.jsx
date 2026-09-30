@@ -2073,10 +2073,10 @@ const HomeExperienceSection = () => {
 
       {/* CTA Section */}
       <section
-        className="relative py-20 lg:py-28 bg-obsidian-900 bg-fixed bg-cover bg-center"
+        className="relative py-28 md:py-36 lg:py-44 min-h-[500px] md:min-h-[600px] flex items-center justify-center bg-obsidian-900 bg-fixed bg-cover bg-center"
         style={{
           backgroundImage:
-            "url('https://res.cloudinary.com/u7xf91gp/image/upload/v1787814393/dunas-travel/catalog/30220e12459b5d974a167d56024e5403d2f5e9c8ec82006eaa849e42e640b042.webp')",
+            "url('https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80')",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 via-obsidian-900/60 to-transparent"></div>
