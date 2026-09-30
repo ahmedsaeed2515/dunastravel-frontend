@@ -122,7 +122,7 @@ export default function TeamSection() {
           50% { transform: translateY(-8px); }
         }
         .legacy-avatar-frame {
-          animation: floatY 5.2s ease-in-out infinite;
+
         }
         @media (prefers-reduced-motion: reduce) {
           .legacy-avatar-frame { animation: none; }
