@@ -355,7 +355,7 @@ const Contact = () => {
 
           {/* Headquarters Location */}
           <motion.a
-            href="https://maps.app.goo.gl/oA84mQGwUsHWo4kt8"
+            href="https://maps.app.goo.gl/hr4pd5kARWvnRB5N8"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ y: -6, scale: 1.02 }}
@@ -481,7 +481,7 @@ const Contact = () => {
             <div className="block w-full h-[240px] rounded-2xl overflow-hidden border border-gold-500/40 shadow-xl relative group mt-4">
               <ConsentGate category="marketing" providerName="Google Maps" height="240px">
                 <a
-                  href="https://maps.app.goo.gl/oA84mQGwUsHWo4kt8"
+                  href="https://maps.app.goo.gl/hr4pd5kARWvnRB5N8"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full h-full relative cursor-pointer"

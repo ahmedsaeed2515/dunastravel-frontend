@@ -1988,7 +1988,7 @@ const HomeExperienceSection = () => {
                     Haram - Giza – Egypt
                   </p>
                   <a
-                    href="https://maps.google.com/?q=5+Hussein+Said+St,+Old+Hadayk+El+Ahram,+Haram,+Giza,+Egypt"
+                    href="https://maps.app.goo.gl/hr4pd5kARWvnRB5N8"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-white hover:text-white/80 transition-colors pt-2 group/link"
