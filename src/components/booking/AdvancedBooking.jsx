@@ -23,6 +23,7 @@ import InvoiceModal from './InvoiceModal';
 import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { useAuth } from '../../context/AuthContext';
+import { addDaysToDate } from '../../utils/titleHelper';
 
 const inputStyle =
   'w-full px-3.5 py-3 rounded-xl bg-[rgba(255,252,247,0.03)] text-ivory-50 placeholder:text-ivory-400/40 border border-[rgba(201,162,39,0.18)] focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 focus:outline-none text-[13.5px] transition-all [color-scheme:dark]';
@@ -44,6 +45,7 @@ const languages = [
 export default function AdvancedBooking({
   onClose,
   tourTitle,
+  durationDays,
   initialTab = 'booking',
   predefinedTourId = null,
   transportChoice = null,
@@ -114,10 +116,19 @@ export default function AdvancedBooking({
 
   const updateField = (field, val) => {
     const numericFields = ['adults', 'children', 'infants'];
-    setFormData((prev) => ({
-      ...prev,
-      [field]: numericFields.includes(field) ? Math.max(0, parseInt(val, 10) || 0) : val,
-    }));
+    setFormData((prev) => {
+      const value = numericFields.includes(field) ? Math.max(0, parseInt(val, 10) || 0) : val;
+      const updated = { ...prev, [field]: value };
+      const numericDays = Number(durationDays) || 0;
+      if (numericDays > 0 && value) {
+        if (field === 'departureDate') {
+          updated.arrivalDate = addDaysToDate(value, numericDays);
+        } else if (field === 'arrivalDate') {
+          updated.departureDate = addDaysToDate(value, numericDays);
+        }
+      }
+      return updated;
+    });
   };
 
   useEffect(() => {

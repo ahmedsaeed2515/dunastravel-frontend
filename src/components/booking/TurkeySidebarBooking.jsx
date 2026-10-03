@@ -23,6 +23,7 @@ import InvoiceModal from './InvoiceModal';
 import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { useAuth } from '../../context/AuthContext';
+import { addDaysToDate } from '../../utils/titleHelper';
 
 const inputStyle =
   'w-full p-3 rounded-xl outline-none transition-all text-[14px] bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-[rgba(201,162,39,0.5)] focus:shadow-[0_0_20px_rgba(201,162,39,0.1)] [color-scheme:dark]';
@@ -48,7 +49,7 @@ const LANGUAGES = [
   { value: 'ar', flag: '🇪🇬', labelKey: 'languages.arabic', fallback: 'Arabic' }
 ];
 
-export default function TurkeySidebarBooking({ tourTitle, transportChoice, requireTransportChoice }) {
+export default function TurkeySidebarBooking({ tourTitle, durationDays, transportChoice, requireTransportChoice }) {
   const { t } = useTranslation();
   const { user, resendVerification } = useAuth();
   const [tab, setTab] = useState('booking'); // 'booking' | 'inquiry'
@@ -160,10 +161,19 @@ export default function TurkeySidebarBooking({ tourTitle, transportChoice, requi
 
   const updateBookingField = (key, val) => {
     const numFields = ['adults', 'children', 'infants'];
-    setBookingForm((prev) => ({
-      ...prev,
-      [key]: numFields.includes(key) ? Math.max(0, parseInt(val) || 0) : val
-    }));
+    setBookingForm((prev) => {
+      const value = numFields.includes(key) ? Math.max(0, parseInt(val) || 0) : val;
+      const updated = { ...prev, [key]: value };
+      const numericDays = Number(durationDays) || 0;
+      if (numericDays > 0 && value) {
+        if (key === 'departureDate') {
+          updated.arrivalDate = addDaysToDate(value, numericDays);
+        } else if (key === 'arrivalDate') {
+          updated.departureDate = addDaysToDate(value, numericDays);
+        }
+      }
+      return updated;
+    });
   };
 
   const passengerList = [

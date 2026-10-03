@@ -280,6 +280,50 @@ export function resolveTourDuration(tour, t, lang = 'en') {
   return resolveLocalizedText(durationVal, safeT, lang);
 }
 
+export function extractTourDays(tour) {
+  if (!tour) return 0;
+  if (typeof tour.durationDays === 'number' && tour.durationDays > 0) return tour.durationDays;
+  if (typeof tour.days === 'number' && tour.days > 0) return tour.days;
+  
+  if (Array.isArray(tour.itinerary) && tour.itinerary.length > 0) {
+    return tour.itinerary.length;
+  }
+
+  const rawVal = tour.days || tour.duration || tour.durationKey || tour.durationJsonb;
+  let str = '';
+  if (typeof rawVal === 'string') {
+    str = rawVal;
+  } else if (typeof rawVal === 'number') {
+    return rawVal;
+  } else if (rawVal && typeof rawVal === 'object') {
+    str = rawVal.en || rawVal.ar || rawVal.es || rawVal.pt || rawVal.it || Object.values(rawVal)[0] || '';
+  }
+
+  const match = str.toString().match(/\d+/);
+  if (match) {
+    return parseInt(match[0], 10);
+  }
+
+  return 0;
+}
+
+export function addDaysToDate(dateStr, days) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const day = parseInt(parts[2], 10);
+  if (isNaN(year) || isNaN(month) || isNaN(day)) return dateStr;
+  const d = new Date(year, month - 1, day);
+  d.setDate(d.getDate() + Number(days));
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+
 const ITINERARY_DAY_DICTIONARY = {
   "cairo": { ar: "القاهرة", en: "Cairo", es: "El Cairo", pt: "Cairo", it: "Il Cairo" },
   "the cairo": { ar: "القاهرة", en: "Cairo", es: "El Cairo", pt: "Cairo", it: "Il Cairo" },

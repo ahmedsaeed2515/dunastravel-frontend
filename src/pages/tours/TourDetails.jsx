@@ -15,7 +15,7 @@ import { useTour } from '../../hooks/useTour';
 import { trackEvent } from '../../utils/analytics';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
-import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage } from '../../utils/titleHelper';
+import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage, extractTourDays } from '../../utils/titleHelper';
 import { getTourDestinationSlug, getDestinationName, getDestinationUrl } from '../../utils/destinationHelper';
 
 import SEOHead from '../../components/seo/SEOHead';
@@ -352,7 +352,7 @@ const TourDetails = () => {
           {/* Sidebar - Booking Form */}
           <div className="lg:col-span-1">
             <div className="sticky top-28">
-              <BookingForm tourId={tour.id} tourSlug={tour.slug} tourTitle={title} initialPrice={tour.basePriceUsd || tour.price} />
+              <BookingForm tourId={tour.id} tourSlug={tour.slug} tourTitle={title} durationDays={extractTourDays(tour)} initialPrice={tour.basePriceUsd || tour.price} />
             </div>
           </div>
 

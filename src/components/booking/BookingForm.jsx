@@ -23,6 +23,7 @@ import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { trackEvent } from '../../utils/analytics';
 import { useAuth } from '../../context/AuthContext';
+import { addDaysToDate } from '../../utils/titleHelper';
 
 const inputClass =
   'w-full px-3.5 py-3 rounded-xl bg-[rgba(255,252,247,0.03)] text-ivory-50 placeholder:text-ivory-400/40 border border-[rgba(201,162,39,0.18)] focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 focus:outline-none text-[13.5px] transition-all [color-scheme:dark]';
@@ -48,7 +49,7 @@ const languages = [
   { value: 'ar', flag: '🇪🇬', labelKey: 'languages.arabic', fallback: 'Arabic' },
 ];
 
-const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTransportChoice, initialPrice = 0 }) => {
+const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoice, requireTransportChoice, initialPrice = 0 }) => {
   const { t, i18n } = useTranslation();
   const { user, resendVerification } = useAuth();
   const bookingTourKey = tourSlug || tourId;
@@ -195,12 +196,17 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
         setAvailabilityStatus(slots.length > 0 ? 'ready' : 'empty');
         if (slots.length > 0) {
           const firstDate = String(slots[0].date).slice(0, 10);
-          setB((current) => ({
-            ...current,
-            arrivalDate: slots.some((slot) => String(slot.date).slice(0, 10) === current.arrivalDate)
+          setB((current) => {
+            const nextArrival = slots.some((slot) => String(slot.date).slice(0, 10) === current.arrivalDate)
               ? current.arrivalDate
-              : firstDate,
-          }));
+              : firstDate;
+            const numericDays = Number(durationDays) || 0;
+            return {
+              ...current,
+              arrivalDate: nextArrival,
+              departureDate: numericDays > 0 ? addDaysToDate(nextArrival, numericDays) : current.departureDate,
+            };
+          });
         }
       })
       .catch(() => {
@@ -211,11 +217,26 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
     return () => {
       isMounted = false;
     };
-  }, [tourId, tourSlug]);
+  }, [tourId, tourSlug, durationDays]);
 
   const selectedAvailability = availabilities.find(
     (slot) => String(slot.date).slice(0, 10) === b.arrivalDate
   );
+
+  useEffect(() => {
+    const numericDays = Number(durationDays) || 0;
+    if (numericDays > 0) {
+      setB((prev) => {
+        if (prev.departureDate && !prev.arrivalDate) {
+          return { ...prev, arrivalDate: addDaysToDate(prev.departureDate, numericDays) };
+        }
+        if (prev.arrivalDate && !prev.departureDate) {
+          return { ...prev, departureDate: addDaysToDate(prev.arrivalDate, numericDays) };
+        }
+        return prev;
+      });
+    }
+  }, [durationDays]);
 
   useEffect(() => {
     if (!user) return undefined;
@@ -244,7 +265,19 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
 
   const updateB = (k, v) => {
     const num = ['adults', 'children', 'infants'];
-    setB((p) => ({ ...p, [k]: num.includes(k) ? Math.max(0, parseInt(v, 10) || 0) : v }));
+    setB((p) => {
+      const val = num.includes(k) ? Math.max(0, parseInt(v, 10) || 0) : v;
+      const updated = { ...p, [k]: val };
+      const numericDays = Number(durationDays) || 0;
+      if (numericDays > 0 && val) {
+        if (k === 'departureDate') {
+          updated.arrivalDate = addDaysToDate(val, numericDays);
+        } else if (k === 'arrivalDate') {
+          updated.departureDate = addDaysToDate(val, numericDays);
+        }
+      }
+      return updated;
+    });
   };
 
   const passengerFields = [
@@ -634,7 +667,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, transportChoice, requireTran
                           const date = String(slot.date).slice(0, 10);
                           return (
                             <option key={slot.id} value={date} className="bg-[#1a1a2e] text-ivory-50">
-                              {date} ({slot.remainingSeats} {t('booking.seatsLeft', 'seats')})
+                              {date}
                             </option>
                           );
                         })}
