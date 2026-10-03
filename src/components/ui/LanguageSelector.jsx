@@ -117,7 +117,7 @@ const LanguageSelector = ({ light = false, className = '', showFullLabel = false
   return (
     <div
       ref={containerRef}
-      className={`relative inline-block text-start ${className}`}
+      className={`relative inline-block text-start shrink-0 ${className}`}
       onKeyDown={handleKeyDown}
     >
       {/* Trigger Button */}
@@ -128,25 +128,25 @@ const LanguageSelector = ({ light = false, className = '', showFullLabel = false
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label={`${showFullLabel ? currentLang.label : (currentLang.code || 'en').toUpperCase()}, ${t('nav.selectLanguage', 'Select language')}`}
-        className={`h-6 sm:h-7 rounded-full flex items-center justify-center gap-1 sm:gap-1.5 px-2 transition-all duration-300 select-none outline-none ${
+        className={`h-6 sm:h-7 rounded-full flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 shrink-0 transition-all duration-300 select-none outline-none ${
           light
             ? 'bg-obsidian-100/80 hover:bg-obsidian-200/80 text-obsidian-800 border border-obsidian-200'
             : 'bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-gold-500/50 text-white'
         } focus-visible:ring-2 focus-visible:ring-gold-500/70`}
       >
-        <CountryFlag code={currentLang.code} fallbackEmoji={currentLang.flag} className="w-4.5 h-3 shadow-sm" />
+        <CountryFlag code={currentLang.code} fallbackEmoji={currentLang.flag} className="w-4 h-3 sm:w-4.5 sm:h-3 shadow-sm shrink-0" />
         {showFullLabel ? (
-          <span className="text-xs font-bold tracking-wide">
+          <span className="text-xs font-bold tracking-wide shrink-0 whitespace-nowrap">
             {currentLang.label}
           </span>
         ) : (
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">
+          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap">
             {currentLang.code}
           </span>
         )}
         <FaChevronDown
           size={8}
-          className={`text-gold-400 transition-transform duration-200 ${
+          className={`text-gold-400 transition-transform duration-200 shrink-0 ${
             isOpen ? 'rotate-180' : ''
           }`}
           aria-hidden="true"
@@ -168,8 +168,8 @@ const LanguageSelector = ({ light = false, className = '', showFullLabel = false
               focusedIndex >= 0 ? `lang-opt-${activeLanguages[focusedIndex]?.code}` : undefined
             }
             tabIndex={-1}
-            className={`absolute top-full mt-2 w-48 rounded-2xl p-1.5 backdrop-blur-xl shadow-2xl border transition-colors z-[10000] ${
-              isRtl ? 'left-0' : 'right-0'
+            className={`absolute top-full mt-2 w-44 sm:w-48 max-w-[calc(100vw-24px)] rounded-2xl p-1.5 backdrop-blur-xl shadow-2xl border transition-colors z-[10000] ${
+              isRtl ? 'left-0 rtl:left-0 ltr:right-0' : 'right-0 ltr:right-0 rtl:left-0'
             } ${
               light
                 ? 'bg-white/95 border-obsidian-200 text-obsidian-900 shadow-obsidian-900/10'

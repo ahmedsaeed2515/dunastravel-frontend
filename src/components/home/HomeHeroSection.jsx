@@ -79,15 +79,6 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
                   {renderAnimatedWord(t("home.heroTitle1", slide.titlePart1))}
                 </h1>
                 <h1 className="text-anime-3 hero-heading-2">
-                  <img
-                    src="/dunas-travel-logo.webp"
-                    alt="Dunas Travel"
-                    width="201"
-                    height="100"
-                    fetchPriority="high"
-                    decoding="async"
-                    className="dunas-logo"
-                  />
                   {renderAnimatedWord(t("home.heroTitle2", slide.titlePart2))}
                 </h1>
                 <p className="slider-contect-des">{t("home.heroDesc", slide.desc)}</p>

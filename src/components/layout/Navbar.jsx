@@ -10,6 +10,7 @@ import Logo from '../ui/Logo';
 const LoginModal = lazy(() => import('../auth/LoginModal'));
 import CurrencySelector from '../ui/CurrencySelector';
 import LanguageSelector from '../ui/LanguageSelector';
+import CountryFlag from '../ui/CountryFlag';
 import CustomerNotificationBell from '../ui/CustomerNotificationBell';
 import { useActiveLocales } from '../../hooks/useActiveLocales';
 import { useDestinations } from '../../hooks/useDestinations';
@@ -206,7 +207,7 @@ const Navbar = () => {
             </div>
 
             {/* Right: Actions (moved from main header) */}
-            <div className="flex items-center gap-1 sm:gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 ms-auto">
               <button
                 onClick={toggleTheme}
                 className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 hover:border-[#F5A623]/40 transition-all duration-300 hover:scale-110"
@@ -637,17 +638,18 @@ const Navbar = () => {
                       {activeLanguages.map((lang) => (
                         <button
                           key={lang.code}
+                          type="button"
                           onClick={() => {
                             changeLanguage(lang.code);
                             setMobileMenuOpen(false);
                           }}
-                          className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all flex items-center gap-1.5 ${
+                          className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all flex items-center gap-2 ${
                             i18n.language === lang.code
-                              ? 'bg-amber-500 text-white border-amber-500 shadow-md'
+                              ? 'bg-amber-500 text-white border-amber-500 shadow-md scale-105'
                               : 'bg-white dark:bg-obsidian-800 text-obsidian-700 dark:text-ivory-200 border-obsidian-200 dark:border-obsidian-600 hover:border-amber-500'
                           }`}
                         >
-                          <span>{lang.flag}</span>
+                          <CountryFlag code={lang.code} fallbackEmoji={lang.flag} className="w-4 h-3 rounded-sm shadow-sm shrink-0" />
                           <span>{lang.label}</span>
                         </button>
                       ))}
