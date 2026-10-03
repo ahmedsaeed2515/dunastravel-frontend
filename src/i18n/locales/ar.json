@@ -5888,5 +5888,15 @@
   "reviews.writeReviewPrompt": "هل خضت هذه الرحلة الاستثنائية؟ سجل دخولك لتقييم الرحلة ومشاركة انطباعاتك مع المسافرين الآخرين.",
   "reviews.commentMinLength": "يجب ألا يقل تعليق التقييم عن 10 أحرف.",
   "reviews.highlightedBadge": "التقييم المحدد",
-  "reviews.signInToReview": "سجل الدخول لكتابة تقييم"
+  "reviews.signInToReview": "سجل الدخول لكتابة تقييم",
+  "filter.duration": "مدة الرحلة:",
+  "filter.allDurations": "الكل",
+  "filter.shortDurations": "1 - 5 أيام",
+  "filter.mediumDurations": "6 - 9 أيام",
+  "filter.longDurations": "+10 أيام",
+  "filter.toursFound": "رحلة",
+  "filter.sortBy": "ترتيب حسب",
+  "filter.default": "الترتيب الافتراضي",
+  "filter.durationAsc": "الأقصر مدة (أقل أيام)",
+  "filter.durationDesc": "الأطول مدة (أكثر أيام)"
 }

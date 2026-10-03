@@ -5888,5 +5888,15 @@
   "reviews.writeReviewPrompt": "Have you experienced this journey? Sign in to rate this trip and share your impressions with other travelers.",
   "reviews.commentMinLength": "Review comment must be at least 10 characters long.",
   "reviews.highlightedBadge": "Selected Review",
-  "reviews.signInToReview": "Sign in to Write a Review"
+  "reviews.signInToReview": "Sign in to Write a Review",
+  "filter.duration": "Duration:",
+  "filter.allDurations": "All",
+  "filter.shortDurations": "1 - 5 Days",
+  "filter.mediumDurations": "6 - 9 Days",
+  "filter.longDurations": "+10 Days",
+  "filter.toursFound": "tours",
+  "filter.sortBy": "Sort by",
+  "filter.default": "Default Order",
+  "filter.durationAsc": "Shortest Duration (Fewer Days)",
+  "filter.durationDesc": "Longest Duration (More Days)"
 }

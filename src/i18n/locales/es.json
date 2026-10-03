@@ -5880,5 +5880,15 @@
   "reviews.writeReviewPrompt": "¿Has vivido este viaje? Inicia sesión para calificar este viaje y compartir tus impresiones con otros viajeros.",
   "reviews.commentMinLength": "El comentario de la reseña debe tener al menos 10 caracteres.",
   "reviews.highlightedBadge": "Reseña seleccionada",
-  "reviews.signInToReview": "Inicia sesión para escribir una reseña"
+  "reviews.signInToReview": "Inicia sesión para escribir una reseña",
+  "filter.duration": "Duración:",
+  "filter.allDurations": "Todos",
+  "filter.shortDurations": "1 - 5 Días",
+  "filter.mediumDurations": "6 - 9 Días",
+  "filter.longDurations": "+10 Días",
+  "filter.toursFound": "viajes",
+  "filter.sortBy": "Ordenar por",
+  "filter.default": "Orden predeterminado",
+  "filter.durationAsc": "Menor duración (Menos días)",
+  "filter.durationDesc": "Mayor duración (Más días)"
 }

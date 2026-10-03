@@ -5880,5 +5880,15 @@
   "reviews.writeReviewPrompt": "Você já viveu esta viagem? Faça login para avaliar este passeio e compartilhar suas impressões com outros viajantes.",
   "reviews.commentMinLength": "O comentário da avaliação deve ter pelo menos 10 caracteres.",
   "reviews.highlightedBadge": "Avaliação selecionada",
-  "reviews.signInToReview": "Entre para escrever uma avaliação"
+  "reviews.signInToReview": "Entre para escrever uma avaliação",
+  "filter.duration": "Duração:",
+  "filter.allDurations": "Todos",
+  "filter.shortDurations": "1 - 5 Dias",
+  "filter.mediumDurations": "6 - 9 Dias",
+  "filter.longDurations": "+10 Dias",
+  "filter.toursFound": "viagens",
+  "filter.sortBy": "Ordenar por",
+  "filter.default": "Ordem padrão",
+  "filter.durationAsc": "Menor duração (Menos dias)",
+  "filter.durationDesc": "Maior duração (Mais dias)"
 }
