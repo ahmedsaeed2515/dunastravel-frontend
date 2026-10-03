@@ -366,6 +366,7 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
+  const timelineRef = useRef(null);
   const animationRef = useRef(null);
 
   // Lazy load Leaflet library dynamically only when map section enters near-viewport
@@ -496,7 +497,7 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
         }
       });
 
-      // Sort matches by appearance in the text so the first mentioned city in the day comes first
+      // Sort matches by appearance in text so first mentioned city comes first
       dayMatches.sort((a, b) => a.index - b.index);
 
       const addedInDay = new Set();
@@ -510,7 +511,7 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       });
     });
 
-    // 2. Scan Key Highlights SECOND (only to add details/missing locations without disturbing itinerary sequence)
+    // 2. Scan Key Highlights SECOND (only for extra details/unlisted cities)
     const rawHighlights = Array.isArray(highlights) ? highlights.filter(Boolean) : [];
     rawHighlights.forEach((hlItem) => {
       const itemText = extractText(hlItem);
@@ -592,11 +593,11 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
     const L = leafletInstance;
     const map = L.map(mapContainerRef.current, {
       zoomControl: true,
-      scrollWheelZoom: false, // Disable scroll wheel hijacking by default until clicked
+      scrollWheelZoom: false, // Disable scroll wheel hijacking by default until focused
       attributionControl: false,
     }).setView(locations[0].coords, 10);
 
-    // Enable scroll wheel zoom on click to prevent page scroll trapping
+    // Enable scroll wheel zoom on click/tap to prevent page scroll trapping on touch devices
     map.once('focus', () => {
       map.scrollWheelZoom.enable();
     });
@@ -798,9 +799,40 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
     if (markersRef.current[index]) {
       markersRef.current[index].openPopup();
     }
+    if (timelineRef.current) {
+      const btn = timelineRef.current.children[index];
+      if (btn) {
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  };
+
+  const handlePrev = () => {
+    if (locations.length === 0) return;
+    const newIdx = (activeLocationIndex - 1 + locations.length) % locations.length;
+    handleSelectLocation(locations[newIdx], newIdx);
+  };
+
+  const handleNext = () => {
+    if (locations.length === 0) return;
+    const newIdx = (activeLocationIndex + 1) % locations.length;
+    handleSelectLocation(locations[newIdx], newIdx);
+  };
+
+  const handleResetBounds = () => {
+    if (!mapRef.current || locations.length === 0) return;
+    const latlngs = locations.map((l) => l.coords);
+    if (latlngs.length === 1) {
+      mapRef.current.setView(latlngs[0], 11);
+    } else if (leafletInstance) {
+      const bounds = leafletInstance.latLngBounds(latlngs);
+      mapRef.current.fitBounds(bounds, { padding: [65, 65] });
+    }
   };
 
   if (locations.length === 0) return null;
+
+  const currentLocation = locations[activeLocationIndex] || locations[0];
 
   return (
     <motion.div
@@ -809,71 +841,119 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="mt-16 w-full"
+      className="mt-12 sm:mt-16 w-full max-w-7xl mx-auto px-2 sm:px-4"
     >
-      <div className="mb-10 text-center">
-        <span className="text-gold-600 dark:text-gold-400 font-extrabold text-xs md:text-sm tracking-[4px] uppercase block mb-3 drop-shadow-sm">
-          {t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE')}
+      {/* Header */}
+      <div className="mb-6 sm:mb-10 text-center">
+        <span className="text-gold-600 dark:text-gold-400 font-extrabold text-[11px] sm:text-xs md:text-sm tracking-[3px] sm:tracking-[4px] uppercase block mb-2 sm:mb-3 drop-shadow-sm">
+          📍 {t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE')}
         </span>
         <h2
-          className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white leading-snug"
+          className="text-xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white leading-snug"
           style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
         >
           {t('tour.routeMapTitle', 'Interactive Itinerary Map')}
         </h2>
-        <div className="w-28 h-1.5 bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 rounded-full mx-auto mt-3 shadow-[0_0_12px_rgba(245,166,35,0.6)]" />
+        <div className="w-20 sm:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 rounded-full mx-auto mt-2.5 sm:mt-3 shadow-[0_0_12px_rgba(245,166,35,0.6)]" />
       </div>
 
-      <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-500/40 dark:border-gold-500/60 h-[480px] md:h-[520px] relative z-10 bg-slate-900 [&_.leaflet-div-icon]:!bg-transparent [&_.leaflet-div-icon]:!border-none [&_.leaflet-tile-pane]:dark:filter [&_.leaflet-tile-pane]:dark:brightness-[0.85] [&_.leaflet-tile-pane]:dark:contrast-[1.15] [&_.leaflet-tile-pane]:dark:invert-[0.9] [&_.leaflet-tile-pane]:dark:hue-rotate-[180deg]">
+      {/* Main Map Box with Floating HUD Overlay */}
+      <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-gold-500/40 dark:border-gold-500/60 h-[380px] sm:h-[460px] md:h-[540px] lg:h-[580px] relative z-10 bg-slate-950 [&_.leaflet-div-icon]:!bg-transparent [&_.leaflet-div-icon]:!border-none [&_.leaflet-tile-pane]:dark:filter [&_.leaflet-tile-pane]:dark:brightness-[0.85] [&_.leaflet-tile-pane]:dark:contrast-[1.15] [&_.leaflet-tile-pane]:dark:invert-[0.9] [&_.leaflet-tile-pane]:dark:hue-rotate-[180deg]">
+        
+        {/* Floating Quick Navigation HUD Control Bar */}
+        {locations.length > 0 && isVisible && leafletInstance && (
+          <div className="absolute top-3 left-3 right-3 sm:left-auto sm:right-3 z-[400] flex items-center justify-between gap-2 bg-slate-900/90 backdrop-blur-md border border-blue-500/30 text-white px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl shadow-xl max-w-full sm:max-w-md">
+            <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping flex-shrink-0" />
+              <div className="flex flex-col min-w-0">
+                <span className="text-[9px] sm:text-[10px] font-black uppercase text-blue-400 tracking-wider truncate">
+                  {currentLocation?.dayLabel || `${t('tour.stop', 'Stop')} ${activeLocationIndex + 1}`}
+                </span>
+                <span className="text-xs sm:text-sm font-extrabold truncate">{currentLocation?.name}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1.5 flex-shrink-0">
+              <button
+                onClick={handlePrev}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-800 hover:bg-blue-600 border border-slate-700 text-white flex items-center justify-center text-xs transition-all active:scale-95 shadow-md"
+                title="Previous Stop"
+              >
+                ◀
+              </button>
+              <span className="text-[10px] sm:text-xs font-bold text-slate-300 px-1">
+                {activeLocationIndex + 1}/{locations.length}
+              </span>
+              <button
+                onClick={handleNext}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-800 hover:bg-blue-600 border border-slate-700 text-white flex items-center justify-center text-xs transition-all active:scale-95 shadow-md"
+                title="Next Stop"
+              >
+                ▶
+              </button>
+              <button
+                onClick={handleResetBounds}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-800 hover:bg-gold-500 border border-slate-700 text-white hover:text-slate-950 flex items-center justify-center text-xs transition-all ml-0.5 active:scale-95 shadow-md"
+                title="Reset Map Bounds"
+              >
+                🔄
+              </button>
+            </div>
+          </div>
+        )}
+
         {(!isVisible || !leafletInstance) ? (
           <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-gold-400 font-bold bg-slate-900 rounded-2xl">
             <div className="w-9 h-9 border-3 border-gold-500 border-t-transparent rounded-full animate-spin" />
             <span className="text-xs font-black uppercase tracking-widest text-gold-300">{t('tour.loadingMap', 'Loading interactive route map...')}</span>
           </div>
         ) : (
-          <div ref={mapContainerRef} className="w-full h-full" style={{ direction: 'ltr' }} />
+          <div ref={mapContainerRef} className="w-full h-full touch-pan-x touch-pan-y" style={{ direction: 'ltr' }} />
         )}
       </div>
 
       {/* Interactive Day-by-Day Journey Route Timeline */}
       {locations.length > 0 && (
-        <div className="mt-6 w-full">
+        <div className="mt-4 sm:mt-6 w-full bg-slate-900/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-2xl p-3 sm:p-5 shadow-xl">
           <div className="flex items-center justify-between mb-3 px-1">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-gold-600 dark:text-gold-400">
-              🗺️ {t('tour.dayByDayRoute', 'Day-by-Day Journey Route')}
+            <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-gold-600 dark:text-gold-400 flex items-center gap-1.5">
+              <span>🗺️</span> <span>{t('tour.dayByDayRoute', 'Day-by-Day Journey Route')}</span>
             </span>
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-bold">
+            <span className="text-[11px] sm:text-xs text-slate-400 font-extrabold bg-slate-800 px-2.5 py-1 rounded-full border border-slate-700">
               {locations.length} {t('tour.stops', 'Stops')}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 overflow-x-auto pb-3 pt-1 px-1 scrollbar-thin scrollbar-thumb-blue-500/40">
+          <div
+            ref={timelineRef}
+            className="flex items-center gap-2.5 sm:gap-3.5 overflow-x-auto pb-2 pt-1 px-1 scrollbar-thin scrollbar-thumb-blue-500/40 snap-x snap-mandatory"
+          >
             {locations.map((loc, idx) => {
               const isActive = activeLocationIndex === idx;
               return (
                 <button
                   key={loc.dbKey + idx}
                   onClick={() => handleSelectLocation(loc, idx)}
-                  className={`flex-shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300 ${
+                  className={`flex-shrink-0 snap-center flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border transition-all duration-300 ${
                     isActive
-                      ? 'bg-blue-600 border-blue-400 text-white shadow-lg shadow-blue-500/40 scale-105 z-10'
-                      : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700/80 text-slate-200 hover:border-blue-500/50'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 border-blue-400 text-white shadow-lg shadow-blue-500/40 scale-105 z-10 ring-2 ring-blue-400/50'
+                      : 'bg-slate-800/90 hover:bg-slate-800 border-slate-700/80 text-slate-200 hover:border-blue-500/50'
                   }`}
                 >
-                  <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-colors ${
-                    isActive ? 'bg-white text-blue-700 shadow-inner' : 'bg-blue-500/20 text-blue-400'
+                  <span className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[11px] sm:text-xs font-black transition-colors ${
+                    isActive ? 'bg-white text-blue-700 shadow-md' : 'bg-blue-500/20 text-blue-400'
                   }`}>
                     {idx + 1}
                   </span>
-                  <div className="text-right flex flex-col">
+                  <div className="text-right flex flex-col min-w-0">
                     {loc.dayLabel && (
-                      <span className={`text-[10px] font-extrabold uppercase tracking-wider ${
-                        isActive ? 'text-blue-200' : 'text-blue-400'
+                      <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider ${
+                        isActive ? 'text-blue-100' : 'text-blue-400'
                       }`}>
                         {loc.dayLabel}
                       </span>
                     )}
-                    <span className="text-sm font-extrabold whitespace-nowrap">{loc.name}</span>
+                    <span className="text-xs sm:text-sm font-extrabold whitespace-nowrap">{loc.name}</span>
                   </div>
                 </button>
               );
