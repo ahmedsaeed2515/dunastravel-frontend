@@ -406,11 +406,12 @@ export default function AdvancedBooking({
                   <input
                     id="modal-arrival-date"
                     type="date"
+                    dir="ltr"
                     value={formData.arrivalDate}
                     min={todayStr}
                     onChange={(e) => updateField('arrivalDate', e.target.value)}
                     required
-                    className={inputStyle}
+                    className={`${inputStyle} text-left font-mono [direction:ltr]`}
                   />
                 </div>
                 <div>
@@ -421,11 +422,12 @@ export default function AdvancedBooking({
                   <input
                     id="modal-departure-date"
                     type="date"
+                    dir="ltr"
                     value={formData.departureDate}
                     min={formData.arrivalDate || todayStr}
                     onChange={(e) => updateField('departureDate', e.target.value)}
                     required
-                    className={inputStyle}
+                    className={`${inputStyle} text-left font-mono [direction:ltr]`}
                   />
                 </div>
               </div>

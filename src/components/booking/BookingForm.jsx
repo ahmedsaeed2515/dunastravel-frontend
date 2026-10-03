@@ -655,48 +655,28 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                       <FaCalendarAlt className="text-gold-400" size={11} />
                       {t('booking.arrivalDate', 'Arrival Date')}
                     </label>
-                    {availabilities.length > 0 ? (
-                      <select
-                        id="arrival-date-input"
-                        value={b.arrivalDate}
-                        onChange={(e) => updateB('arrivalDate', e.target.value)}
-                        required
-                        className={`${inputClass} appearance-none font-mono text-[12.5px]`}
-                      >
-                        {availabilities.map((slot) => {
-                          const date = String(slot.date).slice(0, 10);
-                          return (
-                            <option key={slot.id} value={date} className="bg-[#1a1a2e] text-ivory-50">
-                              {date}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    ) : (
-                      <>
-                        <input
-                          id="arrival-date-input"
-                          type="date"
-                          value={b.arrivalDate}
-                          min={todayStr}
-                          onChange={(e) => updateB('arrivalDate', e.target.value)}
-                          required
-                          className={inputClass}
-                          disabled={availabilityStatus === 'loading'}
-                        />
-                        {availabilityStatus === 'empty' && (
-                          <p className="mt-1.5 text-[11px] text-amber-400/90 leading-tight">
-                            {t('booking.noOnlineSlots', 'No online departures available.')}{' '}
-                            <button
-                              type="button"
-                              onClick={() => setTab('inquiry')}
-                              className="text-gold-400 underline hover:text-gold-300 font-semibold cursor-pointer"
-                            >
-                              {t('booking.switchToInquiry', 'Request tailor-made inquiry')}
-                            </button>
-                          </p>
-                        )}
-                      </>
+                    <input
+                      id="arrival-date-input"
+                      type="date"
+                      dir="ltr"
+                      value={b.arrivalDate}
+                      min={todayStr}
+                      onChange={(e) => updateB('arrivalDate', e.target.value)}
+                      required
+                      className={`${inputClass} text-left font-mono [direction:ltr]`}
+                      disabled={availabilityStatus === 'loading'}
+                    />
+                    {availabilityStatus === 'empty' && (
+                      <p className="mt-1.5 text-[11px] text-amber-400/90 leading-tight">
+                        {t('booking.noOnlineSlots', 'No online departures available.')}{' '}
+                        <button
+                          type="button"
+                          onClick={() => setTab('inquiry')}
+                          className="text-gold-400 underline hover:text-gold-300 font-semibold cursor-pointer"
+                        >
+                          {t('booking.switchToInquiry', 'Request tailor-made inquiry')}
+                        </button>
+                      </p>
                     )}
                   </div>
                   <div>
@@ -707,11 +687,12 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                     <input
                       id="departure-date-input"
                       type="date"
+                      dir="ltr"
                       value={b.departureDate}
                       min={b.arrivalDate || todayStr}
                       onChange={(e) => updateB('departureDate', e.target.value)}
                       required
-                      className={inputClass}
+                      className={`${inputClass} text-left font-mono [direction:ltr]`}
                     />
                   </div>
                 </div>

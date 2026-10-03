@@ -443,11 +443,12 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                   <input
                     id="arrival-date-input"
                     type="date"
+                    dir="ltr"
                     value={bookingForm.arrivalDate}
                     min={todayStr}
                     onChange={(e) => updateBookingField('arrivalDate', e.target.value)}
                     required
-                    className={inputStyle}
+                    className={`${inputStyle} text-left font-mono [direction:ltr]`}
                   />
                 </div>
 
@@ -459,11 +460,12 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                   <input
                     id="departure-date-input"
                     type="date"
+                    dir="ltr"
                     value={bookingForm.departureDate}
                     min={bookingForm.arrivalDate || todayStr}
                     onChange={(e) => updateBookingField('departureDate', e.target.value)}
                     required
-                    className={inputStyle}
+                    className={`${inputStyle} text-left font-mono [direction:ltr]`}
                   />
                 </div>
               </div>

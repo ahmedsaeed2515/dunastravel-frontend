@@ -131,7 +131,7 @@ describe('Prompt 04: Booking Engine & Customer Inquiries Integration', () => {
     const { container } = render(<BookingForm tourId="tour-1" tourSlug="cairo-discovery" tourTitle="Cairo Discovery" />);
 
     await waitFor(() => {
-      expect(container.querySelector('#arrival-date-input')?.tagName).toBe('SELECT');
+      expect(container.querySelector('#arrival-date-input')?.tagName).toBe('INPUT');
     });
 
     const arrivalInput = container.querySelector('#arrival-date-input');
@@ -174,7 +174,7 @@ describe('Prompt 04: Booking Engine & Customer Inquiries Integration', () => {
     const { container } = render(<BookingForm tourId="tour-1" tourTitle="Cairo Discovery" />);
 
     await waitFor(() => {
-      expect(container.querySelector('#arrival-date-input')?.tagName).toBe('SELECT');
+      expect(container.querySelector('#arrival-date-input')?.tagName).toBe('INPUT');
     });
 
     const arrivalInput = container.querySelector('#arrival-date-input');
@@ -225,7 +225,7 @@ describe('Prompt 04: Booking Engine & Customer Inquiries Integration', () => {
     const { container } = render(<BookingForm tourId="tour-1" tourTitle="Cairo Discovery" />);
 
     await waitFor(() => {
-      expect(container.querySelector('#arrival-date-input')?.tagName).toBe('SELECT');
+      expect(container.querySelector('#arrival-date-input')?.tagName).toBe('INPUT');
     });
 
     const arrivalInput = container.querySelector('#arrival-date-input');
