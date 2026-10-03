@@ -332,12 +332,40 @@ const CITY_TRANSLATIONS = {
   }
 };
 
+const getDayLabel = (days, langCode) => {
+  if (!days || days.length === 0) return '';
+  const sorted = [...new Set(days)].sort((a, b) => a - b);
+  let rangeStr = '';
+  if (sorted.length === 1) {
+    rangeStr = `${sorted[0]}`;
+  } else if (sorted.length > 1) {
+    const isConsecutive = sorted.every((val, i) => i === 0 || val === sorted[i - 1] + 1);
+    if (isConsecutive) {
+      rangeStr = `${sorted[0]}-${sorted[sorted.length - 1]}`;
+    } else {
+      rangeStr = sorted.join(', ');
+    }
+  }
+
+  const dayWordMap = {
+    ar: 'اليوم',
+    en: 'Day',
+    es: 'Día',
+    it: 'Giorno',
+    pt: 'Dia',
+  };
+  const word = dayWordMap[langCode] || 'Day';
+  return `${word} ${rangeStr}`;
+};
+
 const RouteMap = ({ itinerary, highlights, tourTitle }) => {
   const [sectionRef, isVisible] = useInViewport({ rootMargin: '200px', once: false });
   const [leafletInstance, setLeafletInstance] = useState(null);
+  const [activeLocationIndex, setActiveLocationIndex] = useState(0);
   const { t, i18n } = useTranslation();
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
+  const markersRef = useRef([]);
   const animationRef = useRef(null);
 
   // Lazy load Leaflet library dynamically only when map section enters near-viewport
@@ -393,7 +421,7 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       return String(val);
     };
 
-    const addOrUpdateLocation = (dbKey, descText) => {
+    const addOrUpdateLocation = (dbKey, descText, dayNum) => {
       const coords = COORDINATES_DATABASE[dbKey];
       if (!coords) return;
 
@@ -405,6 +433,10 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       );
 
       if (existingLoc) {
+        if (dayNum && !existingLoc.daysVisited.includes(dayNum)) {
+          existingLoc.daysVisited.push(dayNum);
+          existingLoc.daysVisited.sort((a, b) => a - b);
+        }
         if (cleanDesc && !existingLoc.descriptions.includes(cleanDesc)) {
           existingLoc.descriptions.push(cleanDesc);
         }
@@ -413,39 +445,13 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
           name: translatedName,
           dbKey: dbKey,
           coords: coords,
+          daysVisited: dayNum ? [dayNum] : [],
           descriptions: cleanDesc ? [cleanDesc] : [translatedName],
         });
       }
     };
 
-    // 1. Scan Key Highlights
-    const rawHighlights = Array.isArray(highlights) ? highlights.filter(Boolean) : [];
-    rawHighlights.forEach((hlItem) => {
-      const itemText = extractText(hlItem);
-      if (!itemText) return;
-      const translatedItem = t(itemText, { defaultValue: itemText });
-      const textToSearch = `${itemText} ${translatedItem}`.toLowerCase();
-
-      const itemMatches = [];
-      Object.keys(KEYWORDS_MAP).forEach((keyword) => {
-        const index = textToSearch.indexOf(keyword);
-        if (index !== -1) {
-          itemMatches.push({
-            keyword,
-            dbKey: KEYWORDS_MAP[keyword],
-            index,
-          });
-        }
-      });
-
-      itemMatches.sort((a, b) => b.keyword.length - a.keyword.length);
-
-      if (itemMatches.length > 0) {
-        addOrUpdateLocation(itemMatches[0].dbKey, translatedItem || itemText);
-      }
-    });
-
-    // 2. Scan Itinerary (regardless of whether highlights found matches)
+    // 1. Scan Itinerary FIRST in strict chronological order (Day 1, Day 2, Day 3...)
     const rawItinerary = Array.isArray(itinerary)
       ? itinerary
       : Array.isArray(itinerary?.days)
@@ -490,12 +496,44 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
         }
       });
 
-      dayMatches.sort((a, b) => b.keyword.length - a.keyword.length);
+      // Sort matches by appearance in the text so the first mentioned city in the day comes first
+      dayMatches.sort((a, b) => a.index - b.index);
 
-      if (dayMatches.length > 0) {
-        const rawTitle = extractText(day.title) || extractText(day.titleDefault) || `${t('tour.day', 'Day')} ${dayNum}`;
-        const firstLineTitle = rawTitle.split('\n')[0].replace(/^اليوم\s+\S+\s*—?\s*/i, '').trim();
-        addOrUpdateLocation(dayMatches[0].dbKey, `${t('tour.day', 'Day')} ${dayNum}: ${firstLineTitle}`);
+      const addedInDay = new Set();
+      dayMatches.forEach((m) => {
+        if (!addedInDay.has(m.dbKey)) {
+          addedInDay.add(m.dbKey);
+          const rawTitle = extractText(day.title) || extractText(day.titleDefault) || `${t('tour.day', 'Day')} ${dayNum}`;
+          const firstLineTitle = rawTitle.split('\n')[0].replace(/^اليوم\s+\S+\s*—?\s*/i, '').trim();
+          addOrUpdateLocation(m.dbKey, `${t('tour.day', 'Day')} ${dayNum}: ${firstLineTitle}`, dayNum);
+        }
+      });
+    });
+
+    // 2. Scan Key Highlights SECOND (only to add details/missing locations without disturbing itinerary sequence)
+    const rawHighlights = Array.isArray(highlights) ? highlights.filter(Boolean) : [];
+    rawHighlights.forEach((hlItem) => {
+      const itemText = extractText(hlItem);
+      if (!itemText) return;
+      const translatedItem = t(itemText, { defaultValue: itemText });
+      const textToSearch = `${itemText} ${translatedItem}`.toLowerCase();
+
+      const itemMatches = [];
+      Object.keys(KEYWORDS_MAP).forEach((keyword) => {
+        const index = textToSearch.indexOf(keyword);
+        if (index !== -1) {
+          itemMatches.push({
+            keyword,
+            dbKey: KEYWORDS_MAP[keyword],
+            index,
+          });
+        }
+      });
+
+      itemMatches.sort((a, b) => b.keyword.length - a.keyword.length);
+
+      if (itemMatches.length > 0) {
+        addOrUpdateLocation(itemMatches[0].dbKey, translatedItem || itemText, null);
       }
     });
 
@@ -523,24 +561,29 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
     }
 
     if (extracted.length === 0) {
-      addOrUpdateLocation(fallbackKey1, langTranslations[fallbackKey1] || fallbackKey1);
-      addOrUpdateLocation(fallbackKey2, langTranslations[fallbackKey2] || fallbackKey2);
+      addOrUpdateLocation(fallbackKey1, langTranslations[fallbackKey1] || fallbackKey1, 1);
+      addOrUpdateLocation(fallbackKey2, langTranslations[fallbackKey2] || fallbackKey2, 2);
     } else if (extracted.length === 1) {
       const firstCoords = extracted[0].coords;
       const fb1Coords = COORDINATES_DATABASE[fallbackKey1];
       const fb2Coords = COORDINATES_DATABASE[fallbackKey2];
 
       if (fb1Coords && (fb1Coords[0] !== firstCoords[0] || fb1Coords[1] !== firstCoords[1])) {
-        addOrUpdateLocation(fallbackKey1, langTranslations[fallbackKey1] || fallbackKey1);
+        addOrUpdateLocation(fallbackKey1, langTranslations[fallbackKey1] || fallbackKey1, 2);
       } else if (fb2Coords && (fb2Coords[0] !== firstCoords[0] || fb2Coords[1] !== firstCoords[1])) {
-        addOrUpdateLocation(fallbackKey2, langTranslations[fallbackKey2] || fallbackKey2);
+        addOrUpdateLocation(fallbackKey2, langTranslations[fallbackKey2] || fallbackKey2, 2);
       }
     }
 
-    return extracted.map((item) => ({
-      ...item,
-      description: item.descriptions.join('<br/>• '),
-    }));
+    return extracted.map((item, index) => {
+      const dayLabel = getDayLabel(item.daysVisited, langCode);
+      return {
+        ...item,
+        stepIndex: index + 1,
+        dayLabel,
+        description: item.descriptions.join('<br/>• '),
+      };
+    });
   }, [itinerary, highlights, tourTitle, t, i18n.language]);
 
   useEffect(() => {
@@ -567,7 +610,7 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
 
     const markers = [];
     locations.forEach((loc, idx) => {
-      // Create custom blue badge icon with city name clearly visible on the map
+      // Create custom blue badge icon with Day & City Name clearly visible on the map
       const customBlueIcon = L.divIcon({
         className: 'custom-blue-city-marker',
         html: `
@@ -580,10 +623,10 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
             pointer-events: auto;
             white-space: nowrap;
             font-family: 'Cairo', 'Inter', system-ui, -apple-system, sans-serif;
-            filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.45));
+            filter: drop-shadow(0px 4px 12px rgba(15, 23, 42, 0.5));
             user-select: none;
           ">
-            <!-- Blue City Name Badge -->
+            <!-- Blue Badge with Day & City Name -->
             <div style="
               background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #1e40af 100%);
               color: #ffffff;
@@ -596,15 +639,15 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
               box-shadow: 0 4px 14px rgba(37, 99, 235, 0.5);
               display: flex;
               align-items: center;
-              gap: 7px;
+              gap: 8px;
               margin-bottom: 5px;
             ">
               <span style="
                 background: #ffffff;
                 color: #1d4ed8;
                 border-radius: 50%;
-                width: 20px;
-                height: 20px;
+                width: 22px;
+                height: 22px;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -612,7 +655,10 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
                 font-weight: 900;
                 box-shadow: inset 0 0 2px rgba(0,0,0,0.25);
               ">${idx + 1}</span>
-              <span style="text-shadow: 0 1px 2px rgba(0,0,0,0.3); font-size: 14px;">${loc.name}</span>
+              <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25;">
+                ${loc.dayLabel ? `<span style="font-size: 10px; font-weight: 900; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px;">${loc.dayLabel}</span>` : ''}
+                <span style="text-shadow: 0 1px 2px rgba(0,0,0,0.3); font-size: 14px; font-weight: 800;">${loc.name}</span>
+              </div>
             </div>
             
             <!-- Pin Pointer -->
@@ -633,17 +679,27 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       const marker = L.marker(loc.coords, { icon: customBlueIcon })
         .addTo(map)
         .bindPopup(`
-          <div style="font-family: 'Cairo', 'Inter', sans-serif; padding: 6px 4px; min-width: 180px;">
-            <div style="font-size: 16px; font-weight: 900; color: #1d4ed8; border-bottom: 2px solid #3b82f6; padding-bottom: 5px; margin-bottom: 7px; display: flex; align-items: center; gap: 6px;">
+          <div style="font-family: 'Cairo', 'Inter', sans-serif; padding: 6px 4px; min-width: 190px;">
+            <div style="font-size: 12px; font-weight: 900; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">
+              ${loc.dayLabel || `${t('tour.stop', 'Stop')} ${idx + 1}`}
+            </div>
+            <div style="font-size: 16px; font-weight: 900; color: #0f172a; border-bottom: 2px solid #3b82f6; padding-bottom: 5px; margin-bottom: 7px; display: flex; align-items: center; gap: 6px;">
               <span>📍</span> <span>${loc.name}</span>
             </div>
-            <div style="font-size: 13px; font-weight: 700; color: #1e293b; line-height: 1.55;">
+            <div style="font-size: 13px; font-weight: 700; color: #334155; line-height: 1.55;">
               ${loc.description || ''}
             </div>
           </div>
         `);
+
+      marker.on('click', () => {
+        setActiveLocationIndex(idx);
+      });
+
       markers.push(marker);
     });
+
+    markersRef.current = markers;
 
     const latlngs = locations.map((l) => l.coords);
     if (latlngs.length === 1) {
@@ -659,7 +715,7 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
           setTimeout(() => markers[0].openPopup(), 300);
         }
       } else {
-        map.fitBounds(bounds, { padding: [60, 60] });
+        map.fitBounds(bounds, { padding: [65, 65] });
       }
     }
 
@@ -728,8 +784,21 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       map.remove();
       mapRef.current = null;
+      markersRef.current = [];
     };
   }, [isVisible, leafletInstance, locations]);
+
+  const handleSelectLocation = (loc, index) => {
+    setActiveLocationIndex(index);
+    if (mapRef.current) {
+      mapRef.current.flyTo(loc.coords, Math.max(mapRef.current.getZoom(), 10), {
+        duration: 1,
+      });
+    }
+    if (markersRef.current[index]) {
+      markersRef.current[index].openPopup();
+    }
+  };
 
   if (locations.length === 0) return null;
 
@@ -765,6 +834,53 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
           <div ref={mapContainerRef} className="w-full h-full" style={{ direction: 'ltr' }} />
         )}
       </div>
+
+      {/* Interactive Day-by-Day Journey Route Timeline */}
+      {locations.length > 0 && (
+        <div className="mt-6 w-full">
+          <div className="flex items-center justify-between mb-3 px-1">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-gold-600 dark:text-gold-400">
+              🗺️ {t('tour.dayByDayRoute', 'Day-by-Day Journey Route')}
+            </span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-bold">
+              {locations.length} {t('tour.stops', 'Stops')}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 overflow-x-auto pb-3 pt-1 px-1 scrollbar-thin scrollbar-thumb-blue-500/40">
+            {locations.map((loc, idx) => {
+              const isActive = activeLocationIndex === idx;
+              return (
+                <button
+                  key={loc.dbKey + idx}
+                  onClick={() => handleSelectLocation(loc, idx)}
+                  className={`flex-shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300 ${
+                    isActive
+                      ? 'bg-blue-600 border-blue-400 text-white shadow-lg shadow-blue-500/40 scale-105 z-10'
+                      : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700/80 text-slate-200 hover:border-blue-500/50'
+                  }`}
+                >
+                  <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-colors ${
+                    isActive ? 'bg-white text-blue-700 shadow-inner' : 'bg-blue-500/20 text-blue-400'
+                  }`}>
+                    {idx + 1}
+                  </span>
+                  <div className="text-right flex flex-col">
+                    {loc.dayLabel && (
+                      <span className={`text-[10px] font-extrabold uppercase tracking-wider ${
+                        isActive ? 'text-blue-200' : 'text-blue-400'
+                      }`}>
+                        {loc.dayLabel}
+                      </span>
+                    )}
+                    <span className="text-sm font-extrabold whitespace-nowrap">{loc.name}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };
