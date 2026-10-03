@@ -4,14 +4,53 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 const supportedLngs = ['en', 'ar', 'es', 'pt', 'it'];
 
+const toTitleCase = (value) => {
+  if (typeof value !== 'string' || !value) return value;
+  if (value.startsWith('http://') || value.startsWith('https://') || (value.includes('@') && !value.includes(' '))) {
+    return value;
+  }
+  if (value.includes('<') && value.includes('>')) {
+    return value.replace(/(^|>)([^<]+)(?=<|$)/g, (_, prefix, content) => {
+      const capitalized = content.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
+      return prefix + capitalized;
+    });
+  }
+  return value.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
+};
+
+const transformObjToTitleCase = (obj) => {
+  if (!obj) return obj;
+  if (typeof obj === 'string') return toTitleCase(obj);
+  if (Array.isArray(obj)) {
+    return obj.map(item => typeof item === 'string' ? toTitleCase(item) : transformObjToTitleCase(item));
+  }
+  if (typeof obj === 'object') {
+    const res = {};
+    for (const k of Object.keys(obj)) {
+      const v = obj[k];
+      if (typeof v === 'string') {
+        res[k] = toTitleCase(v);
+      } else if (typeof v === 'object' && v !== null) {
+        res[k] = transformObjToTitleCase(v);
+      } else {
+        res[k] = v;
+      }
+    }
+    return res;
+  }
+  return obj;
+};
+
 const loadLocaleResource = async (lng) => {
+  let raw;
   switch (lng) {
     case 'ar': return (await import('./locales/ar.json')).default;
-    case 'es': return (await import('./locales/es.json')).default;
-    case 'it': return (await import('./locales/it.json')).default;
-    case 'pt': return (await import('./locales/pt.json')).default;
-    case 'en': default: return (await import('./locales/en.json')).default;
+    case 'es': raw = (await import('./locales/es.json')).default; break;
+    case 'it': raw = (await import('./locales/it.json')).default; break;
+    case 'pt': raw = (await import('./locales/pt.json')).default; break;
+    case 'en': default: raw = (await import('./locales/en.json')).default; break;
   }
+  return transformObjToTitleCase(raw);
 };
 
 const getDefaultLng = () => {
@@ -44,19 +83,7 @@ export const syncDocumentDirection = (lng) => {
   }
 };
 
-const toTitleCase = (value) => {
-  if (typeof value !== 'string' || !value) return value;
-  if (value.startsWith('http://') || value.startsWith('https://') || (value.includes('@') && !value.includes(' '))) {
-    return value;
-  }
-  if (value.includes('<') && value.includes('>')) {
-    return value.replace(/(^|>)([^<]+)(?=<|$)/g, (_, prefix, content) => {
-      const capitalized = content.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
-      return prefix + capitalized;
-    });
-  }
-  return value.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
-};
+
 
 const pascalCasePostProcessor = {
   type: 'postProcessor',
