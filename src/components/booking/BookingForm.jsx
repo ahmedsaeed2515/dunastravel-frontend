@@ -701,7 +701,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
 
 
                 {/* Language & Activity Preferences */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-4">
                   <div ref={langRef} className="relative">
                     <label htmlFor="language-btn" className={labelClass}>
                       <FaGlobeAmericas className="text-gold-400" size={11} />
