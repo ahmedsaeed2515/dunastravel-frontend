@@ -830,6 +830,17 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
     }
   };
 
+  const scrollTimeline = (direction) => {
+    if (timelineRef.current) {
+      const isRtl = document.documentElement.dir === 'rtl' || (i18n.language || '').startsWith('ar');
+      let offset = direction === 'next' ? 240 : -240;
+      if (isRtl) {
+        offset = -offset;
+      }
+      timelineRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
+
   if (locations.length === 0) return null;
 
   const currentLocation = locations[activeLocationIndex] || locations[0];
@@ -919,14 +930,32 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
             <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-gold-600 dark:text-gold-400 flex items-center gap-1.5">
               <span>🗺️</span> <span>{t('tour.dayByDayRoute', 'Day-by-Day Journey Route')}</span>
             </span>
-            <span className="text-[11px] sm:text-xs text-slate-400 font-extrabold bg-slate-800 px-2.5 py-1 rounded-full border border-slate-700">
-              {locations.length} {t('tour.stops', 'Stops')}
-            </span>
+
+            {/* Navigation Arrows Replacing Scrollbar */}
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => scrollTimeline('prev')}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 hover:bg-blue-600 border border-slate-700 text-white flex items-center justify-center text-xs sm:text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-md"
+                title="Previous Cards"
+              >
+                {i18n.language === 'ar' ? '▶' : '◀'}
+              </button>
+              <button
+                onClick={() => scrollTimeline('next')}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 hover:bg-blue-600 border border-slate-700 text-white flex items-center justify-center text-xs sm:text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-md"
+                title="Next Cards"
+              >
+                {i18n.language === 'ar' ? '◀' : '▶'}
+              </button>
+              <span className="text-[10px] sm:text-xs text-slate-400 font-extrabold bg-slate-800 px-2.5 py-1 rounded-full border border-slate-700 ml-1">
+                {locations.length} {t('tour.stops', 'Stops')}
+              </span>
+            </div>
           </div>
 
           <div
             ref={timelineRef}
-            className="flex items-center gap-2.5 sm:gap-3.5 overflow-x-auto pb-2 pt-1 px-1 scrollbar-thin scrollbar-thumb-blue-500/40 snap-x snap-mandatory"
+            className="flex items-center gap-2.5 sm:gap-3.5 overflow-x-auto py-2 px-1 scrollbar-none snap-x snap-mandatory [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {locations.map((loc, idx) => {
               const isActive = activeLocationIndex === idx;
