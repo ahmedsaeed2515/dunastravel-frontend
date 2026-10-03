@@ -430,35 +430,7 @@ export default function AdvancedBooking({
                 </div>
               </div>
 
-              {/* Times */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="modal-arrival-time" className={labelStyle}>
-                    <FaClock className="text-gold-400" size={11} />
-                    {t('booking.arrivalTime', 'Arrival Time')}
-                  </label>
-                  <input
-                    id="modal-arrival-time"
-                    type="time"
-                    value={formData.arrivalTime}
-                    onChange={(e) => updateField('arrivalTime', e.target.value)}
-                    className={inputStyle}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="modal-departure-time" className={labelStyle}>
-                    <FaClock className="text-gold-400" size={11} />
-                    {t('booking.departureTime', 'Departure Time')}
-                  </label>
-                  <input
-                    id="modal-departure-time"
-                    type="time"
-                    value={formData.departureTime}
-                    onChange={(e) => updateField('departureTime', e.target.value)}
-                    className={inputStyle}
-                  />
-                </div>
-              </div>
+
 
               {/* Preferred Language */}
               <div className="relative">

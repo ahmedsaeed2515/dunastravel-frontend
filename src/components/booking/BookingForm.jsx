@@ -717,35 +717,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                 </div>
 
 
-                {/* Times */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label htmlFor="arrival-time-input" className={labelClass}>
-                      <FaClock className="text-gold-400" size={11} />
-                      {t('booking.arrivalTime', 'Arrival Time')}
-                    </label>
-                    <input
-                      id="arrival-time-input"
-                      type="time"
-                      value={b.arrivalTime}
-                      onChange={(e) => updateB('arrivalTime', e.target.value)}
-                      className={inputClass}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="departure-time-input" className={labelClass}>
-                      <FaClock className="text-gold-400" size={11} />
-                      {t('booking.departureTime', 'Departure Time')}
-                    </label>
-                    <input
-                      id="departure-time-input"
-                      type="time"
-                      value={b.departureTime}
-                      onChange={(e) => updateB('departureTime', e.target.value)}
-                      className={inputClass}
-                    />
-                  </div>
-                </div>
+
 
                 {/* Language & Activity Preferences */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

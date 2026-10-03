@@ -468,36 +468,7 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                 </div>
               </div>
 
-              {/* Times Grid */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="arrival-time-input" className={labelStyle}>
-                    <FaClock className="inline mr-1.5 text-gold-400 text-[11px]" />
-                    {t('booking.arrivalTime', 'Arrival Time')}
-                  </label>
-                  <input
-                    id="arrival-time-input"
-                    type="time"
-                    value={bookingForm.arrivalTime}
-                    onChange={(e) => updateBookingField('arrivalTime', e.target.value)}
-                    className={inputStyle}
-                  />
-                </div>
 
-                <div>
-                  <label htmlFor="departure-time-input" className={labelStyle}>
-                    <FaClock className="inline mr-1.5 text-gold-400 text-[11px]" />
-                    {t('booking.departureTime', 'Departure Time')}
-                  </label>
-                  <input
-                    id="departure-time-input"
-                    type="time"
-                    value={bookingForm.departureTime}
-                    onChange={(e) => updateBookingField('departureTime', e.target.value)}
-                    className={inputStyle}
-                  />
-                </div>
-              </div>
 
               {/* Language Selection */}
               <div className="relative">
