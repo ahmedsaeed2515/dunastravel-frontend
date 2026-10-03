@@ -1,0 +1,172 @@
+import { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaSortAmountDown, FaSortAmountUp, FaFilter, FaClock } from 'react-icons/fa';
+
+export function extractTourDays(tour) {
+  if (!tour) return 0;
+  if (typeof tour.durationDays === 'number' && tour.durationDays > 0) return tour.durationDays;
+  if (typeof tour.days === 'number' && tour.days > 0) return tour.days;
+  
+  if (Array.isArray(tour.itinerary) && tour.itinerary.length > 0) {
+    return tour.itinerary.length;
+  }
+
+  const rawVal = tour.days || tour.duration || tour.durationKey || tour.durationJsonb;
+  let str = '';
+  if (typeof rawVal === 'string') {
+    str = rawVal;
+  } else if (typeof rawVal === 'number') {
+    return rawVal;
+  } else if (rawVal && typeof rawVal === 'object') {
+    str = rawVal.en || rawVal.ar || rawVal.es || rawVal.pt || rawVal.it || Object.values(rawVal)[0] || '';
+  }
+
+  const match = str.toString().match(/\d+/);
+  if (match) {
+    return parseInt(match[0], 10);
+  }
+
+  return 0;
+}
+
+export default function DurationSortFilter({ tours = [], onFilterChange, className = '' }) {
+  const { t, i18n } = useTranslation();
+  const [sortOrder, setSortOrder] = useState('default'); // 'default' | 'duration-asc' | 'duration-desc'
+  const [rangeFilter, setRangeFilter] = useState('all'); // 'all' | 'short' (1-5) | 'medium' (6-9) | 'long' (10+)
+
+  const isRtl = i18n.dir() === 'rtl' || i18n.language === 'ar';
+
+  const filteredAndSortedTours = useMemo(() => {
+    if (!Array.isArray(tours)) return [];
+    
+    // 1. Filter by duration range
+    let result = tours.filter((tour) => {
+      const days = extractTourDays(tour);
+      if (rangeFilter === 'short') return days > 0 && days <= 5;
+      if (rangeFilter === 'medium') return days >= 6 && days <= 9;
+      if (rangeFilter === 'long') return days >= 10;
+      return true;
+    });
+
+    // 2. Sort by duration
+    result = [...result].sort((a, b) => {
+      const daysA = extractTourDays(a);
+      const daysB = extractTourDays(b);
+
+      if (sortOrder === 'duration-asc') {
+        return daysA - daysB;
+      }
+      if (sortOrder === 'duration-desc') {
+        return daysB - daysA;
+      }
+      return 0; // Default order
+    });
+
+    return result;
+  }, [tours, sortOrder, rangeFilter]);
+
+  useEffect(() => {
+    if (typeof onFilterChange === 'function') {
+      onFilterChange(filteredAndSortedTours);
+    }
+  }, [filteredAndSortedTours, onFilterChange]);
+
+  return (
+    <div className={`w-full bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-xl border border-gray-200/80 dark:border-gold-500/25 rounded-2xl p-4 sm:p-5 shadow-lg shadow-black/5 transition-all duration-300 ${className}`}>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        
+        {/* Left Side: Filter Range Tabs */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 w-full md:w-auto">
+          <div className="flex items-center gap-2 text-xs font-bold text-gray-500 dark:text-gold-300 uppercase tracking-wider shrink-0">
+            <FaClock className="text-[#F5A623]" size={14} />
+            <span>{t('filter.duration', 'مدة الرحلة:')}</span>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={() => setRangeFilter('all')}
+              className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
+                rangeFilter === 'all'
+                  ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
+                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+              }`}
+            >
+              {t('filter.allDurations', 'الكل')}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setRangeFilter('short')}
+              className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
+                rangeFilter === 'short'
+                  ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
+                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+              }`}
+            >
+              ⚡ {t('filter.shortDurations', '1 - 5 أيام')}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setRangeFilter('medium')}
+              className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
+                rangeFilter === 'medium'
+                  ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
+                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+              }`}
+            >
+              🌟 {t('filter.mediumDurations', '6 - 9 أيام')}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setRangeFilter('long')}
+              className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
+                rangeFilter === 'long'
+                  ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
+                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+              }`}
+            >
+              👑 {t('filter.longDurations', '+10 أيام')}
+            </button>
+          </div>
+        </div>
+
+        {/* Right Side: Sorting Dropdown & Counter */}
+        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-gray-200 dark:border-white/10">
+          <div className="text-xs font-bold text-gray-500 dark:text-gray-400">
+            <span className="text-[#F5A623] font-black me-1">{filteredAndSortedTours.length}</span>
+            <span>{t('filter.toursFound', 'رحلة')}</span>
+          </div>
+
+          <div className="relative flex items-center gap-2">
+            <label htmlFor="duration-sort-select" className="sr-only">
+              {t('filter.sortBy', 'ترتيب حسب')}
+            </label>
+            <div className="relative">
+              <select
+                id="duration-sort-select"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="appearance-none bg-gray-100 dark:bg-[#061539] border border-gray-300 dark:border-gold-500/40 text-gray-900 dark:text-white text-xs font-bold rounded-xl py-2 px-3.5 pe-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0CB2DB] transition-all"
+              >
+                <option value="default">{t('filter.default', 'الترتيب الافتراضي')}</option>
+                <option value="duration-asc">{t('filter.durationAsc', 'الأقصر مدة (أقل أيام)')}</option>
+                <option value="duration-desc">{t('filter.durationDesc', 'الأطول مدة (أكثر أيام)')}</option>
+              </select>
+              <div className={`pointer-events-none absolute inset-y-0 ${isRtl ? 'left-2.5' : 'right-2.5'} flex items-center text-gray-500 dark:text-gold-400`}>
+                {sortOrder === 'duration-asc' ? (
+                  <FaSortAmountUp size={12} />
+                ) : (
+                  <FaSortAmountDown size={12} />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}

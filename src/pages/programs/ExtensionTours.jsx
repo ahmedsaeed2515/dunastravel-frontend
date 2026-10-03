@@ -7,6 +7,7 @@ import { FaChevronRight } from 'react-icons/fa';
 import { staggerContainer, fadeInUp } from '../../animations/variants';
 import TourCard from '../../components/tour/TourCard';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import DurationSortFilter from '../../components/common/DurationSortFilter';
 
 export const EXTENSION_PACKAGES = [
   {
@@ -52,6 +53,26 @@ export const EXTENSION_PACKAGES = [
 
 export default function ExtensionTours() {
   const { t } = useTranslation();
+  const [displayTours, setDisplayTours] = React.useState([]);
+
+  const adaptedTours = React.useMemo(() => {
+    return EXTENSION_PACKAGES.map((pkg) => ({
+      id: pkg.id,
+      slug: pkg.id,
+      title: t(pkg.titleKey, pkg.titleDefault),
+      overview: t(pkg.descKey, pkg.descDefault),
+      destination: t(pkg.destinationsKey, pkg.destinationsDefault),
+      duration: t(pkg.durationKey, pkg.durationDefault),
+      price: pkg.price || null,
+      rating: 5.0,
+      minPax: '2+',
+      badge: t('extensions.addOnAvailable', 'Add-on'),
+      heroImage: pkg.img,
+      images: [pkg.img],
+    }));
+  }, [t]);
+
+  const toursToRender = displayTours.length > 0 ? displayTours : adaptedTours;
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
@@ -113,8 +134,8 @@ export default function ExtensionTours() {
       </div>
 
       {/* Packages Grid */}
-      <section className="container mx-auto px-6 py-16">
-        <div className="text-center mb-14">
+      <section className="container mx-auto px-6 py-16" id="extensions-list">
+        <div className="text-center mb-10">
           <h2
             className="text-3xl md:text-4xl text-obsidian-900 font-display mb-4"
             style={{ fontFamily: "'Playfair Display', serif" }}
@@ -129,6 +150,14 @@ export default function ExtensionTours() {
           </p>
         </div>
 
+        {adaptedTours.length > 0 && (
+          <DurationSortFilter
+            tours={adaptedTours}
+            onFilterChange={setDisplayTours}
+            className="mb-8"
+          />
+        )}
+
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
           variants={staggerContainer}
@@ -136,30 +165,14 @@ export default function ExtensionTours() {
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >
-          {EXTENSION_PACKAGES.map((pkg) => {
-            const adaptedTour = {
-              id: pkg.id,
-              slug: pkg.id,
-              title: t(pkg.titleKey, pkg.titleDefault),
-              overview: t(pkg.descKey, pkg.descDefault),
-              destination: t(pkg.destinationsKey, pkg.destinationsDefault),
-              duration: t(pkg.durationKey, pkg.durationDefault),
-              price: pkg.price || null,
-              rating: 5.0,
-              minPax: '2+',
-              badge: t('extensions.addOnAvailable', 'Add-on'),
-              heroImage: pkg.img,
-              images: [pkg.img],
-            };
-            return (
-              <motion.div key={pkg.id} variants={fadeInUp}>
-                <TourCard
-                  tour={adaptedTour}
-                  linkBase="/programs/extension"
-                />
-              </motion.div>
-            );
-          })}
+          {toursToRender.map((adaptedTour) => (
+            <motion.div key={adaptedTour.id} variants={fadeInUp}>
+              <TourCard
+                tour={adaptedTour}
+                linkBase="/programs/extension"
+              />
+            </motion.div>
+          ))}
         </motion.div>
       </section>
     </div>

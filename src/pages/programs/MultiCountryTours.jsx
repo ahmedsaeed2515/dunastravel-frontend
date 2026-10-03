@@ -6,11 +6,14 @@ import { FaChevronRight } from 'react-icons/fa';
 import TourCard from '../../components/tour/TourCard';
 import { useTours } from '../../hooks/useTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import DurationSortFilter from '../../components/common/DurationSortFilter';
 
 export default function MultiCountryTours() {
   const { t } = useTranslation();
   const { tours: liveTours } = useTours({ destination: 'multi-country', limit: 70 });
+  const [filteredTours, setFilteredTours] = React.useState([]);
   const displayTours = liveTours || [];
+  const toursToRender = filteredTours.length > 0 ? filteredTours : displayTours;
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
@@ -66,7 +69,7 @@ export default function MultiCountryTours() {
       {/* Main Content Section */}
       <section className="relative min-h-screen bg-obsidian-50 pt-16 pb-20" id="multi-tours-list">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="text-display-lg text-obsidian-900 font-display font-bold mb-4">
               {t('programs.multiCountryHeading', 'باقات الرحلات المجمعة المتاحة')}
             </h2>
@@ -75,8 +78,16 @@ export default function MultiCountryTours() {
             </p>
           </div>
 
+          {displayTours.length > 0 && (
+            <DurationSortFilter
+              tours={displayTours}
+              onFilterChange={setFilteredTours}
+              className="mb-8"
+            />
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {displayTours.map((tour) => (
+            {toursToRender.map((tour) => (
               <TourCard key={tour.id} tour={tour} linkBase="/programs/multi-country" />
             ))}
           </div>

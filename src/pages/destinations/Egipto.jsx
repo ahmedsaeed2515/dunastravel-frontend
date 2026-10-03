@@ -8,6 +8,7 @@ import Button from '../../components/ui/Button';
 import TourCard from '../../components/tour/TourCard';
 import { useTours } from '../../hooks/useTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import DurationSortFilter from '../../components/common/DurationSortFilter';
 import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary';
 
 import useLandingPage from '../../hooks/useLandingPage';
@@ -79,6 +80,8 @@ export default function Egipto() {
     'انطلق في رحلة أسطورية عبر الزمن؛ استمتع بزيارة أهرامات الجيزة الخالدة، وواجهات معابد الأقصر وأسوان الملكية، وابحر في نيل مصر على متن أفخم الفنادق العائمة مع استرخاء ساحر على شواطئ البحر الأحمر.'
   );
 
+  const [display9Tours, setDisplay9Tours] = React.useState([]);
+
   return (
     <div className="w-full min-h-screen bg-obsidian-50 dark:bg-[#0c0d19] pb-24 text-start">
       <Helmet>
@@ -134,6 +137,15 @@ export default function Egipto() {
           </h2>
         </div>
 
+        {/* Filter & Sort by Duration */}
+        {baseClassic9Tours.length > 0 && (
+          <DurationSortFilter
+            tours={baseClassic9Tours}
+            onFilterChange={setDisplay9Tours}
+            className="mb-8"
+          />
+        )}
+
         {/* 9 Base Standalone Tours Grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -141,7 +153,7 @@ export default function Egipto() {
           initial="hidden"
           animate="visible"
         >
-          {baseClassic9Tours.map((tour, index) => (
+          {(display9Tours.length > 0 ? display9Tours : baseClassic9Tours).map((tour, index) => (
             <TourCard key={tour.id || tour.slug} tour={tour} index={index} />
           ))}
         </motion.div>

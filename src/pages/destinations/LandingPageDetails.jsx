@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { FaCompass, FaHotel, FaCheck, FaTimes, FaInfoCircle } from 'react-icons/fa';
 import TourCard from '../../components/tour/TourCard';
+import DurationSortFilter from '../../components/common/DurationSortFilter';
 import { useLandingPage } from '../../hooks/useLandingPage';
 import ErrorState from '../../components/ui/ErrorState';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
@@ -203,6 +204,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   const { t } = useTranslation();
   const { landingPage, loading, error, retry } = useLandingPage(slug, { destinationOnly });
   const { tours: allCatalogTours } = useTours({ limit: 70 });
+  const [displayTours, setDisplayTours] = React.useState([]);
 
   const config = DEST_FALLBACK_DATA[slug] || {};
   const effectiveLandingPage = landingPage || (config && (config.headline || config.headlineDefault) ? {
@@ -421,7 +423,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
 
       {/* Curated Destination Tours Section */}
       <section className="container mx-auto px-6 mt-12" id="tours-grid">
-        <div className="mb-10 flex items-end justify-between gap-4 border-b border-gold-500/15 pb-4">
+        <div className="mb-8 flex items-end justify-between gap-4 border-b border-gold-500/15 pb-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-gold-600 dark:text-gold-400">
               {t('destinations.experiences', 'Curated Journeys')}
@@ -435,7 +437,16 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
           </span>
         </div>
 
-        {sortedTours.length > 0 ? (
+        {/* Filter & Sort by Duration */}
+        {sortedTours.length > 0 && (
+          <DurationSortFilter
+            tours={sortedTours}
+            onFilterChange={setDisplayTours}
+            className="mb-8"
+          />
+        )}
+
+        {(displayTours.length > 0 ? displayTours : sortedTours).length > 0 ? (
           <motion.div
             className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
             variants={containerVariants}
@@ -443,7 +454,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
           >
-            {sortedTours.map((tour) => (
+            {(displayTours.length > 0 ? displayTours : sortedTours).map((tour) => (
               <TourCard
                 key={tour.id}
                 tour={{

@@ -13,6 +13,7 @@ import Button from '../../components/ui/Button';
 import TourCard from '../../components/tour/TourCard';
 import { staggerContainer, fadeInUp } from '../../animations/variants';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import DurationSortFilter from '../../components/common/DurationSortFilter';
 
 
 
@@ -20,7 +21,27 @@ export default function ReligiousTours() {
   const { t } = useTranslation();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
+  const [displayTours, setDisplayTours] = React.useState([]);
+
   const religiousPrograms = services.filter((s) => s.category === 'religious');
+  const adaptedTours = React.useMemo(() => {
+    return religiousPrograms.map((tour) => ({
+      id: tour.id,
+      slug: tour.slug,
+      title: tour.title,
+      overview: tour.shortDesc || tour.description || '',
+      destination: tour.location,
+      duration: tour.itinerary ? `${tour.itinerary.length} Days` : '',
+      price: tour.price,
+      rating: tour.rating || 5.0,
+      minPax: '2+',
+      badge: 'Religious',
+      heroImage: tour.images && tour.images[0] ? tour.images[0] : null,
+      images: tour.images || [],
+    }));
+  }, [religiousPrograms]);
+
+  const toursToRender = displayTours.length > 0 ? displayTours : adaptedTours;
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
@@ -121,40 +142,30 @@ export default function ReligiousTours() {
 
       {/* Religious Programs Grid */}
       <section className="container mx-auto px-6 pb-16">
-        {religiousPrograms.length > 0 ? (
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-50px' }}
-          >
-            {religiousPrograms.map((tour) => {
-              /* Adapt services data to TourCard interface */
-              const adaptedTour = {
-                id: tour.id,
-                slug: tour.slug,
-                title: tour.title,
-                overview: tour.shortDesc || tour.description || '',
-                destination: tour.location,
-                duration: tour.itinerary ? `${tour.itinerary.length} Days` : '',
-                price: tour.price,
-                rating: tour.rating || 5.0,
-                minPax: '2+',
-                badge: 'Religious',
-                heroImage: tour.images && tour.images[0] ? tour.images[0] : null,
-                images: tour.images || [],
-              };
-              return (
-                <motion.div key={tour.id} variants={fadeInUp}>
+        {adaptedTours.length > 0 ? (
+          <>
+            <DurationSortFilter
+              tours={adaptedTours}
+              onFilterChange={setDisplayTours}
+              className="mb-8"
+            />
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+            >
+              {toursToRender.map((adaptedTour) => (
+                <motion.div key={adaptedTour.id} variants={fadeInUp}>
                   <TourCard
                     tour={adaptedTour}
                     linkBase="/services/religious"
                   />
                 </motion.div>
-              );
-            })}
-          </motion.div>
+              ))}
+            </motion.div>
+          </>
         ) : (
           <div className="text-center py-20 bg-ivory-50 rounded-xl border border-gold-500/10 p-8 shadow-card">
             <FaSearch size={48} className="text-gold-500 mx-auto mb-4 animate-bounce" />

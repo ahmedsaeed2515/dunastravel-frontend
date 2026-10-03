@@ -6,11 +6,13 @@ import { useTours } from '../../hooks/useTours';
 import TourCard from '../../components/tour/TourCard';
 import ErrorState from '../../components/ui/ErrorState';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import DurationSortFilter from '../../components/common/DurationSortFilter';
 
 /** A catalog page backed exclusively by GET /api/tours with pagination support. */
 export default function BackendToursPage({ titleKey, titleDefault, filters = {}, limit = 12, bgImage }) {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [displayTours, setDisplayTours] = useState([]);
   const { tours, total, totalPages, page, hasNextPage, hasPrevPage, loading, error, retry } = useTours({
     limit,
     page: currentPage,
@@ -78,8 +80,16 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
           </div>
         ) : (
           <>
+            <DurationSortFilter
+              tours={tours}
+              onFilterChange={setDisplayTours}
+              className="mb-8"
+            />
+
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {tours.map((tour) => <TourCard key={tour.id} tour={tour} />)}
+              {(displayTours.length > 0 ? displayTours : tours).map((tour) => (
+                <TourCard key={tour.id} tour={tour} />
+              ))}
             </div>
 
             {/* Canonical Pagination Controls */}
