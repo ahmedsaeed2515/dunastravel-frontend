@@ -44,7 +44,31 @@ export const syncDocumentDirection = (lng) => {
   }
 };
 
-i18n.use(LanguageDetector).use(initReactI18next);
+const toTitleCase = (value) => {
+  if (typeof value !== 'string' || !value) return value;
+  if (value.startsWith('http://') || value.startsWith('https://') || (value.includes('@') && !value.includes(' '))) {
+    return value;
+  }
+  if (value.includes('<') && value.includes('>')) {
+    return value.replace(/(^|>)([^<]+)(?=<|$)/g, (_, prefix, content) => {
+      const capitalized = content.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
+      return prefix + capitalized;
+    });
+  }
+  return value.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
+};
+
+const pascalCasePostProcessor = {
+  type: 'postProcessor',
+  name: 'pascalCaseProcessor',
+  process(value) {
+    const currentLng = i18n.language || 'en';
+    if (currentLng === 'ar' || currentLng.startsWith('ar')) return value;
+    return toTitleCase(value);
+  }
+};
+
+i18n.use(pascalCasePostProcessor).use(LanguageDetector).use(initReactI18next);
 
 let initPromise = null;
 
@@ -65,6 +89,7 @@ export const initI18n = async () => {
         lng,
         interpolation: { escapeValue: false },
         keySeparator: false,
+        postProcess: ['pascalCaseProcessor'],
       });
 
       syncDocumentDirection(lng);

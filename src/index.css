@@ -1771,5 +1771,24 @@ html[dir="rtl"] .dropdown-item:hover {
   transform: translateX(-6px);
 }
 
+/* ── Global Pascal Case / Title Case (Capitalize Each Word) for Foreign Languages ── */
+html:not([dir="rtl"]) body,
+html:not([lang="ar"]) body,
+body:not(.rtl) {
+  text-transform: capitalize;
+}
+
+/* Preserve original formatting for inputs, code, email, passwords, mono fonts */
+html:not([dir="rtl"]) input,
+html:not([dir="rtl"]) textarea,
+html:not([dir="rtl"]) code,
+html:not([dir="rtl"]) pre,
+html:not([dir="rtl"]) .no-capitalize,
+html:not([dir="rtl"]) .font-mono,
+html:not([dir="rtl"]) [contenteditable="true"] {
+  text-transform: none;
+}
+
+
 
 
