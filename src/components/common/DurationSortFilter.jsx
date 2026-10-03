@@ -72,7 +72,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
   }, [filteredAndSortedTours, onFilterChange]);
 
   return (
-    <div className={`w-full bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-xl border border-gray-200/80 dark:border-gold-500/25 rounded-2xl p-4 sm:p-5 shadow-lg shadow-black/5 transition-all duration-300 ${className}`}>
+    <div className={`w-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 rounded-2xl p-4 sm:p-5 shadow-[0_4px_20px_rgba(12,28,72,0.08)] transition-all duration-300 ${className}`}>
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         
         {/* Left Side: Filter Range Tabs */}
@@ -89,7 +89,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
               className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
                 rangeFilter === 'all'
                   ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
-                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+                  : 'bg-gray-100 dark:bg-[#041446] text-gray-700 dark:text-ivory-200 hover:bg-gray-200 dark:hover:bg-[#082066]'
               }`}
             >
               {t('filter.allDurations', 'الكل')}
@@ -101,7 +101,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
               className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
                 rangeFilter === 'short'
                   ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
-                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+                  : 'bg-gray-100 dark:bg-[#041446] text-gray-700 dark:text-ivory-200 hover:bg-gray-200 dark:hover:bg-[#082066]'
               }`}
             >
               ⚡ {t('filter.shortDurations', '1 - 5 أيام')}
@@ -113,7 +113,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
               className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
                 rangeFilter === 'medium'
                   ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
-                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+                  : 'bg-gray-100 dark:bg-[#041446] text-gray-700 dark:text-ivory-200 hover:bg-gray-200 dark:hover:bg-[#082066]'
               }`}
             >
               🌟 {t('filter.mediumDurations', '6 - 9 أيام')}
@@ -125,7 +125,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
               className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
                 rangeFilter === 'long'
                   ? 'bg-gradient-to-r from-[#0CB2DB] to-[#1E3A8A] text-white shadow-md scale-105'
-                  : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20'
+                  : 'bg-gray-100 dark:bg-[#041446] text-gray-700 dark:text-ivory-200 hover:bg-gray-200 dark:hover:bg-[#082066]'
               }`}
             >
               👑 {t('filter.longDurations', '+10 أيام')}
@@ -134,8 +134,8 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
         </div>
 
         {/* Right Side: Sorting Dropdown & Counter */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-gray-200 dark:border-white/10">
-          <div className="text-xs font-bold text-gray-500 dark:text-gray-400">
+        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-gray-200 dark:border-gold-500/20">
+          <div className="text-xs font-bold text-gray-500 dark:text-ivory-300">
             <span className="text-[#F5A623] font-black me-1">{filteredAndSortedTours.length}</span>
             <span>{t('filter.toursFound', 'رحلة')}</span>
           </div>
@@ -149,7 +149,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
                 id="duration-sort-select"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="appearance-none bg-gray-100 dark:bg-[#061539] border border-gray-300 dark:border-gold-500/40 text-gray-900 dark:text-white text-xs font-bold rounded-xl py-2 px-3.5 pe-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0CB2DB] transition-all"
+                className="appearance-none bg-gray-100 dark:bg-[#041446] border border-gray-300 dark:border-gold-500/40 text-gray-900 dark:text-white text-xs font-bold rounded-xl py-2 px-3.5 pe-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0CB2DB] transition-all"
               >
                 <option value="default">{t('filter.default', 'الترتيب الافتراضي')}</option>
                 <option value="duration-asc">{t('filter.durationAsc', 'الأقصر مدة (أقل أيام)')}</option>
