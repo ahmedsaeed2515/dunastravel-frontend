@@ -6,16 +6,25 @@ const supportedLngs = ['en', 'ar', 'es', 'pt', 'it'];
 
 const toTitleCase = (value) => {
   if (typeof value !== 'string' || !value) return value;
+  if (/[\u0600-\u06FF]/.test(value)) return value;
   if (value.startsWith('http://') || value.startsWith('https://') || (value.includes('@') && !value.includes(' '))) {
     return value;
   }
-  if (value.includes('<') && value.includes('>')) {
-    return value.replace(/(^|>)([^<]+)(?=<|$)/g, (_, prefix, content) => {
-      const capitalized = content.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
+  let clean = value.replace(/^data\./i, '');
+
+  if (clean.includes('<') && clean.includes('>')) {
+    return clean.replace(/(^|>)([^<]+)(?=<|$)/g, (_, prefix, content) => {
+      const capitalized = content.replace(/\b([a-zA-Z\u00C0-\u024F])([a-zA-Z\u00C0-\u024F]*)/g, (m, first, rest) => {
+        if (m === m.toUpperCase() && m.length <= 3) return m;
+        return first.toUpperCase() + rest.toLowerCase();
+      });
       return prefix + capitalized;
     });
   }
-  return value.replace(/\b[a-z\u00C0-\u024F]/g, (c) => c.toUpperCase());
+  return clean.replace(/\b([a-zA-Z\u00C0-\u024F])([a-zA-Z\u00C0-\u024F]*)/g, (m, first, rest) => {
+    if (m === m.toUpperCase() && m.length <= 3) return m;
+    return first.toUpperCase() + rest.toLowerCase();
+  });
 };
 
 const transformObjToTitleCase = (obj) => {

@@ -189,51 +189,74 @@ const TAG_FALLBACK_DICTIONARY = {
   'Giza, Egypt': { ar: 'الجيزة، مصر', en: 'Giza, Egypt', es: 'Guiza, Egipto', pt: 'Gizé, Egito', it: 'Giza, Egitto' }
 };
 
+export function formatPascalCase(str, lang = 'en') {
+  if (typeof str !== 'string' || !str) return str;
+  const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
+  if (cleanLang === 'ar' || /[\u0600-\u06FF]/.test(str)) return str;
+  if (str.startsWith('http://') || str.startsWith('https://') || (str.includes('@') && !str.includes(' '))) {
+    return str;
+  }
+  let clean = str.replace(/^data\./i, '');
+
+  if (clean.includes('<') && clean.includes('>')) {
+    return clean.replace(/(^|>)([^<]+)(?=<|$)/g, (_, prefix, text) => {
+      const formatted = text.replace(/\b([a-zA-Z\u00C0-\u024F])([a-zA-Z\u00C0-\u024F]*)/g, (m, first, rest) => {
+        if (m === m.toUpperCase() && m.length <= 3) return m;
+        return first.toUpperCase() + rest.toLowerCase();
+      });
+      return prefix + formatted;
+    });
+  }
+
+  return clean.replace(/\b([a-zA-Z\u00C0-\u024F])([a-zA-Z\u00C0-\u024F]*)/g, (m, first, rest) => {
+    if (m === m.toUpperCase() && m.length <= 3) return m;
+    return first.toUpperCase() + rest.toLowerCase();
+  });
+}
+
 export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
   if (!val) return '';
 
   const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
 
+  let rawResult = '';
   if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
-    return val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || '';
+    rawResult = val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || '';
+  } else if (typeof val !== 'string') {
+    rawResult = String(val);
+  } else {
+    const cleanVal = val.trim();
+    const safeT = typeof t === 'function' ? t : (k) => k;
+
+    const direct = safeT(cleanVal);
+    if (direct && direct !== cleanVal && direct !== `data.${cleanVal}`) {
+      rawResult = direct;
+    } else {
+      const fallbackEntry = TAG_FALLBACK_DICTIONARY[cleanVal];
+      if (fallbackEntry) {
+        rawResult = fallbackEntry[cleanLang] || fallbackEntry[lang] || fallbackEntry.en || fallbackEntry.ar || '';
+      } else {
+        const noDataVal = cleanVal.replace(/^data\./i, '');
+        const dataPrefixed = safeT(`data.${noDataVal}`);
+        if (dataPrefixed && dataPrefixed !== `data.${noDataVal}`) {
+          rawResult = dataPrefixed;
+        } else {
+          const stripped = safeT(noDataVal);
+          if (stripped && stripped !== noDataVal) {
+            rawResult = stripped;
+          } else {
+            rawResult = noDataVal;
+          }
+        }
+      }
+    }
   }
 
-  if (typeof val !== 'string') return String(val);
-
-  const cleanVal = val.trim();
-  const safeT = typeof t === 'function' ? t : (k) => k;
-
-  const direct = safeT(cleanVal);
-  if (direct && direct !== cleanVal) return direct;
-
-  const fallbackEntry = TAG_FALLBACK_DICTIONARY[cleanVal];
-  if (fallbackEntry) {
-    return fallbackEntry[cleanLang] || fallbackEntry[lang] || fallbackEntry.en || fallbackEntry.ar || '';
+  if (typeof rawResult === 'string') {
+    rawResult = rawResult.replace(/^data\./i, '');
   }
 
-  if (!cleanVal.startsWith('data.')) {
-    const dataPrefixed = safeT(`data.${cleanVal}`);
-    if (dataPrefixed && dataPrefixed !== `data.${cleanVal}`) return dataPrefixed;
-  }
-
-  if (cleanVal.startsWith('data.')) {
-    const stripped = cleanVal.replace(/^data\./, '');
-    const translatedStripped = safeT(stripped);
-    if (translatedStripped && translatedStripped !== stripped) return translatedStripped;
-  }
-
-  if (cleanVal.startsWith('honeymooners.tag')) {
-    const egyptKey = cleanVal.replace('honeymooners.tag', 'egyptPackages.honeymooners.tag');
-    const directEgypt = safeT(egyptKey);
-    if (directEgypt && directEgypt !== egyptKey) return directEgypt;
-  }
-  if (cleanVal.startsWith('egyptPackages.honeymooners.tag')) {
-    const honeyKey = cleanVal.replace('egyptPackages.honeymooners.tag', 'honeymooners.tag');
-    const directHoney = safeT(honeyKey);
-    if (directHoney && directHoney !== honeyKey) return directHoney;
-  }
-
-  return cleanVal.startsWith('data.') ? cleanVal.replace(/^data\./, '') : cleanVal;
+  return formatPascalCase(rawResult, cleanLang);
 }
 
 function getObjectOrFallback(tour, fields) {
