@@ -1418,7 +1418,7 @@ const tradeShowItems = [
   { key: 'about.tradeShow1', title: 'FITUR', city: 'Madrid', countryCode: 'spain', fallbackEmoji: '🇪🇸', icon: FaGlobeEurope },
   { key: 'about.tradeShow2', title: 'B-TRAVEL', city: 'Barcelona', countryCode: 'spain', fallbackEmoji: '🇪🇸', icon: FaStoreAlt },
   { key: 'about.tradeShow3', title: 'EXPO MÉXICO', city: 'Mexico City', countryCode: 'mexico', fallbackEmoji: '🇲🇽', icon: FaGlobeAmericas },
-  { key: 'about.tradeShow4', title: 'WTM LATAM', city: 'São Paulo', countryCode: 'brazil', fallbackEmoji: '🇧🇷', icon: FaGlobeAmericas },
+  { key: 'about.tradeShow4', title: 'WTM LATAM', city: 'Brazil', countryCode: 'brazil', fallbackEmoji: '🇧🇷', icon: FaGlobeAmericas },
   { key: 'about.tradeShow5', title: 'FIT', city: 'Buenos Aires', countryCode: 'argentina', fallbackEmoji: '🇦🇷', icon: FaBuilding },
   { key: 'about.tradeShow6', title: 'BTL', city: 'Lisbon', countryCode: 'portugal', fallbackEmoji: '🇵🇹', icon: FaPlaneDeparture },
 ];
@@ -1681,9 +1681,9 @@ const About = () => {
                     <ts.icon />
                   </div>
                 </div>
-                <div className="ts-title">{t(ts.key).split('—')[0]?.trim() || ts.title}</div>
+                <div className="ts-title">{t(ts.key).split(/\s*—\s*|\s*–\s*/)[0]?.trim() || ts.title}</div>
                 <div className="ts-location">
-                  {t(ts.key).split('—')[1]?.trim() || ts.city}
+                  {t(ts.key).split(/\s*—\s*|\s*–\s*/)[1]?.trim() || ts.city}
                 </div>
               </div>
             ))}
