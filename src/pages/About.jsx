@@ -1814,19 +1814,7 @@ const About = () => {
             </div>
           ))}
         </div>
-        <div className="values-row reveal">
-          {[
-            { titleKey: 'about.val01.title', descKey: 'about.val01.desc' },
-            { titleKey: 'about.val02.title', descKey: 'about.val02.desc' },
-            { titleKey: 'about.val03.title', descKey: 'about.val03.desc' },
-            { titleKey: 'about.val04.title', descKey: 'about.val04.desc' },
-          ].map((v, i) => (
-            <div className="value-item" key={i}>
-              <div className="vt">{t(v.titleKey)}</div>
-              <div className="vd">{t(v.descKey)}</div>
-            </div>
-          ))}
-        </div>
+
       </section>
 
       {/* Team Section */}
