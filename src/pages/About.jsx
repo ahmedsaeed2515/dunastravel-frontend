@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments } from 'react-icons/fa';
+import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward } from 'react-icons/fa';
 import { useCmsBlock } from '../hooks/useCmsBlock';
 import AnimatedCounter from '../components/common/AnimatedCounter';
 import TeamSection from '../components/about/TeamSection';
@@ -572,37 +572,84 @@ const styles = `
     font-family: var(--mono);
   }
   .about-page .inst-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: rgba(14, 42, 82, .12);
-    border: 1px solid rgba(14, 42, 82, .12);
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    background: transparent !important;
+    border: none !important;
   }
-  .about-page .inst-cell {
-    background: var(--ivory);
-    padding: 34px 32px;
+  html:not(.dark) .about-page .inst-cell {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.16) !important;
+    border-radius: 14px !important;
+    padding: 30px 22px !important;
+    box-shadow: 0 8px 24px rgba(28, 69, 135, 0.07) !important;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  html:not(.dark) .about-page .inst-cell:hover {
+    transform: translateY(-6px) !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 16px 36px rgba(201, 162, 39, 0.2) !important;
+  }
+  .about-page .inst-icon-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 18px;
+    transition: all 0.3s ease;
+  }
+  html:not(.dark) .about-page .inst-icon-badge {
+    background: rgba(30, 64, 175, 0.08);
+    color: #1E40AF;
+    border: 1px solid rgba(30, 64, 175, 0.2);
+  }
+  .dark .about-page .inst-icon-badge {
+    background: rgba(232, 203, 114, 0.12);
+    color: #E8CB72;
+    border: 1px solid rgba(232, 203, 114, 0.3);
+  }
+  .about-page .inst-cell:hover .inst-icon-badge {
+    transform: scale(1.1) rotate(4deg);
+  }
+  html:not(.dark) .about-page .inst-cell:hover .inst-icon-badge {
+    background: rgba(201, 162, 39, 0.15);
+    color: #C9A227;
+    border-color: #C9A227;
+  }
+  .dark .about-page .inst-cell:hover .inst-icon-badge {
+    background: rgba(232, 203, 114, 0.25);
+    color: #FFFFFF;
+    border-color: #E8CB72;
   }
   .about-page .inst-cell .ic-label {
     font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .12em;
+    font-size: 12px !important;
+    letter-spacing: 0.1em !important;
     text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 600;
-    margin-bottom: 10px;
+    color: #1E40AF;
+    font-weight: 800 !important;
+    margin-bottom: 8px !important;
   }
   .about-page .inst-cell h4 {
     font-family: var(--display);
-    font-size: 23px;
-    color: var(--navy-deep);
-    font-weight: 500;
-    margin-bottom: 6px;
+    font-size: 22px !important;
+    color: #0E2A52;
+    font-weight: 800 !important;
+    line-height: 1.25 !important;
+    margin-bottom: 10px !important;
   }
   .about-page .inst-cell p {
-    font-size: 13.5px;
-    color: var(--ink-soft);
-    line-height: 1.65;
-    font-weight: 300;
+    font-size: 14.5px !important;
+    color: #1E293B !important;
+    line-height: 1.65 !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
   }
   .about-page .quote-block {
     margin-top: 60px;
@@ -646,8 +693,20 @@ const styles = `
   html:not(.dark) .about-page #institutional .section-head .eyebrow,
   html:not(.dark) .about-page #institutional .ic-label.eyebrow {
     color: #1E40AF !important;
-    font-weight: 700 !important;
+    font-weight: 800 !important;
     letter-spacing: 0.22em !important;
+  }
+  html:not(.dark) .about-page #institutional .inst-cell .ic-label {
+    color: #1E40AF !important;
+    font-weight: 800 !important;
+  }
+  html:not(.dark) .about-page #institutional .inst-cell h4 {
+    color: #0E2A52 !important;
+    font-weight: 800 !important;
+  }
+  html:not(.dark) .about-page #institutional .inst-cell p {
+    color: #1E293B !important;
+    font-weight: 600 !important;
   }
   html:not(.dark) .about-page #institutional .tradeshow-chip {
     color: #1E40AF !important;
@@ -685,27 +744,30 @@ const styles = `
   }
   .dark .about-page #institutional .inst-cell {
     background: #142238 !important;
-    border: 1px solid rgba(232, 203, 114, 0.25) !important;
-    border-radius: 8px !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
-    padding: 34px 32px !important;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.35) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    padding: 30px 22px !important;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
   .dark .about-page #institutional .inst-cell:hover {
-    transform: translateY(-4px) !important;
-    border-color: var(--gold-light) !important;
-    box-shadow: 0 12px 32px rgba(201, 162, 39, 0.2) !important;
+    transform: translateY(-6px) !important;
+    border-color: #E8CB72 !important;
+    box-shadow: 0 16px 36px rgba(232, 203, 114, 0.25) !important;
   }
   .dark .about-page #institutional .inst-cell .ic-label {
-    color: var(--gold-light) !important;
-    font-weight: 700 !important;
+    color: #E8CB72 !important;
+    font-weight: 800 !important;
   }
   .dark .about-page #institutional .inst-cell h4 {
     color: #FFFFFF !important;
-    font-weight: 600 !important;
+    font-weight: 800 !important;
   }
   .dark .about-page #institutional .inst-cell p {
-    color: #CBD5E1 !important;
+    color: #F8FAFC !important;
+    font-weight: 500 !important;
   }
 
   .dark .about-page #institutional .tradeshow-chip {
@@ -974,12 +1036,14 @@ const styles = `
     opacity: 1;
     transform: none;
   }
+  @media(max-width:1024px) {
+    .about-page .inst-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  }
   @media(max-width:760px) {
     .about-page section { padding: 80px 6%; }
     .about-page .who-grid,
-    .about-page .chart-wrap,
-    .about-page .inst-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-page .inst-grid { grid-template-columns: 1fr; }
+    .about-page .chart-wrap { grid-template-columns: 1fr; gap: 40px; }
+    .about-page .inst-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
   }
 `;
 
@@ -1229,21 +1293,33 @@ const About = () => {
         </div>
         <div className="inst-grid reveal">
           <div className="inst-cell">
+            <div className="inst-icon-badge">
+              <FaAward />
+            </div>
             <div className="ic-label">{t('about.instFoundation')}</div>
             <h4>{t('about.instFoundationDate')}</h4>
             <p>{t('about.instFoundationDesc')}</p>
           </div>
           <div className="inst-cell">
+            <div className="inst-icon-badge">
+              <FaCertificate />
+            </div>
             <div className="ic-label">{t('about.instLicense')}</div>
             <h4>{t('about.instLicenseNo')}</h4>
             <p>{t('about.instLicenseDesc')}</p>
           </div>
           <div className="inst-cell">
+            <div className="inst-icon-badge">
+              <FaUsers />
+            </div>
             <div className="ic-label">{t('about.instInfra')}</div>
             <h4>{t('about.instInfraVal')}</h4>
             <p>{t('about.instInfraDesc')}</p>
           </div>
           <div className="inst-cell">
+            <div className="inst-icon-badge">
+              <FaHandshake />
+            </div>
             <div className="ic-label">{t('about.instPartnerships')}</div>
             <h4>{t('about.instPartnershipsVal')}</h4>
             <p>{t('about.instPartnershipsDesc')}</p>
