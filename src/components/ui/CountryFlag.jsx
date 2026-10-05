@@ -152,6 +152,160 @@ export const CountryFlag = ({
         </svg>
       );
 
+    case 'fr':
+    case 'france':
+      // Flag of France 🇫🇷
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of France"
+          role="img"
+        >
+          <rect width="300" height="600" fill="#002395" />
+          <rect x="300" width="300" height="600" fill="#FFFFFF" />
+          <rect x="600" width="300" height="600" fill="#ED2939" />
+        </svg>
+      );
+
+    case 'argentina':
+    case 'ar_country':
+      // Flag of Argentina 🇦🇷
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Argentina"
+          role="img"
+        >
+          <rect width="900" height="200" fill="#74ACDF" />
+          <rect y="200" width="900" height="200" fill="#FFFFFF" />
+          <rect y="400" width="900" height="200" fill="#74ACDF" />
+          <circle cx="450" cy="300" r="40" fill="#F6B40E" stroke="#855B17" strokeWidth="2" />
+        </svg>
+      );
+
+    case 'colombia':
+    case 'co':
+      // Flag of Colombia 🇨🇴
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Colombia"
+          role="img"
+        >
+          <rect width="900" height="300" fill="#FCD116" />
+          <rect y="300" width="900" height="150" fill="#003893" />
+          <rect y="450" width="900" height="150" fill="#CE1126" />
+        </svg>
+      );
+
+    case 'mexico':
+    case 'mx':
+      // Flag of Mexico 🇲🇽
+      return (
+        <svg
+          viewBox="0 0 900 514"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Mexico"
+          role="img"
+        >
+          <rect width="300" height="514" fill="#006847" />
+          <rect x="300" width="300" height="514" fill="#FFFFFF" />
+          <rect x="600" width="300" height="514" fill="#CE1126" />
+          <circle cx="450" cy="257" r="35" fill="#8B5A2B" />
+        </svg>
+      );
+
+    case 'peru':
+    case 'pe':
+      // Flag of Peru 🇵🇪
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Peru"
+          role="img"
+        >
+          <rect width="300" height="600" fill="#D91023" />
+          <rect x="300" width="300" height="600" fill="#FFFFFF" />
+          <rect x="600" width="300" height="600" fill="#D91023" />
+        </svg>
+      );
+
+    case 'ecuador':
+    case 'ec':
+      // Flag of Ecuador 🇪🇨
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Ecuador"
+          role="img"
+        >
+          <rect width="900" height="300" fill="#FFD100" />
+          <rect y="300" width="900" height="150" fill="#0033A0" />
+          <rect y="450" width="900" height="150" fill="#DA291C" />
+          <circle cx="450" cy="300" r="30" fill="#0033A0" stroke="#FFD100" strokeWidth="2" />
+        </svg>
+      );
+
+    case 'chile':
+    case 'cl':
+      // Flag of Chile 🇨🇱
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Chile"
+          role="img"
+        >
+          <rect width="900" height="300" fill="#FFFFFF" />
+          <rect y="300" width="900" height="300" fill="#D62718" />
+          <rect width="300" height="300" fill="#0039A6" />
+          <polygon points="150,75 170,135 230,135 180,170 200,230 150,190 100,230 120,170 70,135 130,135" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'panama':
+    case 'pa':
+      // Flag of Panama 🇵🇦
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Panama"
+          role="img"
+        >
+          <rect width="450" height="300" fill="#FFFFFF" />
+          <rect x="450" width="450" height="300" fill="#DA121A" />
+          <rect y="300" width="450" height="300" fill="#072357" />
+          <rect x="450" y="300" width="450" height="300" fill="#FFFFFF" />
+          <polygon points="225,90 235,120 265,120 240,140 250,170 225,150 200,170 210,140 185,120 215,120" fill="#072357" />
+          <polygon points="675,390 685,420 715,420 690,440 700,470 675,450 650,470 660,440 635,420 665,420" fill="#DA121A" />
+        </svg>
+      );
+
+    case 'costa_rica':
+    case 'costarica':
+    case 'cr':
+      // Flag of Costa Rica 🇨🇷
+      return (
+        <svg
+          viewBox="0 0 900 600"
+          className={`inline-block rounded-[2px] shadow-sm shrink-0 object-cover ${className}`}
+          aria-label="Flag of Costa Rica"
+          role="img"
+        >
+          <rect width="900" height="100" fill="#002B7F" />
+          <rect y="100" width="900" height="100" fill="#FFFFFF" />
+          <rect y="200" width="900" height="200" fill="#CE1126" />
+          <rect y="400" width="900" height="100" fill="#FFFFFF" />
+          <rect y="500" width="900" height="100" fill="#002B7F" />
+        </svg>
+      );
+
     default:
       if (fallbackEmoji) {
         return (

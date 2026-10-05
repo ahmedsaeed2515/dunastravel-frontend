@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe } from 'react-icons/fa';
+import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments } from 'react-icons/fa';
 import { useCmsBlock } from '../hooks/useCmsBlock';
 import AnimatedCounter from '../components/common/AnimatedCounter';
 import TeamSection from '../components/about/TeamSection';
+import CountryFlag from '../components/ui/CountryFlag';
 
 const styles = `
   :root {
@@ -297,45 +298,120 @@ const styles = `
     font-weight: 500 !important;
   }
   .about-page .presence-box {
-    background: var(--navy-deep);
+    background: linear-gradient(145deg, #0A1C38 0%, #0E2A52 100%);
     color: var(--ivory);
-    padding: 40px 34px;
-    border-radius: 3px;
+    padding: 34px 28px;
+    border-radius: 16px;
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(232, 203, 114, 0.25);
+    box-shadow: 0 12px 36px rgba(10, 28, 56, 0.4);
   }
-  .about-page .presence-box::after {
-    content: '';
-    position: absolute;
-    right: -40px;
-    top: -40px;
-    width: 160px;
-    height: 160px;
-    border: 1px solid var(--line);
-    border-radius: 50%;
+  .about-page .presence-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid rgba(232, 203, 114, 0.2);
+    padding-bottom: 14px;
+  }
+  .about-page .presence-main-icon {
+    font-size: 24px;
+    color: var(--gold-light);
   }
   .about-page .presence-box h3 {
     font-family: var(--display);
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--gold-light);
-    margin-bottom: 18px;
+    margin: 0;
+    letter-spacing: 0.02em;
   }
-  .about-page .presence-list { display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 1; }
-  .about-page .presence-row {
+  .about-page .presence-cards-grid {
     display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 10px;
-    font-size: 14px;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
   }
-  .about-page .presence-row .k {
-    color: rgba(248, 243, 230, .55);
-    font-size: 11px;
-    letter-spacing: .08em;
+  .about-page .presence-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(232, 203, 114, 0.15);
+    border-radius: 12px;
+    padding: 16px 18px;
+    transition: all 0.3s ease;
+  }
+  .about-page .presence-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+  .about-page .presence-card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .about-page .card-icon-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    color: var(--gold-light);
+    background: linear-gradient(135deg, rgba(232, 203, 114, 0.22) 0%, rgba(201, 162, 39, 0.08) 100%);
+    border: 1px solid rgba(232, 203, 114, 0.35);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+  .about-page .presence-card:hover .card-icon-badge {
+    transform: scale(1.1) rotate(4deg);
+    border-color: var(--gold-light);
+    background: linear-gradient(135deg, rgba(232, 203, 114, 0.35) 0%, rgba(201, 162, 39, 0.18) 100%);
+    box-shadow: 0 6px 16px rgba(232, 203, 114, 0.3);
+  }
+  .about-page .presence-card-head h4 {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
+    color: var(--ivory);
+    margin: 0;
   }
-  .about-page .presence-row .v { font-weight: 400; text-align: right; max-width: 62%; }
+  .about-page .presence-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .about-page .p-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(232, 203, 114, 0.09);
+    border: 1px solid rgba(232, 203, 114, 0.22);
+    color: #F8F3E6;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    cursor: default;
+  }
+  .about-page .p-badge:hover {
+    background: rgba(232, 203, 114, 0.22);
+    border-color: var(--gold-light);
+    transform: scale(1.04);
+    color: #FFFFFF;
+  }
+  .about-page .flag-emoji {
+    font-size: 15px;
+    line-height: 1;
+  }
   /* Stats Strip Card Styling - Light & Dark Mode */
   .about-page .stats-strip {
     display: grid !important;
@@ -1021,23 +1097,6 @@ const About = () => {
           </svg>
         </div>
 
-        <div className="hero-stats">
-          {[
-            { count: 17, suffix: '+', icon: FaCalendarAlt, labelKey: 'about.heroStatsYears' },
-            { count: 95654, suffix: '+', icon: FaSuitcase, labelKey: 'about.heroStatsTravelers' },
-            { count: 438, suffix: '+', icon: FaUsers, labelKey: 'about.heroStatsEmployees' },
-            { count: 182, suffix: '+', icon: FaMapMarkedAlt, labelKey: 'about.heroStatsGuides' },
-            { count: 5, suffix: '', icon: FaGlobe, labelKey: 'about.heroStatsOffices' },
-          ].map((s, i) => (
-            <div key={i}>
-              <s.icon className="stat-icon" />
-              <div className="num">
-                <AnimatedCounter value={s.count} suffix={s.suffix} />
-              </div>
-              <div className="lbl">{t(s.labelKey)}</div>
-            </div>
-          ))}
-        </div>
 
         <div className="scroll-cue"><span>{t('about.heroScroll')}</span><div className="line"></div></div>
       </header>
@@ -1065,12 +1124,60 @@ const About = () => {
             </div>
           </div>
           <div className="presence-box reveal">
-            <h3>{t('about.presenceTitle')}</h3>
-            <div className="presence-list">
-              <div className="presence-row"><span className="k">{t('about.presenceSales')}</span><span className="v">{t('about.presenceSalesVal')}</span></div>
-              <div className="presence-row"><span className="k">{t('about.presenceNetwork')}</span><span className="v">{t('about.presenceNetworkVal')}</span></div>
-              <div className="presence-row"><span className="k">&nbsp;</span><span className="v">{t('about.presenceNetworkVal2')}</span></div>
-              <div className="presence-row"><span className="k">{t('about.presenceLanguages')}</span><span className="v">{t('about.presenceLanguagesVal')}</span></div>
+            <div className="presence-header">
+              <FaGlobeAmericas className="presence-main-icon" />
+              <h3>{t('about.presenceTitle')}</h3>
+            </div>
+            <div className="presence-cards-grid">
+              <div className="presence-card">
+                <div className="presence-card-head">
+                  <div className="card-icon-badge">
+                    <FaStoreAlt />
+                  </div>
+                  <h4>{t('about.presenceSales')}</h4>
+                </div>
+                <div className="presence-badges">
+                  <span className="p-badge"><CountryFlag code="egypt" fallbackEmoji="🇪🇬" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.egypt', 'Egypt')}</span>
+                  <span className="p-badge"><CountryFlag code="spain" fallbackEmoji="🇪🇸" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.spain', 'Spain')}</span>
+                  <span className="p-badge"><CountryFlag code="italy" fallbackEmoji="🇮🇹" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.italy', 'Italy')}</span>
+                  <span className="p-badge"><CountryFlag code="brazil" fallbackEmoji="🇧🇷" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.brazil', 'Brazil')}</span>
+                </div>
+              </div>
+
+              <div className="presence-card">
+                <div className="presence-card-head">
+                  <div className="card-icon-badge">
+                    <FaNetworkWired />
+                  </div>
+                  <h4>{t('about.presenceNetwork')}</h4>
+                </div>
+                <div className="presence-badges">
+                  <span className="p-badge"><CountryFlag code="argentina" fallbackEmoji="🇦🇷" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.argentina', 'Argentina')}</span>
+                  <span className="p-badge"><CountryFlag code="colombia" fallbackEmoji="🇨🇴" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.colombia', 'Colombia')}</span>
+                  <span className="p-badge"><CountryFlag code="mexico" fallbackEmoji="🇲🇽" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.mexico', 'Mexico')}</span>
+                  <span className="p-badge"><CountryFlag code="peru" fallbackEmoji="🇵🇪" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.peru', 'Peru')}</span>
+                  <span className="p-badge"><CountryFlag code="ecuador" fallbackEmoji="🇪🇨" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.ecuador', 'Ecuador')}</span>
+                  <span className="p-badge"><CountryFlag code="chile" fallbackEmoji="🇨🇱" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.chile', 'Chile')}</span>
+                  <span className="p-badge"><CountryFlag code="panama" fallbackEmoji="🇵🇦" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.panama', 'Panama')}</span>
+                  <span className="p-badge"><CountryFlag code="costa_rica" fallbackEmoji="🇨🇷" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.country.costaRica', 'Costa Rica')}</span>
+                </div>
+              </div>
+
+              <div className="presence-card">
+                <div className="presence-card-head">
+                  <div className="card-icon-badge">
+                    <FaComments />
+                  </div>
+                  <h4>{t('about.presenceLanguages')}</h4>
+                </div>
+                <div className="presence-badges">
+                  <span className="p-badge"><CountryFlag code="spain" fallbackEmoji="🇪🇸" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.lang.spanish', 'Spanish')}</span>
+                  <span className="p-badge"><CountryFlag code="portugal" fallbackEmoji="🇵🇹" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.lang.portuguese', 'Portuguese')}</span>
+                  <span className="p-badge"><CountryFlag code="en" fallbackEmoji="🇬🇧" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.lang.english', 'English')}</span>
+                  <span className="p-badge"><CountryFlag code="italy" fallbackEmoji="🇮🇹" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.lang.italian', 'Italian')}</span>
+                  <span className="p-badge"><CountryFlag code="france" fallbackEmoji="🇫🇷" className="w-4.5 h-3 rounded-[2px] shadow-sm" /> {t('about.lang.french', 'French')}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
