@@ -1414,14 +1414,7 @@ const chartData = [
   { year: '2024', value: '95,654', pct: 100 },
 ];
 
-const tradeShowItems = [
-  { key: 'about.tradeShow1', title: 'FITUR', city: 'Madrid', countryCode: 'spain', fallbackEmoji: '🇪🇸', icon: FaGlobeEurope },
-  { key: 'about.tradeShow2', title: 'B-TRAVEL', city: 'Barcelona', countryCode: 'spain', fallbackEmoji: '🇪🇸', icon: FaStoreAlt },
-  { key: 'about.tradeShow3', title: 'EXPO MÉXICO', city: 'Mexico City', countryCode: 'mexico', fallbackEmoji: '🇲🇽', icon: FaGlobeAmericas },
-  { key: 'about.tradeShow4', title: 'WTM LATAM', city: 'Brazil', countryCode: 'brazil', fallbackEmoji: '🇧🇷', icon: FaGlobeAmericas },
-  { key: 'about.tradeShow5', title: 'FIT', city: 'Buenos Aires', countryCode: 'argentina', fallbackEmoji: '🇦🇷', icon: FaBuilding },
-  { key: 'about.tradeShow6', title: 'BTL', city: 'Lisbon', countryCode: 'portugal', fallbackEmoji: '🇵🇹', icon: FaPlaneDeparture },
-];
+
 
 const About = () => {
   const { t } = useTranslation();
@@ -1663,32 +1656,7 @@ const About = () => {
           ))}
         </div>
 
-        {/* International Trade Shows Showcase */}
-        <div className="tradeshows-section reveal">
-          <div className="tradeshows-header">
-            <div className="eyebrow" style={{ color: 'var(--royal)' }}>
-              {t('about.instTradeShows', 'ANNUAL PRESENCE IN INTERNATIONAL TRADE SHOWS')}
-            </div>
-          </div>
-          <div className="tradeshows-grid">
-            {tradeShowItems.map((ts, idx) => (
-              <div className="ts-card" key={idx}>
-                <div className="ts-card-top">
-                  <div className="ts-flag-badge">
-                    <CountryFlag code={ts.countryCode} fallbackEmoji={ts.fallbackEmoji} className="w-5 h-3.5 rounded-[3px] shadow-sm" />
-                  </div>
-                  <div className="ts-icon-badge">
-                    <ts.icon />
-                  </div>
-                </div>
-                <div className="ts-title">{t(ts.key).split(/\s*—\s*|\s*–\s*/)[0]?.trim() || ts.title}</div>
-                <div className="ts-location">
-                  {t(ts.key).split(/\s*—\s*|\s*–\s*/)[1]?.trim() || ts.city}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
         {/* Executive Quote Card */}
         <div className="executive-quote-card reveal">
