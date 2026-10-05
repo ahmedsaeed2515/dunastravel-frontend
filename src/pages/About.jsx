@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward } from 'react-icons/fa';
+import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward, FaClock, FaHeadset, FaUserTie, FaGlobeEurope, FaPlaneDeparture, FaQuoteRight } from 'react-icons/fa';
 import { useCmsBlock } from '../hooks/useCmsBlock';
 import AnimatedCounter from '../components/common/AnimatedCounter';
 import TeamSection from '../components/about/TeamSection';
@@ -223,79 +223,438 @@ const styles = `
     gap: 80px;
     align-items: start;
   }
-  .about-page .who-grid p {
-    font-size: 16.5px;
-    line-height: 1.85;
-    color: var(--ink-soft);
-    font-weight: 300;
-    margin-bottom: 20px;
+  .about-page .who-lead-box {
+    border-left: 4px solid var(--gold);
+    padding-left: 20px;
+    margin-bottom: 24px;
   }
-  .about-page .who-grid p b { color: var(--navy); font-weight: 600; }
+  html[dir="rtl"] .about-page .who-lead-box,
+  [dir="rtl"] .about-page .who-lead-box {
+    border-left: none;
+    border-right: 4px solid var(--gold);
+    padding-left: 0;
+    padding-right: 20px;
+  }
+  html:not(.dark) .about-page .who-grid p {
+    font-size: 17.5px !important;
+    line-height: 1.85 !important;
+    color: #0E1B2E !important;
+    font-weight: 500 !important;
+    margin-bottom: 20px !important;
+    letter-spacing: 0.01em !important;
+  }
+  html:not(.dark) .about-page .who-grid p b {
+    color: #1E40AF !important;
+    font-weight: 800 !important;
+  }
+  .dark .about-page .who-grid p {
+    font-size: 17.5px !important;
+    line-height: 1.85 !important;
+    color: #F8FAFC !important;
+    font-weight: 500 !important;
+    margin-bottom: 20px !important;
+    letter-spacing: 0.01em !important;
+  }
+  .dark .about-page .who-grid p b {
+    color: #E8CB72 !important;
+    font-weight: 800 !important;
+  }
   .about-page .feature-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
     margin-top: 14px;
   }
-  /* Feature Card (SPECIALISTS & OWN OPERATIONS) Light & Dark Mode */
+  /* Feature Cards & Grid in Section WHO */
+  .about-page .features-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .about-page .feature-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .about-page .feature-card-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  
+  /* Light Mode Feature Cards */
   html:not(.dark) .about-page .feature-card {
     background: #FFFFFF !important;
-    border: 1.5px solid rgba(28, 69, 135, 0.18) !important;
-    padding: 24px 22px !important;
-    border-radius: 10px !important;
-    box-shadow: 0 6px 20px rgba(28, 69, 135, 0.08) !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.16) !important;
+    padding: 22px 24px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 6px 20px rgba(28, 69, 135, 0.06) !important;
     transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease !important;
+    position: relative;
+    overflow: hidden;
   }
   html:not(.dark) .about-page .feature-card:hover {
     transform: translateY(-4px) !important;
-    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.2) !important;
+    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.18) !important;
     border-color: var(--gold) !important;
+  }
+  html:not(.dark) .about-page .ft-icon-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(28, 69, 135, 0.10) 0%, rgba(201, 162, 39, 0.12) 100%);
+    border: 1px solid rgba(28, 69, 135, 0.22);
+    color: #1E40AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: all .35s ease;
+  }
+  html:not(.dark) .about-page .feature-card:hover .ft-icon-badge {
+    background: linear-gradient(135deg, #1E40AF 0%, #0E2A52 100%);
+    color: #FFFFFF;
+    border-color: var(--gold);
+    transform: scale(1.08) rotate(3deg);
   }
   html:not(.dark) .about-page .feature-card .ftitle {
     font-family: var(--mono) !important;
     font-weight: 800 !important;
-    font-size: 13px !important;
-    letter-spacing: .08em !important;
+    font-size: 15.5px !important;
+    letter-spacing: .05em !important;
     color: #1E40AF !important;
     text-transform: uppercase !important;
-    margin-bottom: 8px !important;
+    margin: 0 !important;
   }
   html:not(.dark) .about-page .feature-card p {
-    font-size: 14px !important;
-    color: #1E293B !important;
+    font-size: 15.5px !important;
+    color: #0F172A !important;
     margin: 0 !important;
-    line-height: 1.65 !important;
-    font-weight: 500 !important;
+    line-height: 1.7 !important;
+    font-weight: 600 !important;
   }
 
+  /* Dark Mode Feature Cards */
   .dark .about-page .feature-card {
-    background: #142238 !important;
-    border: 1.5px solid rgba(232, 203, 114, 0.35) !important;
-    padding: 24px 22px !important;
-    border-radius: 10px !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    background: linear-gradient(145deg, #142238 0%, #0E1B2E 100%) !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.3) !important;
+    padding: 22px 24px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
     transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease !important;
+    position: relative;
+    overflow: hidden;
   }
   .dark .about-page .feature-card:hover {
     transform: translateY(-4px) !important;
-    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
+    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.22) !important;
     border-color: #E8CB72 !important;
+  }
+  .dark .about-page .ft-icon-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(232, 203, 114, 0.16) 0%, rgba(201, 162, 39, 0.06) 100%);
+    border: 1px solid rgba(232, 203, 114, 0.35);
+    color: #E8CB72;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: all .35s ease;
+  }
+  .dark .about-page .feature-card:hover .ft-icon-badge {
+    background: linear-gradient(135deg, #E8CB72 0%, #C9A227 100%);
+    color: #081830;
+    border-color: #E8CB72;
+    transform: scale(1.08) rotate(3deg);
   }
   .dark .about-page .feature-card .ftitle {
     font-family: var(--mono) !important;
     font-weight: 800 !important;
-    font-size: 13px !important;
-    letter-spacing: .08em !important;
+    font-size: 15.5px !important;
+    letter-spacing: .05em !important;
     color: #E8CB72 !important;
     text-transform: uppercase !important;
-    margin-bottom: 8px !important;
+    margin: 0 !important;
   }
   .dark .about-page .feature-card p {
-    font-size: 14px !important;
+    font-size: 15.5px !important;
     color: #F8FAFC !important;
     margin: 0 !important;
-    line-height: 1.65 !important;
+    line-height: 1.7 !important;
+    font-weight: 600 !important;
+  }
+
+  /* 24/7 Special Card Highlights */
+  html:not(.dark) .about-page .service-247-card {
+    background: linear-gradient(135deg, #FFFDF5 0%, #F4F7FC 100%) !important;
+    border: 1.5px solid rgba(201, 162, 39, 0.45) !important;
+  }
+  .dark .about-page .service-247-card {
+    background: linear-gradient(135deg, #182B46 0%, #0D192B 100%) !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.5) !important;
+  }
+
+  .about-page .live-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #15803D;
+    letter-spacing: 0.05em;
+  }
+  .dark .about-page .live-status-pill {
+    background: rgba(34, 197, 94, 0.18);
+    border-color: rgba(34, 197, 94, 0.45);
+    color: #4ADE80;
+  }
+  .about-page .pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22C55E;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    animation: pulseGlow 1.8s infinite;
+  }
+  @keyframes pulseGlow {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+  }
+
+  /* Trade Shows & Executive Quote Showcase in Section WHO */
+  .about-page .tradeshows-section {
+    margin-top: 56px;
+    border-top: 1px solid var(--line);
+    padding-top: 48px;
+  }
+  .about-page .tradeshows-header {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .about-page .tradeshows-grid {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  /* Light Mode Trade Show Cards */
+  html:not(.dark) .about-page .ts-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.15) !important;
+    border-radius: 14px !important;
+    padding: 20px 18px !important;
+    box-shadow: 0 6px 20px rgba(28, 69, 135, 0.06) !important;
+    transition: all 0.35s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    position: relative;
+    overflow: hidden;
+  }
+  html:not(.dark) .about-page .ts-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 14px 32px rgba(201, 162, 39, 0.22) !important;
+  }
+  html:not(.dark) .about-page .ts-flag-badge {
+    display: flex;
+    align-items: center;
+  }
+  html:not(.dark) .about-page .ts-icon-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(30, 64, 175, 0.08);
+    border: 1px solid rgba(30, 64, 175, 0.2);
+    color: #1E40AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: all 0.35s ease;
+  }
+  html:not(.dark) .about-page .ts-card:hover .ts-icon-badge {
+    background: linear-gradient(135deg, #1E40AF 0%, #0E2A52 100%);
+    color: #FFFFFF;
+    border-color: var(--gold);
+    transform: scale(1.1) rotate(4deg);
+  }
+  html:not(.dark) .about-page .ts-card .ts-title {
+    font-family: var(--mono) !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #0E2A52 !important;
+    margin-top: 16px !important;
+    letter-spacing: 0.04em !important;
+  }
+  html:not(.dark) .about-page .ts-card .ts-location {
+    font-size: 13.5px !important;
+    color: #1E40AF !important;
+    font-weight: 700 !important;
+    margin-top: 4px !important;
+  }
+
+  /* Dark Mode Trade Show Cards */
+  .dark .about-page .ts-card {
+    background: linear-gradient(145deg, #142238 0%, #0E1B2E 100%) !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.3) !important;
+    border-radius: 14px !important;
+    padding: 20px 18px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+    transition: all 0.35s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    position: relative;
+    overflow: hidden;
+  }
+  .dark .about-page .ts-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: #E8CB72 !important;
+    box-shadow: 0 14px 32px rgba(232, 203, 114, 0.25) !important;
+  }
+  .dark .about-page .ts-icon-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(232, 203, 114, 0.12);
+    border: 1px solid rgba(232, 203, 114, 0.3);
+    color: #E8CB72;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: all 0.35s ease;
+  }
+  .dark .about-page .ts-card:hover .ts-icon-badge {
+    background: linear-gradient(135deg, #E8CB72 0%, #C9A227 100%);
+    color: #081830;
+    border-color: #E8CB72;
+    transform: scale(1.1) rotate(4deg);
+  }
+  .dark .about-page .ts-card .ts-title {
+    font-family: var(--mono) !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    margin-top: 16px !important;
+    letter-spacing: 0.04em !important;
+  }
+  .dark .about-page .ts-card .ts-location {
+    font-size: 13.5px !important;
+    color: #E8CB72 !important;
+    font-weight: 700 !important;
+    margin-top: 4px !important;
+  }
+
+  .about-page .ts-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Executive Quote Block Styling */
+  .about-page .executive-quote-card {
+    margin-top: 46px;
+    position: relative;
+    padding: 38px 44px;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: all 0.35s ease;
+  }
+  html:not(.dark) .about-page .executive-quote-card {
+    background: linear-gradient(135deg, #0A1C38 0%, #0E2A52 60%, #16386B 100%) !important;
+    color: #F8F3E6 !important;
+    border: 1.5px solid rgba(201, 162, 39, 0.4) !important;
+    box-shadow: 0 16px 40px rgba(14, 42, 82, 0.25) !important;
+  }
+  .dark .about-page .executive-quote-card {
+    background: linear-gradient(135deg, #0A1C38 0%, #142238 60%, #081830 100%) !important;
+    color: #F8F3E6 !important;
+    border: 1.5px solid rgba(232, 203, 114, 0.45) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+  .about-page .quote-icon-watermark {
+    position: absolute;
+    top: -15px;
+    right: 25px;
+    font-size: 130px;
+    color: rgba(232, 203, 114, 0.08);
+    pointer-events: none;
+    line-height: 1;
+  }
+  html[dir="rtl"] .about-page .quote-icon-watermark,
+  [dir="rtl"] .about-page .quote-icon-watermark {
+    right: auto;
+    left: 25px;
+  }
+  .about-page .executive-quote-card p {
+    font-family: var(--display) !important;
+    font-style: italic !important;
+    font-size: clamp(20px, 2.4vw, 28px) !important;
+    line-height: 1.55 !important;
+    color: #FFFFFF !important;
     font-weight: 500 !important;
+    margin: 0 0 20px 0 !important;
+    position: relative;
+    z-index: 1;
+  }
+  .about-page .quote-author-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid rgba(232, 203, 114, 0.25);
+    padding-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .about-page .quote-author-name {
+    font-family: var(--mono) !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: var(--gold-light) !important;
+  }
+  .about-page .quote-author-tag {
+    font-size: 12px !important;
+    color: rgba(248, 243, 230, 0.65) !important;
+    font-weight: 400 !important;
+  }
+
+  @media (max-width: 1200px) {
+    .about-page .tradeshows-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  }
+  @media (max-width: 768px) {
+    .about-page .tradeshows-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .about-page .executive-quote-card { padding: 28px 24px !important; }
+  }
+  @media (max-width: 480px) {
+    .about-page .tradeshows-grid { grid-template-columns: 1fr !important; }
   }
   .about-page .presence-box {
     background: linear-gradient(145deg, #0A1C38 0%, #0E2A52 100%);
@@ -1055,6 +1414,15 @@ const chartData = [
   { year: '2024', value: '95,654', pct: 100 },
 ];
 
+const tradeShowItems = [
+  { key: 'about.tradeShow1', title: 'FITUR', city: 'Madrid', countryCode: 'spain', fallbackEmoji: '🇪🇸', icon: FaGlobeEurope },
+  { key: 'about.tradeShow2', title: 'B-TRAVEL', city: 'Barcelona', countryCode: 'spain', fallbackEmoji: '🇪🇸', icon: FaStoreAlt },
+  { key: 'about.tradeShow3', title: 'EXPO MÉXICO', city: 'Mexico City', countryCode: 'mexico', fallbackEmoji: '🇲🇽', icon: FaGlobeAmericas },
+  { key: 'about.tradeShow4', title: 'WTM LATAM', city: 'São Paulo', countryCode: 'brazil', fallbackEmoji: '🇧🇷', icon: FaGlobeAmericas },
+  { key: 'about.tradeShow5', title: 'FIT', city: 'Buenos Aires', countryCode: 'argentina', fallbackEmoji: '🇦🇷', icon: FaBuilding },
+  { key: 'about.tradeShow6', title: 'BTL', city: 'Lisbon', countryCode: 'portugal', fallbackEmoji: '🇵🇹', icon: FaPlaneDeparture },
+];
+
 const About = () => {
   const { t } = useTranslation();
   const { data: cmsData } = useCmsBlock('about');
@@ -1173,17 +1541,49 @@ const About = () => {
         </div>
         <div className="who-grid">
           <div className="reveal">
-            <p dangerouslySetInnerHTML={{ __html: t('about.whoP1') }} />
+            <div className="who-lead-box">
+              <p dangerouslySetInnerHTML={{ __html: t('about.whoP1') }} />
+            </div>
             <p>{t('about.whoP2')}</p>
             <p dangerouslySetInnerHTML={{ __html: t('about.whoP3') }} />
-            <div className="feature-pair">
+            <div className="features-grid">
               <div className="feature-card">
-                <div className="ftitle">{t('about.specialistsTitle')}</div>
+                <div className="feature-card-header">
+                  <div className="feature-card-left">
+                    <div className="ft-icon-badge">
+                      <FaUserTie />
+                    </div>
+                    <div className="ftitle">{t('about.specialistsTitle')}</div>
+                  </div>
+                </div>
                 <p>{t('about.specialistsDesc')}</p>
               </div>
+
               <div className="feature-card">
-                <div className="ftitle">{t('about.ownOpsTitle')}</div>
+                <div className="feature-card-header">
+                  <div className="feature-card-left">
+                    <div className="ft-icon-badge">
+                      <FaBuilding />
+                    </div>
+                    <div className="ftitle">{t('about.ownOpsTitle')}</div>
+                  </div>
+                </div>
                 <p>{t('about.ownOpsDesc')}</p>
+              </div>
+
+              <div className="feature-card service-247-card">
+                <div className="feature-card-header">
+                  <div className="feature-card-left">
+                    <div className="ft-icon-badge">
+                      <FaHeadset />
+                    </div>
+                    <div className="ftitle">{cmsData?.service247Title || t('about.service247Title')}</div>
+                  </div>
+                  <span className="live-status-pill">
+                    <span className="pulse-dot"></span> 24/7
+                  </span>
+                </div>
+                <p>{cmsData?.service247Desc || t('about.service247Desc')}</p>
               </div>
             </div>
           </div>
@@ -1262,6 +1662,45 @@ const About = () => {
             </div>
           ))}
         </div>
+
+        {/* International Trade Shows Showcase */}
+        <div className="tradeshows-section reveal">
+          <div className="tradeshows-header">
+            <div className="eyebrow" style={{ color: 'var(--royal)' }}>
+              {t('about.instTradeShows', 'ANNUAL PRESENCE IN INTERNATIONAL TRADE SHOWS')}
+            </div>
+          </div>
+          <div className="tradeshows-grid">
+            {tradeShowItems.map((ts, idx) => (
+              <div className="ts-card" key={idx}>
+                <div className="ts-card-top">
+                  <div className="ts-flag-badge">
+                    <CountryFlag code={ts.countryCode} fallbackEmoji={ts.fallbackEmoji} className="w-5 h-3.5 rounded-[3px] shadow-sm" />
+                  </div>
+                  <div className="ts-icon-badge">
+                    <ts.icon />
+                  </div>
+                </div>
+                <div className="ts-title">{t(ts.key).split('—')[0]?.trim() || ts.title}</div>
+                <div className="ts-location">
+                  {t(ts.key).split('—')[1]?.trim() || ts.city}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Executive Quote Card */}
+        <div className="executive-quote-card reveal">
+          <div className="quote-icon-watermark">
+            <FaQuoteRight />
+          </div>
+          <p>«{t('about.instQuote', 'في دوناس ترافل جروب، نبني علاقات دائمة على أساس الثقة والتميز التشغيلي والمعرفة العميقة بالوجهة.')}»</p>
+          <div className="quote-author-meta">
+            <div className="quote-author-name">{t('about.instQuoteAuthor', 'دوناس ترافل جروب')}</div>
+            <div className="quote-author-tag">• Destination Management Company (DMC)</div>
+          </div>
+        </div>
       </section>
 
       <section className="section-dark" id="growth">
@@ -1324,18 +1763,6 @@ const About = () => {
             <h4>{t('about.instPartnershipsVal')}</h4>
             <p>{t('about.instPartnershipsDesc')}</p>
           </div>
-        </div>
-        <div style={{ marginTop: 50 }} className="reveal">
-          <div className="ic-label eyebrow" style={{ color: 'var(--royal)' }}>{t('about.instTradeShows')}</div>
-          <div className="tradeshow-row" style={{ marginTop: 18 }}>
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div className="tradeshow-chip" key={n}>{t('about.tradeShow' + n)}</div>
-            ))}
-          </div>
-        </div>
-        <div className="quote-block reveal">
-          <p>{t('about.instQuote')}</p>
-          <span>{t('about.instQuoteAuthor')}</span>
         </div>
       </section>
 
