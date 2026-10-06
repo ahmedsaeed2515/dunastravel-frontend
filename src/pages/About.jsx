@@ -585,6 +585,7 @@ const styles = `
     border-radius: 18px;
     overflow: hidden;
     transition: all 0.35s ease;
+    z-index: 1;
   }
   html:not(.dark) .about-page .executive-quote-card {
     background: linear-gradient(135deg, #0A1C38 0%, #0E2A52 60%, #16386B 100%) !important;
@@ -592,7 +593,8 @@ const styles = `
     border: 1.5px solid rgba(201, 162, 39, 0.4) !important;
     box-shadow: 0 16px 40px rgba(14, 42, 82, 0.25) !important;
   }
-  .dark .about-page .executive-quote-card {
+  .dark .about-page .executive-quote-card,
+  html.dark .about-page .executive-quote-card {
     background: linear-gradient(135deg, #0A1C38 0%, #142238 60%, #081830 100%) !important;
     color: #F8F3E6 !important;
     border: 1.5px solid rgba(232, 203, 114, 0.45) !important;
@@ -606,6 +608,12 @@ const styles = `
     color: rgba(232, 203, 114, 0.08);
     pointer-events: none;
     line-height: 1;
+    z-index: 0 !important;
+  }
+  .dark .about-page .quote-icon-watermark,
+  html.dark .about-page .quote-icon-watermark {
+    color: rgba(232, 203, 114, 0.12) !important;
+    z-index: 0 !important;
   }
   html[dir="rtl"] .about-page .quote-icon-watermark,
   [dir="rtl"] .about-page .quote-icon-watermark {
@@ -620,8 +628,16 @@ const styles = `
     color: #FFFFFF !important;
     font-weight: 500 !important;
     margin: 0 0 20px 0 !important;
-    position: relative;
-    z-index: 1;
+    position: relative !important;
+    z-index: 10 !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7) !important;
+  }
+  .dark .about-page .executive-quote-card p,
+  html.dark .about-page .executive-quote-card p {
+    color: #FFFFFF !important;
+    position: relative !important;
+    z-index: 10 !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8) !important;
   }
   .about-page .quote-author-meta {
     display: flex;
@@ -629,8 +645,8 @@ const styles = `
     gap: 16px;
     border-top: 1px solid rgba(232, 203, 114, 0.25);
     padding-top: 16px;
-    position: relative;
-    z-index: 1;
+    position: relative !important;
+    z-index: 10 !important;
   }
   .about-page .quote-author-name {
     font-family: var(--mono) !important;
@@ -1695,7 +1711,7 @@ const About = () => {
           <div className="quote-icon-watermark">
             <FaQuoteRight />
           </div>
-          <p>«{t('about.instQuote', 'في دوناس ترافل جروب، نبني علاقات دائمة على أساس الثقة والتميز التشغيلي والمعرفة العميقة بالوجهة.')}»</p>
+          <p>{t('about.instQuote', '«في دوناس ترافل جروب، نبني علاقات دائمة على أساس الثقة والتميز التشغيلي والمعرفة العميقة بالوجهة.»')}</p>
           <div className="quote-author-meta">
             <div className="quote-author-name">{t('about.instQuoteAuthor', 'دوناس ترافل جروب')}</div>
             <div className="quote-author-tag">• Destination Management Company (DMC)</div>
