@@ -605,15 +605,27 @@ const styles = `
     top: -15px;
     right: 25px;
     font-size: 130px;
-    color: rgba(232, 203, 114, 0.08);
+    color: rgba(248, 198, 48, 0.22) !important;
     pointer-events: none;
     line-height: 1;
     z-index: 0 !important;
+    filter: drop-shadow(0 0 15px rgba(248, 198, 48, 0.35));
   }
   .dark .about-page .quote-icon-watermark,
   html.dark .about-page .quote-icon-watermark {
-    color: rgba(232, 203, 114, 0.12) !important;
+    color: rgba(248, 198, 48, 0.28) !important;
     z-index: 0 !important;
+    filter: drop-shadow(0 0 18px rgba(248, 198, 48, 0.45));
+  }
+  .about-page .quote-mark-gold {
+    color: #F8C630 !important;
+    font-size: 1.35em !important;
+    font-weight: 800 !important;
+    font-family: Georgia, serif !important;
+    display: inline-block !important;
+    margin: 0 4px !important;
+    text-shadow: 0 0 12px rgba(248, 198, 48, 0.6) !important;
+    vertical-align: middle !important;
   }
   html[dir="rtl"] .about-page .quote-icon-watermark,
   [dir="rtl"] .about-page .quote-icon-watermark {
@@ -1711,7 +1723,11 @@ const About = () => {
           <div className="quote-icon-watermark">
             <FaQuoteRight />
           </div>
-          <p>{t('about.instQuote', '«في دوناس ترافل جروب، نبني علاقات دائمة على أساس الثقة والتميز التشغيلي والمعرفة العميقة بالوجهة.»')}</p>
+          <p>
+            <span className="quote-mark-gold">«</span>
+            {t('about.instQuote', 'في دوناس ترافل جروب، نبني علاقات دائمة على أساس الثقة والتميز التشغيلي والمعرفة العميقة بالوجهة.')}
+            <span className="quote-mark-gold">»</span>
+          </p>
           <div className="quote-author-meta">
             <div className="quote-author-name">{t('about.instQuoteAuthor', 'دوناس ترافل جروب')}</div>
             <div className="quote-author-tag">• Destination Management Company (DMC)</div>
