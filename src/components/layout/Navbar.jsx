@@ -439,7 +439,7 @@ const Navbar = () => {
             >
               <span className="relative z-10 flex items-center gap-1.5">
                 <span className="inline-block group-hover:animate-bounce">✈</span>
-                Tailor a Tour
+                {t('home.tailorTour', 'Tailor a Tour')}
               </span>
               <span className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
             </Link>
@@ -455,7 +455,7 @@ const Navbar = () => {
                 color: '#fff'
               }}
             >
-              ✈ Tailor
+              ✈ {t('nav.tailorShort', 'Tailor')}
             </Link>
             <button
               className={`relative group w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 shadow-sm z-50 select-none cursor-pointer outline-none overflow-hidden shrink-0 ${
@@ -617,7 +617,7 @@ const Navbar = () => {
                   className="w-full py-4 px-5 rounded-2xl text-lg font-bold flex items-center justify-center gap-3 shadow-lg"
                   style={{ background: 'linear-gradient(135deg, #FF6B35, rgb(6, 29, 93))', color: '#fff' }}
                 >
-                  ✈ {t('nav.tailorMade', 'Tailor Your Tour')}
+                  ✈ {t('home.tailorTour', 'Tailor a Tour')}
                 </Link>
 
                 {/* Mobile Language & Theme Controls */}

@@ -38,10 +38,10 @@ const SLIDE_DATA = [
 ];
 
 function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
-  const renderAnimatedWord = (word, startCharIdx = 0) => {
-    if (!word) return null;
+  const renderAnimatedWord = (text, startCharIdx = 0) => {
+    if (!text) return null;
     if (isRtl) {
-      return word.split(" ").map((w, idx) => (
+      return text.split(" ").map((w, idx) => (
         <span
           key={idx}
           className="char ar-word"
@@ -51,15 +51,39 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
         </span>
       ));
     }
-    return word.split("").map((char, index) => (
-      <span
-        key={index}
-        className="char"
-        style={{ display: 'inline-block', '--char-index': startCharIdx + index }}
-      >
-        {char === " " ? "\u00A0" : char}
-      </span>
-    ));
+
+    let globalCharIndex = startCharIdx;
+    const words = text.split(" ");
+
+    return words.map((wordStr, wordIdx) => {
+      const chars = wordStr.split("").map((char) => {
+        const charElement = (
+          <span
+            key={globalCharIndex}
+            className="char"
+            style={{ display: 'inline-block', '--char-index': globalCharIndex }}
+          >
+            {char}
+          </span>
+        );
+        globalCharIndex++;
+        return charElement;
+      });
+
+      return (
+        <span
+          key={wordIdx}
+          className="word-wrapper"
+          style={{
+            display: 'inline-block',
+            whiteSpace: 'nowrap',
+            marginRight: wordIdx < words.length - 1 ? '0.3em' : '0'
+          }}
+        >
+          {chars}
+        </span>
+      );
+    });
   };
 
   return (
