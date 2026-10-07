@@ -2126,14 +2126,47 @@ const styles = `
   .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(5) .bar-val-chip,
   .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(5) .bar-surge-tag { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.75s; }
 
+  .about-page .custom-chart-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(248, 198, 48, 0.3) transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+  .about-page .custom-chart-scroll::-webkit-scrollbar {
+    height: 4px;
+  }
+  .about-page .custom-chart-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .about-page .custom-chart-scroll::-webkit-scrollbar-thumb {
+    background: rgba(248, 198, 48, 0.35);
+    border-radius: 4px;
+  }
+
   @media(max-width:1024px) {
     .about-page .inst-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
   }
   @media(max-width:760px) {
     .about-page section { padding: 80px 6%; }
+    .about-page .growth-ultra-section { padding: 50px 3% !important; }
+    .about-page .growth-chart-showcase { padding: 16px 8px !important; border-radius: 20px !important; }
     .about-page .who-grid,
     .about-page .chart-wrap { grid-template-columns: 1fr; gap: 40px; }
     .about-page .inst-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  }
+  @media(max-width:640px) {
+    .about-page .growth-ultra-section { padding: 40px 8px !important; }
+    .about-page .growth-summary-card { padding: 16px 12px !important; }
+    .about-page .growth-chart-showcase { padding: 14px 6px !important; border-radius: 16px !important; }
+    .about-page .bar-year-lbl { padding: 2px 4px !important; font-size: 10px !important; border-radius: 6px !important; }
+    .about-page .bar-val-chip span { padding: 2px 4px !important; font-size: 9px !important; border-radius: 5px !important; }
+    .about-page .bar-surge-tag { padding: 2px 3px !important; font-size: 7.5px !important; letter-spacing: 0 !important; }
+  }
+  @media(max-width:390px) {
+    .about-page .growth-ultra-section { padding: 32px 4px !important; }
+    .about-page .growth-chart-showcase { padding: 10px 4px !important; }
+    .about-page .bar-year-lbl { padding: 1px 3px !important; font-size: 8.5px !important; }
+    .about-page .bar-val-chip span { padding: 1px 3px !important; font-size: 8px !important; }
+    .about-page .bar-surge-tag { padding: 1px 2px !important; font-size: 7px !important; }
   }
 `;
 
@@ -2467,88 +2500,91 @@ const About = () => {
           </div>
 
           {/* Metric Summary Cards */}
-          <div className="growth-summary-grid reveal grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-            <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
+          <div className="growth-summary-grid reveal grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-10 sm:mb-14">
+            <div className="growth-summary-card p-4 sm:p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-400">{t('about.growthMilestoneBase', 'Baseline Year')}</span>
-                <span className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-bold">2018</span>
+                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-amber-400">{t('about.growthMilestoneBase', 'Baseline Year')}</span>
+                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs sm:text-sm font-bold">2018</span>
               </div>
-              <div className="text-3xl font-bold font-serif text-white mb-1">
+              <div className="text-2xl sm:text-3xl font-bold font-serif text-white mb-1">
                 <AnimatedCounter value={24000} duration={2000} />
               </div>
-              <div className="text-xs text-slate-400 font-medium">{t('about.statTravelers', 'Travelers Served')}</div>
+              <div className="text-[11px] sm:text-xs text-slate-400 font-medium">{t('about.statTravelers', 'Travelers Served')}</div>
             </div>
 
-            <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden featured-surge-card text-left rtl:text-right">
+            <div className="growth-summary-card p-4 sm:p-6 rounded-2xl relative overflow-hidden featured-surge-card text-left rtl:text-right">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">{t('about.growthTotalSurge', '+298% Surge')}</span>
-                <span className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm"><FaChartLine /></span>
+                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-emerald-400">{t('about.growthTotalSurge', '+298% Surge')}</span>
+                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs sm:text-sm"><FaChartLine /></span>
               </div>
-              <div className="text-3xl font-bold font-serif text-white mb-1">
+              <div className="text-2xl sm:text-3xl font-bold font-serif text-white mb-1">
                 <AnimatedCounter value={95654} suffix="+" duration={2200} />
               </div>
-              <div className="text-xs text-slate-300 font-medium">{t('about.growthMilestonePeak', 'Record Peak (2024–2025)')}</div>
+              <div className="text-[11px] sm:text-xs text-slate-300 font-medium">{t('about.growthMilestonePeak', 'Record Peak (2024–2025)')}</div>
             </div>
 
-            <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
+            <div className="growth-summary-card p-4 sm:p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-400">17+ {t('about.heroStatsYears', 'Years')}</span>
-                <span className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm"><FaShieldAlt /></span>
+                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-400">17+ {t('about.heroStatsYears', 'Years')}</span>
+                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs sm:text-sm"><FaShieldAlt /></span>
               </div>
-              <div className="text-3xl font-bold font-serif text-white mb-1">
+              <div className="text-2xl sm:text-3xl font-bold font-serif text-white mb-1">
                 <AnimatedCounter value={100} suffix="%" duration={1800} />
               </div>
-              <div className="text-xs text-slate-400 font-medium">{t('about.metricExcellence', 'Operational Leadership')}</div>
+              <div className="text-[11px] sm:text-xs text-slate-400 font-medium">{t('about.metricExcellence', 'Operational Leadership')}</div>
             </div>
           </div>
 
           {/* Interactive Modern Growth Bar Chart */}
-          <div className="growth-chart-showcase reveal p-6 sm:p-8 md:p-12 rounded-3xl relative overflow-hidden mb-12">
+          <div className="growth-chart-showcase reveal p-2.5 xs:p-4 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl relative overflow-hidden mb-8 sm:mb-12">
             <div className="chart-grid-backdrop"></div>
             
-            <div className="chart-bars-flex flex items-end justify-between gap-3 sm:gap-4 md:gap-8 h-80 pt-10 pb-4 relative z-10">
-              {[
-                { year: '2018', num: 24000, suffix: '', pct: 28, badge: t('about.growthMilestoneBase', 'Baseline Year'), color: '#94A3B8' },
-                { year: '2019', num: 32993, suffix: '', pct: 38, badge: '+37%', color: '#60A5FA' },
-                { year: '2022', num: 66793, suffix: '', pct: 72, badge: '+102%', color: '#34D399' },
-                { year: '2023', num: 90202, suffix: '', pct: 93, badge: '+35%', color: '#FBBF24' },
-                { year: '2024–25', num: 95654, suffix: '+', pct: 100, badge: t('about.growthMilestonePeak', 'Record Peak'), color: '#F8C630', isPeak: true },
-              ].map((barItem, idx) => (
-                <div className="bar-column-lux group flex-1 flex flex-col items-center h-full justify-end relative" key={idx}>
-                  {/* Top Value Pill with Animated Counter */}
-                  <div className="bar-val-chip mb-3 opacity-95 group-hover:scale-110 group-hover:opacity-100 transition-all duration-300">
-                    <span className="text-[11px] sm:text-xs font-mono font-bold text-white px-2 sm:px-2.5 py-1 rounded-md bg-navy-deep/80 border border-amber-400/30 shadow-lg whitespace-nowrap">
-                      <AnimatedCounter value={barItem.num} suffix={barItem.suffix} duration={1800 + idx * 150} />
+            {/* Container for chart */}
+            <div className="custom-chart-scroll w-full overflow-x-auto overflow-y-hidden pb-1 pt-1 relative z-10">
+              <div className="chart-bars-flex flex items-end justify-between gap-1 xs:gap-2 sm:gap-4 md:gap-8 h-60 xs:h-72 sm:h-80 pt-6 sm:pt-10 pb-2 sm:pb-4 relative z-10 w-full min-w-0">
+                {[
+                  { year: '2018', num: 24000, suffix: '', pct: 28, badge: t('about.growthMilestoneBase', 'Baseline Year'), color: '#94A3B8' },
+                  { year: '2019', num: 32993, suffix: '', pct: 38, badge: '+37%', color: '#60A5FA' },
+                  { year: '2022', num: 66793, suffix: '', pct: 72, badge: '+102%', color: '#34D399' },
+                  { year: '2023', num: 90202, suffix: '', pct: 93, badge: '+35%', color: '#FBBF24' },
+                  { year: '2024–25', num: 95654, suffix: '+', pct: 100, badge: t('about.growthMilestonePeak', 'Record Peak'), color: '#F8C630', isPeak: true },
+                ].map((barItem, idx) => (
+                  <div className="bar-column-lux group flex-1 min-w-0 flex flex-col items-center h-full justify-end relative" key={idx}>
+                    {/* Top Value Pill with Animated Counter */}
+                    <div className="bar-val-chip mb-1.5 sm:mb-3 opacity-95 group-hover:scale-110 group-hover:opacity-100 transition-all duration-300">
+                      <span className="text-[9px] xs:text-[10px] sm:text-xs font-mono font-bold text-white px-1 xs:px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-navy-deep/80 border border-amber-400/30 shadow-lg whitespace-nowrap">
+                        <AnimatedCounter value={barItem.num} suffix={barItem.suffix} duration={1800 + idx * 150} />
+                      </span>
+                    </div>
+
+                    {/* Growth Pill Badge */}
+                    <span className="bar-surge-tag text-[7.5px] xs:text-[8.5px] sm:text-[10px] font-bold uppercase tracking-tight xs:tracking-wider px-1 sm:px-2 py-0.5 rounded-full mb-1.5 sm:mb-2 text-center max-w-full truncate" style={{ color: barItem.color, backgroundColor: `${barItem.color}20`, border: `1px solid ${barItem.color}40` }}>
+                      {barItem.badge}
                     </span>
-                  </div>
 
-                  {/* Growth Pill Badge */}
-                  <span className="bar-surge-tag text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full mb-2" style={{ color: barItem.color, backgroundColor: `${barItem.color}20`, border: `1px solid ${barItem.color}40` }}>
-                    {barItem.badge}
-                  </span>
+                    {/* Animated Growth Bar */}
+                    <div className="bar-track-wrap w-full max-w-[28px] xs:max-w-[40px] sm:max-w-[64px] bg-slate-800/40 rounded-xl sm:rounded-2xl p-0.5 sm:p-1.5 relative overflow-hidden flex items-end h-full">
+                      <div 
+                        className={`bar-pillar w-full rounded-lg sm:rounded-xl ease-out relative ${barItem.isPeak ? 'bar-peak-glowing' : ''}`}
+                        style={{ 
+                          '--bar-h': `${barItem.pct}%`, 
+                          background: barItem.isPeak 
+                            ? 'linear-gradient(180deg, #F8C630 0%, #C9A227 50%, #1E40AF 100%)' 
+                            : `linear-gradient(180deg, ${barItem.color} 0%, rgba(14, 42, 82, 0.8) 100%)`,
+                          boxShadow: `0 0 20px ${barItem.color}40`
+                        }}
+                      >
+                        <div className="bar-cap-shine"></div>
+                      </div>
+                    </div>
 
-                  {/* Animated Growth Bar */}
-                  <div className="bar-track-wrap w-full max-w-[64px] bg-slate-800/40 rounded-2xl p-1.5 relative overflow-hidden flex items-end h-full">
-                    <div 
-                      className={`bar-pillar w-full rounded-xl ease-out relative ${barItem.isPeak ? 'bar-peak-glowing' : ''}`}
-                      style={{ 
-                        '--bar-h': `${barItem.pct}%`, 
-                        background: barItem.isPeak 
-                          ? 'linear-gradient(180deg, #F8C630 0%, #C9A227 50%, #1E40AF 100%)' 
-                          : `linear-gradient(180deg, ${barItem.color} 0%, rgba(14, 42, 82, 0.8) 100%)`,
-                        boxShadow: `0 0 20px ${barItem.color}40`
-                      }}
-                    >
-                      <div className="bar-cap-shine"></div>
+                    {/* Year Label */}
+                    <div className="bar-year-lbl mt-2 sm:mt-4 font-mono font-bold text-[10px] xs:text-[11px] sm:text-sm text-slate-300 group-hover:text-amber-400 transition-colors whitespace-nowrap">
+                      {barItem.year}
                     </div>
                   </div>
-
-                  {/* Year Label */}
-                  <div className="bar-year-lbl mt-4 font-mono font-bold text-xs sm:text-sm text-slate-300 group-hover:text-amber-400 transition-colors">
-                    {barItem.year}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
