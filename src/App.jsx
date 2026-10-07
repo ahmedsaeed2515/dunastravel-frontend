@@ -290,7 +290,7 @@ function App() {
         </Suspense>
 
         <Suspense fallback={<FallbackLoader />}>
-          <Routes location={location} key={location.pathname}>
+          <Routes>
               <Route path="/" element={<Layout />}>
                 <Route
                   index
