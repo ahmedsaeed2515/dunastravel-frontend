@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward, FaClock, FaHeadset, FaUserTie, FaGlobeEurope, FaPlaneDeparture, FaQuoteRight } from 'react-icons/fa';
+import { Helmet } from 'react-helmet-async';
+import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward, FaClock, FaHeadset, FaUserTie, FaGlobeEurope, FaPlaneDeparture, FaPlaneArrival, FaBriefcase, FaUmbrellaBeach, FaQuoteRight, FaArrowRight, FaArrowLeft, FaCheckCircle, FaStar, FaRoute, FaCompass, FaShip, FaGem } from 'react-icons/fa';
 import { useCmsBlock } from '../hooks/useCmsBlock';
 import AnimatedCounter from '../components/common/AnimatedCounter';
 import TeamSection from '../components/about/TeamSection';
@@ -569,6 +570,358 @@ const styles = `
     color: #E8CB72 !important;
     font-weight: 700 !important;
     margin-top: 4px !important;
+  }
+
+  /* Section 05 — Why Choose Dunas Travel / Ultra Services Grid Styling */
+  .about-page .ultra-services-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 28px !important;
+    margin-top: 52px !important;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 1200px) {
+    .about-page .ultra-services-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 24px !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .about-page .ultra-services-grid {
+      grid-template-columns: 1fr !important;
+      gap: 20px !important;
+    }
+  }
+
+  /* Ultra Service Card Base */
+  .about-page .ultra-svc-card {
+    position: relative !important;
+    border-radius: 24px !important;
+    padding: 36px 30px 32px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    min-height: 380px !important;
+    overflow: hidden !important;
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Top Shimmering Beam on Hover */
+  .about-page .ultra-svc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #F8C630, #FFC857, transparent);
+    transition: transform 0.8s ease;
+    transform: translateX(0);
+    z-index: 10;
+  }
+
+  .about-page .ultra-svc-card:hover::before {
+    transform: translateX(50%);
+  }
+
+  /* Large Background Watermark Number */
+  .about-page .ultra-svc-card .watermark-num {
+    position: absolute;
+    top: -15px;
+    right: 15px;
+    font-family: var(--display) !important;
+    font-size: 140px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    pointer-events: none;
+    user-select: none;
+    transition: all 0.5s ease !important;
+    z-index: 0;
+  }
+
+  html[dir="rtl"] .about-page .ultra-svc-card .watermark-num,
+  [dir="rtl"] .about-page .ultra-svc-card .watermark-num {
+    right: auto;
+    left: 15px;
+  }
+
+  /* Light Mode Ultra Card Styling */
+  html:not(.dark) .about-page .ultra-svc-card {
+    background: linear-gradient(165deg, #FFFFFF 0%, #F8FAFC 100%) !important;
+    border: 1.5px solid rgba(28, 69, 135, 0.14) !important;
+    box-shadow: 0 12px 36px rgba(28, 69, 135, 0.07) !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card .watermark-num {
+    color: rgba(28, 69, 135, 0.05) !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card:hover {
+    transform: translateY(-10px) scale(1.02) !important;
+    border-color: rgba(201, 162, 39, 0.7) !important;
+    box-shadow: 0 24px 54px rgba(201, 162, 39, 0.22) !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card:hover .watermark-num {
+    color: rgba(201, 162, 39, 0.12) !important;
+    transform: scale(1.08) translateY(-5px);
+  }
+
+  /* Dark Mode Ultra Card Styling */
+  .dark .about-page .ultra-svc-card,
+  html.dark .about-page .ultra-svc-card {
+    background: linear-gradient(155deg, #13233C 0%, #081426 100%) !important;
+    border: 1.5px solid rgba(248, 198, 48, 0.28) !important;
+    box-shadow: 0 14px 42px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .dark .about-page .ultra-svc-card .watermark-num,
+  html.dark .about-page .ultra-svc-card .watermark-num {
+    color: rgba(248, 198, 48, 0.06) !important;
+  }
+
+  .dark .about-page .ultra-svc-card:hover,
+  html.dark .about-page .ultra-svc-card:hover {
+    transform: translateY(-10px) scale(1.02) !important;
+    border-color: #F8C630 !important;
+    box-shadow: 0 26px 60px rgba(248, 198, 48, 0.25) !important;
+  }
+
+  .dark .about-page .ultra-svc-card:hover .watermark-num,
+  html.dark .about-page .ultra-svc-card:hover .watermark-num {
+    color: rgba(248, 198, 48, 0.15) !important;
+    transform: scale(1.08) translateY(-5px);
+  }
+
+  /* Header inside Card */
+  .about-page .ultra-svc-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 24px !important;
+  }
+
+  .about-page .ultra-svc-num-tag {
+    font-family: var(--mono) !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.12em !important;
+    padding: 6px 14px !important;
+    border-radius: 30px !important;
+    transition: all 0.35s ease !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-num-tag {
+    background: rgba(28, 69, 135, 0.08) !important;
+    color: #1E40AF !important;
+    border: 1px solid rgba(28, 69, 135, 0.2) !important;
+  }
+
+  .dark .about-page .ultra-svc-num-tag,
+  html.dark .about-page .ultra-svc-num-tag {
+    background: rgba(248, 198, 48, 0.12) !important;
+    color: #F8C630 !important;
+    border: 1px solid rgba(248, 198, 48, 0.35) !important;
+  }
+
+  /* Glowing Expressive Icon Badge */
+  .about-page .ultra-svc-icon-box {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 26px !important;
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative;
+    z-index: 2;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-icon-box {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(201, 162, 39, 0.15) 100%) !important;
+    border: 1.5px solid rgba(30, 64, 175, 0.3) !important;
+    color: #1E40AF !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card:hover .ultra-svc-icon-box {
+    background: linear-gradient(135deg, #1E40AF 0%, #0E2A52 100%) !important;
+    color: #FFFFFF !important;
+    border-color: #C9A227 !important;
+    transform: scale(1.15) rotate(8deg) !important;
+    box-shadow: 0 10px 25px rgba(30, 64, 175, 0.35) !important;
+  }
+
+  .dark .about-page .ultra-svc-icon-box,
+  html.dark .about-page .ultra-svc-icon-box {
+    background: linear-gradient(135deg, rgba(248, 198, 48, 0.18) 0%, rgba(201, 162, 39, 0.1) 100%) !important;
+    border: 1.5px solid rgba(248, 198, 48, 0.45) !important;
+    color: #F8C630 !important;
+  }
+
+  .dark .about-page .ultra-svc-card:hover .ultra-svc-icon-box,
+  html.dark .about-page .ultra-svc-card:hover .ultra-svc-icon-box {
+    background: linear-gradient(135deg, #F8C630 0%, #C9A227 100%) !important;
+    color: #081830 !important;
+    border-color: #F8C630 !important;
+    transform: scale(1.15) rotate(8deg) !important;
+    box-shadow: 0 10px 30px rgba(248, 198, 48, 0.5) !important;
+  }
+
+  /* Title & Sub-Pill */
+  .about-page .ultra-svc-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card .ultra-svc-title {
+    font-family: var(--display) !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: #0E2A52 !important;
+    margin-bottom: 6px !important;
+    line-height: 1.25 !important;
+    transition: color 0.3s ease !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card:hover .ultra-svc-title {
+    color: #1E40AF !important;
+  }
+
+  .dark .about-page .ultra-svc-card .ultra-svc-title,
+  html.dark .about-page .ultra-svc-card .ultra-svc-title {
+    font-family: var(--display) !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    margin-bottom: 6px !important;
+    line-height: 1.25 !important;
+    transition: color 0.3s ease !important;
+  }
+
+  .dark .about-page .ultra-svc-card:hover .ultra-svc-title,
+  html.dark .about-page .ultra-svc-card:hover .ultra-svc-title {
+    color: #F8C630 !important;
+  }
+
+  .about-page .ultra-svc-tag-pill {
+    display: inline-block !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 3px 10px !important;
+    border-radius: 6px !important;
+    margin-bottom: 12px !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-tag-pill {
+    background: rgba(30, 64, 175, 0.07) !important;
+    color: #1E40AF !important;
+  }
+
+  .dark .about-page .ultra-svc-tag-pill,
+  html.dark .about-page .ultra-svc-tag-pill {
+    background: rgba(248, 198, 48, 0.1) !important;
+    color: #F8C630 !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card p {
+    font-size: 14.5px !important;
+    line-height: 1.65 !important;
+    color: #475569 !important;
+    margin-bottom: 20px !important;
+    font-weight: 500 !important;
+  }
+
+  .dark .about-page .ultra-svc-card p,
+  html.dark .about-page .ultra-svc-card p {
+    font-size: 14.5px !important;
+    line-height: 1.65 !important;
+    color: #94A3B8 !important;
+    margin-bottom: 20px !important;
+    font-weight: 400 !important;
+  }
+
+  /* Card Bottom Footer: Stats & Explore Button */
+  .about-page .ultra-svc-footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(200, 200, 200, 0.15);
+    padding-top: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .dark .about-page .ultra-svc-footer,
+  html.dark .about-page .ultra-svc-footer {
+    border-top-color: rgba(248, 198, 48, 0.2) !important;
+  }
+
+  .about-page .ultra-svc-stats-pill {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-stats-pill {
+    color: #1E40AF !important;
+  }
+
+  .dark .about-page .ultra-svc-stats-pill,
+  html.dark .about-page .ultra-svc-stats-pill {
+    color: #F8C630 !important;
+  }
+
+  .about-page .ultra-svc-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-link {
+    color: #0E2A52 !important;
+  }
+
+  html:not(.dark) .about-page .ultra-svc-card:hover .ultra-svc-link {
+    color: #1E40AF !important;
+    transform: translateX(4px);
+  }
+
+  html[dir="rtl"]:not(.dark) .about-page .ultra-svc-card:hover .ultra-svc-link,
+  [dir="rtl"]:not(.dark) .about-page .ultra-svc-card:hover .ultra-svc-link {
+    transform: translateX(-4px);
+  }
+
+  .dark .about-page .ultra-svc-link,
+  html.dark .about-page .ultra-svc-link {
+    color: #F8C630 !important;
+  }
+
+  .dark .about-page .ultra-svc-card:hover .ultra-svc-link,
+  html.dark .about-page .ultra-svc-card:hover .ultra-svc-link {
+    color: #FFE082 !important;
+    transform: translateX(4px);
+  }
+
+  html[dir="rtl"].dark .about-page .ultra-svc-card:hover .ultra-svc-link,
+  html[dir="rtl"] .dark .about-page .ultra-svc-card:hover .ultra-svc-link,
+  [dir="rtl"] .dark .about-page .ultra-svc-card:hover .ultra-svc-link {
+    transform: translateX(-4px);
   }
 
   .about-page .ts-card-top {
@@ -1824,29 +2177,86 @@ const About = () => {
         <p className="events-more reveal">{t('about.eventsMore')}</p>
       </section>
 
+      {/* Section 05 — Why Choose Dunas Travel / Ultra Services */}
       <section className="section-light" id="services">
         <div className="section-head reveal">
           <span className="eyebrow" style={{ color: 'var(--royal)' }}>{t('about.servicesEyebrow')}</span>
           <h2 dangerouslySetInnerHTML={{ __html: t('about.servicesTitle') }} />
           <div className="rule"></div>
         </div>
-        <div className="services-grid reveal">
+        
+        <div className="ultra-services-grid reveal">
           {[
-            { num: '01', titleKey: 'about.svc01.title', descKey: 'about.svc01.desc' },
-            { num: '02', titleKey: 'about.svc02.title', descKey: 'about.svc02.desc' },
-            { num: '03', titleKey: 'about.svc03.title', descKey: 'about.svc03.desc' },
-            { num: '04', titleKey: 'about.svc04.title', descKey: 'about.svc04.desc' },
-          ].map((svc, i) => (
-            <div className="svc-card" key={i}>
-              <span className="svc-num">{svc.num}</span>
-              <div>
-                <div className="svc-title">{t(svc.titleKey)}</div>
-                <p>{t(svc.descKey)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            {
+              icon: FaPlaneArrival,
+              titleKey: 'about.svc01.title',
+              descKey: 'about.svc01.desc',
+              tagKey: 'about.svc01.tag',
+              link: '/services',
+              badgeKey: 'about.svc01.badge',
+              statKey: 'about.svc01.stat'
+            },
+            {
+              icon: FaPlaneDeparture,
+              titleKey: 'about.svc02.title',
+              descKey: 'about.svc02.desc',
+              tagKey: 'about.svc02.tag',
+              link: '/destinations',
+              badgeKey: 'about.svc02.badge',
+              statKey: 'about.svc02.stat'
+            },
+            {
+              icon: FaBriefcase,
+              titleKey: 'about.svc03.title',
+              descKey: 'about.svc03.desc',
+              tagKey: 'about.svc03.tag',
+              link: '/contact',
+              badgeKey: 'about.svc03.badge',
+              statKey: 'about.svc03.stat'
+            },
+            {
+              icon: FaUmbrellaBeach,
+              titleKey: 'about.svc04.title',
+              descKey: 'about.svc04.desc',
+              tagKey: 'about.svc04.tag',
+              link: '/tours',
+              badgeKey: 'about.svc04.badge',
+              statKey: 'about.svc04.stat'
+            },
+          ].map((svc, i) => {
+            const IconComponent = svc.icon;
+            return (
+              <div className="ultra-svc-card" key={i}>
+                <div>
+                  <div className="ultra-svc-header">
+                    <span className="ultra-svc-num-tag">{t(svc.badgeKey)}</span>
+                    <div className="ultra-svc-icon-box">
+                      <IconComponent />
+                    </div>
+                  </div>
 
+                  <div className="ultra-svc-content">
+                    <div className="ultra-svc-title">{t(svc.titleKey)}</div>
+                    <span className="ultra-svc-tag-pill">{t(svc.tagKey)}</span>
+                    <p>{t(svc.descKey)}</p>
+                  </div>
+                </div>
+
+                <div className="ultra-svc-footer">
+                  <div className="ultra-svc-stats-pill">
+                    <FaCheckCircle className="text-amber-500" />
+                    <span>{t(svc.statKey)}</span>
+                  </div>
+                  <Link to={svc.link} className="ultra-svc-link">
+                    <span>{t('home.explore', 'Explore')}</span>
+                    <span className="rtl:hidden"><FaArrowRight /></span>
+                    <span className="hidden rtl:inline"><FaArrowLeft /></span>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* Team Section */}
