@@ -27,8 +27,7 @@ import {
   getTourDestinationSlug, 
   getDestinationName 
 } from '../../utils/destinationHelper';
-import api from '../../utils/api';
-import { prefetchQuery, CACHE_POLICIES } from '../../utils/apiCache';
+import { prefetchTour } from '../../hooks/useTour';
 
 const marketFlag = (market) => {
   const flags = { Brasil: '🇧🇷', Italia: '🇮🇹', Spain: '🇪🇸', Egypt: '🇪🇬' };
@@ -150,7 +149,10 @@ const TourCard = ({
   const bookNowText = t('tourCard.btnBookNow', bookNowLabels[langKey] || 'BOOK NOW');
   const perPersonText = t('tourCard.perPerson', perPersonLabels[langKey] || 'per person');
 
-  const handleCardClick = () => {
+  const handleCardClick = (e) => {
+    if (e.target.closest('a') || e.target.closest('button')) {
+      return;
+    }
     trackEvent('tour_card_click', {
       tourSlug: tour.slug,
       interfaceSlug: typeof window !== 'undefined' ? sessionStorage.getItem('dunas_origin_interface') : undefined,
@@ -167,14 +169,7 @@ const TourCard = ({
   const handlePrefetch = () => {
     const slug = tour?.slug || tour?.id;
     if (!slug) return;
-    prefetchQuery(
-      ['tour', slug, lang],
-      async () => {
-        const raw = await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`);
-        return raw;
-      },
-      { policy: CACHE_POLICIES.TOUR_DETAILS }
-    );
+    prefetchTour(slug, lang);
   };
 
   const imageLoadingAttr = loading || (index < 2 ? "eager" : "lazy");

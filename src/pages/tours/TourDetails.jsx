@@ -37,6 +37,10 @@ const TourDetails = () => {
   const { tour, loading, error } = useTour(slug);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+
+  useEffect(() => {
     if (tour?.slug) {
       trackEvent('tour_view', { tourSlug: tour.slug });
     }

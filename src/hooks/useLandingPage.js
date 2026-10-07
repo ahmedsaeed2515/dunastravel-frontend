@@ -123,6 +123,7 @@ export function useLandingPage(slug, { destinationOnly = false } = {}) {
         setLoading(false);
       }
     } else {
+      setLandingPage(null);
       setLoading(true);
     }
 

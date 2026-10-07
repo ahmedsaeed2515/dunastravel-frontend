@@ -111,6 +111,20 @@ function normalizeTour(data, lang = 'en', fallback = null) {
   };
 }
 
+export function prefetchTour(slug, lang = 'en') {
+  if (!slug) return Promise.resolve(null);
+  const normalizedLang = supportedLocale(lang);
+  const currentKey = ['tour', slug, normalizedLang];
+  return prefetchQuery(
+    currentKey,
+    async () => {
+      const raw = await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(normalizedLang)}`);
+      return normalizeTour(raw, normalizedLang);
+    },
+    { policy: CACHE_POLICIES.TOUR_DETAILS }
+  );
+}
+
 export function useTour(slug) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
@@ -119,7 +133,7 @@ export function useTour(slug) {
   const [tour, setTour] = useState(() => {
     if (!queryKey) return null;
     const cached = getCachedEntry(queryKey);
-    return cached ? cached.data : null;
+    return cached && cached.data ? normalizeTour(cached.data, lang) : null;
   });
   const [loading, setLoading] = useState(() => {
     if (!queryKey) return false;
@@ -139,12 +153,17 @@ export function useTour(slug) {
 
     const currentKey = ['tour', slug, lang];
     const cached = getCachedEntry(currentKey);
-    if (cached) {
-      setTour(cached.data);
+    if (cached && cached.data) {
+      try {
+        setTour(normalizeTour(cached.data, lang));
+      } catch {
+        setTour(cached.data);
+      }
       if (!cached.isStale) {
         setLoading(false);
       }
     } else {
+      setTour(null);
       setLoading(true);
     }
 
@@ -158,7 +177,8 @@ export function useTour(slug) {
     )
       .then((data) => {
         if (isMounted) {
-          setTour(data);
+          const normalized = normalizeTour(data, lang);
+          setTour(normalized);
           setError(null);
           setLoading(false);
         }
