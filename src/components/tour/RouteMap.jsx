@@ -1,6 +1,7 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { FaMapMarkedAlt } from 'react-icons/fa';
 import { fadeInUp } from '../../animations/variants';
 import useInViewport from '../../hooks/useInViewport';
 
@@ -855,17 +856,24 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       className="mt-12 sm:mt-16 w-full max-w-7xl mx-auto px-2 sm:px-4"
     >
       {/* Header */}
-      <div className="mb-6 sm:mb-10 text-center">
-        <span className="text-gold-600 dark:text-gold-400 font-extrabold text-[11px] sm:text-xs md:text-sm tracking-[3px] sm:tracking-[4px] uppercase block mb-2 sm:mb-3 drop-shadow-sm">
-          📍 {t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE')}
-        </span>
+      <div className="mb-6 sm:mb-10 text-center relative">
+        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/90 dark:bg-gold-500/25 border border-amber-300/70 dark:border-gold-400/50 mb-3 shadow-sm">
+          <FaMapMarkedAlt className="text-amber-800 dark:text-gold-300 text-xs" />
+          <span className="text-amber-900 dark:text-gold-300 font-black text-[11px] sm:text-xs md:text-sm tracking-[3px] sm:tracking-[4px] uppercase block">
+            {t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE')}
+          </span>
+        </div>
         <h2
-          className="text-xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white leading-snug"
+          className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 dark:text-white dark:drop-shadow-[0_2px_15px_rgba(255,255,255,0.35)] leading-snug font-display tracking-tight"
           style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
         >
-          {t('tour.routeMapTitle', 'Interactive Itinerary Map')}
+          {t('tour.routeMapTitle', 'Interactive Itinerary Journey Map')}
         </h2>
-        <div className="w-20 sm:w-28 h-1 sm:h-1.5 bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 rounded-full mx-auto mt-2.5 sm:mt-3 shadow-[0_0_12px_rgba(245,166,35,0.6)]" />
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <div className="w-16 h-1 bg-gradient-to-r from-transparent via-gold-500 to-amber-600 dark:via-gold-400 rounded-full" />
+          <div className="w-3 h-3 rounded-full bg-gold-500 dark:bg-gold-400 shadow-[0_0_12px_rgba(245,166,35,0.9)] ring-4 ring-gold-500/20" />
+          <div className="w-16 h-1 bg-gradient-to-l from-transparent via-gold-500 to-amber-600 dark:via-gold-400 rounded-full" />
+        </div>
       </div>
 
       {/* Main Map Box with Floating HUD Overlay */}

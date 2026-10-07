@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaChevronRight, FaClock, FaTag,
-  FaCheck, FaTimes, FaMapMarkerAlt, FaBed, FaCheckCircle, FaUsers
+  FaCheck, FaTimes, FaMapMarkerAlt, FaBed, FaCheckCircle, FaUsers,
+  FaCompass, FaStar, FaCalendarAlt, FaShieldAlt
 } from 'react-icons/fa';
 import { fadeInUp } from '../../animations/variants';
 import BookingForm from '../../components/booking/BookingForm';
@@ -172,9 +173,19 @@ const TourDetails = () => {
             {/* Overview */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <div className="bg-gradient-to-br from-amber-50/90 via-orange-50/90 to-amber-100/60 dark:bg-gradient-to-br dark:from-[#0b1d4b] dark:via-[#0e245e] dark:to-[#112c72] p-6 md:p-8 rounded-2xl border-2 border-gold-500/80 dark:border-gold-500/70 shadow-lg dark:shadow-[0_14px_45px_rgba(0,0,0,0.85)]">
-                <h2 className="text-display-lg text-2xl md:text-3xl font-black text-black dark:text-gold-400 mb-4" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
-                  {t('tourDetail.overview', 'Overview')}
-                </h2>
+                <div className="flex items-center gap-3.5 mb-5 pb-3.5 border-b-2 border-gold-500/30 dark:border-gold-500/40">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-gold-500 to-amber-600 dark:from-amber-300 dark:via-gold-400 dark:to-amber-500 flex items-center justify-center text-slate-950 shadow-[0_0_20px_rgba(245,166,35,0.45)] shrink-0 font-black">
+                    <FaCompass className="text-2xl text-slate-950" />
+                  </div>
+                  <div>
+                    <span className="inline-block px-3 py-0.5 rounded-md bg-amber-100/90 dark:bg-gold-500/25 text-amber-900 dark:text-gold-300 text-[11px] sm:text-xs font-black uppercase tracking-[3px] border border-amber-300/60 dark:border-gold-400/50 mb-1 shadow-sm font-sans">
+                      {t('tourDetail.aboutTourTag', 'TRIP DISCOVERY')}
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-[#FFE066] dark:drop-shadow-[0_2px_12px_rgba(255,224,102,0.45)] font-display tracking-tight" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
+                      {t('tourDetail.overview', 'Overview')}
+                    </h2>
+                  </div>
+                </div>
                 <p className="text-body-lg text-black dark:text-slate-50 font-extrabold leading-relaxed text-base md:text-lg">{overview}</p>
               </div>
             </motion.div>
@@ -188,9 +199,19 @@ const TourDetails = () => {
                 viewport={{ once: true }}
                 className="mt-16"
               >
-                <h2 className="text-display-lg text-2xl md:text-3xl font-black text-black dark:text-gold-400 mb-6" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
-                  {t('tourDetail.highlights', 'Key Highlights')}
-                </h2>
+                <div className="flex items-center gap-3.5 mb-6 pb-4 border-b-2 border-gold-500/30 dark:border-gold-500/40">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-gold-500 to-amber-600 dark:from-amber-300 dark:via-gold-400 dark:to-amber-500 flex items-center justify-center text-slate-950 shadow-[0_0_20px_rgba(245,166,35,0.45)] shrink-0 font-black">
+                    <FaStar className="text-2xl text-slate-950" />
+                  </div>
+                  <div>
+                    <span className="inline-block px-3 py-0.5 rounded-md bg-amber-100/90 dark:bg-gold-500/25 text-amber-900 dark:text-gold-300 text-[11px] sm:text-xs font-black uppercase tracking-[3px] border border-amber-300/60 dark:border-gold-400/50 mb-1 shadow-sm font-sans">
+                      {t('tourDetail.curatedHighlightsTag', 'CURATED EXPERIENCES')}
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-[#FFE066] dark:drop-shadow-[0_2px_12px_rgba(255,224,102,0.45)] font-display tracking-tight" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
+                      {t('tourDetail.highlights', 'Key Highlights')}
+                    </h2>
+                  </div>
+                </div>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {tour.highlights.map((highlight, idx) => (
                     <li key={idx} className="flex items-start gap-3 bg-gradient-to-br from-amber-50 via-orange-50/80 to-amber-100/50 dark:bg-gradient-to-br dark:from-[#0b1d4b] dark:via-[#0e245e] dark:to-[#112c72] p-5 rounded-xl shadow-md border-2 border-gold-500/70 dark:border-gold-500/70 hover:border-gold-500 dark:hover:border-gold-400 transition-all">
@@ -210,14 +231,21 @@ const TourDetails = () => {
               viewport={{ once: true }}
               className="mt-16"
             >
-              <div className="mb-10 text-center">
-                <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-[4px] font-black block mb-3 text-xs md:text-sm">
-                  {t('tour.journeyDayByDay', 'YOUR JOURNEY DAY BY DAY')}
-                </span>
-                <h2 className="text-display-lg text-3xl md:text-4xl font-black text-black dark:text-white" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
+              <div className="mb-10 text-center relative">
+                <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/90 dark:bg-gold-500/25 border border-amber-300/70 dark:border-gold-400/50 mb-3 shadow-sm">
+                  <FaCalendarAlt className="text-amber-800 dark:text-gold-300 text-xs" />
+                  <span className="text-amber-900 dark:text-gold-300 uppercase tracking-[4px] font-black text-xs sm:text-sm">
+                    {t('tour.journeyDayByDay', 'YOUR JOURNEY DAY BY DAY')}
+                  </span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white dark:drop-shadow-[0_2px_15px_rgba(255,255,255,0.35)] font-display tracking-tight" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
                   {t('tourDetail.itinerary', 'Itinerary')}
                 </h2>
-                <div className="w-24 h-1.5 bg-gold-500 dark:bg-gold-400 mx-auto mt-3 rounded-full shadow-[0_0_10px_rgba(245,166,35,0.5)]"></div>
+                <div className="flex items-center justify-center gap-2 mt-4">
+                  <div className="w-16 h-1 bg-gradient-to-r from-transparent via-gold-500 to-amber-600 dark:via-gold-400 rounded-full" />
+                  <div className="w-3 h-3 rounded-full bg-gold-500 dark:bg-gold-400 shadow-[0_0_12px_rgba(245,166,35,0.9)] ring-4 ring-gold-500/20" />
+                  <div className="w-16 h-1 bg-gradient-to-l from-transparent via-gold-500 to-amber-600 dark:via-gold-400 rounded-full" />
+                </div>
               </div>
 
               <div className="relative max-w-full">
@@ -279,14 +307,20 @@ const TourDetails = () => {
                 viewport={{ once: true }}
                 className="mt-16"
               >
-                <div className="mb-8">
-                  <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-[4px] font-black block mb-2 text-xs">
-                    {t('tourDetail.details', 'TOUR SPECIFICATIONS')}
-                  </span>
-                  <h2 className="text-display-lg text-2xl md:text-3xl text-black dark:text-white font-display font-black" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
+                <div className="mb-8 relative">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/90 dark:bg-gold-500/25 border border-amber-300/70 dark:border-gold-400/50 mb-3 shadow-sm">
+                    <FaShieldAlt className="text-amber-800 dark:text-gold-300 text-xs" />
+                    <span className="text-amber-900 dark:text-gold-300 uppercase tracking-[4px] font-black text-xs">
+                      {t('tourDetail.details', 'TOUR SPECIFICATIONS')}
+                    </span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl text-slate-900 dark:text-white dark:drop-shadow-[0_2px_15px_rgba(255,255,255,0.35)] font-display font-black tracking-tight" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
                     {t('tourDetail.incExc', "What's Included & Excluded")}
                   </h2>
-                  <div className="w-20 h-1.5 bg-gold-500 mt-3 rounded-full shadow-[0_0_10px_rgba(245,166,35,0.5)]" />
+                  <div className="flex items-center gap-2 mt-3">
+                    <div className="w-24 h-1.5 bg-gradient-to-r from-gold-500 via-amber-400 to-gold-600 dark:from-gold-400 dark:to-amber-500 rounded-full shadow-[0_0_10px_rgba(245,166,35,0.6)]" />
+                    <div className="w-2 h-2 rounded-full bg-gold-500 dark:bg-gold-400" />
+                  </div>
                 </div>
 
                 <div className={`grid grid-cols-1 ${tour.excursions && tour.excursions.length > 0 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6`}>

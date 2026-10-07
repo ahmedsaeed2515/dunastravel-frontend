@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaCompass } from 'react-icons/fa';
 import TourCard from './TourCard';
 import { useTours } from '../../hooks/useTours';
 import { useCurrency } from '../../context/CurrencyContext';
@@ -111,16 +111,19 @@ export default function SuggestedTours({ currentDestination = 'egypt', currentSl
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div>
-            <span className="text-caption text-gold-600 dark:text-gold-400 uppercase tracking-widest font-semibold mb-2 block">
-              {t('suggested.badge', 'Handpicked Recommendations')}
-            </span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/90 dark:bg-gold-500/25 border border-amber-300/70 dark:border-gold-400/50 mb-3 shadow-sm">
+              <FaCompass className="text-amber-800 dark:text-gold-300 text-xs" />
+              <span className="text-amber-900 dark:text-gold-300 uppercase tracking-[3px] font-black text-xs">
+                {t('suggested.badge', 'Handpicked Recommendations')}
+              </span>
+            </div>
             <h2
-              className="text-3xl md:text-4xl text-obsidian-900 dark:text-ivory-50 font-display"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white dark:drop-shadow-[0_2px_15px_rgba(255,255,255,0.35)] font-display tracking-tight"
+              style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
             >
               {t('suggested.title', 'Suggested Experiences')}
             </h2>
-            <p className="text-body-sm text-obsidian-500 dark:text-ivory-300 mt-2 max-w-xl">
+            <p className="text-body-sm text-slate-700 dark:text-slate-100 font-semibold mt-2 max-w-xl text-sm sm:text-base leading-relaxed">
               {t(
                 'suggested.subtitle',
                 'Discover tailored journeys and exclusive add-ons curated to complement your travel adventure.'
