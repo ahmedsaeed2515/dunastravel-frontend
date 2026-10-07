@@ -139,24 +139,25 @@ export function useLandingPage(slug, { destinationOnly = false } = {}) {
       { policy: CACHE_POLICIES.DESTINATIONS }
     )
       .then((page) => {
-        if (active) {
+        if (active && page) {
           setLandingPage(page);
           setError(null);
-          setLoading(false);
         }
       })
       .catch((reason) => {
-        if (reason.name === 'AbortError') return;
+        if (!active) return;
+        if (reason?.name === 'AbortError' || reason?.code === 'ERR_CANCELED') return;
+        setError(reason);
+        setLandingPage(null);
+      })
+      .finally(() => {
         if (active) {
-          setError(reason);
-          setLandingPage(null);
           setLoading(false);
         }
       });
 
     return () => {
       active = false;
-      abortQuery(queryKey);
     };
   }, [destinationOnly, locale, canonicalSlug, reloadNonce]);
 

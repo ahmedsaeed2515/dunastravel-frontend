@@ -311,23 +311,24 @@ export function useTours(filters = {}) {
       policy: CACHE_POLICIES.TOUR_CATALOG,
     })
       .then((result) => {
-        if (isMounted) {
+        if (isMounted && result) {
           setToursState(result);
           setError(null);
-          setLoading(false);
         }
       })
       .catch((requestError) => {
-        if (requestError.name === 'AbortError') return;
+        if (!isMounted) return;
+        if (requestError?.name === 'AbortError' || requestError?.code === 'ERR_CANCELED') return;
+        setError(requestError);
+      })
+      .finally(() => {
         if (isMounted) {
-          setError(requestError);
           setLoading(false);
         }
       });
 
     return () => {
       isMounted = false;
-      abortQuery(queryKey);
     };
   }, [JSON.stringify(queryKey), lang, retryCount]);
 

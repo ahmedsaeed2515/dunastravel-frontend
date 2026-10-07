@@ -73,7 +73,6 @@ export function useBlog(slug) {
 
     return () => {
       isMounted = false;
-      abortQuery(queryKey);
     };
   }, [slug, lang]);
 

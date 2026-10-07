@@ -6,7 +6,7 @@ import { resolveDestinationSlug } from '../utils/destinationHelper';
 import {
   fetchWithSmartCache,
   getCachedEntry,
-  abortQuery,
+  subscribeToQueryKey,
   CACHE_POLICIES,
 } from '../utils/apiCache';
 
@@ -115,7 +115,7 @@ export function prefetchTour(slug, lang = 'en') {
   if (!slug) return Promise.resolve(null);
   const normalizedLang = supportedLocale(lang);
   const currentKey = ['tour', slug, normalizedLang];
-  return prefetchQuery(
+  return fetchWithSmartCache(
     currentKey,
     async () => {
       const raw = await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(normalizedLang)}`);
@@ -152,6 +152,21 @@ export function useTour(slug) {
     }
 
     const currentKey = ['tour', slug, lang];
+
+    // Reactive subscription to cache changes for this query key
+    const unsubscribe = subscribeToQueryKey(currentKey, (data) => {
+      if (!isMounted) return;
+      if (data) {
+        try {
+          setTour(normalizeTour(data, lang));
+        } catch {
+          setTour(data);
+        }
+        setError(null);
+        setLoading(false);
+      }
+    });
+
     const cached = getCachedEntry(currentKey);
     if (cached && cached.data) {
       try {
@@ -163,7 +178,6 @@ export function useTour(slug) {
         setLoading(false);
       }
     } else {
-      setTour(null);
       setLoading(true);
     }
 
@@ -176,26 +190,38 @@ export function useTour(slug) {
       { policy: CACHE_POLICIES.TOUR_DETAILS }
     )
       .then((data) => {
-        if (isMounted) {
+        if (isMounted && data) {
           const normalized = normalizeTour(data, lang);
           setTour(normalized);
           setError(null);
-          setLoading(false);
         }
       })
       .catch((requestError) => {
-        if (requestError.name === 'AbortError') return;
+        if (!isMounted) return;
+        if (requestError?.name === 'AbortError' || requestError?.code === 'ERR_CANCELED') {
+          const fallbackCached = getCachedEntry(currentKey);
+          if (fallbackCached && fallbackCached.data) {
+            try {
+              setTour(normalizeTour(fallbackCached.data, lang));
+            } catch {
+              setTour(fallbackCached.data);
+            }
+          }
+          return;
+        }
+        const errorMsg = requestError?.response?.data?.message || requestError?.message || 'Tour not found';
+        setError(typeof errorMsg === 'string' ? errorMsg : String(errorMsg));
+        setTour(null);
+      })
+      .finally(() => {
         if (isMounted) {
-          const errorMsg = requestError?.response?.data?.message || requestError?.message || 'Tour not found';
-          setError(typeof errorMsg === 'string' ? errorMsg : String(errorMsg));
-          setTour(null);
           setLoading(false);
         }
       });
 
     return () => {
       isMounted = false;
-      abortQuery(currentKey);
+      unsubscribe();
     };
   }, [slug, lang]);
 

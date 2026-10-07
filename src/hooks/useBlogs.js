@@ -82,7 +82,6 @@ export function useBlogs(filters = {}) {
 
     return () => {
       isMounted = false;
-      abortQuery(queryKey);
     };
   }, [lang, JSON.stringify(filters)]);
 

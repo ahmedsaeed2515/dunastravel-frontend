@@ -227,7 +227,6 @@ export function useServices(category = null) {
 
     return () => {
       isMounted = false;
-      abortQuery(queryKey);
     };
   }, [category, lang]);
 

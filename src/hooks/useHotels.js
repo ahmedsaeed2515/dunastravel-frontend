@@ -56,7 +56,6 @@ export function useHotel(slug) {
     void fetchHotel();
     return () => {
       active = false;
-      abortQuery(queryKey);
     };
   }, [slug, lang]);
 
@@ -133,7 +132,6 @@ export function useHotels({ destinationSlug, limit = 24 } = {}) {
     void fetchHotels();
     return () => {
       active = false;
-      abortQuery(queryKey);
     };
   }, [destinationSlug, limit, lang]);
 
