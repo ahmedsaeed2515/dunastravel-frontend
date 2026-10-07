@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useEffect, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { useTours } from "../../hooks/useTours";
@@ -360,6 +360,15 @@ const HomeExperienceSection = () => {
   const destMarqueeRef = useRef(null);
   const pkgHoveredRef = useRef(false);
   const destHoveredRef = useRef(false);
+
+  const ctaSectionRef = useRef(null);
+  const { scrollYProgress: ctaScrollYProgress } = useScroll({
+    target: ctaSectionRef,
+    offset: ["start end", "end start"],
+  });
+  const ctaBgY = useTransform(ctaScrollYProgress, [0, 1], ["-20%", "20%"]);
+  const ctaBgScale = useTransform(ctaScrollYProgress, [0, 0.5, 1], [1.25, 1.08, 1]);
+  const ctaGlowOpacity = useTransform(ctaScrollYProgress, [0.1, 0.5, 0.9], [0.2, 0.65, 0.2]);
 
   const handleMarqueeScroll = (ref, direction) => {
     if (!ref.current) return;
@@ -2049,42 +2058,46 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-32 md:py-40 lg:py-48 min-h-[560px] md:min-h-[660px] flex items-center justify-center bg-obsidian-950 overflow-hidden select-none">
-        {/* Parallax Zoom Background Image */}
-        <motion.div
-          initial={{ scale: 1.18, opacity: 0.8 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80')",
-          }}
-        />
+      <section
+        ref={ctaSectionRef}
+        className="relative py-32 md:py-44 lg:py-52 min-h-[580px] md:min-h-[680px] flex items-center justify-center bg-obsidian-950 overflow-hidden select-none"
+      >
+        {/* Hardware-Accelerated Parallax Background Image */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            style={{
+              y: ctaBgY,
+              scale: ctaBgScale,
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80')",
+            }}
+            className="absolute -inset-y-28 inset-x-0 bg-cover bg-center will-change-transform"
+          />
+        </div>
 
         {/* Ambient Dark Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-obsidian-900/75" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-obsidian-950/60 to-obsidian-950" />
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/85 to-obsidian-950/90" />
+        <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-obsidian-950/70 to-obsidian-950 pointer-events-none" />
 
         {/* Animated Gold Ambient Light Orbs */}
         <motion.div
+          style={{ opacity: ctaGlowOpacity }}
           animate={{
-            opacity: [0.2, 0.5, 0.2],
-            scale: [0.9, 1.25, 0.9],
-            x: ["-5%", "5%", "-5%"],
+            scale: [0.95, 1.2, 0.95],
+            rotate: [0, 10, 0],
           }}
           transition={{
-            duration: 9,
+            duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[450px] bg-gradient-radial from-amber-500/25 via-gold-500/10 to-transparent blur-3xl pointer-events-none rounded-full"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[500px] bg-gradient-radial from-amber-500/30 via-gold-500/15 to-transparent blur-3xl pointer-events-none rounded-full"
         />
 
         <motion.div
           animate={{
-            opacity: [0.15, 0.4, 0.15],
+            opacity: [0.15, 0.45, 0.15],
             scale: [1.1, 0.9, 1.1],
           }}
           transition={{
@@ -2092,52 +2105,52 @@ const HomeExperienceSection = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute -top-20 -left-20 w-96 h-96 bg-gold-500/15 blur-3xl pointer-events-none rounded-full"
+          className="absolute -top-20 -left-20 w-96 h-96 bg-gold-500/20 blur-3xl pointer-events-none rounded-full"
         />
 
         {/* Floating Golden Dust Particles */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(12)].map((_, i) => (
+          {[...Array(14)].map((_, i) => (
             <motion.div
               key={`cta-particle-${i}`}
               initial={{
                 opacity: 0,
                 y: Math.random() * 400 + 100,
-                x: `${15 + (i * 7) % 70}%`,
-                scale: Math.random() * 0.6 + 0.4,
+                x: `${10 + (i * 6.5) % 80}%`,
+                scale: Math.random() * 0.7 + 0.3,
               }}
               animate={{
-                opacity: [0, 0.8, 0],
-                y: [-50, -400],
-                x: [`${15 + (i * 7) % 70}%`, `${15 + (i * 7) % 70 + (i % 2 === 0 ? 5 : -5)}%`],
+                opacity: [0, 0.9, 0],
+                y: [-50, -450],
+                x: [`${10 + (i * 6.5) % 80}%`, `${10 + (i * 6.5) % 80 + (i % 2 === 0 ? 6 : -6)}%`],
               }}
               transition={{
-                duration: 6 + (i % 5),
+                duration: 5.5 + (i % 4),
                 repeat: Infinity,
-                delay: i * 0.7,
+                delay: i * 0.5,
                 ease: "easeOut",
               }}
-              className="absolute w-1.5 h-1.5 rounded-full bg-gradient-to-t from-gold-400 to-amber-200 shadow-[0_0_8px_#fbbf24]"
+              className="absolute w-1.5 h-1.5 rounded-full bg-gradient-to-t from-gold-400 via-amber-300 to-yellow-100 shadow-[0_0_10px_#fbbf24]"
             />
           ))}
         </div>
 
-        {/* Decorative Luxury Top/Bottom Borders */}
-        <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-gold-500/40 to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-gold-500/40 to-transparent" />
+        {/* Decorative Luxury Top/Bottom Gold Borders */}
+        <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-gold-500/50 to-transparent shadow-[0_0_12px_rgba(201,162,39,0.5)]" />
+        <div className="absolute bottom-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-gold-500/50 to-transparent shadow-[0_0_12px_rgba(201,162,39,0.5)]" />
 
         <div className="relative z-10 container mx-auto px-6 text-center max-w-4xl">
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: false, amount: 0.25 }}
             variants={{
               hidden: { opacity: 0 },
               visible: {
                 opacity: 1,
                 transition: {
-                  staggerChildren: 0.22,
-                  delayChildren: 0.1,
+                  staggerChildren: 0.18,
+                  delayChildren: 0.08,
                 },
               },
             }}
@@ -2145,29 +2158,29 @@ const HomeExperienceSection = () => {
             {/* Floating Luxury Tag */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.9 },
+                hidden: { opacity: 0, y: 35, scale: 0.88 },
                 visible: {
                   opacity: 1,
                   y: 0,
                   scale: 1,
-                  transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+                  transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
                 },
               }}
               className="mb-8 inline-block"
             >
               <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ y: [0, -7, 0] }}
+                transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
                 className="relative group"
               >
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-gold-500/50 via-amber-400/30 to-gold-500/50 rounded-full blur-md opacity-60 group-hover:opacity-100 transition duration-500" />
-                <span className="relative inline-flex items-center gap-3 border border-gold-400/50 bg-obsidian-950/80 backdrop-blur-xl text-gold-300 text-[11px] md:text-xs font-bold tracking-[0.35em] py-2.5 px-7 rounded-full uppercase shadow-[0_4px_30px_rgba(201,162,39,0.25)]">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/80 via-yellow-400/60 to-amber-500/80 rounded-full blur-md opacity-80 group-hover:opacity-100 transition duration-500" />
+                <span className="relative inline-flex items-center gap-3 border-2 border-amber-400/90 bg-obsidian-950/95 dark:bg-obsidian-950/95 backdrop-blur-xl text-amber-300 text-[12px] md:text-xs font-extrabold tracking-[0.3em] py-2.5 px-7 rounded-full uppercase shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
                   <span className="relative flex h-2.5 w-2.5 items-center justify-center">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-gold-400 shadow-[0_0_8px_#fbbf24]" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-90" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400 shadow-[0_0_10px_#fbbf24]" />
                   </span>
-                  <FaStar className="w-2.5 h-2.5 text-gold-300/90 animate-pulse" />
-                  <span className="bg-gradient-to-r from-gold-200 via-amber-300 to-gold-100 bg-clip-text text-transparent">
+                  <FaStar className="w-3 h-3 text-amber-300 animate-pulse" />
+                  <span className="text-amber-300 dark:text-amber-300 font-extrabold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                     {t('home.ctaTag', 'Bespoke Journeys')}
                   </span>
                 </span>
@@ -2177,7 +2190,7 @@ const HomeExperienceSection = () => {
             {/* Main Animated Title */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
+                hidden: { opacity: 0, y: 45, filter: "blur(14px)" },
                 visible: {
                   opacity: 1,
                   y: 0,
@@ -2187,8 +2200,8 @@ const HomeExperienceSection = () => {
               }}
               className="mb-6 relative"
             >
-              <h2 className="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-wide leading-tight drop-shadow-2xl">
-                <span className="bg-gradient-to-r from-ivory-50 via-amber-100 to-gold-200 bg-clip-text text-transparent inline-block">
+              <h2 className="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-wide leading-tight drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">
+                <span className="text-ivory-50 dark:text-ivory-50 bg-gradient-to-r from-white via-amber-100 to-gold-300 bg-clip-text text-transparent inline-block drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] font-medium">
                   {t("home.ctaTitle", "Your Next Adventure Awaits")}
                 </span>
               </h2>
@@ -2196,16 +2209,16 @@ const HomeExperienceSection = () => {
               {/* Shimmer light sweep bar */}
               <motion.div
                 initial={{ x: "-100%", opacity: 0 }}
-                animate={{ x: "100%", opacity: [0, 0.7, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-300/20 to-transparent pointer-events-none mix-blend-overlay"
+                animate={{ x: "100%", opacity: [0, 0.85, 0] }}
+                transition={{ duration: 3.2, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" }}
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-300/25 to-transparent pointer-events-none mix-blend-overlay"
               />
             </motion.div>
 
             {/* Subtitle / Description */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+                hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
                 visible: {
                   opacity: 1,
                   y: 0,
@@ -2215,20 +2228,30 @@ const HomeExperienceSection = () => {
               }}
               className="mb-12 max-w-2xl mx-auto flex items-center justify-center gap-4"
             >
-              <span className="hidden sm:block h-[1px] w-10 bg-gradient-to-r from-transparent to-gold-400/60" />
-              <p className="text-body-lg text-ivory-200/90 text-base md:text-xl font-light leading-relaxed drop-shadow-md tracking-wide">
+              <motion.span
+                initial={{ width: 0 }}
+                whileInView={{ width: "2.5rem" }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="hidden sm:block h-[1px] bg-gradient-to-r from-transparent to-gold-400/80"
+              />
+              <p className="text-body-lg text-white dark:text-ivory-100 text-base md:text-xl font-medium leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] tracking-wide">
                 {t(
                   "home.ctaDesc",
                   "Let us craft a journey tailored entirely to you",
                 )}
               </p>
-              <span className="hidden sm:block h-[1px] w-10 bg-gradient-to-l from-transparent to-gold-400/60" />
+              <motion.span
+                initial={{ width: 0 }}
+                whileInView={{ width: "2.5rem" }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="hidden sm:block h-[1px] bg-gradient-to-l from-transparent to-gold-400/80"
+              />
             </motion.div>
 
             {/* Action Buttons */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.95 },
+                hidden: { opacity: 0, y: 35, scale: 0.92 },
                 visible: {
                   opacity: 1,
                   y: 0,
@@ -2241,7 +2264,7 @@ const HomeExperienceSection = () => {
               <Link to="/contact" className="w-full sm:w-auto">
                 <Button
                   variant="gold-glow"
-                  className="group relative px-9 py-4 text-base md:text-lg w-full sm:w-auto font-semibold shadow-[0_10px_35px_rgba(201,162,39,0.35)] hover:shadow-[0_15px_45px_rgba(201,162,39,0.6)] transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
+                  className="group relative px-9 py-4 text-base md:text-lg w-full sm:w-auto font-semibold shadow-[0_10px_35px_rgba(201,162,39,0.35)] hover:shadow-[0_15px_45px_rgba(201,162,39,0.65)] transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {t("home.ctaStart", "Start Planning")}
