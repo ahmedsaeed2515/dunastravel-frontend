@@ -29,6 +29,8 @@ const Navbar = () => {
   const [mobileActiveSubDropdown, setMobileActiveSubDropdown] = useState(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const profileDropdownRef = useRef(null);
+  const desktopNavRef = useRef(null);
+  const dropdownTimeoutRef = useRef(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
@@ -40,6 +42,36 @@ const Navbar = () => {
     enabled: profileDropdownOpen,
     escapeKey: true,
   });
+
+  useClickOutside(desktopNavRef, () => setActiveDropdown(null), {
+    enabled: !!activeDropdown,
+    escapeKey: true,
+  });
+
+  const handleMouseEnterNav = (name) => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
+    }
+    setActiveDropdown(name);
+  };
+
+  const handleMouseLeaveNav = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 280);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (dropdownTimeoutRef.current) {
+        clearTimeout(dropdownTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleLogout = async () => {
     setProfileDropdownOpen(false);
@@ -327,17 +359,27 @@ const Navbar = () => {
             <Logo theme="dark" height={54} />
           </Link>
 
-          {/* Desktop Nav (Hover) */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 flex-shrink-0 min-h-[36px]">
+          {/* Desktop Nav (Hover & Click) */}
+          <nav ref={desktopNavRef} className="hidden lg:flex items-center gap-4 xl:gap-6 flex-shrink-0 min-h-[36px]">
             {navLinks.map((link) => (
               <div
                 key={link.name}
-                className="relative group"
-                onMouseEnter={() => link.dropdown && setActiveDropdown(link.name)}
-                onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
+                className="relative group py-1"
+                onMouseEnter={() => link.dropdown && handleMouseEnterNav(link.name)}
+                onMouseLeave={() => link.dropdown && handleMouseLeaveNav()}
               >
                 {link.dropdown ? (
-                  <button className={`flex items-center gap-1.5 ${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-[13px] xl:text-sm font-bold py-1.5 whitespace-nowrap flex-shrink-0`}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (dropdownTimeoutRef.current) {
+                        clearTimeout(dropdownTimeoutRef.current);
+                        dropdownTimeoutRef.current = null;
+                      }
+                      setActiveDropdown((prev) => (prev === link.name ? null : link.name));
+                    }}
+                    className={`flex items-center gap-1.5 ${scrolled ? 'text-black dark:text-ivory-50' : 'text-white'} hover:text-[#C9A227] transition-colors text-[13px] xl:text-sm font-bold py-1.5 whitespace-nowrap flex-shrink-0 cursor-pointer outline-none`}
+                  >
                     {link.name} <FaChevronDown className={`text-[10px] transition-transform duration-200 ${activeDropdown === link.name ? 'rotate-180' : ''}`} />
                   </button>
                 ) : (
@@ -346,66 +388,82 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                {/* Dropdown Panel Desktop */}
+                {/* Dropdown Panel Desktop with Invisible Hover Bridge */}
                 {link.dropdown && activeDropdown === link.name && (
                   <div
-                    className={`absolute top-full left-0 mt-2 ${link.name === t('nav.services') ? 'w-64 p-4' : 'w-52'} bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-xl animate-page-fade`}
+                    onMouseEnter={() => handleMouseEnterNav(link.name)}
+                    onMouseLeave={() => handleMouseLeaveNav()}
+                    className={`absolute top-full ${isRtl ? 'right-0' : 'left-0'} pt-2 ${
+                      link.name === t('nav.services') ? 'w-64' : 'w-56'
+                    } z-[9999] before:absolute before:-top-4 before:left-0 before:right-0 before:h-5 before:content-['']`}
                   >
-                    {link.name === t('nav.services') ? (
-                      <>
-                        <h4 className="text-caption text-amber-700 dark:text-gold-400 uppercase tracking-widest mb-3 px-1 font-extrabold text-xs">
-                          {link.name}
-                        </h4>
-                        <div className="flex flex-col gap-1">
-                          {link.dropdown.map((item) => (
-                            <Link
-                              key={item.name}
-                              to={item.path}
-                              className="px-3.5 py-2 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg"
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </>
-                    ) : (
-                      link.dropdown.map((item) => (
-                        <div key={item.name} className="relative group/sub">
-                          {item.subItems ? (
-                            <>
+                    <div className={`bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-xl overflow-hidden shadow-2xl ${
+                      link.name === t('nav.services') ? 'p-3.5' : 'p-1.5'
+                    } animate-page-fade`}>
+                      {link.name === t('nav.services') ? (
+                        <>
+                          <h4 className="text-caption text-amber-700 dark:text-gold-400 uppercase tracking-widest mb-2 px-2 font-extrabold text-xs">
+                            {link.name}
+                          </h4>
+                          <div className="flex flex-col gap-1">
+                            {link.dropdown.map((item) => (
+                              <Link
+                                key={item.name}
+                                to={item.path}
+                                onClick={() => setActiveDropdown(null)}
+                                className="px-3.5 py-2 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg"
+                              >
+                                {item.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </>
+                      ) : (
+                        link.dropdown.map((item) => (
+                          <div key={item.name} className="relative group/sub">
+                            {item.subItems ? (
+                              <>
+                                <Link
+                                  to={item.path}
+                                  onClick={() => setActiveDropdown(null)}
+                                  className="px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg border-b border-obsidian-100 dark:border-obsidian-700/50 last:border-0 flex justify-between items-center w-full"
+                                >
+                                  <span>{item.name}</span>
+                                  <FaChevronDown className={`text-[9px] opacity-60 group-hover/sub:text-[#F5A623] transition-transform duration-200 ${
+                                    isRtl ? 'rotate-90 group-hover/sub:rotate-0' : '-rotate-90 group-hover/sub:rotate-0'
+                                  }`} />
+                                </Link>
+                                <div className={`absolute ${isRtl ? 'right-full' : 'left-full'} top-0 hidden group-hover/sub:block w-52 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-xl overflow-hidden shadow-2xl z-[10000] p-1.5 before:absolute before:top-0 before:bottom-0 ${
+                                  isRtl ? 'before:-right-4' : 'before:-left-4'
+                                } before:w-5 before:content-['']`}>
+                                  {item.subItems.map((sub) => (
+                                    <Link
+                                      key={sub.name}
+                                      to={sub.path}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg"
+                                    >
+                                      {sub.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </>
+                            ) : (
                               <Link
                                 to={item.path}
-                                className="px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 flex justify-between items-center w-full"
+                                onClick={() => setActiveDropdown(null)}
+                                className="group/link block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg border-b border-obsidian-100 dark:border-obsidian-700/50 last:border-0"
                               >
-                                <span>{item.name}</span>
-                                <FaChevronDown className="-rotate-90 text-[9px] opacity-60 group-hover/sub:text-[#F5A623] group-hover/sub:rotate-0 transition-transform duration-200" />
+                                <span className="flex items-center gap-2">
+                                  <FaPlane className="text-[10px] opacity-0 -ml-1 group-hover/link:opacity-100 group-hover/link:ml-0 transition-all duration-200 text-[#F5A623]" />
+                                  {item.name}
+                                </span>
                               </Link>
-                              <div className={`absolute ${isRtl ? 'right-full mr-0.5' : 'left-full ml-0.5'} top-0 hidden group-hover/sub:block w-52 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-2xl z-[9999]`}>
-                                {item.subItems.map((sub) => (
-                                  <Link
-                                    key={sub.name}
-                                    to={sub.path}
-                                    className="block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
-                                  >
-                                    {sub.name}
-                                  </Link>
-                                ))}
-                              </div>
-                            </>
-                          ) : (
-                            <Link
-                              to={item.path}
-                              className="group/link block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
-                            >
-                              <span className="flex items-center gap-2">
-                                <FaPlane className="text-[10px] opacity-0 -ml-1 group-hover/link:opacity-100 group-hover/link:ml-0 transition-all duration-200 text-[#F5A623]" />
-                                {item.name}
-                              </span>
-                            </Link>
-                          )}
-                        </div>
-                      ))
-                    )}
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
