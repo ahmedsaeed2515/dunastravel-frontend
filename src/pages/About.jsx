@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
-import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward, FaClock, FaHeadset, FaUserTie, FaGlobeEurope, FaPlaneDeparture, FaPlaneArrival, FaBriefcase, FaUmbrellaBeach, FaQuoteRight, FaArrowRight, FaArrowLeft, FaCheckCircle, FaStar, FaRoute, FaCompass, FaShip, FaGem } from 'react-icons/fa';
+import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward, FaClock, FaHeadset, FaUserTie, FaGlobeEurope, FaPlaneDeparture, FaPlaneArrival, FaBriefcase, FaUmbrellaBeach, FaQuoteRight, FaArrowRight, FaArrowLeft, FaCheckCircle, FaStar, FaRoute, FaCompass, FaShip, FaGem, FaTrophy, FaFutbol, FaNewspaper, FaUserMd, FaBullseye, FaLandmark, FaCrown, FaShieldAlt, FaChartLine } from 'react-icons/fa';
 import { useCmsBlock } from '../hooks/useCmsBlock';
 import AnimatedCounter from '../components/common/AnimatedCounter';
 import TeamSection from '../components/about/TeamSection';
@@ -38,7 +38,7 @@ const styles = `
   .about-page .hero {
     position: relative;
     min-height: 100vh;
-    background: radial-gradient(ellipse 120% 80% at 50% -10%, #11305E 0%, var(--navy) 42%, var(--navy-deep) 100%);
+    background: linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%) !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -195,7 +195,7 @@ const styles = `
   }
   .about-page .section-dark { position: relative; }
   .about-page #growth {
-    background: url('/imgs/egyothero.webp') center / cover no-repeat;
+    background: linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%) !important;
     color: #FFFFFF !important;
   }
   .about-page #growth .eyebrow,
@@ -731,13 +731,13 @@ const styles = `
 
   /* Glowing Expressive Icon Badge */
   .about-page .ultra-svc-icon-box {
-    width: 60px !important;
-    height: 60px !important;
-    border-radius: 18px !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 14px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 26px !important;
+    font-size: 20px !important;
     transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
     position: relative;
     z-index: 2;
@@ -1539,36 +1539,271 @@ const styles = `
     color: var(--gold-light) !important;
     font-weight: 700 !important;
   }
-  .about-page .events-list { display: flex; flex-direction: column; }
-  .about-page .event-row {
-    display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 30px;
-    padding: 26px 0;
-    border-bottom: 1px solid var(--line);
-    align-items: baseline;
+  /* High-Impact Events & Congresses Section (#events) */
+  .high-impact-events-section {
+    position: relative;
+    padding: 100px 6%;
+    background: linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%) !important;
+    overflow: hidden;
+    color: #FFFFFF;
   }
-  .about-page .event-row:first-child { border-top: 1px solid var(--line); }
-  .about-page .event-row .eyr {
+
+  /* Ambient Glow Spheres */
+  .about-page .events-bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.45;
+  }
+  .about-page .events-bg-glow-1 {
+    top: -10%;
+    left: 20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(201, 162, 39, 0.25) 0%, transparent 70%);
+  }
+  .about-page .events-bg-glow-2 {
+    bottom: -10%;
+    right: 15%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(30, 64, 175, 0.3) 0%, transparent 70%);
+  }
+
+  /* Watermark Typography */
+  .about-page .events-watermark {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: var(--mono);
-    color: var(--gold-light);
-    font-size: 14px;
-    font-weight: 600;
+    font-size: clamp(40px, 8vw, 120px);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.02);
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+    z-index: 0;
   }
-  .about-page .event-row .etxt {
-    font-size: 16px;
-    font-weight: 300;
-    color: rgba(248, 243, 230, .88);
-    line-height: 1.55;
+
+  /* Badge Pill */
+  .about-page .events-badge-pill {
+    background: rgba(248, 198, 48, 0.12);
+    border: 1px solid rgba(248, 198, 48, 0.35);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(248, 198, 48, 0.15);
   }
-  .about-page .event-row .etxt b { font-weight: 500; color: var(--ivory); }
-  .about-page .events-more {
-    margin-top: 26px;
-    font-size: 13.5px;
-    color: rgba(248, 243, 230, .6);
-    font-weight: 300;
-    line-height: 1.7;
+
+  /* Metrics Cards */
+  .about-page .events-metric-card {
+    background: rgba(14, 42, 82, 0.45);
+    border: 1px solid rgba(201, 162, 39, 0.25);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    transition: all 0.35s ease;
   }
+  .about-page .events-metric-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(248, 198, 48, 0.6);
+    background: rgba(22, 56, 107, 0.65);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(248, 198, 48, 0.2);
+  }
+  .about-page .events-metric-card .metric-icon {
+    font-size: 20px;
+    color: #F8C630;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .about-page .events-metric-card .metric-val {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.1;
+  }
+  .about-page .events-metric-card .metric-lbl {
+    font-size: 12px;
+    color: #94A3B8;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* Flagship Event Card */
+  .about-page .flagship-event-card {
+    background: linear-gradient(135deg, rgba(22, 56, 107, 0.75) 0%, rgba(14, 42, 82, 0.85) 100%);
+    border: 1.5px solid rgba(248, 198, 48, 0.45);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(248, 198, 48, 0.15);
+  }
+  .about-page .flagship-glow-accent {
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(248, 198, 48, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .about-page .flagship-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(8, 24, 48, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 12.5px;
+    color: #E2E8F0;
+    font-weight: 500;
+  }
+
+  /* Event Lux Cards (Grid) */
+  .about-page .event-lux-card {
+    background: rgba(14, 42, 82, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+  }
+  .about-page .event-lux-card:hover {
+    border-color: rgba(248, 198, 48, 0.4);
+    background: rgba(22, 56, 107, 0.6);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 25px rgba(248, 198, 48, 0.12);
+  }
+  .about-page .card-ambient-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+  .about-page .event-lux-card:hover .card-ambient-glow {
+    opacity: 1;
+  }
+  .about-page .event-year-badge {
+    border: 1px solid;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Footer Banner */
+  .about-page .events-footer-banner {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.25) 0%, rgba(14, 42, 82, 0.6) 100%);
+    border: 1px solid rgba(201, 162, 39, 0.35);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Section 02 — Sustained Growth Styling (#growth) */
+  .growth-ultra-section {
+    position: relative;
+    padding: 100px 6%;
+    background: linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%) !important;
+    overflow: hidden;
+    color: #FFFFFF;
+  }
+  .about-page .growth-bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(130px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.35;
+  }
+  .about-page .growth-glow-1 {
+    top: 10%;
+    left: -10%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(30, 64, 175, 0.35) 0%, transparent 70%);
+  }
+  .about-page .growth-glow-2 {
+    bottom: 5%;
+    right: -5%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(248, 198, 48, 0.22) 0%, transparent 70%);
+  }
+  .about-page .growth-badge-pill {
+    background: rgba(248, 198, 48, 0.12);
+    border: 1px solid rgba(248, 198, 48, 0.35);
+    backdrop-filter: blur(8px);
+  }
+  .about-page .growth-summary-card {
+    background: rgba(14, 42, 82, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    transition: all 0.35s ease;
+  }
+  .about-page .growth-summary-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(248, 198, 48, 0.5);
+    background: rgba(22, 56, 107, 0.6);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 0 0 20px rgba(248, 198, 48, 0.15);
+  }
+  .about-page .featured-surge-card {
+    background: linear-gradient(135deg, rgba(22, 56, 107, 0.75) 0%, rgba(14, 42, 82, 0.85) 100%);
+    border: 1.5px solid rgba(248, 198, 48, 0.45);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 0 0 25px rgba(248, 198, 48, 0.2);
+  }
+  .about-page .growth-chart-showcase {
+    background-image: url('https://res.cloudinary.com/tibx70zb/image/upload/v1791335276/e3d1daae-4fd9-4e1b-bf30-a7098dfeb6f6_compressed_gcnchj.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid rgba(201, 162, 39, 0.35);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  }
+  .about-page .chart-grid-backdrop {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 100% 40px;
+    pointer-events: none;
+  }
+  .about-page .bar-cap-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+  .about-page .bar-peak-glowing {
+    animation: barPulseGlow 3s infinite alternate;
+  }
+  @keyframes barPulseGlow {
+    0% { box-shadow: 0 0 15px rgba(248, 198, 48, 0.4); }
+    100% { box-shadow: 0 0 35px rgba(248, 198, 48, 0.8); }
+  }
+
+  /* High Contrast Chart Text & Numbers Backdrops */
+  .about-page .bar-val-chip span {
+    background: rgba(8, 24, 48, 0.92) !important;
+    color: #F8C630 !important;
+    border: 1px solid rgba(248, 198, 48, 0.5) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  }
+  .about-page .bar-surge-tag {
+    background: rgba(8, 24, 48, 0.9) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  }
+  .about-page .bar-year-lbl {
+    background: rgba(8, 24, 48, 0.9) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 3px 10px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+  }
+
+
   /* Services Grid (.svc-card) Light & Dark Mode */
   .about-page .services-grid {
     display: grid !important;
@@ -2088,24 +2323,116 @@ const About = () => {
         </div>
       </section>
 
-      <section className="section-dark" id="growth">
-        <div className="section-head reveal">
-          <span className="eyebrow">{t('about.growthEyebrow')}</span>
-          <h2 dangerouslySetInnerHTML={{ __html: t('about.growthTitle') }} />
-          <div className="rule"></div>
-        </div>
-        <div className="chart-wrap">
-          <div className="reveal">
-            <p style={{ fontSize: 16, lineHeight: 1.85, fontWeight: 400, color: '#ffffff' }}>{t('about.growthDesc')}</p>
+      {/* Section 02 — Sustained Growth Showcase */}
+      <section className="section-dark growth-ultra-section" id="growth">
+        <div className="growth-bg-glow growth-glow-1"></div>
+        <div className="growth-bg-glow growth-glow-2"></div>
+
+        <div className="growth-container max-w-7xl mx-auto relative z-10">
+          {/* Header */}
+          <div className="section-head reveal text-center max-w-3xl mx-auto mb-12">
+            <div className="growth-badge-pill inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4">
+              <FaChartLine className="text-amber-400 text-sm animate-pulse" />
+              <span className="eyebrow tracking-widest text-amber-300 font-bold text-xs uppercase">{t('about.growthEyebrow')}</span>
+            </div>
+            <h2 
+              className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 leading-tight"
+              dangerouslySetInnerHTML={{ __html: t('about.growthTitle') }} 
+            />
+            <div className="rule mx-auto my-4 w-24 h-1 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 rounded-full"></div>
+            <p className="text-slate-300 text-base md:text-lg font-light leading-relaxed max-w-2xl mx-auto mt-4">
+              {t('about.growthDesc')}
+            </p>
           </div>
-          <div className="chart reveal">
-            {chartData.map((c, i) => (
-              <div className="bar-col" key={i}>
-                <div className="bar" data-h={c.pct}><span className="val">{c.value}</span></div>
-                <div className="bar-yr">{c.year}</div>
+
+          {/* Metric Summary Cards */}
+          <div className="growth-summary-grid reveal grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+            <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-400">{t('about.growthMilestoneBase', 'Baseline')}</span>
+                <span className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-bold">2018</span>
               </div>
-            ))}
+              <div className="text-3xl font-bold font-serif text-white mb-1">24,000</div>
+              <div className="text-xs text-slate-400 font-medium">{t('about.statTravelers', 'Travelers Served')}</div>
+            </div>
+
+            <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden featured-surge-card text-left rtl:text-right">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">{t('about.growthTotalSurge', '+298% Surge')}</span>
+                <span className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm"><FaChartLine /></span>
+              </div>
+              <div className="text-3xl font-bold font-serif text-white mb-1">95,654+</div>
+              <div className="text-xs text-slate-300 font-medium">{t('about.growthMilestonePeak', 'Record High Peak (2024–2025)')}</div>
+            </div>
+
+            <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-400">17+ {t('about.heroStatsYears', 'Years')}</span>
+                <span className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm"><FaShieldAlt /></span>
+              </div>
+              <div className="text-3xl font-bold font-serif text-white mb-1">100%</div>
+              <div className="text-xs text-slate-400 font-medium">{t('about.metricExcellence', 'Operational Leadership')}</div>
+            </div>
           </div>
+
+          {/* Interactive Modern Growth Bar Chart */}
+          <div className="growth-chart-showcase reveal p-6 sm:p-8 md:p-12 rounded-3xl relative overflow-hidden mb-12">
+            <div className="chart-grid-backdrop"></div>
+            
+            <div className="chart-bars-flex flex items-end justify-between gap-3 sm:gap-4 md:gap-8 h-80 pt-10 pb-4 relative z-10">
+              {[
+                { year: '2018', value: '24,000', pct: 28, badge: t('about.growthMilestoneBase', 'Baseline'), color: '#94A3B8' },
+                { year: '2019', value: '32,993', pct: 38, badge: '+37%', color: '#60A5FA' },
+                { year: '2022', value: '66,793', pct: 72, badge: '+102%', color: '#34D399' },
+                { year: '2023', value: '90,202', pct: 93, badge: '+35%', color: '#FBBF24' },
+                { year: '2024–25', value: '95,654+', pct: 100, badge: t('about.growthMilestonePeak', 'Peak'), color: '#F8C630', isPeak: true },
+              ].map((barItem, idx) => (
+                <div className="bar-column-lux group flex-1 flex flex-col items-center h-full justify-end relative" key={idx}>
+                  {/* Top Value Pill */}
+                  <div className="bar-val-chip mb-3 opacity-95 group-hover:scale-110 group-hover:opacity-100 transition-all duration-300">
+                    <span className="text-[11px] sm:text-xs font-mono font-bold text-white px-2 sm:px-2.5 py-1 rounded-md bg-navy-deep/80 border border-amber-400/30 shadow-lg whitespace-nowrap">
+                      {barItem.value}
+                    </span>
+                  </div>
+
+                  {/* Growth Pill Badge */}
+                  <span className="bar-surge-tag text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full mb-2" style={{ color: barItem.color, backgroundColor: `${barItem.color}20`, border: `1px solid ${barItem.color}40` }}>
+                    {barItem.badge}
+                  </span>
+
+                  {/* Animated Growth Bar */}
+                  <div className="bar-track-wrap w-full max-w-[64px] bg-slate-800/40 rounded-2xl p-1.5 relative overflow-hidden flex items-end h-full">
+                    <div 
+                      className={`bar-pillar w-full rounded-xl transition-all duration-1000 ease-out relative ${barItem.isPeak ? 'bar-peak-glowing' : ''}`}
+                      style={{ 
+                        height: `${barItem.pct}%`, 
+                        background: barItem.isPeak 
+                          ? 'linear-gradient(180deg, #F8C630 0%, #C9A227 50%, #1E40AF 100%)' 
+                          : `linear-gradient(180deg, ${barItem.color} 0%, rgba(14, 42, 82, 0.8) 100%)`,
+                        boxShadow: `0 0 20px ${barItem.color}40`
+                      }}
+                    >
+                      <div className="bar-cap-shine"></div>
+                    </div>
+                  </div>
+
+                  {/* Year Label */}
+                  <div className="bar-year-lbl mt-4 font-mono font-bold text-xs sm:text-sm text-slate-300 group-hover:text-amber-400 transition-colors">
+                    {barItem.year}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer Note */}
+          <div className="growth-footer-note reveal p-5 rounded-2xl bg-navy-mid/40 border border-amber-400/20 text-center flex items-center justify-center gap-3">
+            <FaCheckCircle className="text-amber-400 text-lg shrink-0" />
+            <p className="text-slate-300 text-xs sm:text-sm font-light leading-relaxed">
+              {t('about.growthFleetDrivers')}
+            </p>
+          </div>
+
         </div>
       </section>
 
@@ -2151,30 +2478,193 @@ const About = () => {
         </div>
       </section>
 
-      <section className="section-dark" id="events">
-        <div className="section-head reveal">
-          <span className="eyebrow">{t('about.eventsEyebrow')}</span>
-          <h2 dangerouslySetInnerHTML={{ __html: t('about.eventsTitle') }} />
-          <div className="rule"></div>
-        </div>
-        <div className="events-list reveal">
-          {[
-            { year: '\u2014', textKey: 'about.event1' },
-            { year: '2013', textKey: 'about.event2' },
-            { year: '2014\u201315', textKey: 'about.event3' },
-            { year: '2015', textKey: 'about.event4' },
-            { year: '2016', textKey: 'about.event5' },
-            { year: '2016\u201317', textKey: 'about.event6' },
-            { year: '2018', textKey: 'about.event7' },
-            { year: '2019', textKey: 'about.event8' },
-          ].map((ev, i) => (
-            <div className="event-row" key={i}>
-              <div className="eyr">{ev.year}</div>
-              <div className="etxt">{t(ev.textKey)}</div>
+      {/* Section 04 — High-Impact Events & Congresses */}
+      <section className="section-dark high-impact-events-section" id="events">
+        {/* Background Decorative Lighting & Glow Gradients */}
+        <div className="events-bg-glow events-bg-glow-1"></div>
+        <div className="events-bg-glow events-bg-glow-2"></div>
+
+        <div className="events-container relative z-10 max-w-7xl mx-auto">
+          {/* Section Header */}
+          <div className="section-head reveal text-center max-w-3xl mx-auto mb-12">
+            <div className="events-badge-pill inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4">
+              <FaCrown className="text-amber-400 text-sm animate-pulse" />
+              <span className="eyebrow tracking-widest text-amber-300 font-bold text-xs uppercase">{t('about.eventsEyebrow')}</span>
             </div>
-          ))}
+            <h2 
+              className="events-main-heading font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 leading-tight"
+              dangerouslySetInnerHTML={{ __html: t('about.eventsTitle') }} 
+            />
+            <div className="rule mx-auto my-4 w-24 h-1 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 rounded-full"></div>
+          </div>
+
+          {/* Quick Metrics Bar */}
+          <div className="events-metrics-grid reveal grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
+            <div className="events-metric-card">
+              <div className="metric-icon"><FaGlobeAmericas /></div>
+              <div className="metric-val">12+</div>
+              <div className="metric-lbl">{t('about.metricCountries')}</div>
+            </div>
+            <div className="events-metric-card">
+              <div className="metric-icon"><FaUsers /></div>
+              <div className="metric-val">150+</div>
+              <div className="metric-lbl">{t('about.metricGuests')}</div>
+            </div>
+            <div className="events-metric-card">
+              <div className="metric-icon"><FaChartLine /></div>
+              <div className="metric-val">48+</div>
+              <div className="metric-lbl">{t('about.metricCompanies')}</div>
+            </div>
+            <div className="events-metric-card">
+              <div className="metric-icon"><FaShieldAlt /></div>
+              <div className="metric-val">100%</div>
+              <div className="metric-lbl">{t('about.metricExcellence')}</div>
+            </div>
+          </div>
+
+          {/* Flagship Event Spotlight Box (Event 1) */}
+          <div className="flagship-event-card reveal mb-14 p-6 sm:p-8 md:p-10 rounded-2xl relative overflow-hidden">
+            <div className="flagship-glow-accent"></div>
+            <div className="relative z-10 flex flex-col lg:flex-row gap-8 items-start lg:items-center justify-between">
+              <div className="flagship-content max-w-3xl text-left rtl:text-right">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4">
+                  <FaTrophy className="text-amber-400" />
+                  <span>{t('about.flagshipBadge')}</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 font-serif leading-snug">
+                  {t('about.event1Title')}
+                </h3>
+                <p className="text-slate-200 text-base md:text-lg leading-relaxed font-light mb-6">
+                  {t('about.event1')}
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="flagship-chip"><FaCheckCircle className="text-emerald-400" /> {t('about.chipMinistry')}</span>
+                  <span className="flagship-chip"><FaGlobe className="text-amber-400" /> {t('about.chipDelegations')}</span>
+                  <span className="flagship-chip"><FaUsers className="text-blue-400" /> {t('about.chipGuests')}</span>
+                </div>
+              </div>
+              <div className="flagship-icon-box shrink-0 hidden lg:flex items-center justify-center w-28 h-28 rounded-2xl bg-gradient-to-br from-amber-500/30 to-amber-700/10 border border-amber-400/40 text-amber-400 text-5xl shadow-2xl shadow-amber-500/20">
+                <FaTrophy />
+              </div>
+            </div>
+          </div>
+
+          {/* Chronological Grid Showcase */}
+          <div className="events-grid-showcase reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+            {[
+              {
+                year: '2013',
+                icon: FaFutbol,
+                category: t('about.catSports'),
+                textKey: 'about.event2',
+                accentColor: '#F8C630',
+                badgeText: t('about.badgeEvent2')
+              },
+              {
+                year: '2014–15',
+                icon: FaGlobeAmericas,
+                category: t('about.catBusiness'),
+                textKey: 'about.event3',
+                accentColor: '#60A5FA',
+                badgeText: t('about.badgeEvent3')
+              },
+              {
+                year: '2015',
+                icon: FaNewspaper,
+                category: t('about.catMedia'),
+                textKey: 'about.event4',
+                accentColor: '#C084FC',
+                badgeText: t('about.badgeEvent4')
+              },
+              {
+                year: '2016',
+                icon: FaPlaneDeparture,
+                category: t('about.catDelegation'),
+                textKey: 'about.event5',
+                accentColor: '#34D399',
+                badgeText: t('about.badgeEvent5')
+              },
+              {
+                year: '2016–17',
+                icon: FaUserMd,
+                category: t('about.catMedical'),
+                textKey: 'about.event6',
+                accentColor: '#22D3EE',
+                badgeText: t('about.badgeEvent6')
+              },
+              {
+                year: '2018',
+                icon: FaBullseye,
+                category: t('about.catChampionship'),
+                textKey: 'about.event7',
+                accentColor: '#F87171',
+                badgeText: t('about.badgeEvent7')
+              },
+              {
+                year: '2019',
+                icon: FaLandmark,
+                category: t('about.catEconomic'),
+                textKey: 'about.event8',
+                accentColor: '#FBBF24',
+                badgeText: t('about.badgeEvent8')
+              },
+            ].map((ev, i) => {
+              const EventIcon = ev.icon;
+              return (
+                <div className="event-lux-card group relative p-6 rounded-2xl transition-all duration-500 hover:-translate-y-2 text-left rtl:text-right" key={i}>
+                  <div className="card-ambient-glow" style={{ background: `radial-gradient(circle at 50% 0%, ${ev.accentColor}25, transparent 70%)` }}></div>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="event-year-badge font-mono text-sm font-bold px-3 py-1 rounded-full" style={{ color: ev.accentColor, backgroundColor: `${ev.accentColor}18`, borderColor: `${ev.accentColor}40` }}>
+                      {ev.year}
+                    </span>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 group-hover:text-white transition-colors">
+                      {ev.badgeText}
+                    </span>
+                  </div>
+
+                  <div className="flex items-start gap-4 mb-3">
+                    <div className="event-icon-avatar shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" style={{ color: ev.accentColor, backgroundColor: `${ev.accentColor}15`, border: `1px solid ${ev.accentColor}35` }}>
+                      <EventIcon />
+                    </div>
+                    <div>
+                      <span className="block text-xs font-medium uppercase tracking-widest text-slate-400 mb-1">{ev.category}</span>
+                      <p className="text-slate-200 text-sm font-normal leading-relaxed group-hover:text-white transition-colors">
+                        {t(ev.textKey)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Footer Global Impact Banner */}
+          <div className="events-footer-banner reveal p-6 sm:p-8 rounded-2xl relative overflow-hidden">
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 text-left rtl:text-right">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-400 text-2xl flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/10">
+                  <FaGlobeEurope />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-white mb-1 font-serif">{t('about.eventsGlobalTitle', 'Global Event Operations & Expertise')}</h4>
+                  <p className="text-slate-300 text-sm font-light leading-relaxed max-w-2xl">
+                    {t('about.eventsMore')}
+                  </p>
+                </div>
+              </div>
+              <Link 
+                to="/contact" 
+                className="shrink-0 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-navy-deep font-bold text-sm shadow-xl shadow-amber-500/20 hover:shadow-amber-500/40 hover:scale-105 transition-all duration-300 flex items-center gap-2"
+              >
+                <span>{t('about.hostEventCTA', 'Organize Your Event')}</span>
+                <span className="rtl:hidden"><FaArrowRight /></span>
+                <span className="hidden rtl:inline"><FaArrowLeft /></span>
+              </Link>
+            </div>
+          </div>
+
         </div>
-        <p className="events-more reveal">{t('about.eventsMore')}</p>
       </section>
 
       {/* Section 05 — Why Choose Dunas Travel / Ultra Services */}
