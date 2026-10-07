@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import { JaiderChatProvider } from '../../context/JaiderChatContext';
 
@@ -11,6 +11,7 @@ const JaiderChatWindow = lazy(() => import('../ui/JaiderChatWindow'));
 
 const Layout = () => {
   const [loadWidgets, setLoadWidgets] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     let timer;
@@ -36,6 +37,46 @@ const Layout = () => {
 
     return cleanup;
   }, []);
+
+  // Global Scroll Reveal Observer for all pages
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+    );
+
+    const observeElements = () => {
+      const targets = document.querySelectorAll(
+        '.reveal, .reveal-on-scroll, section:not(.no-reveal), .section-head, .grid-card-reveal'
+      );
+
+      targets.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('in');
+        } else {
+          el.classList.add('reveal-on-scroll');
+          observer.observe(el);
+        }
+      });
+    };
+
+    const timeoutId = setTimeout(observeElements, 120);
+
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
+  }, [location.pathname]);
 
   return (
     <JaiderChatProvider>

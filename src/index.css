@@ -1788,6 +1788,44 @@ html:not([dir="rtl"]) [contenteditable="true"] {
   text-transform: none !important;
 }
 
+/* ── Global Smooth Content Entrance & Scroll Reveal System ────────────────── */
+.reveal,
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.in,
+.reveal-on-scroll.in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Staggered Entrance for Children within Revealed Sections */
+.reveal.in > *:nth-child(1),
+.reveal-on-scroll.in > *:nth-child(1) { animation: globalChildStagger 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+.reveal.in > *:nth-child(2),
+.reveal-on-scroll.in > *:nth-child(2) { animation: globalChildStagger 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both; }
+.reveal.in > *:nth-child(3),
+.reveal-on-scroll.in > *:nth-child(3) { animation: globalChildStagger 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+.reveal.in > *:nth-child(4),
+.reveal-on-scroll.in > *:nth-child(4) { animation: globalChildStagger 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both; }
+.reveal.in > *:nth-child(5),
+.reveal-on-scroll.in > *:nth-child(5) { animation: globalChildStagger 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.36s both; }
+
+@keyframes globalChildStagger {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 
 

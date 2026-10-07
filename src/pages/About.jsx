@@ -2002,15 +2002,130 @@ const styles = `
     border-color: var(--gold);
     transform: translateY(-2px);
   }
+
+  /* Page Entrance Fade-In Animation */
+  .about-page {
+    animation: aboutPageFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes aboutPageFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Hero Section Staggered Entrance */
+  .about-page .hero-eyebrow {
+    animation: heroItemFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+  .about-page .hero h1 {
+    animation: heroItemFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+  }
+  .about-page .hero p.sub {
+    animation: heroItemFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  }
+  .about-page .routes-wrap {
+    animation: heroItemFadeIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.48s both;
+  }
+  .about-page .hero-stats {
+    animation: heroItemFadeIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+  }
+
+  @keyframes heroItemFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scroll Reveal & Staggered Elements */
   .about-page .reveal {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .8s ease, transform .8s ease;
+    transform: translateY(32px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
   }
   .about-page .reveal.in {
     opacity: 1;
-    transform: none;
+    transform: translateY(0);
   }
+
+  /* Staggered card entrance inside revealed containers */
+  .about-page .reveal.in .ultra-svc-card:nth-child(1),
+  .about-page .reveal.in .inst-cell:nth-child(1),
+  .about-page .reveal.in .ts-card:nth-child(1),
+  .about-page .reveal.in .feature-card:nth-child(1) {
+    animation: cardStaggerFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+  }
+  .about-page .reveal.in .ultra-svc-card:nth-child(2),
+  .about-page .reveal.in .inst-cell:nth-child(2),
+  .about-page .reveal.in .ts-card:nth-child(2),
+  .about-page .reveal.in .feature-card:nth-child(2) {
+    animation: cardStaggerFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+  .about-page .reveal.in .ultra-svc-card:nth-child(3),
+  .about-page .reveal.in .inst-cell:nth-child(3),
+  .about-page .reveal.in .ts-card:nth-child(3),
+  .about-page .reveal.in .feature-card:nth-child(3) {
+    animation: cardStaggerFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+  }
+  .about-page .reveal.in .ultra-svc-card:nth-child(4),
+  .about-page .reveal.in .inst-cell:nth-child(4),
+  .about-page .reveal.in .ts-card:nth-child(4) {
+    animation: cardStaggerFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  }
+
+  @keyframes cardStaggerFade {
+    0% {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Growth Chart Bar & Counter Entrance Animations */
+  .about-page .growth-chart-showcase .bar-pillar {
+    height: 0% !important;
+    transition: height 1.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .about-page .growth-chart-showcase.in .bar-pillar {
+    height: var(--bar-h) !important;
+  }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(1) .bar-pillar { transition-delay: 0.1s !important; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(2) .bar-pillar { transition-delay: 0.25s !important; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(3) .bar-pillar { transition-delay: 0.4s !important; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(4) .bar-pillar { transition-delay: 0.55s !important; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(5) .bar-pillar { transition-delay: 0.7s !important; }
+
+  .about-page .growth-chart-showcase .bar-val-chip,
+  .about-page .growth-chart-showcase .bar-surge-tag {
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(1) .bar-val-chip,
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(1) .bar-surge-tag { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.15s; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(2) .bar-val-chip,
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(2) .bar-surge-tag { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.3s; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(3) .bar-val-chip,
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(3) .bar-surge-tag { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.45s; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(4) .bar-val-chip,
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(4) .bar-surge-tag { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.6s; }
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(5) .bar-val-chip,
+  .about-page .growth-chart-showcase.in .bar-column-lux:nth-child(5) .bar-surge-tag { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.75s; }
+
   @media(max-width:1024px) {
     .about-page .inst-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
   }
@@ -2056,8 +2171,16 @@ const About = () => {
           io.unobserve(e.target);
         }
       });
-    }, { threshold: 0.15 });
-    revealEls.forEach(r => io.observe(r));
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(r => {
+      const rect = r.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        r.classList.add('in');
+      } else {
+        io.observe(r);
+      }
+    });
 
     const chartIo = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -2076,8 +2199,6 @@ const About = () => {
     }, { threshold: 0.3 });
     const chart = el.querySelector('.chart');
     if (chart) chartIo.observe(chart);
-
-
 
     return () => {
       io.disconnect();
@@ -2349,10 +2470,12 @@ const About = () => {
           <div className="growth-summary-grid reveal grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
             <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-400">{t('about.growthMilestoneBase', 'Baseline')}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-400">{t('about.growthMilestoneBase', 'Baseline Year')}</span>
                 <span className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-bold">2018</span>
               </div>
-              <div className="text-3xl font-bold font-serif text-white mb-1">24,000</div>
+              <div className="text-3xl font-bold font-serif text-white mb-1">
+                <AnimatedCounter value={24000} duration={2000} />
+              </div>
               <div className="text-xs text-slate-400 font-medium">{t('about.statTravelers', 'Travelers Served')}</div>
             </div>
 
@@ -2361,8 +2484,10 @@ const About = () => {
                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">{t('about.growthTotalSurge', '+298% Surge')}</span>
                 <span className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm"><FaChartLine /></span>
               </div>
-              <div className="text-3xl font-bold font-serif text-white mb-1">95,654+</div>
-              <div className="text-xs text-slate-300 font-medium">{t('about.growthMilestonePeak', 'Record High Peak (2024–2025)')}</div>
+              <div className="text-3xl font-bold font-serif text-white mb-1">
+                <AnimatedCounter value={95654} suffix="+" duration={2200} />
+              </div>
+              <div className="text-xs text-slate-300 font-medium">{t('about.growthMilestonePeak', 'Record Peak (2024–2025)')}</div>
             </div>
 
             <div className="growth-summary-card p-6 rounded-2xl relative overflow-hidden text-left rtl:text-right">
@@ -2370,7 +2495,9 @@ const About = () => {
                 <span className="text-xs font-bold uppercase tracking-wider text-blue-400">17+ {t('about.heroStatsYears', 'Years')}</span>
                 <span className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm"><FaShieldAlt /></span>
               </div>
-              <div className="text-3xl font-bold font-serif text-white mb-1">100%</div>
+              <div className="text-3xl font-bold font-serif text-white mb-1">
+                <AnimatedCounter value={100} suffix="%" duration={1800} />
+              </div>
               <div className="text-xs text-slate-400 font-medium">{t('about.metricExcellence', 'Operational Leadership')}</div>
             </div>
           </div>
@@ -2381,17 +2508,17 @@ const About = () => {
             
             <div className="chart-bars-flex flex items-end justify-between gap-3 sm:gap-4 md:gap-8 h-80 pt-10 pb-4 relative z-10">
               {[
-                { year: '2018', value: '24,000', pct: 28, badge: t('about.growthMilestoneBase', 'Baseline'), color: '#94A3B8' },
-                { year: '2019', value: '32,993', pct: 38, badge: '+37%', color: '#60A5FA' },
-                { year: '2022', value: '66,793', pct: 72, badge: '+102%', color: '#34D399' },
-                { year: '2023', value: '90,202', pct: 93, badge: '+35%', color: '#FBBF24' },
-                { year: '2024–25', value: '95,654+', pct: 100, badge: t('about.growthMilestonePeak', 'Peak'), color: '#F8C630', isPeak: true },
+                { year: '2018', num: 24000, suffix: '', pct: 28, badge: t('about.growthMilestoneBase', 'Baseline Year'), color: '#94A3B8' },
+                { year: '2019', num: 32993, suffix: '', pct: 38, badge: '+37%', color: '#60A5FA' },
+                { year: '2022', num: 66793, suffix: '', pct: 72, badge: '+102%', color: '#34D399' },
+                { year: '2023', num: 90202, suffix: '', pct: 93, badge: '+35%', color: '#FBBF24' },
+                { year: '2024–25', num: 95654, suffix: '+', pct: 100, badge: t('about.growthMilestonePeak', 'Record Peak'), color: '#F8C630', isPeak: true },
               ].map((barItem, idx) => (
                 <div className="bar-column-lux group flex-1 flex flex-col items-center h-full justify-end relative" key={idx}>
-                  {/* Top Value Pill */}
+                  {/* Top Value Pill with Animated Counter */}
                   <div className="bar-val-chip mb-3 opacity-95 group-hover:scale-110 group-hover:opacity-100 transition-all duration-300">
                     <span className="text-[11px] sm:text-xs font-mono font-bold text-white px-2 sm:px-2.5 py-1 rounded-md bg-navy-deep/80 border border-amber-400/30 shadow-lg whitespace-nowrap">
-                      {barItem.value}
+                      <AnimatedCounter value={barItem.num} suffix={barItem.suffix} duration={1800 + idx * 150} />
                     </span>
                   </div>
 
@@ -2403,9 +2530,9 @@ const About = () => {
                   {/* Animated Growth Bar */}
                   <div className="bar-track-wrap w-full max-w-[64px] bg-slate-800/40 rounded-2xl p-1.5 relative overflow-hidden flex items-end h-full">
                     <div 
-                      className={`bar-pillar w-full rounded-xl transition-all duration-1000 ease-out relative ${barItem.isPeak ? 'bar-peak-glowing' : ''}`}
+                      className={`bar-pillar w-full rounded-xl ease-out relative ${barItem.isPeak ? 'bar-peak-glowing' : ''}`}
                       style={{ 
-                        height: `${barItem.pct}%`, 
+                        '--bar-h': `${barItem.pct}%`, 
                         background: barItem.isPeak 
                           ? 'linear-gradient(180deg, #F8C630 0%, #C9A227 50%, #1E40AF 100%)' 
                           : `linear-gradient(180deg, ${barItem.color} 0%, rgba(14, 42, 82, 0.8) 100%)`,

@@ -35,7 +35,7 @@ const teamMembers = [
     countryKey: 'about.countries.italy',
     country: 'Italy',
     flag: '🇮🇹',
-    image: 'https://res.cloudinary.com/degbrq3ck/image/upload/v1789472475/IMG-20260630-WA0003_lzlp5c.jpg',
+    image: 'https://res.cloudinary.com/tibx70zb/image/upload/v1791337577/b3afcf19-df40-4190-b191-2d855aa47cb3_u4c3ql.jpg',
     initials: 'GF',
     offset: '38px',
     delay: '.1s',
@@ -121,9 +121,7 @@ export default function TeamSection() {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-8px); }
         }
-        .legacy-avatar-frame {
-
-        }
+        .legacy-avatar-frame { }
         @media (prefers-reduced-motion: reduce) {
           .legacy-avatar-frame { animation: none; }
         }

@@ -1675,14 +1675,23 @@ const HomeExperienceSection = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 lg:py-28 relative overflow-hidden bg-white dark:bg-obsidian-950 border-t border-gray-100 dark:border-white/5 content-auto">
+      <section
+        className="py-20 lg:py-28 relative overflow-hidden content-auto"
+        style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
+      >
+        {/* Subtle shine overlay matching top header */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%)' }} />
+
+        {/* Top and Bottom Gold accent borders matching top header */}
+        <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+
         {/* Decorative backdrop elements */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03]"
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.05]"
           style={{
             background: 'radial-gradient(circle at 10% 20%, rgb(30,58,138) 0%, transparent 40%), radial-gradient(circle at 90% 80%, #F5A623 0%, transparent 40%)'
           }}
         />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent" />
 
         <div className="container mx-auto px-6 relative z-10">
           {/* Section Header */}
@@ -1693,16 +1702,16 @@ const HomeExperienceSection = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center mb-16 md:mb-24"
           >
-            <span className="inline-block text-gold-600 dark:text-gold-400 uppercase tracking-[0.25em] text-caption mb-4 font-bold text-xs px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 shadow-sm">
+            <span className="inline-block text-[#F5A623] uppercase tracking-[0.25em] text-caption mb-4 font-bold text-xs px-4 py-1.5 rounded-full bg-white/10 border border-white/20 shadow-sm">
               {t('home.servicesSub', 'Our Services')}
             </span>
-            <h2 className="text-display-lg text-obsidian-900 dark:text-white font-display mb-6 tracking-wide">
+            <h2 className="text-display-lg text-white font-display mb-6 tracking-wide">
               {t('home.servicesTitle', 'Services')}
             </h2>
-            <p className="text-black dark:text-white text-body-md max-w-xl mx-auto font-body font-semibold">
+            <p className="text-white/90 text-body-md max-w-xl mx-auto font-body font-semibold">
               {t('home.servicesDesc', 'Premium travel solutions tailored to your needs')}
             </p>
-            <div className="w-20 h-[3px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mt-8 rounded-full" />
+            <div className="w-20 h-[3px] bg-gradient-to-r from-transparent via-[#F5A623] to-transparent mx-auto mt-8 rounded-full" />
           </motion.div>
 
           {/* Dynamic Expanding Panels */}
@@ -2064,50 +2073,119 @@ const HomeExperienceSection = () => {
         </div>
       </section>
 
-
-
       {/* CTA Section */}
-      <section
-        className="relative py-28 md:py-36 lg:py-44 min-h-[500px] md:min-h-[600px] flex items-center justify-center bg-obsidian-900 bg-fixed bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80')",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 via-obsidian-900/60 to-transparent"></div>
-        <div className="relative z-10 container mx-auto px-6 text-center">
+      <section className="relative py-28 md:py-36 lg:py-44 min-h-[520px] md:min-h-[620px] flex items-center justify-center bg-obsidian-950 overflow-hidden">
+        {/* Parallax Zoom Background Image */}
+        <motion.div
+          initial={{ scale: 1.12 }}
+          whileInView={{ scale: 1 }}
+          transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80')",
+          }}
+        />
+
+        {/* Ambient Dark Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/75 to-obsidian-900/70" />
+
+        {/* Animated Gold Radial Light Leak */}
+        <motion.div
+          animate={{
+            opacity: [0.25, 0.55, 0.25],
+            scale: [0.95, 1.15, 0.95],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-radial from-amber-500/20 via-gold-500/10 to-transparent blur-3xl pointer-events-none rounded-full"
+        />
+
+
+
+        <div className="relative z-10 container mx-auto px-6 text-center max-w-4xl">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.2,
+                  delayChildren: 0.15,
+                },
+              },
+            }}
           >
-            <h2 className="font-display italic text-4xl md:text-5xl lg:text-6xl text-ivory-50 mb-6 drop-shadow-lg">
+            {/* Floating Luxury Tag */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 25 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
+              }}
+              className="mb-6"
+            >
+              <span className="inline-flex items-center gap-2 border border-gold-500/40 bg-obsidian-900/60 backdrop-blur-md text-gold-300 text-[11px] md:text-xs font-bold tracking-[0.3em] py-2 px-6 rounded-full uppercase shadow-[0_4px_25px_rgba(201,162,39,0.2)]">
+                <span className="w-2 h-2 rounded-full bg-gold-400 animate-ping" />
+                {t('home.ctaTag', 'Bespoke Journeys')}
+              </span>
+            </motion.div>
+
+            {/* Title */}
+            <motion.h2
+              variants={{
+                hidden: { opacity: 0, y: 35 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+              }}
+              className="font-display italic text-4xl md:text-6xl lg:text-7xl text-ivory-50 mb-6 drop-shadow-2xl font-light tracking-wide leading-tight"
+            >
               {t("home.ctaTitle", "Your Next Adventure Awaits")}
-            </h2>
-            <p className="text-body-lg text-ivory-300 mb-10 max-w-xl mx-auto drop-shadow-md">
+            </motion.h2>
+
+            {/* Subtitle / Description */}
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 25 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+              }}
+              className="text-body-lg text-ivory-200/90 text-base md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md"
+            >
               {t(
                 "home.ctaDesc",
                 "Let us craft a journey tailored entirely to you",
               )}
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link to="/contact">
+            </motion.p>
+
+            {/* Action Buttons */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 25 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
+              }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-5 md:gap-7"
+            >
+              <Link to="/contact" className="w-full sm:w-auto">
                 <Button
                   variant="gold-glow"
-                  className="px-8 py-4 text-lg w-full sm:w-auto"
+                  className="px-9 py-4 text-base md:text-lg w-full sm:w-auto font-semibold shadow-[0_10px_35px_rgba(201,162,39,0.35)] hover:shadow-[0_15px_45px_rgba(201,162,39,0.55)] transition-all duration-300 transform hover:-translate-y-1"
                 >
                   {t("home.ctaStart", "Start Planning")}
                 </Button>
               </Link>
               <Button
                 variant="glass"
-                className="px-8 py-4 text-lg w-full sm:w-auto"
+                className="px-9 py-4 text-base md:text-lg w-full sm:w-auto font-semibold border-white/25 hover:border-gold-400/60 hover:bg-white/10 text-white transition-all duration-300 transform hover:-translate-y-1"
                 onClick={() => setIsAllToursPopupOpen(true)}
               >
                 {t("home.ctaBrowse", "Browse Tours")}
               </Button>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
