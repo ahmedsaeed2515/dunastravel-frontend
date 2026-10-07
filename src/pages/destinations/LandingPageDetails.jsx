@@ -206,6 +206,10 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   const { tours: allCatalogTours } = useTours({ limit: 70 });
   const [displayTours, setDisplayTours] = React.useState([]);
 
+  React.useEffect(() => {
+    setDisplayTours([]);
+  }, [slug]);
+
   const config = DEST_FALLBACK_DATA[slug] || {};
   const effectiveLandingPage = landingPage || (config && (config.headline || config.headlineDefault) ? {
     id: slug,

@@ -5,7 +5,7 @@ import { supportedLocale } from '../utils/locale';
 import {
   fetchWithSmartCache,
   getCachedEntry,
-  abortQuery,
+  subscribeToQueryKey,
   CACHE_POLICIES,
 } from '../utils/apiCache';
 
@@ -116,6 +116,15 @@ export function useLandingPage(slug, { destinationOnly = false } = {}) {
       return undefined;
     }
 
+    const unsubscribe = subscribeToQueryKey(queryKey, (data) => {
+      if (!active) return;
+      if (data) {
+        setLandingPage(data);
+        setError(null);
+        setLoading(false);
+      }
+    });
+
     const cached = getCachedEntry(queryKey);
     if (cached) {
       setLandingPage(cached.data);
@@ -158,6 +167,7 @@ export function useLandingPage(slug, { destinationOnly = false } = {}) {
 
     return () => {
       active = false;
+      unsubscribe();
     };
   }, [destinationOnly, locale, canonicalSlug, reloadNonce]);
 
