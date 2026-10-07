@@ -51,15 +51,13 @@ const transformObjToTitleCase = (obj) => {
 };
 
 const loadLocaleResource = async (lng) => {
-  let raw;
   switch (lng) {
     case 'ar': return (await import('./locales/ar.json')).default;
-    case 'es': raw = (await import('./locales/es.json')).default; break;
-    case 'it': raw = (await import('./locales/it.json')).default; break;
-    case 'pt': raw = (await import('./locales/pt.json')).default; break;
-    case 'en': default: raw = (await import('./locales/en.json')).default; break;
+    case 'es': return (await import('./locales/es.json')).default;
+    case 'it': return (await import('./locales/it.json')).default;
+    case 'pt': return (await import('./locales/pt.json')).default;
+    case 'en': default: return (await import('./locales/en.json')).default;
   }
-  return transformObjToTitleCase(raw);
 };
 
 const getDefaultLng = () => {

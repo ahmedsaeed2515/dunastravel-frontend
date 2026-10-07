@@ -1826,6 +1826,22 @@ html:not([dir="rtl"]) [contenteditable="true"] {
   }
 }
 
+@keyframes pageFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-fade {
+  animation: pageFadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
 
 
 

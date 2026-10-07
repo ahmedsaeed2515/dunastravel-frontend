@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaUserCircle, FaSignOutAlt, FaBookmark, FaMoon, FaSun, FaPlane, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
@@ -232,67 +231,61 @@ const Navbar = () => {
                     </button>
 
                     {/* Profile Dropdown directly anchored to its button */}
-                    <AnimatePresence>
-                      {profileDropdownOpen && (
-                        <motion.div
-                          variants={dropdownVariants}
-                          initial="hidden"
-                          animate="visible"
-                          exit="exit"
-                          role="menu"
-                          aria-label={t('nav.profile', 'User Profile')}
-                          className={`absolute top-full ${isRtl ? 'left-0' : 'right-0'} mt-2 w-56 bg-white dark:bg-[#061539] border border-gray-200 dark:border-gold-500/40 rounded-2xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.85)] z-[10000] text-start backdrop-blur-xl`}
-                        >
-                          <div className="px-4 py-3.5 border-b border-gray-100 dark:border-gold-500/20 bg-gray-50/90 dark:bg-white/10">
-                            <p className="text-xs font-extrabold text-gray-900 dark:text-white tracking-wide truncate">
-                              {user.name}
-                            </p>
-                            <p className="text-[11px] font-medium text-gray-500 dark:text-gold-300 truncate mt-0.5">
-                              {user.email}
-                            </p>
-                          </div>
-                          <div className="p-1.5 space-y-0.5">
-                            <Link
-                              to="/dashboard"
-                              role="menuitem"
-                              onClick={() => setProfileDropdownOpen(false)}
-                              className="w-full px-3.5 py-2.5 text-xs font-bold text-gray-800 dark:text-white hover:text-gold-600 dark:hover:text-gold-300 hover:bg-gold-50/80 dark:hover:bg-gold-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 group"
-                            >
-                              <FaUserCircle className="text-gold-500 dark:text-gold-400 shrink-0 group-hover:scale-110 transition-transform" size={15} />
-                              <span>{t('user.tabOverview', 'My Dashboard')}</span>
-                            </Link>
-                            <Link
-                              to="/profile"
-                              role="menuitem"
-                              onClick={() => setProfileDropdownOpen(false)}
-                              className="w-full px-3.5 py-2.5 text-xs font-bold text-gray-800 dark:text-white hover:text-gold-600 dark:hover:text-gold-300 hover:bg-gold-50/80 dark:hover:bg-gold-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 group"
-                            >
-                              <FaUserCircle className="text-gold-500 dark:text-gold-400 shrink-0 group-hover:scale-110 transition-transform" size={15} />
-                              <span>{t('nav.myProfile', 'My Profile')}</span>
-                            </Link>
-                            <Link
-                              to="/bookings"
-                              role="menuitem"
-                              onClick={() => setProfileDropdownOpen(false)}
-                              className="w-full px-3.5 py-2.5 text-xs font-bold text-gray-800 dark:text-white hover:text-gold-600 dark:hover:text-gold-300 hover:bg-gold-50/80 dark:hover:bg-gold-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 group"
-                            >
-                              <FaBookmark className="text-gold-500 dark:text-gold-400 shrink-0 group-hover:scale-110 transition-transform" size={15} />
-                              <span>{t('nav.myBookings', 'My Bookings')}</span>
-                            </Link>
-                            <div className="my-1 border-t border-gray-100 dark:border-gold-500/20" />
-                            <button
-                              type="button"
-                              role="menuitem"
-                              onClick={handleLogout}
-                              className="w-full px-3.5 py-2.5 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 cursor-pointer group"
-                            >
-                              <FaSignOutAlt className="shrink-0 group-hover:scale-110 transition-transform" size={14} />
-                              <span>{t('nav.logout', 'Logout')}</span>
-                            </button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    {profileDropdownOpen && (
+                      <div
+                        role="menu"
+                        aria-label={t('nav.profile', 'User Profile')}
+                        className={`absolute top-full ${isRtl ? 'left-0' : 'right-0'} mt-2 w-56 bg-white dark:bg-[#061539] border border-gray-200 dark:border-gold-500/40 rounded-2xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.85)] z-[10000] text-start backdrop-blur-xl animate-page-fade`}
+                      >
+                        <div className="px-4 py-3.5 border-b border-gray-100 dark:border-gold-500/20 bg-gray-50/90 dark:bg-white/10">
+                          <p className="text-xs font-extrabold text-gray-900 dark:text-white tracking-wide truncate">
+                            {user.name}
+                          </p>
+                          <p className="text-[11px] font-medium text-gray-500 dark:text-gold-300 truncate mt-0.5">
+                            {user.email}
+                          </p>
+                        </div>
+                        <div className="p-1.5 space-y-0.5">
+                          <Link
+                            to="/dashboard"
+                            role="menuitem"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="w-full px-3.5 py-2.5 text-xs font-bold text-gray-800 dark:text-white hover:text-gold-600 dark:hover:text-gold-300 hover:bg-gold-50/80 dark:hover:bg-gold-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 group"
+                          >
+                            <FaUserCircle className="text-gold-500 dark:text-gold-400 shrink-0 group-hover:scale-110 transition-transform" size={15} />
+                            <span>{t('user.tabOverview', 'My Dashboard')}</span>
+                          </Link>
+                          <Link
+                            to="/profile"
+                            role="menuitem"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="w-full px-3.5 py-2.5 text-xs font-bold text-gray-800 dark:text-white hover:text-gold-600 dark:hover:text-gold-300 hover:bg-gold-50/80 dark:hover:bg-gold-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 group"
+                          >
+                            <FaUserCircle className="text-gold-500 dark:text-gold-400 shrink-0 group-hover:scale-110 transition-transform" size={15} />
+                            <span>{t('nav.myProfile', 'My Profile')}</span>
+                          </Link>
+                          <Link
+                            to="/bookings"
+                            role="menuitem"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="w-full px-3.5 py-2.5 text-xs font-bold text-gray-800 dark:text-white hover:text-gold-600 dark:hover:text-gold-300 hover:bg-gold-50/80 dark:hover:bg-gold-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 group"
+                          >
+                            <FaBookmark className="text-gold-500 dark:text-gold-400 shrink-0 group-hover:scale-110 transition-transform" size={15} />
+                            <span>{t('nav.myBookings', 'My Bookings')}</span>
+                          </Link>
+                          <div className="my-1 border-t border-gray-100 dark:border-gold-500/20" />
+                          <button
+                            type="button"
+                            role="menuitem"
+                            onClick={handleLogout}
+                            className="w-full px-3.5 py-2.5 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/20 rounded-xl transition-all duration-200 flex items-center gap-3 cursor-pointer group"
+                          >
+                            <FaSignOutAlt className="shrink-0 group-hover:scale-110 transition-transform" size={14} />
+                            <span>{t('nav.logout', 'Logout')}</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <Link
@@ -354,73 +347,67 @@ const Navbar = () => {
                 )}
 
                 {/* Dropdown Panel Desktop */}
-                <AnimatePresence>
-                  {link.dropdown && activeDropdown === link.name && (
-                    <motion.div
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      className={`absolute top-full left-0 mt-2 ${link.name === t('nav.services') ? 'w-64 p-4' : 'w-52'} bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-xl`}
-                    >
-                      {link.name === t('nav.services') ? (
-                        <>
-                          <h4 className="text-caption text-amber-700 dark:text-gold-400 uppercase tracking-widest mb-3 px-1 font-extrabold text-xs">
-                            {link.name}
-                          </h4>
-                          <div className="flex flex-col gap-1">
-                            {link.dropdown.map((item) => (
+                {link.dropdown && activeDropdown === link.name && (
+                  <div
+                    className={`absolute top-full left-0 mt-2 ${link.name === t('nav.services') ? 'w-64 p-4' : 'w-52'} bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-xl animate-page-fade`}
+                  >
+                    {link.name === t('nav.services') ? (
+                      <>
+                        <h4 className="text-caption text-amber-700 dark:text-gold-400 uppercase tracking-widest mb-3 px-1 font-extrabold text-xs">
+                          {link.name}
+                        </h4>
+                        <div className="flex flex-col gap-1">
+                          {link.dropdown.map((item) => (
+                            <Link
+                              key={item.name}
+                              to={item.path}
+                              className="px-3.5 py-2 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg"
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      link.dropdown.map((item) => (
+                        <div key={item.name} className="relative group/sub">
+                          {item.subItems ? (
+                            <>
                               <Link
-                                key={item.name}
                                 to={item.path}
-                                className="px-3.5 py-2 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm rounded-lg"
+                                className="px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 flex justify-between items-center w-full"
                               >
+                                <span>{item.name}</span>
+                                <FaChevronDown className="-rotate-90 text-[9px] opacity-60 group-hover/sub:text-[#F5A623] group-hover/sub:rotate-0 transition-transform duration-200" />
+                              </Link>
+                              <div className={`absolute ${isRtl ? 'right-full mr-0.5' : 'left-full ml-0.5'} top-0 hidden group-hover/sub:block w-52 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-2xl z-[9999]`}>
+                                {item.subItems.map((sub) => (
+                                  <Link
+                                    key={sub.name}
+                                    to={sub.path}
+                                    className="block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                  >
+                                    {sub.name}
+                                  </Link>
+                                ))}
+                              </div>
+                            </>
+                          ) : (
+                            <Link
+                              to={item.path}
+                              className="group/link block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                            >
+                              <span className="flex items-center gap-2">
+                                <FaPlane className="text-[10px] opacity-0 -ml-1 group-hover/link:opacity-100 group-hover/link:ml-0 transition-all duration-200 text-[#F5A623]" />
                                 {item.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </>
-                      ) : (
-                        link.dropdown.map((item) => (
-                          <div key={item.name} className="relative group/sub">
-                            {item.subItems ? (
-                              <>
-                                <Link
-                                  to={item.path}
-                                  className="px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0 flex justify-between items-center w-full"
-                                >
-                                  <span>{item.name}</span>
-                                  <FaChevronDown className="-rotate-90 text-[9px] opacity-60 group-hover/sub:text-[#F5A623] group-hover/sub:rotate-0 transition-transform duration-200" />
-                                </Link>
-                                <div className={`absolute ${isRtl ? 'right-full mr-0.5' : 'left-full ml-0.5'} top-0 hidden group-hover/sub:block w-52 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-lg overflow-hidden shadow-2xl z-[9999]`}>
-                                  {item.subItems.map((sub) => (
-                                    <Link
-                                      key={sub.name}
-                                      to={sub.path}
-                                      className="block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
-                                    >
-                                      {sub.name}
-                                    </Link>
-                                  ))}
-                                </div>
-                              </>
-                            ) : (
-                              <Link
-                                to={item.path}
-                                className="group/link block px-3.5 py-2.5 text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-amber-50 dark:hover:bg-obsidian-700 transition-colors text-sm border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
-                              >
-                                <span className="flex items-center gap-2">
-                                  <FaPlane className="text-[10px] opacity-0 -ml-1 group-hover/link:opacity-100 group-hover/link:ml-0 transition-all duration-200 text-[#F5A623]" />
-                                  {item.name}
-                                </span>
-                              </Link>
-                            )}
-                          </div>
-                        ))
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                              </span>
+                            </Link>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </nav>
@@ -498,106 +485,89 @@ const Navbar = () => {
           </div>
 
         {/* Mobile Full Screen Menu Overlay */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, x: isRtl ? '-100%' : '100%' }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: isRtl ? '-100%' : '100%' }}
-              transition={{ type: 'tween', duration: 0.35, ease: 'easeInOut' }}
-              className="fixed inset-0 bg-white dark:bg-obsidian-900 z-40 flex flex-col px-8 pt-20 pb-8 overflow-y-auto lg:hidden h-screen w-screen"
-            >
-              <div className="flex flex-col gap-6 w-full max-w-md mx-auto">
-                {navLinks.map((link) => (
-                    <div key={link.name} className="w-full border-b border-obsidian-100 dark:border-obsidian-700 pb-4 last:border-0">
-                    {link.dropdown ? (
-                      <>
-                        <button
-                          onClick={() => handleMobileDropdownToggle(link.name)}
-                          className="w-full flex justify-between items-center text-left text-2xl text-black dark:text-white hover:text-[#F5A623] font-extrabold py-2 transition-colors"
-                        >
-                          <span className={mobileActiveDropdown === link.name ? 'text-[#F5A623]' : ''}>
-                            {link.name}
-                          </span>
-                          <FaChevronDown
-                            className={`text-base transition-transform duration-300 ${mobileActiveDropdown === link.name ? 'rotate-180 text-[#F5A623]' : 'text-obsidian-300'
-                              }`}
-                          />
-                        </button>
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 bg-white dark:bg-obsidian-900 z-40 flex flex-col px-8 pt-20 pb-8 overflow-y-auto lg:hidden h-screen w-screen animate-page-fade"
+          >
+            <div className="flex flex-col gap-6 w-full max-w-md mx-auto">
+              {navLinks.map((link) => (
+                  <div key={link.name} className="w-full border-b border-obsidian-100 dark:border-obsidian-700 pb-4 last:border-0">
+                  {link.dropdown ? (
+                    <>
+                      <button
+                        onClick={() => handleMobileDropdownToggle(link.name)}
+                        className="w-full flex justify-between items-center text-left text-2xl text-black dark:text-white hover:text-[#F5A623] font-extrabold py-2 transition-colors"
+                      >
+                        <span className={mobileActiveDropdown === link.name ? 'text-[#F5A623]' : ''}>
+                          {link.name}
+                        </span>
+                        <FaChevronDown
+                          className={`text-base transition-transform duration-300 ${mobileActiveDropdown === link.name ? 'rotate-180 text-[#F5A623]' : 'text-obsidian-300'
+                            }`}
+                        />
+                      </button>
 
-                        <AnimatePresence initial={false}>
-                          {mobileActiveDropdown === link.name && (
-                            <motion.div
-                              variants={mobileDropdownVariants}
-                              initial="hidden"
-                              animate="visible"
-                              exit="exit"
-                              className="flex flex-col gap-1 pl-4 bg-obsidian-50/50 dark:bg-obsidian-800/50 rounded-2xl overflow-hidden mt-2 border border-obsidian-100 dark:border-obsidian-700"
-                            >
-                              {link.dropdown.map(item => (
-                                <div key={item.name} className="w-full">
-                                  {item.subItems ? (
-                                    <>
-                                      <div className="flex justify-between items-center text-lg text-black dark:text-white font-bold py-3.5 px-4 border-b border-obsidian-100 dark:border-obsidian-700 last:border-0">
-                                        <Link
-                                          to={item.path}
-                                          onClick={() => setMobileMenuOpen(false)}
-                                          className="hover:text-[#F5A623] transition-colors flex-grow"
-                                        >
-                                          {item.name}
-                                        </Link>
-                                        <button
-                                          onClick={() => setMobileActiveSubDropdown(mobileActiveSubDropdown === item.name ? null : item.name)}
-                                          aria-label={`Toggle sub-menu for ${item.name}`}
-                                          className="p-2 -mr-2 text-obsidian-400 dark:text-ivory-500 hover:text-[#F5A623] transition-colors"
-                                        >
-                                          <FaChevronDown
-                                            className={`text-xs transition-transform duration-200 ${mobileActiveSubDropdown === item.name ? 'rotate-180 text-[#F5A623]' : ''}`}
-                                          />
-                                        </button>
-                                      </div>
-                                      <AnimatePresence initial={false}>
-                                        {mobileActiveSubDropdown === item.name && (
-                                          <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: 'auto', opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="pl-4 bg-obsidian-50/30 dark:bg-obsidian-800/30 border-l border-obsidian-200 dark:border-obsidian-700"
-                                          >
-                                            {item.subItems.map(sub => (
-                                              <Link
-                                                key={sub.name}
-                                                to={sub.path}
-                                                onClick={() => {
-                                                  setMobileMenuOpen(false);
-                                                  setMobileActiveSubDropdown(null);
-                                                }}
-                                                className="text-base font-bold text-black dark:text-white hover:text-[#F5A623] py-3 px-4 block transition-colors border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
-                                              >
-                                                {sub.name}
-                                              </Link>
-                                            ))}
-                                          </motion.div>
-                                        )}
-                                      </AnimatePresence>
-                                    </>
-                                  ) : (
+                      {mobileActiveDropdown === link.name && (
+                        <div
+                          className="flex flex-col gap-1 pl-4 bg-obsidian-50/50 dark:bg-obsidian-800/50 rounded-2xl overflow-hidden mt-2 border border-obsidian-100 dark:border-obsidian-700 animate-page-fade"
+                        >
+                          {link.dropdown.map(item => (
+                            <div key={item.name} className="w-full">
+                              {item.subItems ? (
+                                <>
+                                  <div className="flex justify-between items-center text-lg text-black dark:text-white font-bold py-3.5 px-4 border-b border-obsidian-100 dark:border-obsidian-700 last:border-0">
                                     <Link
-                                      key={item.name}
                                       to={item.path}
                                       onClick={() => setMobileMenuOpen(false)}
-                                      className="text-lg text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-obsidian-50 dark:hover:bg-obsidian-800 py-3.5 px-4 block transition-all border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                      className="hover:text-[#F5A623] transition-colors flex-grow"
                                     >
                                       {item.name}
                                     </Link>
+                                    <button
+                                      onClick={() => setMobileActiveSubDropdown(mobileActiveSubDropdown === item.name ? null : item.name)}
+                                      aria-label={`Toggle sub-menu for ${item.name}`}
+                                      className="p-2 -mr-2 text-obsidian-400 dark:text-ivory-500 hover:text-[#F5A623] transition-colors"
+                                    >
+                                      <FaChevronDown
+                                        className={`text-xs transition-transform duration-200 ${mobileActiveSubDropdown === item.name ? 'rotate-180 text-[#F5A623]' : ''}`}
+                                      />
+                                    </button>
+                                  </div>
+                                  {mobileActiveSubDropdown === item.name && (
+                                    <div
+                                      className="pl-4 bg-obsidian-50/30 dark:bg-obsidian-800/30 border-l border-obsidian-200 dark:border-obsidian-700 animate-page-fade"
+                                    >
+                                      {item.subItems.map(sub => (
+                                        <Link
+                                          key={sub.name}
+                                          to={sub.path}
+                                          onClick={() => {
+                                            setMobileMenuOpen(false);
+                                            setMobileActiveSubDropdown(null);
+                                          }}
+                                          className="text-base font-bold text-black dark:text-white hover:text-[#F5A623] py-3 px-4 block transition-colors border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                        >
+                                          {sub.name}
+                                        </Link>
+                                      ))}
+                                    </div>
                                   )}
-                                </div>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </>
+                                </>
+                              ) : (
+                                <Link
+                                  key={item.name}
+                                  to={item.path}
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="text-lg text-black dark:text-white font-bold hover:text-[#F5A623] hover:bg-obsidian-50 dark:hover:bg-obsidian-800 py-3.5 px-4 block transition-all border-b border-obsidian-100 dark:border-obsidian-700 last:border-0"
+                                >
+                                  {item.name}
+                                </Link>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
                     ) : (
                       <Link
                         to={link.path}
@@ -685,10 +655,9 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
-      </div>
+        </div>
 
       {isLoginModalOpen && (
         <Suspense fallback={null}>

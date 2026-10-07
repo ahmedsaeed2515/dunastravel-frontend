@@ -103,7 +103,7 @@ function devLoggerPlugin() {
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  const envDir = path.resolve(__dirname);
+  const envDir = path.resolve(process.cwd());
   const env = { ...loadEnv(mode, process.cwd(), ''), ...loadEnv(mode, envDir, '') };
   // Keep local development fully integrated. VITE_API_URL wins (e.g. http://localhost:5000/api if running local backend),
   // defaulting to the live deployed API so local frontend works immediately out of the box.
@@ -156,9 +156,11 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks(id) {
             const normalizedId = id.replace(/\\/g, '/');
+            if (normalizedId.includes('node_modules/react-dom/')) {
+              return 'vendor-react-dom';
+            }
             if (
               normalizedId.includes('node_modules/react/') ||
-              normalizedId.includes('node_modules/react-dom/') ||
               normalizedId.includes('node_modules/scheduler/')
             ) {
               return 'vendor-react-core';

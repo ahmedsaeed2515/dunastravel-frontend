@@ -1,13 +1,11 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Layout from "./components/layout/Layout";
 import Logo from "./components/ui/Logo";
 import { trackEvent } from "./utils/analytics";
 import { ConsentProvider } from "./privacy/consent";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import { variants } from "./animations/variants";
 import { syncDocumentDirection } from "./i18n";
 
 // ── Stale Chunk / Deployment Recovery Helpers ─────────────────────────────
@@ -186,46 +184,30 @@ const CookieConsentBanner = lazyWithRetry(() => import("./components/privacy/Coo
 const CookiePreferencesModal = lazyWithRetry(() => import("./components/privacy/CookiePreferencesModal"));
 
 const PageTransition = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 16 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-  >
+  <div className="animate-page-fade">
     {children}
-  </motion.div>
+  </div>
 );
 
 const CinematicLoader = ({ onComplete }) => (
-  <motion.div
-    className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-primary-900"
-    variants={variants.loadingExit}
-    initial="initial"
-    animate="animate"
-    exit="exit"
-    onAnimationComplete={onComplete}
+  <div
+    className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-primary-900 animate-page-fade"
+    onAnimationEnd={onComplete}
   >
     <div aria-live="polite" className="sr-only">
       Loading Dunas Travel experiences...
     </div>
     <div className="flex flex-col items-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <div>
         <Logo theme="dark" height={80} />
-      </motion.div>
+      </div>
 
       {/* Gold Line Expands */}
-      <motion.div
-        className="h-[1px] bg-gold-500 mt-8"
-        initial={{ width: 0, opacity: 0 }}
-        animate={{ width: 120, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      <div
+        className="h-[1px] bg-gold-500 mt-8 w-[120px] transition-all duration-700"
       />
     </div>
-  </motion.div>
+  </div>
 );
 
 const FallbackLoader = () => (

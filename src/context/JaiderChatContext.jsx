@@ -308,10 +308,10 @@ export const JaiderChatProvider = ({ children }) => {
   }, [i18n.language]);
 
   useEffect(() => {
-    if (!sessionId) return undefined;
+    if (!sessionId || !isOpen) return undefined;
     const restoreTimer = setTimeout(() => restoreConversationHistory(sessionId), 0);
     return () => clearTimeout(restoreTimer);
-  }, [sessionId, restoreConversationHistory]);
+  }, [sessionId, isOpen, restoreConversationHistory]);
 
   const handleSetIsOpen = (open) => {
     const nextOpen = typeof open === 'function' ? open(isOpen) : open;
