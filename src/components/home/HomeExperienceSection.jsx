@@ -1413,8 +1413,8 @@ const HomeExperienceSection = () => {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: idx * 0.1 }}
                       className={`group relative rounded-3xl overflow-hidden cursor-pointer flex flex-col justify-between border transition-all duration-500 backdrop-blur-xl ${isHero
-                          ? "lg:col-span-2 min-h-[380px] sm:min-h-[420px] bg-gradient-to-br from-[#121c3b]/90 via-[#0d152d]/90 to-[#070c1b]/90 border-gold-500/40 hover:border-gold-400 shadow-[0_12px_40px_rgba(245,166,35,0.2)] hover:shadow-[0_16px_50px_rgba(245,166,35,0.35)]"
-                          : "min-h-[360px] bg-gradient-to-br from-[#121c3b]/80 via-[#0a1127]/80 to-[#060a17]/80 border-white/10 hover:border-gold-500/50 hover:shadow-[0_12px_36px_rgba(245,166,35,0.25)] hover:-translate-y-2"
+                        ? "lg:col-span-2 min-h-[380px] sm:min-h-[420px] bg-gradient-to-br from-[#121c3b]/90 via-[#0d152d]/90 to-[#070c1b]/90 border-gold-500/40 hover:border-gold-400 shadow-[0_12px_40px_rgba(245,166,35,0.2)] hover:shadow-[0_16px_50px_rgba(245,166,35,0.35)]"
+                        : "min-h-[360px] bg-gradient-to-br from-[#121c3b]/80 via-[#0a1127]/80 to-[#060a17]/80 border-white/10 hover:border-gold-500/50 hover:shadow-[0_12px_36px_rgba(245,166,35,0.25)] hover:-translate-y-2"
                         }`}
                       onClick={() => handlePackageClick(pkg.id)}
                     >
@@ -1576,8 +1576,8 @@ const HomeExperienceSection = () => {
                 key={tab}
                 onClick={() => setVehicleFilter(tab)}
                 className={`px-6 py-2 rounded-full border-2 transition-all duration-300 font-semibold tracking-wide cursor-pointer ${vehicleFilter === tab
-                    ? "bg-obsidian-900 dark:bg-obsidian-900 text-white border-gold-500 shadow-[0_0_15px_rgba(245,166,35,0.4)] scale-105"
-                    : "bg-obsidian-900/70 dark:bg-obsidian-900/70 text-white/80 border-transparent hover:border-gold-500/50 hover:text-white"
+                  ? "bg-obsidian-900 dark:bg-obsidian-900 text-white border-gold-500 shadow-[0_0_15px_rgba(245,166,35,0.4)] scale-105"
+                  : "bg-obsidian-900/70 dark:bg-obsidian-900/70 text-white/80 border-transparent hover:border-gold-500/50 hover:text-white"
                   }`}
               >
                 {tab === "all"
@@ -1679,20 +1679,6 @@ const HomeExperienceSection = () => {
         className="py-20 lg:py-28 relative overflow-hidden content-auto"
         style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
       >
-        {/* Subtle shine overlay matching top header */}
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%)' }} />
-
-        {/* Top and Bottom Gold accent borders matching top header */}
-        <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
-        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
-
-        {/* Decorative backdrop elements */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.05]"
-          style={{
-            background: 'radial-gradient(circle at 10% 20%, rgb(30,58,138) 0%, transparent 40%), radial-gradient(circle at 90% 80%, #F5A623 0%, transparent 40%)'
-          }}
-        />
-
         <div className="container mx-auto px-6 relative z-10">
           {/* Section Header */}
           <motion.div
@@ -1846,7 +1832,7 @@ const HomeExperienceSection = () => {
       <div ref={photoSectionRef}>
         {isPhotoSectionVisible ? (
           <Suspense fallback={
-            <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
+            <div className="w-full min-h-[580px] h-[580px] my-6 rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}>
               <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
               <span className="text-sm font-semibold tracking-wider uppercase">Loading Photo Gallery...</span>
             </div>
@@ -1854,7 +1840,7 @@ const HomeExperienceSection = () => {
             <PhotoShowcaseCarousel photos={showcasePhotos} loading={showcaseLoading} />
           </Suspense>
         ) : (
-          <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70" />
+          <div className="w-full min-h-[580px] h-[580px] my-6 rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }} />
         )}
       </div>
 
@@ -1862,7 +1848,7 @@ const HomeExperienceSection = () => {
       <div ref={videoSectionRef}>
         {isVideoSectionVisible ? (
           <Suspense fallback={
-            <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70">
+            <div className="w-full min-h-[580px] h-[580px] my-6 rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}>
               <div className="w-10 h-10 border-2 border-gold-400/30 border-t-gold-400 rounded-full animate-spin" />
               <span className="text-sm font-semibold tracking-wider uppercase">Loading Video Showcase...</span>
             </div>
@@ -1870,7 +1856,7 @@ const HomeExperienceSection = () => {
             <VideoShowcaseCarousel videos={showcaseVideos} loading={showcaseLoading} />
           </Suspense>
         ) : (
-          <div className="w-full min-h-[580px] h-[580px] my-6 bg-obsidian-950/50 backdrop-blur-md rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70" />
+          <div className="w-full min-h-[580px] h-[580px] my-6 rounded-3xl border border-amber-500/10 flex flex-col items-center justify-center gap-4 text-gold-400/70 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }} />
         )}
       </div>
 
@@ -1879,17 +1865,6 @@ const HomeExperienceSection = () => {
         className="py-20 lg:py-32 relative overflow-hidden content-auto"
         style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
       >
-        {/* Subtle shine overlay matching top header */}
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%)' }} />
-
-        {/* Top and Bottom Gold accent borders matching top header */}
-        <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
-        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
-
-        {/* Glow Effects */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-[#F5A623]/10 blur-[100px] pointer-events-none" />
-
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
 

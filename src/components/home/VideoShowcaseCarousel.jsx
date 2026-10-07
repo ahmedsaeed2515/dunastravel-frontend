@@ -131,8 +131,13 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
 
   if (loading && videos.length === 0) {
     return (
-      <section className="py-20 bg-[#050A14] border-t border-white/5" aria-busy="true">
-        <div className="container mx-auto px-6">
+      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }} aria-busy="true">
+        {/* Subtle shine overlay matching top header */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%)' }} />
+        {/* Top and Bottom Gold accent borders matching top header */}
+        <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="h-8 w-48 bg-white/10 rounded-full mx-auto mb-4 animate-pulse" />
           <div className="h-12 w-80 bg-white/10 rounded-xl mx-auto mb-10 animate-pulse" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -152,11 +157,13 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
   return (
     <section
       ref={sectionRef}
-      className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-[#050A14] via-[#081224] to-[#050A14] border-t border-white/10 text-white select-none"
+      className="py-16 md:py-24 relative overflow-hidden text-white select-none"
+      style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}
       role="region"
       aria-roledescription="carousel"
       aria-label={t('home.videoCarouselLabel', 'Travel Stories & Videos')}
     >
+
       <style>{`
         @keyframes videoShowcaseContinuous {
           0% {
@@ -214,8 +221,8 @@ export default function VideoShowcaseCarousel({ videos = [], loading = false }) 
       {/* Marquee Container with Left & Right Gradient Masks */}
       <div className="relative w-full overflow-hidden">
         {/* Cinematic Edge Gradient Overlays */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 md:w-44 bg-gradient-to-r from-[#050A14] via-[#050A14]/80 to-transparent z-20" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 md:w-44 bg-gradient-to-l from-[#050A14] via-[#050A14]/80 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 md:w-44 bg-gradient-to-r from-[#041446] via-[#041446]/80 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 md:w-44 bg-gradient-to-l from-[#0A2878] via-[#0A2878]/80 to-transparent z-20" />
 
         {/* Continuous Right-to-Left Infinite Marquee Track */}
         <div className="w-full relative overflow-x-auto md:overflow-hidden py-4 scrollbar-none snap-x snap-mandatory md:snap-none" dir="ltr">

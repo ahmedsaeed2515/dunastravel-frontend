@@ -134,8 +134,13 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
 
   if (loading && (!photos || photos.length === 0)) {
     return (
-      <section className="py-16 md:py-24 bg-[#1E3A8A] border-t border-white/5" aria-busy="true">
-        <div className="container mx-auto px-6">
+      <section className="py-16 md:py-24 border-t border-white/5 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }} aria-busy="true">
+        {/* Subtle shine overlay matching top header */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%)' }} />
+        {/* Top and Bottom Gold accent borders matching top header */}
+        <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="h-8 w-48 bg-white/10 rounded-full mx-auto mb-4 animate-pulse" />
           <div className="h-12 w-80 bg-white/10 rounded-xl mx-auto mb-10 animate-pulse" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -153,7 +158,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
   }
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 relative overflow-hidden content-auto bg-[#1E3A8A]">
+    <section ref={sectionRef} className="py-16 md:py-24 relative overflow-hidden content-auto" style={{ background: 'linear-gradient(135deg, rgb(4, 20, 70) 0%, rgb(6, 29, 93) 40%, rgb(10, 40, 120) 100%)' }}>
       <style>{`
         @keyframes photoShowcaseContinuous {
           0% {
@@ -211,7 +216,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
       <div className="relative w-full overflow-hidden my-4">
         {/* Top Shape Overlay SVG */}
         <div className="absolute top-0 left-0 right-0 w-full z-20 pointer-events-none -mt-1 select-none">
-          <svg className="w-full h-12 md:h-20 text-[#1E3A8A] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
+          <svg className="w-full h-12 md:h-20 text-[#061D5D] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
             <path d="M0,0 L1440,0 L1440,20 Q720,80 0,20 Z" />
           </svg>
         </div>
@@ -279,7 +284,7 @@ export default function PhotoShowcaseCarousel({ photos = [], loading = false }) 
 
         {/* Bottom Shape Overlay SVG */}
         <div className="absolute bottom-0 left-0 right-0 w-full z-20 pointer-events-none -mb-1 select-none">
-          <svg className="w-full h-12 md:h-20 text-[#1E3A8A] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
+          <svg className="w-full h-12 md:h-20 text-[#061D5D] fill-current" viewBox="0 0 1440 80" preserveAspectRatio="none">
             <path d="M0,80 L1440,80 L1440,60 Q720,0 0,60 Z" />
           </svg>
         </div>
