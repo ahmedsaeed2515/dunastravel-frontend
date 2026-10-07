@@ -264,7 +264,7 @@ export default function MultiCountryTourDetails() {
             )}
 
             {/* Route Map */}
-            {((tour.highlights && tour.highlights.length > 0) || tour.itinerary) && <RouteMap itinerary={tour.itinerary} highlights={tour.highlights} />}
+            {((tour.highlights && tour.highlights.length > 0) || tour.itinerary || tour.routeMapJsonb || tour.routeMap) && <RouteMap itinerary={tour.itinerary} highlights={tour.highlights} routeMap={tour.routeMapJsonb || tour.routeMap} />}
           </div>
 
           {/* Sticky Sidebar Booking Column */}

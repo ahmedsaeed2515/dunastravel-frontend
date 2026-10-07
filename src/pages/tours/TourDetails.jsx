@@ -393,10 +393,10 @@ const TourDetails = () => {
         </div>
 
         {/* Interactive Route Map (Full Width Section) */}
-        {((tour.highlights && tour.highlights.length > 0) || (tour.itinerary && tour.itinerary.length > 0)) && (
+        {((tour.highlights && tour.highlights.length > 0) || (tour.itinerary && tour.itinerary.length > 0) || tour.routeMapJsonb || tour.routeMap) && (
           <div className="mt-20 w-full">
             <Suspense fallback={<div className="h-64 flex items-center justify-center text-gold-500 font-semibold bg-obsidian-900/50 rounded-2xl animate-pulse">Loading map route...</div>}>
-              <RouteMap itinerary={tour.itinerary} highlights={tour.highlights} tourTitle={title} />
+              <RouteMap itinerary={tour.itinerary} highlights={tour.highlights} routeMap={tour.routeMapJsonb || tour.routeMap} tourTitle={title} />
             </Suspense>
           </div>
         )}

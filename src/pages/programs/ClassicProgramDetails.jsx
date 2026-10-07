@@ -450,7 +450,7 @@ export default function ClassicProgramDetails() {
             </motion.div>
 
             {/* Route Map */}
-            <RouteMap itinerary={itinerary} highlights={program?.highlights || highlights} />
+            <RouteMap itinerary={itinerary} highlights={program?.highlights || highlights} routeMap={program?.routeMapJsonb || program?.routeMap} />
           </div>
 
           {/* Sticky Sidebar Booking Column */}

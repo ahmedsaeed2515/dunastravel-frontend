@@ -359,7 +359,7 @@ const getDayLabel = (days, langCode) => {
   return `${word} ${rangeStr}`;
 };
 
-const RouteMap = ({ itinerary, highlights, tourTitle }) => {
+const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
   const [sectionRef, isVisible] = useInViewport({ rootMargin: '200px', once: false });
   const [leafletInstance, setLeafletInstance] = useState(null);
   const [activeLocationIndex, setActiveLocationIndex] = useState(0);
@@ -408,20 +408,56 @@ const RouteMap = ({ itinerary, highlights, tourTitle }) => {
       if (!val) return '';
       if (typeof val === 'string') return val;
       if (typeof val === 'object') {
-        return [
-          val[langCode],
-          val.en,
-          val.ar,
-          val.es,
-          val.it,
-          val.pt,
-          val.title,
-          val.description,
-          val.text,
-        ].filter(Boolean).join(' ');
+        return (
+          val[langCode] ||
+          val.en ||
+          val.ar ||
+          val.es ||
+          val.it ||
+          val.pt ||
+          val.title ||
+          val.description ||
+          val.text ||
+          ''
+        );
       }
       return String(val);
     };
+
+    // 0. If routeMap custom data is passed from dashboard, use it directly!
+    const customMapData = routeMap || itinerary?.routeMap || itinerary?.routeMapJsonb;
+    if (customMapData && Array.isArray(customMapData.locations) && customMapData.locations.length > 0) {
+      return customMapData.locations.map((item, index) => {
+        const dbKey = (item.dbKey || 'cairo').toLowerCase();
+        const coords = (typeof item.lat === 'number' && typeof item.lng === 'number' && (item.lat !== 0 || item.lng !== 0))
+          ? [item.lat, item.lng]
+          : (COORDINATES_DATABASE[dbKey] || [30.0444, 31.2357]);
+
+        const nameFromDict = langTranslations[dbKey] || (dbKey.charAt(0).toUpperCase() + dbKey.slice(1));
+        const localizedName = extractText(item.nameJsonb) || extractText(item.name) || nameFromDict;
+        const localizedDesc = extractText(item.descriptionJsonb) || extractText(item.description) || localizedName;
+
+        const daysArr = Array.isArray(item.daysVisited)
+          ? item.daysVisited
+          : (typeof item.daysVisited === 'string'
+              ? item.daysVisited.split(',').map(n => parseInt(n.trim(), 10)).filter(Boolean)
+              : []);
+
+        const dayLabelText = daysArr.length > 0
+          ? getDayLabel(daysArr, langCode)
+          : `${t('tour.stop', 'Stop')} ${index + 1}`;
+
+        return {
+          name: localizedName,
+          dbKey: dbKey,
+          coords: coords,
+          daysVisited: daysArr,
+          descriptions: [localizedDesc],
+          dayLabel: dayLabelText,
+          displayIndex: index + 1,
+        };
+      });
+    }
 
     const addOrUpdateLocation = (dbKey, descText, dayNum) => {
       const coords = COORDINATES_DATABASE[dbKey];
