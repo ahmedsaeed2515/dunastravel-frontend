@@ -12,6 +12,8 @@ import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 import { useTour } from '../../hooks/useTour';
 import { useTours } from '../../hooks/useTours';
 
+import { resolveTourType } from '../../utils/titleHelper';
+
 const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
 
@@ -71,7 +73,7 @@ export default function MultiCountryTourDetails() {
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection
-        badge={t('programs.multiCountryBadge', '🌍 Multi-Country Tours')}
+        badge={t('programs.multiCountryBadge', lang === 'ar' ? '🌍 رحلات كبرى عبر بلدان متعددة' : '🌍 Grand Multi-Country Expeditions')}
         title={title}
         subtitle={subtitle || duration}
         bgImage="https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg"
@@ -85,7 +87,7 @@ export default function MultiCountryTourDetails() {
               <FaChevronRight />
             </span>
             <Link to="/programs/multi-country" className="hover:text-ivory-50 transition-colors">
-              {t('programs.multiCountryTitle', 'Multi-Country Tours')}
+              {t('programs.multiCountryTitle', lang === 'ar' ? 'جولات متعددة الدول' : 'Multi-Country Tours')}
             </Link>
             <span className="rtl-flip text-[10px]">
               <FaChevronRight />
@@ -109,7 +111,7 @@ export default function MultiCountryTourDetails() {
             <div className="p-6 flex flex-col items-center justify-center text-center gap-2">
               <FaTag className="text-gold-500 text-2xl mb-1" />
               <span className="text-caption text-obsidian-500 uppercase text-xs">{t('tour.tourType', 'Tour Type')}</span>
-              <span className="text-body-md font-semibold text-obsidian-900">{tour.type || 'Multi-Country'}</span>
+              <span className="text-body-md font-semibold text-obsidian-900">{resolveTourType(tour.type || 'Multi-Country', t, lang)}</span>
             </div>
             <div className="p-6 flex flex-col items-center justify-center text-center gap-2">
               <FaUsers className="text-gold-500 text-2xl mb-1" />

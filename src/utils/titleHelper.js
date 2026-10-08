@@ -602,11 +602,61 @@ export function resolveTourHeroImage(tour) {
   return 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_800/v1783026771/8_mpyvu4.jpg';
 }
 
+export function resolveTourType(type, t, lang = 'en') {
+  if (!type && !t) return '';
+  const raw = typeof type === 'string' ? type.trim() : (type ? String(type) : '');
+  const lower = raw.toLowerCase();
+
+  if (typeof type === 'object' && type !== null) {
+    return resolveLocalizedText(type, t, lang);
+  }
+
+  if (t) {
+    if (raw && t(`data.${raw}`, { defaultValue: '' })) return t(`data.${raw}`);
+    if (raw && t(`tourType.${lower}`, { defaultValue: '' })) return t(`tourType.${lower}`);
+  }
+
+  if (!lower || lower.includes('multi-country') || lower.includes('multi_country') || lower.includes('multicountry') || lower === 'multi') {
+    if (lower.includes('classic')) {
+      return lang === 'ar' ? 'جولات متعددة الدول كلاسيكية' : lang === 'es' ? 'Tours Multi-País Clásicos' : lang === 'pt' ? 'Tours Multi-Países Clássicos' : lang === 'it' ? 'Tour Multi-Paese Classici' : 'Multi-Country Classic Tours';
+    }
+    if (lower.includes('cultural')) {
+      return lang === 'ar' ? 'جولات متعددة الدول ثقافية' : lang === 'es' ? 'Tours Multi-País Culturales' : lang === 'pt' ? 'Tours Multi-Países Culturais' : lang === 'it' ? 'Tour Multi-Paese Culturali' : 'Multi-Country Cultural Tours';
+    }
+    if (lower.includes('premium')) {
+      return lang === 'ar' ? 'جولات متعددة الدول فاخرة' : lang === 'es' ? 'Tours Multi-País Premium' : lang === 'pt' ? 'Tours Multi-Países Premium' : lang === 'it' ? 'Tour Multi-Paese Premium' : 'Multi-Country Premium Tours';
+    }
+    if (lower.includes('pilgrimage')) {
+      return lang === 'ar' ? 'جولات متعددة الدول دينية' : lang === 'es' ? 'Tours Multi-País de Peregrinación' : lang === 'pt' ? 'Tours Multi-Países de Peregrinação' : lang === 'it' ? 'Tour Multi-Paese Pellegrinaggio' : 'Multi-Country Pilgrimage Tours';
+    }
+    if (lower.includes('grand')) {
+      return lang === 'ar' ? 'رحلات كبرى عبر بلدان متعددة' : lang === 'es' ? 'Gran Tour Multi-País' : lang === 'pt' ? 'Grand Tour Multi-Países' : lang === 'it' ? 'Gran Tour Multi-Paese' : 'Multi-Country Grand Tour';
+    }
+    return lang === 'ar' ? 'جولات متعددة الدول' : lang === 'es' ? 'Tours Multi-País' : lang === 'pt' ? 'Tours Multi-Países' : lang === 'it' ? 'Tour Multi-Paese' : 'Multi-Country Tours';
+  }
+
+  if (lower.includes('classic') || lower.includes('كلاسيك')) {
+    return lang === 'ar' ? 'برنامج كلاسيكي' : lang === 'es' ? 'Programa Clásico' : lang === 'pt' ? 'Programa Clássico' : lang === 'it' ? 'Programma Classico' : 'Classic Program';
+  }
+  if (lower.includes('honeymoon') || lower.includes('عسل')) {
+    return lang === 'ar' ? 'شهر العسل' : lang === 'es' ? 'Luna de Miel' : lang === 'pt' ? 'Lua de Mel' : lang === 'it' ? 'Luna di Miele' : 'Honeymoon Package';
+  }
+  if (lower.includes('religious') || lower.includes('pilgrim') || lower.includes('coptic') || lower.includes('holy') || lower.includes('دين')) {
+    return lang === 'ar' ? 'رحلة دينية / مسار العائلة المقدسة' : lang === 'es' ? 'Ruta de la Sagrada Familia' : lang === 'pt' ? 'Rota da Sagrada Família' : lang === 'it' ? 'Percorso della Sacra Famiglia' : 'Religious / Holy Family Pilgrimage';
+  }
+  if (lower.includes('extension') || lower.includes('استجمام')) {
+    return lang === 'ar' ? 'ملحق استجمام' : lang === 'es' ? 'Extensión de Playa' : lang === 'pt' ? 'Extensão de Praia' : lang === 'it' ? 'Estensione Mare' : 'Beach Extension';
+  }
+
+  return raw;
+}
+
 export default {
   resolveLocalizedText,
   resolveTourTitle,
   resolveTourOverview,
   resolveTourDuration,
+  resolveTourType,
   resolveItineraryDayTitle,
   resolveTourHeroImage,
 };

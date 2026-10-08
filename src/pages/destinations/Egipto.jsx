@@ -364,60 +364,62 @@ export default function Egipto() {
             </div>
           </motion.div>
 
-          {/* Card 4: Multi-Country Tours Program (جولات متعددة الدول - 9 رحلات) */}
-          <motion.div
-            variants={itemVariants}
-            className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
-          >
-            <div className="about-sp">
-              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
-                <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
-                <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
-              </svg>
-            </div>
-            <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
-              <Link to="/programs/multi-country" className="block w-full h-full overflow-hidden">
-                <img
-                  src={getOptimizedCloudinaryUrl("https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg", { width: 500, quality: 'auto:eco' })}
-                  alt="Multi-Country Tours"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  width="400"
-                  height="255"
-                />
-              </Link>
-            </div>
-            <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
-              <Link to="/programs/multi-country">
-                <h3
-                  className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
-                  style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
-                >
-                  {t('nav.multiCountry', 'جولات متعددة الدول (9 رحلات دولية)')}
-                </h3>
-              </Link>
-              <p className="text-gray-600 dark:text-slate-100 font-medium text-[14px] leading-relaxed line-clamp-3 mb-4 flex-grow">
-                {t(
-                  'dest.egypt.multiCountryDesc',
-                  'برامج مجمعة تشمل مصر مع الأردن، المغرب، تونس، دبي، تركيا، واليونان بـ 9 رحلات دولية فريدة.'
-                )}
-              </p>
-              <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
-                <div className="populer-btn defult-btn shrink-0">
-                  <Link to="/programs/multi-country" className="group/btn">
-                    <span>{t('tourCard.viewDetails', 'عرض الـ 9 رحلات')}</span>
-                    {isRtl ? (
-                      <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
-                    ) : (
-                      <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
-                    )}
-                  </Link>
+          {/* Card 4: Multi-Country Tours Program (جولات متعددة الدول - 9 رحلات) - Shown only in Arabic */}
+          {isRtl && (
+            <motion.div
+              variants={itemVariants}
+              className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
+            >
+              <div className="about-sp">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="75" cy="75" r="55" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.45" />
+                  <circle cx="75" cy="75" r="32" fill="#F5A623" opacity="0.2" />
+                  <path d="M55 75 L75 55 L95 75" stroke="#F5A623" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+                </svg>
+              </div>
+              <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
+                <Link to="/programs/multi-country" className="block w-full h-full overflow-hidden">
+                  <img
+                    src={getOptimizedCloudinaryUrl("https://res.cloudinary.com/degbrq3ck/image/upload/v1789341982/62de536e-2674-4518-b31c-ce74f137c119_jxxocg.jpg", { width: 500, quality: 'auto:eco' })}
+                    alt="Multi-Country Tours"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="255"
+                  />
+                </Link>
+              </div>
+              <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
+                <Link to="/programs/multi-country">
+                  <h3
+                    className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
+                    style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
+                  >
+                    {t('nav.multiCountry', 'Multi-Country Tours')}
+                  </h3>
+                </Link>
+                <p className="text-gray-600 dark:text-slate-100 font-medium text-[14px] leading-relaxed line-clamp-3 mb-4 flex-grow">
+                  {t(
+                    'dest.egypt.multiCountryDesc',
+                    'برامج مجمعة تشمل مصر مع الأردن، المغرب، تونس، دبي، تركيا، واليونان بـ 9 رحلات دولية فريدة.'
+                  )}
+                </p>
+                <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
+                  <div className="populer-btn defult-btn shrink-0">
+                    <Link to="/programs/multi-country" className="group/btn">
+                      <span>{t('tourCard.viewDetails', 'عرض الـ 9 رحلات')}</span>
+                      {isRtl ? (
+                        <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
+                      ) : (
+                        <FaArrowRight className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+                      )}
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
 
           {/* Card 5: Egypt Extensions (رحلات الاستجمام والملحقات) */}
           <motion.div

@@ -53,6 +53,9 @@ const DESTINATION_NAMES = {
   'holy land':            { ar: 'الأراضي المقدسة', en: 'Holy Land', es: 'Tierra Santa', pt: 'Terra Santa', it: 'Terra Santa' },
   holyland:               { ar: 'الأراضي المقدسة', en: 'Holy Land', es: 'Tierra Santa', pt: 'Terra Santa', it: 'Terra Santa' },
   'multi-country':        { ar: 'رحلة متعددة الدول', en: 'Multi-Country Journey', es: 'Viaje Multipaís', pt: 'Viagem Multipaíses', it: 'Viaggio Multi-paese' },
+  'multi_country':        { ar: 'رحلة متعددة الدول', en: 'Multi-Country Journey', es: 'Viaje Multipaís', pt: 'Viagem Multipaíses', it: 'Viaggio Multi-paese' },
+  'multicountry':         { ar: 'رحلة متعددة الدول', en: 'Multi-Country Journey', es: 'Viaje Multipaís', pt: 'Viagem Multipaíses', it: 'Viaggio Multi-paese' },
+  'multi country':        { ar: 'رحلة متعددة الدول', en: 'Multi-Country Journey', es: 'Viaje Multipaís', pt: 'Viagem Multipaíses', it: 'Viaggio Multi-paese' },
 };
 
 const resolveDestinationName = (dest, lang) => {
