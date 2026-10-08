@@ -186,7 +186,28 @@ const TAG_FALLBACK_DICTIONARY = {
   '2 Pax': { ar: 'فردان', en: '2 Pax', es: '2 Pax', pt: '2 Pax', it: '2 Pax' },
   'فردان': { ar: 'فردان', en: '2 Pax', es: '2 Pax', pt: '2 Pax', it: '2 Pax' },
   'Giza • Pyramids View': { ar: 'الجيزة • إطلالة على الأهرامات', en: 'Giza • Pyramids View', es: 'Giza • Vista a las Pirámides', pt: 'Gizé • Vista para as Pirâmides', it: 'Giza • Vista sulle Piramidi' },
-  'Giza, Egypt': { ar: 'الجيزة، مصر', en: 'Giza, Egypt', es: 'Guiza, Egipto', pt: 'Gizé, Egito', it: 'Giza, Egitto' }
+  'Giza, Egypt': { ar: 'الجيزة، مصر', en: 'Giza, Egypt', es: 'Guiza, Egipto', pt: 'Gizé, Egito', it: 'Giza, Egitto' },
+  'جولات متعددة الدول (Multi-Country Tours)': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  'جولات متعددة الدول (MULTI-COUNTRY TOURS)': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  'جولات متعددة الدول': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  'Multi-Country Tours': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  'multi-country': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  'multi_country': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  'multicountry': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  'رحلة متعددة الدول': { ar: 'جولات متعددة الدول', en: 'Multi-Country Tours', es: 'Tours Multi-País', pt: 'Tours Multi-Países', it: 'Tour Multi-Paese' },
+  '11 days / 10 nights': { ar: '11 يومًا / 10 ليالٍ', en: '11 Days / 10 Nights', es: '11 Días / 10 Noches', pt: '11 Dias / 10 Noites', it: '11 Giorni / 10 Notti' },
+  '11 Days / 10 Nights': { ar: '11 يومًا / 10 ليالٍ', en: '11 Days / 10 Nights', es: '11 Días / 10 Noches', pt: '11 Dias / 10 Noites', it: '11 Giorni / 10 Notti' },
+  'Min Pax': { ar: 'أدنى عدد أفراد', en: 'Min Pax', es: 'Mín. Pax', pt: 'Mín. Pax', it: 'Min. Pax' },
+  'TRIP DISCOVERY': { ar: 'استكشاف الرحلة', en: 'TRIP DISCOVERY', es: 'DESCUBRIMIENTO DEL VIAJE', pt: 'DESCOBERTA DA VIAGEM', it: 'SCOPERTA DEL VIAGGIO' },
+  'CURATED EXPERIENCES': { ar: 'تجارب مختارة بعناية', en: 'CURATED EXPERIENCES', es: 'EXPERIENCIAS SELECCIONADAS', pt: 'EXPERIÊNCIAS SELECIONADAS', it: 'ESPERIENZE SELEZIONATE' },
+  'Breakfast & Lunch included': { ar: 'شامل الإفطار والغداء', en: 'Breakfast & Lunch included', es: 'Desayuno y almuerzo incluidos', pt: 'Café da manhã e almoço incluídos', it: 'Colazione e pranzo inclusi' },
+  'Breakfast & Lunch Included': { ar: 'شامل الإفطار والغداء', en: 'Breakfast & Lunch included', es: 'Desayuno y almuerzo incluidos', pt: 'Café da manhã e almoço incluídos', it: 'Colazione e pranzo inclusi' },
+  'Breakfast &amp; Lunch included': { ar: 'شامل الإفطار والغداء', en: 'Breakfast & Lunch included', es: 'Desayuno y almuerzo incluidos', pt: 'Café da manhã e almoço incluídos', it: 'Colazione e pranzo inclusi' },
+  'Breakfast &amp; Lunch Included': { ar: 'شامل الإفطار والغداء', en: 'Breakfast & Lunch included', es: 'Desayuno y almuerzo incluidos', pt: 'Café da manhã e almoço incluídos', it: 'Colazione e pranzo inclusi' },
+  'Breakfast & Dinner included': { ar: 'شامل الإفطار والعشاء', en: 'Breakfast & Dinner included', es: 'Desayuno y cena incluidos', pt: 'Café da manhã e jantar incluídos', it: 'Colazione e cena incluse' },
+  'Breakfast included': { ar: 'شامل الإفطار', en: 'Breakfast included', es: 'Desayuno incluido', pt: 'Café da manhã incluído', it: 'Colazione inclusa' },
+  'All meals included': { ar: 'جميع الوجبات متضمنة', en: 'All meals included', es: 'Todas las comidas incluidas', pt: 'Todas as refeições incluídas', it: 'Tutti i pasti inclusi' },
+  'TOUR SPECIFICATIONS': { ar: 'مواصفات الرحلة', en: 'TOUR SPECIFICATIONS', es: 'ESPECIFICACIONES DEL TOUR', pt: 'ESPECIFICAÇÕES DO TOUR', it: 'SPECIFICHE DEL TOUR' }
 };
 
 export function formatPascalCase(str, lang = 'en') {
@@ -225,8 +246,45 @@ export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
   } else if (typeof val !== 'string') {
     rawResult = String(val);
   } else {
-    const cleanVal = val.trim();
+    const cleanVal = val.trim().replace(/&amp;/gi, '&');
     const safeT = typeof t === 'function' ? t : (k) => k;
+
+    // Pattern Matcher for Duration (e.g., "11 days / 10 nights", "11 Days / 10 Nights")
+    const durationMatch = cleanVal.match(/^(\d+)\s*(?:days?|días|dias|giorni|أيام|يومًا|يوم)\s*[\/&,\-]\s*(\d+)\s*(?:nights?|noches|noites|notti|ليالٍ|ليالي|ليلة)$/i);
+    if (durationMatch) {
+      const d = durationMatch[1];
+      const n = durationMatch[2];
+      if (cleanLang === 'ar') return `${d} يومًا / ${n} ليالٍ`;
+      if (cleanLang === 'es') return `${d} Días / ${n} Noches`;
+      if (cleanLang === 'pt') return `${d} Dias / ${n} Noites`;
+      if (cleanLang === 'it') return `${d} Giorni / ${n} Notti`;
+      return `${d} Days / ${n} Nights`;
+    }
+
+    // Pattern Matcher for Meals (e.g., "Breakfast & Lunch included")
+    if (/^breakfast\s*(?:&|and)\s*lunch\s*(?:included)?$/i.test(cleanVal) || /^شامل الإفطار والغداء$/i.test(cleanVal)) {
+      if (cleanLang === 'ar') return 'شامل الإفطار والغداء';
+      if (cleanLang === 'es') return 'Desayuno y almuerzo incluidos';
+      if (cleanLang === 'pt') return 'Café da manhã e almoço incluídos';
+      if (cleanLang === 'it') return 'Colazione e pranzo inclusi';
+      return 'Breakfast & Lunch included';
+    }
+
+    if (/^breakfast\s*(?:&|and)\s*dinner\s*(?:included)?$/i.test(cleanVal) || /^شامل الإفطار والعشاء$/i.test(cleanVal)) {
+      if (cleanLang === 'ar') return 'شامل الإفطار والعشاء';
+      if (cleanLang === 'es') return 'Desayuno y cena incluidos';
+      if (cleanLang === 'pt') return 'Café da manhã e jantar incluídos';
+      if (cleanLang === 'it') return 'Colazione e cena incluse';
+      return 'Breakfast & Dinner included';
+    }
+
+    if (/^breakfast\s*(?:included)?$/i.test(cleanVal) || /^شامل الإفطار$/i.test(cleanVal)) {
+      if (cleanLang === 'ar') return 'شامل الإفطار';
+      if (cleanLang === 'es') return 'Desayuno incluido';
+      if (cleanLang === 'pt') return 'Café da manhã incluído';
+      if (cleanLang === 'it') return 'Colazione inclusa';
+      return 'Breakfast included';
+    }
 
     const direct = safeT(cleanVal);
     if (direct && direct !== cleanVal && direct !== `data.${cleanVal}`) {
@@ -616,7 +674,7 @@ export function resolveTourType(type, t, lang = 'en') {
     if (raw && t(`tourType.${lower}`, { defaultValue: '' })) return t(`tourType.${lower}`);
   }
 
-  if (!lower || lower.includes('multi-country') || lower.includes('multi_country') || lower.includes('multicountry') || lower === 'multi') {
+  if (!lower || lower.includes('multi-country') || lower.includes('multi_country') || lower.includes('multicountry') || lower.includes('متعددة') || lower.includes('multi')) {
     if (lower.includes('classic')) {
       return lang === 'ar' ? 'جولات متعددة الدول كلاسيكية' : lang === 'es' ? 'Tours Multi-País Clásicos' : lang === 'pt' ? 'Tours Multi-Países Clássicos' : lang === 'it' ? 'Tour Multi-Paese Classici' : 'Multi-Country Classic Tours';
     }

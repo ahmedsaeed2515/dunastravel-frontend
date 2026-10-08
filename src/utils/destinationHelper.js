@@ -133,6 +133,8 @@ export const DEST_ALIASES = {
   'multicountry': 'multi-country',
   'multi country': 'multi-country',
   'متعددة الدول': 'multi-country',
+  'جولات متعددة الدول': 'multi-country',
+  'جولات متعددة الدول (multi-country tours)': 'multi-country',
   'رحلة متعددة الدول': 'multi-country',
 };
 

@@ -16,7 +16,7 @@ import { useTour } from '../../hooks/useTour';
 import { trackEvent } from '../../utils/analytics';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
-import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage, extractTourDays } from '../../utils/titleHelper';
+import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage, extractTourDays, resolveTourType } from '../../utils/titleHelper';
 import { getTourDestinationSlug, getDestinationName, getDestinationUrl } from '../../utils/destinationHelper';
 
 import SEOHead from '../../components/seo/SEOHead';
@@ -125,7 +125,7 @@ const TourDetails = () => {
 
       {/* Luxury Destination-Style Hero Section */}
       <LuxuryHeroSection
-        badge={resolveLocalizedText(tour.type || tour.category, t, lang) || t('tour.luxuryExperience', 'رحلة سياحية فاخرة')}
+        badge={resolveTourType(tour.type || tour.category, t, lang) || resolveLocalizedText(tour.type || tour.category, t, lang) || t('tour.luxuryExperience', 'رحلة سياحية فاخرة')}
         title={title}
         subtitle={duration}
         bgImage={heroImg}
@@ -157,7 +157,7 @@ const TourDetails = () => {
             <div className="p-6 flex flex-col items-center justify-center text-center gap-2">
               <FaTag className="text-amber-800 dark:text-gold-400 text-2xl mb-1 filter drop-shadow-[0_0_8px_rgba(245,166,35,0.4)]" />
               <span className="text-caption text-black dark:text-gold-300/90 font-black uppercase tracking-wider text-xs">{t('tour.tourType', 'Tour Type')}</span>
-              <span className="text-body-md font-black text-black dark:text-white text-base md:text-lg">{resolveLocalizedText(tour.type || tour.category || 'City Break', t, lang)}</span>
+              <span className="text-body-md font-black text-black dark:text-white text-base md:text-lg">{resolveTourType(tour.type || tour.category || 'City Break', t, lang) || resolveLocalizedText(tour.type || tour.category || 'City Break', t, lang)}</span>
             </div>
             <div className="p-6 flex flex-col items-center justify-center text-center gap-2">
               <FaUsers className="text-amber-800 dark:text-gold-400 text-2xl mb-1 filter drop-shadow-[0_0_8px_rgba(245,166,35,0.4)]" />
