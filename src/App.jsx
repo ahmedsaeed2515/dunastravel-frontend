@@ -412,7 +412,6 @@ function App() {
                   <Route path="extension/:id" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="extensions" element={<PageTransition><ExtensionTours /></PageTransition>} />
                   <Route path="extensions/:id" element={<PageTransition><TourDetails /></PageTransition>} />
-                  <Route path="classic" element={<PageTransition><BackendToursPage titleKey="programs.classicTitle" titleDefault="Classic Egypt Tours" filters={{ category: 'Classic' }} /></PageTransition>} />
                   <Route path="classic/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="turkey" element={<PageTransition><BackendToursPage titleKey="nav.turkey" titleDefault="Turkey Tours" filters={{ destination: 'Turkey' }} bgImage="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85" /></PageTransition>} />
                   <Route path="turkey/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
