@@ -407,7 +407,7 @@ export default function TurkeyProgramDetails() {
             )}
 
             {/* Route Map */}
-            <RouteMap itinerary={days} />
+            <RouteMap itinerary={days} routeMap={program?.routeMapJsonb || program?.routeMap} />
           </div>
 
           {/* Sidebar Booking Column (1 Col) */}

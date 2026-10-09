@@ -104,6 +104,8 @@ function normalizeTour(data, lang = 'en', fallback = null) {
     route: data.transportation?.route || null,
     itinerary,
     price,
+    routeMap: data.routeMap || data.routeMapJsonb || fallback?.routeMap || null,
+    routeMapJsonb: data.routeMapJsonb || data.routeMap || null,
     destination: resolveDestinationSlug(
       data.destination || data.country || fallback?.destination || fallback?.country || data.city || fallback?.city || 'egypt'
     ),

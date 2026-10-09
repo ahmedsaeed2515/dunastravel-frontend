@@ -316,7 +316,7 @@ export default function JordanProgramDetails() {
 
             {/* Route Map */}
             {Array.isArray(days) && days.length > 0 && (
-              <RouteMap itinerary={days} />
+              <RouteMap itinerary={days} routeMap={program?.routeMapJsonb || program?.routeMap} />
             )}
           </div>
 
