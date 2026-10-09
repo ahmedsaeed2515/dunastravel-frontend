@@ -200,7 +200,7 @@ export default function HoneymoonersDetails() {
             </motion.div>
 
             {/* Route Map */}
-            <RouteMap itinerary={HONEYMOON_ITINERARY} />
+            <RouteMap itinerary={HONEYMOON_ITINERARY} routeMap={program?.routeMapJsonb || program?.routeMap} />
           </div>
 
           {/* Sidebar Booking Form */}

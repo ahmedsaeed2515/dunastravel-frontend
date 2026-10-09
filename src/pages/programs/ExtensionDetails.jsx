@@ -146,8 +146,8 @@ export default function ExtensionDetails() {
             )}
 
             {/* Route Map */}
-            {tourData.itinerary && tourData.itinerary.length > 0 && (
-              <RouteMap itinerary={tourData.itinerary} />
+            {((tourData.itinerary && tourData.itinerary.length > 0) || tourData.routeMapJsonb || tourData.routeMap) && (
+              <RouteMap itinerary={tourData.itinerary} routeMap={tourData.routeMapJsonb || tourData.routeMap} />
             )}
           </div>
 

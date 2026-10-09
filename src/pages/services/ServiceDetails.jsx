@@ -250,7 +250,7 @@ const ServiceDetails = () => {
                     </div>
                   </motion.div>
                   <Suspense fallback={<div className="h-80 rounded-2xl bg-obsidian-200/40 animate-pulse my-8" />}>
-                    <RouteMap itinerary={service.itinerary} />
+                    <RouteMap itinerary={service.itinerary} routeMap={service.routeMapJsonb || service.routeMap} />
                   </Suspense>
                 </>
                 )}

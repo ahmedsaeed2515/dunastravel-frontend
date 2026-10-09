@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo, useState } from 'react';
+import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { FaMapMarkedAlt } from 'react-icons/fa';
@@ -370,6 +370,46 @@ const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
   const timelineRef = useRef(null);
   const animationRef = useRef(null);
 
+  const langCode = (i18n.language || 'en').split('-')[0].toLowerCase();
+
+  const extractText = useCallback((val) => {
+    if (!val) return '';
+    if (typeof val === 'string') return val;
+    if (typeof val === 'object') {
+      return (
+        val[langCode] ||
+        val.en ||
+        val.ar ||
+        val.es ||
+        val.it ||
+        val.pt ||
+        val.title ||
+        val.description ||
+        val.text ||
+        ''
+      );
+    }
+    return String(val);
+  }, [langCode]);
+
+  const customMapData = routeMap || itinerary?.routeMap || itinerary?.routeMapJsonb;
+
+  const displayTitle = useMemo(() => {
+    if (customMapData) {
+      const extracted = extractText(customMapData.titleJsonb) || extractText(customMapData.title);
+      if (extracted) return extracted;
+    }
+    return t('tour.routeMapTitle', 'Interactive Itinerary Journey Map');
+  }, [customMapData, extractText, t]);
+
+  const displaySubtitle = useMemo(() => {
+    if (customMapData) {
+      const extracted = extractText(customMapData.subtitleJsonb) || extractText(customMapData.subtitle);
+      if (extracted) return extracted;
+    }
+    return t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE');
+  }, [customMapData, extractText, t]);
+
   // Lazy load Leaflet library dynamically only when map section enters near-viewport
   useEffect(() => {
     if (!isVisible || leafletInstance) return undefined;
@@ -401,31 +441,9 @@ const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
 
   const locations = useMemo(() => {
     const extracted = [];
-    const langCode = (i18n.language || 'en').split('-')[0].toLowerCase();
     const langTranslations = CITY_TRANSLATIONS[langCode] || CITY_TRANSLATIONS['en'];
 
-    const extractText = (val) => {
-      if (!val) return '';
-      if (typeof val === 'string') return val;
-      if (typeof val === 'object') {
-        return (
-          val[langCode] ||
-          val.en ||
-          val.ar ||
-          val.es ||
-          val.it ||
-          val.pt ||
-          val.title ||
-          val.description ||
-          val.text ||
-          ''
-        );
-      }
-      return String(val);
-    };
-
     // 0. If routeMap custom data is passed from dashboard, use it directly!
-    const customMapData = routeMap || itinerary?.routeMap || itinerary?.routeMapJsonb;
     if (customMapData && Array.isArray(customMapData.locations) && customMapData.locations.length > 0) {
       return customMapData.locations.map((item, index) => {
         const dbKey = (item.dbKey || 'cairo').toLowerCase();
@@ -896,14 +914,14 @@ const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
         <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/90 dark:bg-gold-500/25 border border-amber-300/70 dark:border-gold-400/50 mb-3 shadow-sm">
           <FaMapMarkedAlt className="text-amber-800 dark:text-gold-300 text-xs" />
           <span className="text-amber-900 dark:text-gold-300 font-black text-[11px] sm:text-xs md:text-sm tracking-[3px] sm:tracking-[4px] uppercase block">
-            {t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE')}
+            {displaySubtitle}
           </span>
         </div>
         <h2
           className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 dark:text-white dark:drop-shadow-[0_2px_15px_rgba(255,255,255,0.35)] leading-snug font-display tracking-tight"
           style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
         >
-          {t('tour.routeMapTitle', 'Interactive Itinerary Journey Map')}
+          {displayTitle}
         </h2>
         <div className="flex items-center justify-center gap-2 mt-4">
           <div className="w-16 h-1 bg-gradient-to-r from-transparent via-gold-500 to-amber-600 dark:via-gold-400 rounded-full" />
