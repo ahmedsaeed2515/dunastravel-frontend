@@ -160,7 +160,6 @@ const ExtensionTours = lazyWithRetry(() => import("./pages/programs/ExtensionTou
 const ExtensionDetails = lazyWithRetry(() => import("./pages/programs/ExtensionDetails"));
 const MultiCountryTours = lazyWithRetry(() => import("./pages/programs/MultiCountryTours"));
 const MultiCountryTourDetails = lazyWithRetry(() => import("./pages/programs/MultiCountryTourDetails"));
-const ClassicProgramDetails = lazyWithRetry(() => import("./pages/programs/ClassicProgramDetails"));
 const JordanProgramDetails = lazyWithRetry(() => import("./pages/programs/JordanProgramDetails"));
 const DubaiProgramDetails = lazyWithRetry(() => import("./pages/programs/DubaiProgramDetails"));
 const TurkeyProgramDetails = lazyWithRetry(() => import("./pages/programs/TurkeyProgramDetails"));
@@ -700,8 +699,6 @@ function App() {
                 <Route path="extension/:id" element={<PageTransition><ExtensionDetails /></PageTransition>} />
                 <Route path="extensions" element={<PageTransition><ExtensionTours /></PageTransition>} />
                 <Route path="extensions/:id" element={<PageTransition><ExtensionDetails /></PageTransition>} />
-                <Route path="classic" element={<PageTransition><ClassicProgramDetails /></PageTransition>} />
-                <Route path="classic/:slug" element={<PageTransition><ClassicProgramDetails /></PageTransition>} />
                 <Route
                   path="trips/:id"
                   element={
