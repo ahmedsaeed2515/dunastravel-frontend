@@ -202,6 +202,7 @@ export default function Egipto() {
           {/* Card 1: Classic Program (برنامج مصر الكلاسيكي) */}
           <motion.div
             variants={itemVariants}
+            onClick={() => navigate('/classic')}
             className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
           >
             <div className="about-sp">
