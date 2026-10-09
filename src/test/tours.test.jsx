@@ -9,6 +9,7 @@ import { useHotel } from '../hooks/useHotels';
 import ReviewsMap from '../components/tour/ReviewsMap';
 import { AuthContext } from '../context/AuthContext';
 import api from '../utils/api';
+import RouteMap from '../components/tour/RouteMap';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -23,6 +24,21 @@ describe('Prompt 02: Tours Catalog, Localization & Reviews Integration', () => {
     if (typeof localStorage !== 'undefined') {
       localStorage.clear();
     }
+    // jsdom lacks matchMedia which framer-motion touches while rendering components
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: (query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false,
+      }),
+    });
   });
 
   it('useTours includes active lang and catalog filters in GET /api/tours', async () => {
@@ -237,5 +253,82 @@ describe('Prompt 02: Tours Catalog, Localization & Reviews Integration', () => {
 
     expect(result.current.error).toBeDefined();
     expect(result.current.hotel).toBeNull();
+  });
+
+  // ── Interactive Itinerary Journey Map (routeMap) Live Sync ────────────────
+  // Dashboard routeMap edits must reach the frontend WITHOUT waiting for the
+  // 5min-stale / 30min-TTL cache window. useTour's liveSync polls quietly and
+  // swaps in the new tour object without remounting the page.
+
+  it('useTour live sync picks up a dashboard routeMap edit without remount', async () => {
+    const baseTour = {
+      id: 'tour-live-sync',
+      slug: 'live-sync-route-map',
+      title: 'Classic Egypt',
+      basePriceUsd: '1500.00',
+      itinerary: [
+        { id: 'it-1', sortOrder: 0, day: 'Day 1', description: 'Cairo Pyramids sightseeing' },
+      ],
+    };
+    // What the dashboard admin just saved inside the Interactive Itinerary Journey Map.
+    const updatedTour = {
+      ...baseTour,
+      routeMapJsonb: {
+        titleJsonb: { es: 'Mapa del viaje clásico' },
+        subtitleJsonb: { es: 'Explora la ruta' },
+        locations: [
+          { id: 'loc-1', dbKey: 'cairo', nameJsonb: { es: 'El Cairo' }, lat: 30.0444, lng: 31.2357, daysVisited: [1] },
+          { id: 'loc-2', dbKey: 'luxor', nameJsonb: { es: 'Lúxor' }, lat: 25.6872, lng: 32.6396, daysVisited: [2] },
+        ],
+      },
+    };
+
+    const getMock = vi.spyOn(api, 'get');
+    let callCount = 0;
+    getMock.mockImplementation((url) => {
+      callCount += 1;
+      // First call = initial page load (no route map yet). Follow-ups = live sync polls.
+      return Promise.resolve(callCount === 1 ? baseTour : updatedTour);
+    });
+
+    const { result } = renderHook(() => useTour('live-sync-route-map', { liveSyncInterval: 20 }));
+
+    // Live sync silently refetches and swaps the data in — the hook itself never remounts.
+    await waitFor(
+      () => {
+        expect(result.current.tour.routeMapJsonb?.locations?.length).toBe(2);
+      },
+      { timeout: 3000 }
+    );
+
+    // Prove the edit really arrived through a background refetch (not the initial load).
+    expect(getMock.mock.calls.length).toBeGreaterThanOrEqual(2);
+    expect(getMock).toHaveBeenCalledWith('/tours/live-sync-route-map?lang=es', expect.anything());
+    expect(result.current.tour.routeMap.locations[0].nameJsonb.es).toBe('El Cairo');
+  });
+
+  // ── RouteMap renders dashboard-supplied custom data ───────────────────────
+  it('RouteMap renders custom dashboard routeMap data instead of the auto-generated map', () => {
+    const customRouteMap = {
+      titleJsonb: { es: 'Mapa del viaje clásico' },
+      subtitleJsonb: { es: 'Explora la ruta clásica' },
+      locations: [
+        { id: 'loc-1', dbKey: 'cairo', nameJsonb: { es: 'El Cairo' }, lat: 30.0444, lng: 31.2357, daysVisited: [1] },
+        { id: 'loc-2', dbKey: 'luxor', nameJsonb: { es: 'Lúxor' }, lat: 25.6872, lng: 32.6396, daysVisited: [2] },
+      ],
+    };
+
+    render(<RouteMap itinerary={[]} highlights={[]} tourTitle="Classic Egypt" routeMap={customRouteMap} />);
+
+    // Custom section heading + subtitle come from the dashboard titleJsonb/subtitleJsonb (lang=es)
+    expect(screen.getByRole('heading', { name: 'Mapa del viaje clásico' })).toBeDefined();
+    expect(screen.getByText('Explora la ruta clásica')).toBeDefined();
+
+    // Each dashboard location (nameJsonb.es) appears as a journey-map stop with its day label
+    expect(screen.getByText('El Cairo')).toBeDefined();
+    expect(screen.getByText('Lúxor')).toBeDefined();
+    expect(screen.getByText('Día 1')).toBeDefined();
+    expect(screen.getByText('Día 2')).toBeDefined();
+    expect(screen.getByText('2 Stops')).toBeDefined();
   });
 });

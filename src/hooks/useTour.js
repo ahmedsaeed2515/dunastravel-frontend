@@ -6,6 +6,7 @@ import { resolveDestinationSlug } from '../utils/destinationHelper';
 import {
   fetchWithSmartCache,
   getCachedEntry,
+  setCachedEntry,
   subscribeToQueryKey,
   CACHE_POLICIES,
 } from '../utils/apiCache';
@@ -127,10 +128,15 @@ export function prefetchTour(slug, lang = 'en') {
   );
 }
 
-export function useTour(slug) {
+export function useTour(slug, options = {}) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
   const queryKey = slug ? ['tour', slug, lang] : null;
+
+  // Live Sync: keep tour details (incl. Interactive Itinerary Journey Map / routeMap)
+  // in sync with dashboard edits. Defaults to ON for tour detail pages.
+  const liveSync = options.liveSync !== false;
+  const liveSyncInterval = options.liveSyncInterval ?? 10_000;
 
   const [tour, setTour] = useState(() => {
     if (!queryKey) return null;
@@ -154,6 +160,14 @@ export function useTour(slug) {
     }
 
     const currentKey = ['tour', slug, lang];
+    const fetcher = ({ signal } = {}) =>
+      api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`, { signal })
+        .then((raw) => normalizeTour(raw, lang));
+
+    // Had the data been served from a FRESH cache entry (i.e. we did NOT just hit
+    // the network)? If yes, run a quick live check shortly after mount so recent
+    // dashboard edits (route map / itinerary / etc.) appear immediately.
+    let servedFromFreshCache = false;
 
     // Reactive subscription to cache changes for this query key
     const unsubscribe = subscribeToQueryKey(currentKey, (data) => {
@@ -177,6 +191,7 @@ export function useTour(slug) {
         setTour(cached.data);
       }
       if (!cached.isStale) {
+        servedFromFreshCache = true;
         setLoading(false);
       }
     } else {
@@ -185,10 +200,7 @@ export function useTour(slug) {
 
     fetchWithSmartCache(
       currentKey,
-      async ({ signal } = {}) => {
-        const raw = await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`, { signal });
-        return normalizeTour(raw, lang);
-      },
+      fetcher,
       { policy: CACHE_POLICIES.TOUR_DETAILS }
     )
       .then((data) => {
@@ -221,11 +233,73 @@ export function useTour(slug) {
         }
       });
 
+    // ── LIVE SYNC (dashboard ↔ frontend) ─────────────────────────────────────
+    // Silently refetch tour details so edits made in the dashboard (Interactive
+    // Itinerary Journey Map, itinerary, highlights, ...) are reflected on this
+    // page without waiting for the 5min stale / 30min TTL cache window.
+    let pollId = null;
+    let initialCheckId = null;
+    let refreshing = false;
+
+    const refresh = async (force) => {
+      if (!isMounted || refreshing) return;
+      if (!force && typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
+      refreshing = true;
+      try {
+        const raw = await api.get(`/tours/${encodeURIComponent(slug)}?lang=${encodeURIComponent(lang)}`);
+        const normalized = normalizeTour(raw, lang);
+        if (!isMounted) return;
+        // Skip re-render when nothing actually changed (keeps the page calm).
+        setTour((prev) => {
+          if (!prev) return normalized;
+          try {
+            return JSON.stringify(prev) === JSON.stringify(normalized) ? prev : normalized;
+          } catch {
+            return normalized;
+          }
+        });
+        setError(null);
+        setCachedEntry(currentKey, normalized, CACHE_POLICIES.TOUR_DETAILS);
+      } catch {
+        // Keep current data on network hiccups — never blank the page silently.
+      } finally {
+        refreshing = false;
+      }
+    };
+
+    if (liveSync) {
+      // Immediate verification when the page opened with fresh-cached data.
+      if (servedFromFreshCache) {
+        initialCheckId = setTimeout(() => refresh(true), 600);
+      }
+
+      // Continuous background sync while the page is open.
+      pollId = setInterval(() => refresh(false), liveSyncInterval);
+
+      // Instant refresh whenever the user returns to this tab (e.g. after saving
+      // an edit in the dashboard tab) — visibility + window focus events.
+      const onVisibility = () => {
+        if (document.visibilityState === 'visible') refresh(true);
+      };
+      const onFocus = () => refresh(true);
+      document.addEventListener('visibilitychange', onVisibility);
+      window.addEventListener('focus', onFocus);
+
+      return () => {
+        isMounted = false;
+        unsubscribe();
+        if (initialCheckId) clearTimeout(initialCheckId);
+        if (pollId) clearInterval(pollId);
+        document.removeEventListener('visibilitychange', onVisibility);
+        window.removeEventListener('focus', onFocus);
+      };
+    }
+
     return () => {
       isMounted = false;
       unsubscribe();
     };
-  }, [slug, lang]);
+  }, [slug, lang, liveSync, liveSyncInterval]);
 
   return { tour, loading, error };
 }

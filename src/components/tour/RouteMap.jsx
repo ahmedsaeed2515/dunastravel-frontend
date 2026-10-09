@@ -640,7 +640,7 @@ const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
         description: item.descriptions.join('<br/>• '),
       };
     });
-  }, [itinerary, highlights, tourTitle, t, i18n.language]);
+  }, [itinerary, highlights, tourTitle, t, i18n.language, customMapData]);
 
   useEffect(() => {
     if (!isVisible || !leafletInstance || !mapContainerRef.current || locations.length === 0) return undefined;
