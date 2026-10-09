@@ -202,7 +202,7 @@ export default function Egipto() {
           {/* Card 1: Classic Program (برنامج مصر الكلاسيكي) */}
           <motion.div
             variants={itemVariants}
-            onClick={() => navigate('/classic')}
+            onClick={() => navigate('/tours/classic-program')}
             className="populer-single-box style-classic group relative flex flex-col h-full bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_24px_50px_rgba(245,166,35,0.28)] hover:border-gold-500 hover:-translate-y-2.5 transition-all duration-500 cursor-pointer text-left rtl:text-right"
           >
             <div className="about-sp">
@@ -213,7 +213,7 @@ export default function Egipto() {
               </svg>
             </div>
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
-              <Link to="/classic" className="block w-full h-full overflow-hidden">
+              <Link to="/tours/classic-program" className="block w-full h-full overflow-hidden">
                 <img
                   src={getOptimizedCloudinaryUrl("https://res.cloudinary.com/degbrq3ck/image/upload/v1783029636/Classic_Program_gfal0s.jpg", { width: 500, quality: 'auto:eco' })}
                   alt="Classic Program"
@@ -226,7 +226,7 @@ export default function Egipto() {
               </Link>
             </div>
             <div className="populer-contnet flex flex-col flex-grow p-6 bg-white dark:bg-transparent">
-              <Link to="/classic">
+              <Link to="/tours/classic-program">
                 <h3
                   className="popular-title text-gray-900 dark:text-white group-hover:text-gold-500 dark:group-hover:text-gold-400 font-bold text-[22px] leading-snug line-clamp-2 mb-2.5 transition-colors duration-300"
                   style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
@@ -242,7 +242,7 @@ export default function Egipto() {
               </p>
               <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-end gap-3">
                 <div className="populer-btn defult-btn shrink-0">
-                  <Link to="/classic" className="group/btn">
+                  <Link to="/tours/classic-program" className="group/btn">
                     <span>{t('tourCard.viewDetails', 'View Details')}</span>
                     {isRtl ? (
                       <FaArrowLeft className="text-xs inline-block ml-2 rtl:mr-2 transform group-hover/btn:-translate-x-1.5 transition-transform duration-300" />
