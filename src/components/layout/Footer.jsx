@@ -88,7 +88,7 @@ const Footer = () => {
             <Logo theme="light" height={85} />
           </Link>
           <p className="text-white text-base sm:text-lg font-bold leading-snug">
-            {t('footer.desc', 'Since 2010, we craft unforgettable luxury travel experiences across Egypt, Jordan, Turkey, Tunisia, Greece, the Holy Land, Morocco, and Dubai.')}
+            {t('footer.desc', 'Since 2009, we craft unforgettable luxury travel experiences across Egypt, Jordan, Turkey, Tunisia, Greece, the Holy Land, Morocco, and Dubai.')}
           </p>
           <div className="flex items-center gap-3 mt-4 flex-wrap">
             {/* Facebook */}
