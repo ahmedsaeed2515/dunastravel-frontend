@@ -169,6 +169,7 @@ const FAQ = lazyWithRetry(() => import("./pages/FAQ"));
 const Invoice = lazyWithRetry(() => import("./pages/Invoice"));
 const BookingSuccess = lazyWithRetry(() => import("./pages/BookingSuccess"));
 const BookingCancel = lazyWithRetry(() => import("./pages/BookingCancel"));
+const HotelsCatalog = lazyWithRetry(() => import("./pages/hotels/HotelsCatalog"));
 const HotelDetails = lazyWithRetry(() => import("./pages/hotels/HotelDetails"));
 const RoomDetails = lazyWithRetry(() => import("./pages/hotels/RoomDetails"));
 const MediaGallery = lazyWithRetry(() => import("./pages/MediaGallery"));
@@ -359,6 +360,14 @@ function App() {
                     }
                   />
                   <Route
+                    path="hotels"
+                    element={
+                      <PageTransition>
+                        <HotelsCatalog />
+                      </PageTransition>
+                    }
+                  />
+                  <Route
                     path="hotels/:slug"
                     element={
                       <PageTransition>
@@ -387,6 +396,32 @@ function App() {
                     element={
                       <PageTransition>
                         <Services />
+                      </PageTransition>
+                    }
+                  />
+                </Route>
+                <Route path="hotels">
+                  <Route
+                    index
+                    element={
+                      <PageTransition>
+                        <HotelsCatalog />
+                      </PageTransition>
+                    }
+                  />
+                  <Route
+                    path=":slug"
+                    element={
+                      <PageTransition>
+                        <HotelDetails />
+                      </PageTransition>
+                    }
+                  />
+                  <Route
+                    path=":hotelSlug/:roomSlug"
+                    element={
+                      <PageTransition>
+                        <RoomDetails />
                       </PageTransition>
                     }
                   />
@@ -420,7 +455,7 @@ function App() {
                   <Route path="jordan/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="dubai" element={<PageTransition><BackendToursPage titleKey="nav.dubai" titleDefault="Dubai Tours" filters={{ destination: 'United Arab Emirates' }} bgImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=85" /></PageTransition>} />
                   <Route path="dubai/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
-                  <Route path="hotels" element={<Navigate to="/services" replace />} />
+                  <Route path="hotels" element={<Navigate to="/hotels" replace />} />
                   <Route path="transportation" element={<Navigate to="/transportation" replace />} />
                   <Route path=":slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path=":category/:programSlug" element={<PageTransition><TourDetails /></PageTransition>} />

@@ -47,6 +47,38 @@ vi.mock('../hooks/useTour', () => ({
       included: ['Private Transfers', '5-Star Accommodation'],
       excluded: ['International Flights'],
       highlights: ['Great Pyramids', 'Petra Treasury'],
+      price: 2000,
+      seasonRules: [
+        {
+          seasonName: 'Winter Peak',
+          startDate: '2026-12-01',
+          endDate: '2027-02-28',
+          multiplier: 1.25,
+          supplementUsd: 100,
+        },
+      ],
+      accommodations: [
+        {
+          id: 'acc-1',
+          city: 'Cairo',
+          nights: 3,
+          boardBasis: 'BB',
+          priceSupplementUsd: '150.00',
+          hotel: {
+            id: 'hotel-1',
+            slug: 'mena-house-cairo',
+            name: 'Marriott Mena House Cairo',
+            city: 'Cairo',
+            starRating: 5,
+          },
+          room: {
+            id: 'room-1',
+            slug: 'pyramid-view-suite',
+            name: 'Pyramid View Suite',
+            basePriceUsd: '420.00',
+          },
+        },
+      ],
     },
     loading: false,
     error: null,
@@ -127,7 +159,7 @@ describe('TourCard component', () => {
 });
 
 describe('TourDetails component', () => {
-  it('renders tour details with real title, overview, and itinerary', () => {
+  it('renders tour details with real title, overview, itinerary, relational accommodations, and multiplier seasonal pricing (BUG-06)', () => {
     render(
       <HelmetProvider>
         <MemoryRouter initialEntries={['/tours/egypt-jordan-combined-14d']}>
@@ -141,5 +173,12 @@ describe('TourDetails component', () => {
     expect(screen.getAllByText(/Grand Egypt & Jordan Pilgrimage/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Arrival in Cairo/i)).toBeInTheDocument();
     expect(screen.getByText(/Pyramids of Giza/i)).toBeInTheDocument();
+    // Relational accommodation card
+    expect(screen.getByText(/Marriott Mena House Cairo/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pyramid View Suite/i)).toBeInTheDocument();
+    expect(screen.getByText(/\$420/i)).toBeInTheDocument();
+    // Seasonal rule: 2000 * 1.25 + 100 = $2600
+    expect(screen.getByText(/Winter Peak/i)).toBeInTheDocument();
+    expect(screen.getByText('$2600')).toBeInTheDocument();
   });
 });

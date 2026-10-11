@@ -37,6 +37,15 @@ vi.mock('../hooks/useHotels', () => ({
           name: mockLanguage.startsWith('ar') ? 'غرفة مفردة' : 'Single Room',
           ratePerNight: 75,
           maxOccupancy: 1,
+          seasonPricings: [
+            {
+              id: 'sp-1',
+              seasonName: 'Winter Peak',
+              startDate: '2026-12-01',
+              endDate: '2027-02-28',
+              ratePerNight: 110,
+            },
+          ],
         },
       ],
     },
@@ -46,7 +55,7 @@ vi.mock('../hooks/useHotels', () => ({
 }));
 
 describe('HotelDetails and RoomDetails components', () => {
-  it('renders HotelDetails in English without isAr ReferenceError', () => {
+  it('renders HotelDetails in English without isAr ReferenceError and displays seasonal ratePerNight (BUG-05)', () => {
     mockLanguage = 'en';
     render(
       <HelmetProvider>
@@ -60,6 +69,7 @@ describe('HotelDetails and RoomDetails components', () => {
 
     expect(screen.getAllByText(/Sol Pyramid Hotel/i).length).toBeGreaterThan(0);
     expect(screen.getByText('View Available Rooms')).toBeInTheDocument();
+    expect(screen.getByText('$110')).toBeInTheDocument();
   });
 
   it('renders HotelDetails in Arabic without isAr ReferenceError', () => {
@@ -78,7 +88,7 @@ describe('HotelDetails and RoomDetails components', () => {
     expect(screen.getByText('غرفة مفردة')).toBeInTheDocument();
   });
 
-  it('renders RoomDetails in English without isAr ReferenceError', () => {
+  it('renders RoomDetails in English without isAr ReferenceError and displays seasonal ratePerNight (BUG-05)', () => {
     mockLanguage = 'en';
     render(
       <HelmetProvider>
@@ -91,6 +101,7 @@ describe('HotelDetails and RoomDetails components', () => {
     );
 
     expect(screen.getAllByText(/Single Room/i).length).toBeGreaterThan(0);
+    expect(screen.getByText('$110')).toBeInTheDocument();
   });
 
   it('renders RoomDetails in Arabic without isAr ReferenceError', () => {

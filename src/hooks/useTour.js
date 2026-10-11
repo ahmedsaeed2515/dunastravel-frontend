@@ -96,8 +96,16 @@ function normalizeTour(data, lang = 'en', fallback = null) {
         || data.seasonPricing?.pricing?.categories
         || fallback?.pricingTiers
         || [],
+    seasonRules: Array.isArray(data.seasonPricing?.rules)
+      ? data.seasonPricing.rules
+      : Array.isArray(data.seasonPricing)
+        ? data.seasonPricing
+        : fallback?.seasonRules || [],
     optionalExcursionsPricing: data.seasonPricing?.optionalExcursionsPricing || null,
     accommodation: data.hotelInfo?.accommodation || fallback?.accommodation || null,
+    accommodations: Array.isArray(data.accommodations) && data.accommodations.length > 0
+      ? data.accommodations
+      : fallback?.accommodations || [],
     hotels: data.hotelInfo?.hotels || fallback?.hotels || null,
     hotelCategory: data.hotelInfo?.hotelCategory || fallback?.hotelCategory || null,
     excursions: data.terms?.excursions || fallback?.excursions || [],

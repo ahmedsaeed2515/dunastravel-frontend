@@ -141,3 +141,55 @@ export function useHotels({ destinationSlug, limit = 24 } = {}) {
     error,
   };
 }
+
+export function useSeasons() {
+  const queryKey = ['hotel-seasons'];
+  const cached = getCachedEntry(queryKey);
+  const [seasons, setSeasons] = useState(cached ? cached.data : []);
+  const [loading, setLoading] = useState(!cached);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchSeasons = async () => {
+      try {
+        const currentCached = getCachedEntry(queryKey);
+        if (!currentCached) setLoading(true);
+        setError(null);
+
+        const data = await fetchWithSmartCache(
+          queryKey,
+          async (signal) => {
+            const res = await api.get('/hotels/seasons', { signal });
+            return Array.isArray(res) ? res : [];
+          },
+          CACHE_POLICIES.TOUR_CATALOG
+        );
+
+        if (active) {
+          setSeasons(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        if (err?.name === 'AbortError' || err?.code === 'ERR_CANCELED') return;
+        if (active) {
+          setSeasons([]);
+          setError(err);
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void fetchSeasons();
+    return () => {
+      active = false;
+      abortQuery(queryKey);
+    };
+  }, []);
+
+  return {
+    seasons,
+    loading,
+    error,
+  };
+}
+

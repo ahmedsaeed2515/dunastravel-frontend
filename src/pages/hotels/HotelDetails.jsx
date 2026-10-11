@@ -46,6 +46,7 @@ const HotelDetails = () => {
   const { slug } = useParams();
   const location = useLocation();
   const basePath = location.pathname.startsWith('/programs') ? '/programs' : '/services';
+  const roomLinkBase = location.pathname.startsWith('/hotels') ? '/hotels' : `${basePath}/hotels`;
   const currentSlug = slug || 'sol-pyramid-hotel';
   const { hotel: apiHotel, loading, error } = useHotel(currentSlug);
 
@@ -186,6 +187,7 @@ const HotelDetails = () => {
           bed: r.bedType || r.description || fallback?.bed || '1 King Bed',
           view: r.viewType || fallback?.view || 'Panoramic View',
           image: r.image || r.imageUrl || fallback?.image || apiHotel?.heroImageUrl || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
+          seasonPricings: Array.isArray(r.seasonPricings) ? r.seasonPricings : [],
         };
       })
     : defaultRoomTypes;
@@ -364,7 +366,9 @@ const HotelDetails = () => {
                   {t('tour.tourType', 'Rating')}
                 </span>
                 <span className="font-semibold text-slate-900 dark:text-white text-sm">
-                  {t('hotel.overview.starsLabel', '3-Star Hotel')}
+                  {apiHotel?.stars
+                    ? `${apiHotel.stars}★ ${t('hotel.overview.luxuryHotel', 'Hotel')}`
+                    : t('hotel.overview.starsLabel', '5-Star Hotel')}
                 </span>
               </div>
             </div>
@@ -517,6 +521,24 @@ const HotelDetails = () => {
                       <span>5 Star Service</span>
                     </span>
                   </div>
+                  {Array.isArray(room.seasonPricings) && room.seasonPricings.length > 0 && (
+                    <div className="pt-3 border-t border-slate-100 dark:border-obsidian-700 space-y-1.5">
+                      <span className="block text-[10px] uppercase tracking-wider font-bold text-gold-600 dark:text-gold-400">
+                        {t('hotel.room.seasonalRates', 'Seasonal Rates')}
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {room.seasonPricings.map((sp, spIdx) => (
+                          <span
+                            key={sp.id || sp.seasonId || spIdx}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 dark:bg-obsidian-900 border border-gold-500/30 text-[11px] font-semibold text-slate-800 dark:text-slate-200"
+                          >
+                            <span className="text-gold-600 dark:text-gold-400 font-bold">{sp.seasonName || 'Season'}:</span>
+                            <span>{formatPrice(Number(sp.ratePerNightUsd ?? sp.ratePerNight ?? room.price))}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -532,8 +554,7 @@ const HotelDetails = () => {
                     <span className="text-xs font-medium text-slate-500 dark:text-slate-400">/ {t('hotel.night', 'night')}</span>
                   </div>
                 </div>
-
-                <Link to={`${basePath}/hotels/${currentSlug}/${room.id}`}>
+                <Link to={`${roomLinkBase}/${currentSlug}/${room.id}`}>
                   <button className="px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white bg-[#1e3a8a] hover:bg-[#1d4ed8] dark:bg-[#1e40af] dark:hover:bg-[#2563eb] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95">
                     {t('tourCard.viewDetails', 'View Details')}
                   </button>

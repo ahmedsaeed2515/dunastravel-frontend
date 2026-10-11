@@ -49,6 +49,7 @@ const RoomDetails = () => {
 
   const [activeImage, setActiveImage] = useState(null);
   const basePath = location.pathname.startsWith('/programs') ? '/programs' : '/services';
+  const hotelLinkBase = location.pathname.startsWith('/hotels') ? '/hotels' : `${basePath}/hotels`;
 
   const roomDataMap = {
     'single-room': {
@@ -164,6 +165,7 @@ const RoomDetails = () => {
   const room = (matchedStatic || apiRoom) ? {
     id: roomSlug,
     name: (apiRoom?.name) || (matchedStatic?.name) || (isAr ? 'غرفة فاخرة' : 'Luxury Room'),
+    description: apiRoom?.description || null,
     price: (apiRoom?.ratePerNight !== undefined && apiRoom?.ratePerNight !== null && Number(apiRoom.ratePerNight) > 0)
       ? Number(apiRoom.ratePerNight)
       : (matchedStatic?.price || 85),
@@ -178,6 +180,7 @@ const RoomDetails = () => {
     petsAllowed: apiRoom?.petsAllowed ?? matchedStatic?.petsAllowed ?? false,
     image: apiRoom?.image || matchedStatic?.image || defaultFallbackImage,
     gallery: defaultFallbackGallery,
+    seasonPricings: Array.isArray(apiRoom?.seasonPricings) ? apiRoom.seasonPricings : [],
   } : null;
 
   const todayStr = (() => {
@@ -207,7 +210,28 @@ const RoomDetails = () => {
     return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) : 1;
   })();
 
-  const unitPrice = Number(room?.price) > 0 ? Number(room.price) : 75;
+  const matchedSeasonPricing = (() => {
+    if (!bookingForm.checkInDate || !Array.isArray(room?.seasonPricings) || room.seasonPricings.length === 0) {
+      return null;
+    }
+    const checkIn = new Date(bookingForm.checkInDate).getTime();
+    return room.seasonPricings.find((sp) => {
+      if (!sp.startDate || !sp.endDate) return false;
+      const s = new Date(sp.startDate).getTime();
+      const e = new Date(sp.endDate).getTime();
+      return checkIn >= s && checkIn <= e;
+    }) || null;
+  })();
+
+  const baseRoomPrice = Number(room?.price) > 0 ? Number(room.price) : 75;
+  const matchedSeasonalRate = matchedSeasonPricing
+    ? Number(matchedSeasonPricing.ratePerNightUsd ?? matchedSeasonPricing.ratePerNight ?? 0)
+    : 0;
+  const singleSupplementRate =
+    parseInt(bookingForm.guests, 10) === 1 && matchedSeasonPricing
+      ? Number(matchedSeasonPricing.singleSupplementUsd ?? matchedSeasonPricing.singleSupplement ?? 0)
+      : 0;
+  const unitPrice = (matchedSeasonalRate > 0 ? matchedSeasonalRate : baseRoomPrice) + (singleSupplementRate > 0 ? singleSupplementRate : 0);
   const estimatedTotal = nightsCount * unitPrice;
 
   const [reviews, setReviews] = useState([
@@ -374,7 +398,7 @@ const RoomDetails = () => {
         <div className="relative z-10 container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-start md:items-end gap-6 w-full">
           <div className="text-left w-full md:w-auto rtl:text-right">
             <Link
-              to={`${basePath}/hotels/sol-pyramid-hotel`}
+              to={`${hotelLinkBase}/${currentHotelSlug}`}
               className="inline-flex items-center gap-2 text-gold-500 hover:text-gold-600 font-semibold mb-4 transition-colors"
             >
               <FaArrowLeft className={isRtl ? 'rotate-180' : ''} />
@@ -419,6 +443,13 @@ const RoomDetails = () => {
       <section className="container mx-auto px-6 py-12 max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-12 text-left rtl:text-right">
+            {room.description && (
+              <div className="bg-white dark:bg-obsidian-800 p-5 md:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-obsidian-700">
+                <p className="text-base md:text-lg text-slate-700 dark:text-slate-200 leading-relaxed">
+                  {room.description}
+                </p>
+              </div>
+            )}
             {/* Room Features Bar */}
             <div className="bg-white dark:bg-[#0d162a] p-6 md:p-8 rounded-3xl shadow-xl dark:shadow-2xl border-2 border-slate-200/90 dark:border-blue-900/60 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
@@ -466,6 +497,41 @@ const RoomDetails = () => {
                 </span>
               </div>
             </div>
+
+            {/* Seasonal Room Pricing Matrix */}
+            {Array.isArray(room.seasonPricings) && room.seasonPricings.length > 0 && (
+              <div className="bg-white dark:bg-obsidian-800 p-5 md:p-8 rounded-2xl shadow-sm border border-gold-500/40">
+                <h2 className="text-2xl font-display font-semibold text-slate-900 dark:text-white mb-4 pb-3 border-b border-slate-100 dark:border-obsidian-700 flex items-center gap-3">
+                  <span className="w-1.5 h-6 bg-gold-500 rounded-full" />
+                  {t('hotel.room.seasonalRatesTitle', 'Seasonal Room Rates')}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {room.seasonPricings.map((sp, spIdx) => (
+                    <div
+                      key={sp.id || sp.seasonId || spIdx}
+                      className="p-4 rounded-xl bg-amber-50/70 dark:bg-obsidian-900/70 border border-gold-500/30 flex items-center justify-between gap-3"
+                    >
+                      <div>
+                        <span className="text-xs font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400 block">
+                          {sp.seasonName || 'Season'}
+                        </span>
+                        {(sp.startDate || sp.endDate) && (
+                          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                            {String(sp.startDate).slice(0, 10)} → {String(sp.endDate).slice(0, 10)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-right rtl:text-left">
+                        <span className="text-base font-black text-slate-900 dark:text-white">
+                          {formatPrice(Number(sp.ratePerNightUsd ?? sp.ratePerNight ?? room.price))}
+                        </span>
+                        <span className="block text-[10px] text-slate-400">/ {t('hotel.night', 'night')}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Amenities Section */}
             <div className="bg-white dark:bg-[#0d162a] p-6 md:p-8 rounded-3xl shadow-xl dark:shadow-2xl border-2 border-slate-200/90 dark:border-blue-900/60">
