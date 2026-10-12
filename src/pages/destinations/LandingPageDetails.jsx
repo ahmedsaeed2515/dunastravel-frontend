@@ -203,7 +203,14 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   const slug = (rawSlug || '').toLowerCase().trim();
   const { t } = useTranslation();
   const { landingPage, loading, error, retry } = useLandingPage(slug, { destinationOnly });
-  const { tours: allCatalogTours } = useTours({ limit: 70 });
+  const hasEmbeddedTours = Array.isArray(landingPage?.tours) && landingPage.tours.length > 0;
+  const needsFallbackTours = !loading && !hasEmbeddedTours && slug !== 'holy-land' && slug !== 'holyland';
+  const targetDestFilter = (slug === 'egipto' || slug === 'egito') ? 'egypt' : slug;
+  const { tours: allCatalogTours, loading: fallbackToursLoading } = useTours(
+    { destination: targetDestFilter, limit: 24 },
+    { enabled: needsFallbackTours }
+  );
+  const isToursLoading = loading || (needsFallbackTours && fallbackToursLoading);
   const [displayTours, setDisplayTours] = React.useState([]);
 
   React.useEffect(() => {
@@ -475,6 +482,28 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
               />
             ))}
           </motion.div>
+        ) : isToursLoading && slug !== 'holy-land' && slug !== 'holyland' ? (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3" role="status" aria-label={t('common.loading', 'Loading tours...')}>
+            {[0, 1, 2].map((skelIdx) => (
+              <div
+                key={`lp-tour-skel-${skelIdx}`}
+                className="rounded-2xl overflow-hidden bg-white dark:bg-[#1a1a30]/80 border border-gold-500/20 shadow-lg h-[430px] animate-pulse flex flex-col"
+              >
+                <div className="h-56 bg-obsidian-200/70 dark:bg-obsidian-800/60 w-full" />
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="h-5 w-4/5 bg-obsidian-200 dark:bg-obsidian-700 rounded" />
+                    <div className="h-4 w-full bg-obsidian-100 dark:bg-obsidian-800 rounded" />
+                    <div className="h-4 w-2/3 bg-obsidian-100 dark:bg-obsidian-800 rounded" />
+                  </div>
+                  <div className="pt-4 border-t border-obsidian-100 dark:border-obsidian-800 flex items-center justify-between">
+                    <div className="h-5 w-24 bg-gold-500/30 rounded" />
+                    <div className="h-9 w-28 bg-obsidian-200 dark:bg-obsidian-700 rounded-lg" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="rounded-3xl border border-gold-500/20 bg-white/80 dark:bg-[#1a1a30]/80 backdrop-blur-xl p-10 md:p-14 text-center text-obsidian-700 dark:text-ivory-300 shadow-xl max-w-3xl mx-auto">
             <div className="w-16 h-16 rounded-full bg-gold-500/15 border border-gold-500/30 flex items-center justify-center mx-auto mb-6 text-gold-500 text-3xl">

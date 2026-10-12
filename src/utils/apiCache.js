@@ -182,16 +182,82 @@ function notifyKeySubscribers(key, data, isError = false) {
   }
 }
 
+// ── SessionStorage Hydration (Public Catalog Only) ──────────────────────────
+const SESSION_CACHE_PREFIX = 'dunas_swr_v2:';
+const MAX_SESSION_ITEM_CHARS = 180_000;
+
+function readSessionCache(key) {
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return null;
+  try {
+    const raw = sessionStorage.getItem(SESSION_CACHE_PREFIX + key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || parsed.isPrivate) return null;
+    if (Date.now() > parsed.expiresAt) {
+      sessionStorage.removeItem(SESSION_CACHE_PREFIX + key);
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeSessionCache(key, entry) {
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined' || entry.isPrivate) return;
+  try {
+    const serialized = JSON.stringify(entry);
+    if (serialized.length <= MAX_SESSION_ITEM_CHARS) {
+      sessionStorage.setItem(SESSION_CACHE_PREFIX + key, serialized);
+    }
+  } catch {
+    // Ignore QuotaExceededError or private browsing restrictions
+  }
+}
+
+function removeSessionCache(key) {
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.removeItem(SESSION_CACHE_PREFIX + key);
+  } catch {
+    // Ignore storage errors
+  }
+}
+
+function clearAllSessionCache() {
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return;
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const k = sessionStorage.key(i);
+      if (k && k.startsWith(SESSION_CACHE_PREFIX)) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach((k) => sessionStorage.removeItem(k));
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 // ── Cache Entry Accessors ───────────────────────────────────────────────────
 export function getCachedEntry(rawKey) {
   const key = normalizeQueryKey(rawKey);
-  const entry = cacheStore.get(key);
+  let entry = cacheStore.get(key);
+  if (!entry) {
+    const hydrated = readSessionCache(key);
+    if (hydrated) {
+      cacheStore.set(key, hydrated);
+      entry = hydrated;
+    }
+  }
   if (!entry) return null;
 
   const now = Date.now();
   // If entry has completely expired past TTL, remove it
   if (now > entry.expiresAt) {
     cacheStore.delete(key);
+    removeSessionCache(key);
     return null;
   }
 
@@ -213,13 +279,18 @@ export function setCachedEntry(rawKey, data, policy = CACHE_POLICIES.TOUR_CATALO
   const staleTime = policy.staleTime ?? 60_000;
   const ttl = policy.ttl ?? 300_000;
 
-  cacheStore.set(key, {
+  const entry = {
     data,
     timestamp: now,
     staleAt: now + staleTime,
     expiresAt: now + ttl,
     isPrivate: Boolean(policy.isPrivate),
-  });
+  };
+
+  cacheStore.set(key, entry);
+  if (!entry.isPrivate) {
+    writeSessionCache(key, entry);
+  }
 
   enforceMaxEntries();
 }
@@ -239,6 +310,7 @@ export function invalidateQueries(matcher) {
     for (const [key, entry] of cacheStore.entries()) {
       if (matcher(key, entry)) {
         cacheStore.delete(key);
+        removeSessionCache(key);
         notifyKeySubscribers(key, null);
       }
     }
@@ -249,6 +321,7 @@ export function invalidateQueries(matcher) {
   for (const [key] of cacheStore.entries()) {
     if (key === prefix || key.startsWith(prefix) || key.includes(prefix)) {
       cacheStore.delete(key);
+      removeSessionCache(key);
       notifyKeySubscribers(key, null);
     }
   }
@@ -268,6 +341,7 @@ export function clearPrivateUserCache() {
       key.includes('/in-app-notifications')
     ) {
       cacheStore.delete(key);
+      removeSessionCache(key);
       notifyKeySubscribers(key, null);
     }
   }
@@ -281,12 +355,18 @@ export function clearAllCache() {
   inFlightPromises.clear();
   activeAbortControllers.clear();
   keySubscribers.clear();
+  clearAllSessionCache();
   resetCacheMetrics();
 }
 
 // ── Request Cancellation ────────────────────────────────────────────────────
-export function abortQuery(rawKey) {
+export function abortQuery(rawKey, options = {}) {
   const key = normalizeQueryKey(rawKey);
+  const subs = keySubscribers.get(key);
+  // Do not abort a shared in-flight query if other mounted components are still subscribed to it
+  if (!options.force && subs && subs.size > 0) {
+    return;
+  }
   const controller = activeAbortControllers.get(key);
   if (controller) {
     controller.abort('Query superseded or cancelled');
@@ -335,7 +415,14 @@ export async function fetchWithSmartCache(rawKey, fetcher, options = {}) {
     return fetcher();
   }
 
-  const cached = cacheStore.get(key);
+  let cached = cacheStore.get(key);
+  if (!cached && !policy.isPrivate) {
+    const hydrated = readSessionCache(key);
+    if (hydrated) {
+      cacheStore.set(key, hydrated);
+      cached = hydrated;
+    }
+  }
 
   // 1. FRESH CACHE HIT
   if (cached && now < cached.staleAt) {

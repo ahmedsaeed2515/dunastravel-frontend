@@ -78,15 +78,8 @@ export function useMedia(optionsOrTourId = null) {
         const result = await fetchWithSmartCache(
           queryKey,
           async ({ signal } = {}) => {
-            try {
-              const raw = await api.get(url, { signal });
-              return normalizeAssets(raw, isSpecific);
-            } catch {
-              return {
-                galleryImages: isSpecific ? [] : DEFAULT_GALLERY_IMAGES,
-                videos: [],
-              };
-            }
+            const raw = await api.get(url, { signal });
+            return normalizeAssets(raw, isSpecific);
           },
           CACHE_POLICIES.STATIC_CONFIG
         );
@@ -112,7 +105,6 @@ export function useMedia(optionsOrTourId = null) {
 
     return () => {
       isMounted = false;
-      abortQuery(queryKey);
     };
   }, [category, tourId, isSpecific]);
 
@@ -128,7 +120,7 @@ export function useMedia(optionsOrTourId = null) {
 }
 
 const showcaseCache = { data: null, timestamp: 0 };
-const SHOWCASE_CACHE_TTL_MS = 60_000; // 60 seconds
+const SHOWCASE_CACHE_TTL_MS = 5 * 60_000; // 5 minutes
 
 export function invalidateShowcaseCache() {
   showcaseCache.data = null;
@@ -141,10 +133,11 @@ function getCloudNameFromUrl(url) {
   return match ? match[1] : 'u7xf91gp';
 }
 
-export function useMediaShowcase() {
+export function useMediaShowcase(options = {}) {
+  const enabled = options?.enabled !== undefined ? Boolean(options.enabled) : true;
   const [photos, setPhotos] = useState(() => showcaseCache.data?.photos || DEFAULT_GALLERY_IMAGES);
   const [videos, setVideos] = useState(() => showcaseCache.data?.videos || []);
-  const [loading, setLoading] = useState(() => !showcaseCache.data);
+  const [loading, setLoading] = useState(() => enabled && !showcaseCache.data);
   const [error, setError] = useState(null);
 
   const fetchShowcase = async (force = false) => {
@@ -158,7 +151,11 @@ export function useMediaShowcase() {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.get('/media/showcase');
+      const res = await fetchWithSmartCache(
+        ['media', 'showcase'],
+        async ({ signal } = {}) => api.get('/media/showcase', { signal }),
+        { policy: CACHE_POLICIES.STATIC_CONFIG, bypassCache: force }
+      );
       const fetchedPhotos = (res && Array.isArray(res.photos) && res.photos.length > 0)
         ? res.photos.map(p => ({
             ...p,
@@ -200,21 +197,23 @@ export function useMediaShowcase() {
   };
 
   useEffect(() => {
-    let isMounted = true;
+    if (!enabled) {
+      setLoading(false);
+      return undefined;
+    }
     fetchShowcase();
 
     const handleFocus = () => {
-      if (Date.now() - showcaseCache.timestamp > 30_000) {
+      if (Date.now() - showcaseCache.timestamp > 60_000) {
         fetchShowcase(true);
       }
     };
 
     window.addEventListener('focus', handleFocus);
     return () => {
-      isMounted = false;
       window.removeEventListener('focus', handleFocus);
     };
-  }, []);
+  }, [enabled]);
 
   return {
     photos,

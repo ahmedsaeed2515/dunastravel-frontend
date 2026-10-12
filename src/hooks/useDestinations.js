@@ -74,6 +74,10 @@ export function useDestinations() {
     return cached?.data || staticDestinations;
   });
   const [loading, setLoading] = useState(() => !getCachedEntry(queryKey));
+  const [refreshing, setRefreshing] = useState(() => {
+    const cached = getCachedEntry(queryKey);
+    return !cached || cached.isStale;
+  });
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -81,6 +85,7 @@ export function useDestinations() {
       if (!isErr && updated) {
         setDestinations(updated);
         setLoading(false);
+        setRefreshing(false);
         setError(null);
       }
     });
@@ -91,56 +96,61 @@ export function useDestinations() {
     let isMounted = true;
 
     const cached = getCachedEntry(queryKey);
-    if (cached) {
+    if (cached?.data) {
       setDestinations(cached.data);
-      if (!cached.isStale) {
-        setLoading(false);
-      }
+      setLoading(false);
+      setRefreshing(Boolean(cached.isStale));
     } else {
       setLoading(true);
+      setRefreshing(true);
     }
 
     fetchWithSmartCache(
       queryKey,
       async ({ signal } = {}) => {
-        try {
-          const res = await api.get(`/destinations?locale=${encodeURIComponent(lang)}`, { signal });
-          const items = readDestinations(res);
-          return items.length > 0 ? items : staticDestinations;
-        } catch {
-          return staticDestinations;
+        const res = await api.get(`/destinations?locale=${encodeURIComponent(lang)}`, { signal });
+        const items = readDestinations(res);
+        if (items.length === 0) {
+          throw new Error('Empty destinations response');
         }
+        return items;
       },
       { policy: CACHE_POLICIES.DESTINATIONS }
     )
       .then((items) => {
         if (isMounted) {
-          setDestinations(items);
+          setDestinations(items && items.length > 0 ? items : staticDestinations);
           setError(null);
           setLoading(false);
+          setRefreshing(false);
         }
       })
       .catch((err) => {
-        if (err.name === 'AbortError') return;
-        if (isMounted) {
-          setDestinations(staticDestinations);
+        if (!isMounted) return;
+        if (err.name === 'AbortError') {
           setLoading(false);
+          setRefreshing(false);
+          return;
         }
+        setDestinations((prev) => (prev && prev.length > 0 ? prev : staticDestinations));
+        setLoading(false);
+        setRefreshing(false);
       });
 
     return () => {
       isMounted = false;
-      abortQuery(queryKey);
     };
   }, [lang]);
 
   return {
     destinations,
     loading,
+    refreshing,
     error,
     retry: () => {
       invalidateQueries(queryKey);
       setLoading(true);
+      setRefreshing(true);
     },
   };
 }

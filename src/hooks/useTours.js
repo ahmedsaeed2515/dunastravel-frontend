@@ -193,9 +193,10 @@ function parseToursResponse(response, filters, lang) {
   return { items, meta };
 }
 
-export function useTours(filters = {}) {
+export function useTours(filters = {}, options = {}) {
   const { i18n } = useTranslation();
   const lang = supportedLocale(i18n.language);
+  const enabled = options?.enabled !== undefined ? Boolean(options.enabled) : (filters?.enabled !== undefined ? Boolean(filters.enabled) : true);
 
   // Build clean normalized filters
   const cleanFilters = {};
@@ -219,7 +220,12 @@ export function useTours(filters = {}) {
       hasPrevPage: false,
     };
   });
-  const [loading, setLoading] = useState(() => !getCachedEntry(queryKey));
+  const [loading, setLoading] = useState(() => enabled && !getCachedEntry(queryKey));
+  const [refreshing, setRefreshing] = useState(() => {
+    if (!enabled) return false;
+    const cached = getCachedEntry(queryKey);
+    return !cached || Boolean(cached.isStale);
+  });
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
@@ -230,27 +236,35 @@ export function useTours(filters = {}) {
 
   // Subscribe to background revalidation or cache invalidations
   useEffect(() => {
+    if (!enabled) return undefined;
     const unsubscribe = subscribeToQueryKey(queryKey, (updatedData, isErr) => {
       if (!isErr && updatedData) {
         setToursState(updatedData);
         setLoading(false);
+        setRefreshing(false);
         setError(null);
       }
     });
     return unsubscribe;
-  }, [JSON.stringify(queryKey)]);
+  }, [JSON.stringify(queryKey), enabled]);
 
   useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      setRefreshing(false);
+      return undefined;
+    }
+
     let isMounted = true;
 
     const cached = getCachedEntry(queryKey);
-    if (cached) {
+    if (cached?.data) {
       setToursState(cached.data);
-      if (!cached.isStale) {
-        setLoading(false);
-      }
+      setLoading(false);
+      setRefreshing(Boolean(cached.isStale));
     } else {
       setLoading(true);
+      setRefreshing(true);
     }
 
     const fetcher = async ({ signal } = {}) => {
@@ -267,7 +281,7 @@ export function useTours(filters = {}) {
       if (cleanFilters.category && items.length === 0) {
         try {
           const catLower = cleanFilters.category.toLowerCase();
-          const broadParams = new URLSearchParams({ lang, limit: '70' });
+          const broadParams = new URLSearchParams({ lang, limit: '36' });
           const broadRes = await api.get(`/tours?${broadParams.toString()}`, { signal });
           const { items: allItems } = parseToursResponse(broadRes, {}, lang);
 
@@ -299,7 +313,7 @@ export function useTours(filters = {}) {
               hasPrevPage: false,
             };
           }
-        } catch (err) {
+        } catch {
           // Keep initial fetched items if broad fetch fails
         }
       }
@@ -324,13 +338,14 @@ export function useTours(filters = {}) {
       .finally(() => {
         if (isMounted) {
           setLoading(false);
+          setRefreshing(false);
         }
       });
 
     return () => {
       isMounted = false;
     };
-  }, [JSON.stringify(queryKey), lang, retryCount]);
+  }, [JSON.stringify(queryKey), lang, retryCount, enabled]);
 
   return {
     tours: toursState.tours,
@@ -341,6 +356,7 @@ export function useTours(filters = {}) {
     hasNextPage: toursState.hasNextPage,
     hasPrevPage: toursState.hasPrevPage,
     loading,
+    refreshing,
     error,
     retry,
   };

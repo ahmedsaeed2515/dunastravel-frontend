@@ -154,17 +154,22 @@ export const FALLBACK_HOTEL_SERVICE = {
   isActive: true,
 };
 
-export function useServices(category = null) {
+export function useServices(category = null, options = {}) {
   const { i18n } = useTranslation();
   const lang = localeFor(i18n.language);
+  const enabled = options?.enabled !== undefined ? Boolean(options.enabled) : true;
   const queryKey = ['services', category || 'all', lang];
 
   const cached = getCachedEntry(queryKey);
   const [services, setServices] = useState(cached ? cached.data : []);
-  const [loading, setLoading] = useState(!cached);
+  const [loading, setLoading] = useState(enabled && !cached);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      return undefined;
+    }
     let isMounted = true;
     const fetchServices = async () => {
       try {
@@ -228,7 +233,7 @@ export function useServices(category = null) {
     return () => {
       isMounted = false;
     };
-  }, [category, lang]);
+  }, [category, lang, enabled]);
 
   return {
     services,

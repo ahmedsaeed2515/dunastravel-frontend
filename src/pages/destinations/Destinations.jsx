@@ -9,10 +9,18 @@ import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 const Destinations = () => {
   const { t } = useTranslation();
-  const { destinations, loading: destsLoading, error } = useDestinations();
-  const { tours: allTours, loading: toursLoading } = useTours({ limit: 100 });
-  const loading = destsLoading || toursLoading;
+  const { destinations, loading: destsLoading, refreshing: destsRefreshing, error } = useDestinations();
   const destinationsList = Array.isArray(destinations) ? destinations : [];
+
+  // Only fetch the fallback tour catalog if /destinations finished loading and any destination is still missing embedded tours
+  const needsFallbackTours = !destsLoading && destinationsList.some(
+    (d) => (Number(d?.toursCount) > 0) && (!Array.isArray(d?.tours) || d.tours.length === 0)
+  );
+  const { tours: allTours, loading: toursLoading } = useTours(
+    { limit: 48 },
+    { enabled: needsFallbackTours }
+  );
+  const isFetchingTours = destsLoading || destsRefreshing || (needsFallbackTours && toursLoading);
 
   const mainHeroBgImage = destinationsList.find((d) => d?.heroImageUrl || d?.image)?.heroImageUrl 
     || destinationsList.find((d) => d?.heroImageUrl || d?.image)?.image
@@ -41,22 +49,18 @@ const Destinations = () => {
     />
 
     {/* Destinations Iteration */}
-    <section className="container mx-auto px-6 -mt-16 relative z-20">
-      {loading ? (
-        <div className="flex justify-center py-24">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold-500"></div>
-        </div>
-      ) : error ? (
+    <section id="tours-grid" className="container mx-auto px-6 -mt-16 relative z-20">
+      {error && destinationsList.length === 0 ? (
         <div className="mx-auto max-w-2xl rounded-2xl border border-red-300 bg-red-50 p-6 text-center text-red-800">
           {t('destinations.loadError', 'Destinations could not be loaded. Please try again later.')}
         </div>
-      ) : destinationsList.length === 0 ? (
+      ) : destinationsList.length === 0 && !isFetchingTours ? (
         <div className="mx-auto max-w-2xl rounded-2xl border border-obsidian-200 bg-white p-8 text-center text-obsidian-600">
           {t('destinations.empty', 'No destinations are currently available.')}
         </div>
       ) : (
         <div className="flex flex-col gap-24">
-          {destinationsList.map((destination) => {
+          {destinationsList.map((destination, destIndex) => {
             const destSlug = String(destination?.slug || destination?.id || '').toLowerCase();
             const targetSlug = (destSlug === 'egipto' || destSlug === 'egito') ? 'egypt' : destSlug;
 
@@ -134,6 +138,8 @@ const Destinations = () => {
                   <img 
                     src={cardImage} 
                     alt={destination.name} 
+                    loading={destIndex === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     onError={(e) => {
                       if (cardImage !== '/imgs/egyothero.webp') {
@@ -175,6 +181,28 @@ const Destinations = () => {
                           destination: tour.destination || tour.country || targetSlug || destination.slug || destination.name
                         }} 
                       />
+                    ))}
+                  </div>
+                ) : isFetchingTours && (destination.toursCount > 0 || targetSlug !== 'holy-land') ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {Array.from({ length: 3 }).map((_, skelIdx) => (
+                      <div
+                        key={`dest-tour-skel-${destination.id}-${skelIdx}`}
+                        className="rounded-2xl overflow-hidden bg-white border border-obsidian-100 shadow-sm h-[430px] animate-pulse flex flex-col"
+                      >
+                        <div className="h-56 bg-obsidian-200/70 w-full" />
+                        <div className="p-6 flex-1 flex flex-col justify-between">
+                          <div className="space-y-3">
+                            <div className="h-5 w-4/5 bg-obsidian-200 rounded" />
+                            <div className="h-4 w-full bg-obsidian-100 rounded" />
+                            <div className="h-4 w-2/3 bg-obsidian-100 rounded" />
+                          </div>
+                          <div className="pt-4 border-t border-obsidian-100 flex items-center justify-between">
+                            <div className="h-5 w-24 bg-gold-500/30 rounded" />
+                            <div className="h-9 w-28 bg-obsidian-200 rounded-lg" />
+                          </div>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 ) : (

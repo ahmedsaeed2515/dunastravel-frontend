@@ -198,4 +198,37 @@ describe('Smart Query Cache & Deduplication Engine (apiCache.js)', () => {
       expect(fetcher).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('Shared Query Cancellation Protection', () => {
+    it('does not abort a shared in-flight query when other subscribers are still active', async () => {
+      const { subscribeToQueryKey, abortQuery } = await import('../utils/apiCache');
+      const key = ['destinations', 'ar'];
+      let capturedSignal;
+      let resolveReq;
+
+      const fetcher = vi.fn().mockImplementation(({ signal } = {}) => {
+        capturedSignal = signal;
+        return new Promise((resolve) => {
+          resolveReq = resolve;
+        });
+      });
+
+      const unsubNavbar = subscribeToQueryKey(key, () => {});
+      const unsubHome = subscribeToQueryKey(key, () => {});
+
+      const promise = fetchWithSmartCache(key, fetcher, { policy: CACHE_POLICIES.DESTINATIONS });
+
+      // Home unmounts and unsubscribes, then calls abortQuery(key)
+      unsubHome();
+      abortQuery(key);
+
+      // Because Navbar is still subscribed, signal MUST NOT be aborted!
+      expect(capturedSignal?.aborted).toBe(false);
+
+      resolveReq([{ slug: 'egypt', title: 'Egypt' }]);
+      const data = await promise;
+      expect(data).toEqual([{ slug: 'egypt', title: 'Egypt' }]);
+      unsubNavbar();
+    });
+  });
 });

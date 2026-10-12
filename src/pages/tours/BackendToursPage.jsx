@@ -13,12 +13,21 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [displayTours, setDisplayTours] = useState([]);
-  const { tours, total, totalPages, page, hasNextPage, hasPrevPage, loading, error, retry } = useTours({
+  const [retainedTours, setRetainedTours] = useState([]);
+  const { tours, total, totalPages, page, hasNextPage, hasPrevPage, loading, refreshing, error, retry } = useTours({
     limit,
     page: currentPage,
     ...filters,
   });
   const title = t(titleKey, titleDefault);
+
+  if (Array.isArray(tours) && tours.length > 0 && tours !== retainedTours) {
+    setRetainedTours(tours);
+  }
+
+  const activeTours = (Array.isArray(tours) && tours.length > 0)
+    ? tours
+    : (loading ? retainedTours : []);
 
   const heroImage = bgImage || (
     filters.category === 'Religious'
@@ -27,6 +36,7 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
   );
 
   const handlePageChange = (newPage) => {
+    setDisplayTours([]);
     setCurrentPage(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -58,20 +68,36 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
 
       <section className="container mx-auto px-6 mt-16" id="tours-grid">
 
-        {loading ? (
+        {loading && activeTours.length === 0 ? (
           <div className="grid grid-cols-1 gap-8 py-8 md:grid-cols-2 lg:grid-cols-3" role="status" aria-label={t('common.loading', 'Loading tours')}>
             {[0, 1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="h-96 animate-pulse rounded-2xl bg-obsidian-200/60 dark:bg-obsidian-800/50" />
+              <div
+                key={item}
+                className="h-[430px] rounded-2xl overflow-hidden bg-white dark:bg-[#1a1a30]/80 border border-obsidian-200/60 dark:border-gray-800 shadow-sm animate-pulse flex flex-col"
+              >
+                <div className="h-56 bg-obsidian-200/70 dark:bg-obsidian-800/60 w-full" />
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="h-5 w-4/5 bg-obsidian-200 dark:bg-obsidian-700 rounded" />
+                    <div className="h-4 w-full bg-obsidian-100 dark:bg-obsidian-800 rounded" />
+                    <div className="h-4 w-2/3 bg-obsidian-100 dark:bg-obsidian-800 rounded" />
+                  </div>
+                  <div className="pt-4 border-t border-obsidian-100 dark:border-obsidian-800 flex items-center justify-between">
+                    <div className="h-5 w-24 bg-gold-500/30 rounded" />
+                    <div className="h-9 w-28 bg-obsidian-200 dark:bg-obsidian-700 rounded-lg" />
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-        ) : error ? (
+        ) : error && activeTours.length === 0 ? (
           <ErrorState
             title={t('common.errorOccurred', 'Unable to load tours')}
             message={t('tours.loadError', 'Tours could not be loaded. Please try again later.')}
             actionLabel={t('common.tryAgain', 'Try again')}
             onRetry={retry}
           />
-        ) : tours.length === 0 ? (
+        ) : activeTours.length === 0 ? (
           <div className="mx-auto max-w-2xl rounded-2xl border border-obsidian-200 dark:border-gray-800 bg-white dark:bg-[#1a1a30] p-10 text-center text-obsidian-600 dark:text-ivory-300 shadow-card">
             <p className="text-body-lg font-medium mb-2">{t('tours.emptyTitle', 'No Journeys Found')}</p>
             <p className="text-body-sm text-obsidian-400 dark:text-ivory-400">
@@ -81,13 +107,13 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
         ) : (
           <>
             <DurationSortFilter
-              tours={tours}
+              tours={activeTours}
               onFilterChange={setDisplayTours}
               className="mb-8"
             />
 
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {(displayTours.length > 0 ? displayTours : tours).map((tour) => (
+            <div className={`grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 transition-opacity duration-200 ${loading || refreshing ? 'opacity-80' : 'opacity-100'}`}>
+              {(displayTours.length > 0 ? displayTours : activeTours).map((tour) => (
                 <TourCard key={tour.id} tour={tour} />
               ))}
             </div>

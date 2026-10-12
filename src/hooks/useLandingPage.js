@@ -95,15 +95,34 @@ export function useLandingPage(slug, { destinationOnly = false } = {}) {
 
   const queryKey = canonicalSlug ? ['landing-page', destinationOnly ? 'dest' : 'lp', canonicalSlug, locale] : null;
 
+  const findSeededFromDestinationsList = () => {
+    if (!canonicalSlug) return null;
+    const listCached = getCachedEntry(['destinations', locale]);
+    if (!Array.isArray(listCached?.data)) return null;
+    const match = listCached.data.find((d) => {
+      const s = String(d?.slug || d?.id || '').toLowerCase();
+      return s === canonicalSlug || (destinationSlugAliases[s] && destinationSlugAliases[s] === canonicalSlug);
+    });
+    if (!match) return null;
+    try {
+      return normalizeLandingPage(match);
+    } catch {
+      return null;
+    }
+  };
+
   const [landingPage, setLandingPage] = useState(() => {
     if (!queryKey) return null;
     const cached = getCachedEntry(queryKey);
-    return cached ? cached.data : null;
+    if (cached?.data) return cached.data;
+    return findSeededFromDestinationsList();
   });
   const [loading, setLoading] = useState(() => {
     if (!queryKey) return false;
     const cached = getCachedEntry(queryKey);
-    return !cached;
+    if (cached?.data) return false;
+    const seeded = findSeededFromDestinationsList();
+    return !(seeded && Array.isArray(seeded.tours) && seeded.tours.length > 0);
   });
   const [error, setError] = useState(null);
   const [reloadNonce, setReloadNonce] = useState(0);
@@ -126,14 +145,20 @@ export function useLandingPage(slug, { destinationOnly = false } = {}) {
     });
 
     const cached = getCachedEntry(queryKey);
-    if (cached) {
+    if (cached?.data) {
       setLandingPage(cached.data);
       if (!cached.isStale) {
         setLoading(false);
       }
     } else {
-      setLandingPage(null);
-      setLoading(true);
+      const seeded = findSeededFromDestinationsList();
+      if (seeded) {
+        setLandingPage(seeded);
+        setLoading(!(Array.isArray(seeded.tours) && seeded.tours.length > 0));
+      } else {
+        setLandingPage(null);
+        setLoading(true);
+      }
     }
 
     fetchWithSmartCache(

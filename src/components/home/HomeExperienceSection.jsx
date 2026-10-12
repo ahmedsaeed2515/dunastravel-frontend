@@ -390,14 +390,44 @@ const HomeExperienceSection = () => {
 
     el.scrollBy({ left: scrollDelta, behavior: 'smooth' });
   };
-  const { photos: showcasePhotos, videos: showcaseVideos, loading: showcaseLoading } = useMediaShowcase();
+  const { photos: showcasePhotos, videos: showcaseVideos, loading: showcaseLoading } = useMediaShowcase({
+    enabled: isPhotoSectionVisible || isVideoSectionVisible,
+  });
+  const {
+    destinations: liveDestinationsRaw,
+    loading: destinationsLoading,
+    error: destinationsError,
+  } = useDestinations();
   const {
     tours: allLiveToursRaw,
     loading: toursLoading,
     error: toursError,
-  } = useTours({ limit: 70 });
-  const allLiveTours = useMemo(() => Array.isArray(allLiveToursRaw) ? allLiveToursRaw : [], [allLiveToursRaw]);
-  const { services: rawTransportation = [], loading: transportLoading } = useServices('transportation');
+  } = useTours({ limit: 24 });
+  const allLiveTours = useMemo(() => {
+    if (Array.isArray(allLiveToursRaw) && allLiveToursRaw.length > 0) {
+      return allLiveToursRaw;
+    }
+    const embedded = [];
+    const seen = new Set();
+    (liveDestinationsRaw || []).forEach((dest) => {
+      const destSlug = dest?.slug || dest?.id || 'egypt';
+      (dest?.tours || []).forEach((tItem) => {
+        const key = tItem?.id || tItem?.slug;
+        if (key && !seen.has(key)) {
+          seen.add(key);
+          embedded.push({
+            ...tItem,
+            destination: tItem.destination || destSlug,
+            price: Number(tItem.basePriceUsd ?? tItem.price ?? 0),
+          });
+        }
+      });
+    });
+    return embedded;
+  }, [allLiveToursRaw, liveDestinationsRaw]);
+  const { services: rawTransportation = [], loading: transportLoading } = useServices('transportation', {
+    enabled: isTransportSectionVisible,
+  });
   const transportationList = useMemo(() => {
     const rawList = Array.isArray(rawTransportation) && rawTransportation.length > 0
       ? rawTransportation
@@ -439,11 +469,6 @@ const HomeExperienceSection = () => {
       };
     });
   }, [rawTransportation, lang, t]);
-  const {
-    destinations: liveDestinationsRaw,
-    loading: destinationsLoading,
-    error: destinationsError,
-  } = useDestinations();
   const liveDestinations = useMemo(() => Array.isArray(liveDestinationsRaw) ? liveDestinationsRaw : [], [liveDestinationsRaw]);
   const DEST_HERO_MAP = {
     egypt: 'https://res.cloudinary.com/nclvl0iu/image/upload/v1790131551/egyothero.webp',
@@ -1165,13 +1190,22 @@ const HomeExperienceSection = () => {
             </p>
           </div>
 
-          {/* Destination Cards Grid - Exact Travolo Replica (3 Columns, Tall 520px Cards, Top Hanging Badge & Bottom Floating Box) */}
+          {/* Destination Cards Grid - Progressive Rendering (Immediate Cards + Non-Blocking SWR) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(destinationsLoading || toursLoading) && (
-              <div className="lg:col-span-3 rounded-3xl border border-white/20 bg-[#041446]/50 px-6 py-16 text-center text-white backdrop-blur-md">
-                <div className="inline-block w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p className="font-bold text-lg text-white">{t('common.loading', 'Loading destinations and tours...')}</p>
-              </div>
+            {liveDestinationCards.length === 0 && (destinationsLoading || toursLoading) && (
+              Array.from({ length: 6 }).map((_, idx) => (
+                <div
+                  key={`dest-skel-${idx}`}
+                  className="h-[480px] sm:h-[520px] rounded-[24px] overflow-hidden border border-white/15 bg-[#041446]/60 animate-pulse flex flex-col justify-between p-6"
+                >
+                  <div className="self-end w-36 h-12 rounded-b-2xl bg-[#F5A623]/30" />
+                  <div className="rounded-[20px] p-5 bg-[#041446]/90 border border-[#F5A623]/25 space-y-3">
+                    <div className="h-4 w-3/4 bg-white/20 rounded" />
+                    <div className="h-4 w-1/2 bg-white/15 rounded" />
+                    <div className="h-3 w-1/3 bg-[#F5A623]/30 rounded pt-2" />
+                  </div>
+                </div>
+              ))
             )}
             {(destinationsError || toursError) && liveDestinationCards.length === 0 && !destinationsLoading && !toursLoading && (
               <div className="lg:col-span-3 rounded-3xl border border-red-400/30 bg-red-950/20 px-6 py-16 text-center text-white backdrop-blur-md">
@@ -1183,7 +1217,7 @@ const HomeExperienceSection = () => {
                 {t('destination.empty', 'No destinations are currently available.')}
               </div>
             )}
-            {!destinationsLoading && !toursLoading && liveDestinationCards.length > 0 && liveDestinationCards.map((dest, index) => {
+            {liveDestinationCards.length > 0 && liveDestinationCards.map((dest, index) => {
               const tourCount = dest.toursCount;
               const isFirst = index % 3 === 0;
 
@@ -1280,6 +1314,20 @@ const HomeExperienceSection = () => {
           >
             <div className="flex w-max gap-5 px-5 animate-continuous-marquee-left" data-active={isDestSectionVisible ? "true" : "false"}>
               {(() => {
+                if (destinationToursForMarquee.length === 0 && (toursLoading || destinationsLoading)) {
+                  return Array.from({ length: 4 }).map((_, idx) => (
+                    <div
+                      key={`dest-marquee-skel-${idx}`}
+                      className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] shrink-0 rounded-2xl overflow-hidden h-[340px] sm:h-[355px] border border-white/15 bg-obsidian-900/70 animate-pulse flex flex-col justify-between p-5"
+                    >
+                      <div className="w-20 h-6 rounded-full bg-gold-500/30" />
+                      <div className="space-y-3">
+                        <div className="h-5 w-4/5 bg-white/20 rounded" />
+                        <div className="h-4 w-1/2 bg-white/15 rounded" />
+                      </div>
+                    </div>
+                  ));
+                }
                 const infiniteList = buildInfiniteMarqueeList(destinationToursForMarquee, 'dest');
                 return infiniteList.map((tData, idx) => {
                   const resolvedTitle = resolveTourTitle(tData, t, lang);
@@ -1555,7 +1603,7 @@ const HomeExperienceSection = () => {
 
 
       {/* Transportation & Transfers (Vehicles Marquee Slider Only) */}
-      <section className="py-12 bg-ivory-50 dark:bg-obsidian-950 relative overflow-hidden content-auto">
+      <section ref={transportSectionRef} className="py-12 bg-ivory-50 dark:bg-obsidian-950 relative overflow-hidden content-auto">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <motion.span
