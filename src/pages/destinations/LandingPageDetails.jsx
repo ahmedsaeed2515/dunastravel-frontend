@@ -224,6 +224,63 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
     sections: [],
   } : null);
 
+  const sortedTours = React.useMemo(() => {
+    const providedTours = Array.isArray(landingPage?.tours) && landingPage.tours.length > 0
+      ? landingPage.tours
+      : [];
+
+    const targetSlug = (slug === 'egipto' || slug === 'egito') ? 'egypt' : slug;
+    const filteredProvidedTours = providedTours.filter((tour) => {
+      if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
+        const s = String(tour?.slug || tour?.id || '').toLowerCase();
+        if (s.includes('holy-family')) return false;
+      }
+      return true;
+    });
+
+    const DEST_ALIASES = {
+      'united arab emirates': 'dubai',
+      'uae': 'dubai',
+      'emirates': 'dubai',
+      'holy land': 'holy-land',
+      'holyland': 'holy-land',
+    };
+    const normalizeDestStr = (str) => {
+      const clean = String(str || '').toLowerCase().trim();
+      return DEST_ALIASES[clean] || clean;
+    };
+
+    const matchedCatalogTours = (allCatalogTours || []).filter((tour) => {
+      const rawDest = String(tour.destination || tour.country || '').toLowerCase();
+      const tourDest = normalizeDestStr(rawDest);
+      const normalizedTarget = normalizeDestStr(targetSlug);
+      const tourCategory = String(tour.category || tour.type || '').toLowerCase();
+      const tourSlug = String(tour.slug || tour.id || '').toLowerCase();
+
+      if (normalizedTarget === 'holy-land') {
+        if (tourSlug.includes('holy-family')) return false;
+        return tourDest === 'holy-land';
+      }
+      if (normalizedTarget === 'religious') {
+        return tourCategory.includes('religious') || tourDest.includes('coptic') || tourSlug.includes('holy-family');
+      }
+      if (normalizedTarget === 'multi-country' || normalizedTarget === 'multi_country') {
+        return tourDest.includes('multi') || tourCategory.includes('multi');
+      }
+      return tourDest === normalizedTarget || tourDest.includes(normalizedTarget) || normalizedTarget.includes(tourDest);
+    });
+
+    const rawToursToDisplay = filteredProvidedTours.length > 0
+      ? filteredProvidedTours
+      : matchedCatalogTours;
+
+    return [...rawToursToDisplay].sort((a, b) => {
+      if (a.isFeatured && !b.isFeatured) return -1;
+      if (!a.isFeatured && b.isFeatured) return 1;
+      return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+    });
+  }, [landingPage?.tours, allCatalogTours, slug]);
+
   if (loading && !effectiveLandingPage) {
     return (
       <div className="mx-auto grid min-h-[60vh] max-w-6xl grid-cols-1 gap-8 px-6 py-24 md:grid-cols-3" role="status" aria-label={t('common.loading', 'Loading destination')}>
@@ -281,60 +338,6 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
   }
 
   const sections = readableSections(effectiveLandingPage.sections);
-  const providedTours = Array.isArray(effectiveLandingPage.tours) && effectiveLandingPage.tours.length > 0
-    ? effectiveLandingPage.tours
-    : [];
-
-  const targetSlug = (slug === 'egipto' || slug === 'egito') ? 'egypt' : slug;
-  const filteredProvidedTours = providedTours.filter((tour) => {
-    if (targetSlug === 'holy-land' || targetSlug === 'holyland') {
-      const s = String(tour?.slug || tour?.id || '').toLowerCase();
-      if (s.includes('holy-family')) return false;
-    }
-    return true;
-  });
-
-  const DEST_ALIASES = {
-    'united arab emirates': 'dubai',
-    'uae': 'dubai',
-    'emirates': 'dubai',
-    'holy land': 'holy-land',
-    'holyland': 'holy-land',
-  };
-  const normalizeDestStr = (str) => {
-    const clean = String(str || '').toLowerCase().trim();
-    return DEST_ALIASES[clean] || clean;
-  };
-
-  const matchedCatalogTours = (allCatalogTours || []).filter((tour) => {
-    const rawDest = String(tour.destination || tour.country || '').toLowerCase();
-    const tourDest = normalizeDestStr(rawDest);
-    const normalizedTarget = normalizeDestStr(targetSlug);
-    const tourCategory = String(tour.category || tour.type || '').toLowerCase();
-    const tourSlug = String(tour.slug || tour.id || '').toLowerCase();
-
-    if (normalizedTarget === 'holy-land') {
-      if (tourSlug.includes('holy-family')) return false;
-      return tourDest === 'holy-land';
-    }
-    if (normalizedTarget === 'religious') {
-      return tourCategory.includes('religious') || tourDest.includes('coptic') || tourSlug.includes('holy-family');
-    }
-    if (normalizedTarget === 'multi-country' || normalizedTarget === 'multi_country') {
-      return tourDest.includes('multi') || tourCategory.includes('multi');
-    }
-    return tourDest === normalizedTarget || tourDest.includes(normalizedTarget) || normalizedTarget.includes(tourDest);
-  });
-
-  const rawToursToDisplay = filteredProvidedTours.length > 0
-    ? filteredProvidedTours
-    : matchedCatalogTours;
-
-  const sortedTours = [...rawToursToDisplay].sort((a, b) => {
-    if (a.isFeatured && !b.isFeatured) return -1;
-    if (!a.isFeatured && b.isFeatured) return 1;
-    return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
-  });
 
   const heroBadge = config.badge ? t(config.badge, config.badgeDefault) : (effectiveLandingPage.type || 'LUXURY DESTINATION');
   const heroTitle = effectiveLandingPage.title || (config.headline ? t(config.headline, config.headlineDefault) : slug.toUpperCase());

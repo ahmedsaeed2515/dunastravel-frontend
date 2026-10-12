@@ -23,8 +23,8 @@ export default function ReligiousTours() {
   const navigate = useNavigate();
   const [displayTours, setDisplayTours] = React.useState([]);
 
-  const religiousPrograms = services.filter((s) => s.category === 'religious');
   const adaptedTours = React.useMemo(() => {
+    const religiousPrograms = services.filter((s) => s.category === 'religious');
     return religiousPrograms.map((tour) => ({
       id: tour.id,
       slug: tour.slug,
@@ -39,7 +39,7 @@ export default function ReligiousTours() {
       heroImage: tour.images && tour.images[0] ? tour.images[0] : null,
       images: tour.images || [],
     }));
-  }, [religiousPrograms]);
+  }, []);
 
   const toursToRender = displayTours.length > 0 ? displayTours : adaptedTours;
 

@@ -18,7 +18,23 @@ export function getFallbackTour() {
 function normalizeTour(data, lang = 'en', fallback = null) {
   const id = data?.id || data?.slug;
   const slug = data?.slug || data?.id;
-  const title = typeof data?.title === 'object' ? (data.title[lang] || data.title.en || data.title.ar) : (data?.title || slug);
+  const resolveLocalizedObj = (obj) => {
+    if (!obj || typeof obj !== 'object') return '';
+    return (
+      obj[lang] ||
+      obj.en ||
+      obj.ar ||
+      obj.es ||
+      obj.pt ||
+      obj.it ||
+      Object.values(obj).find((v) => typeof v === 'string' && v.trim()) ||
+      ''
+    );
+  };
+  const rawTitle = data?.title ?? data?.titleJsonb ?? data?.name ?? data?.nameJsonb;
+  const title = rawTitle && typeof rawTitle === 'object'
+    ? resolveLocalizedObj(rawTitle)
+    : (rawTitle || slug);
   if (!id || !slug || !title) {
     throw new Error('Invalid tour details response');
   }
@@ -55,7 +71,7 @@ function normalizeTour(data, lang = 'en', fallback = null) {
   const resolveField = (val) => {
     if (!val) return '';
     if (typeof val === 'string') return val;
-    if (typeof val === 'object') return val[lang] || val.en || val.ar || Object.values(val)[0] || '';
+    if (typeof val === 'object') return resolveLocalizedObj(val);
     return String(val);
   };
 
@@ -149,7 +165,12 @@ export function useTour(slug, options = {}) {
   const [tour, setTour] = useState(() => {
     if (!queryKey) return null;
     const cached = getCachedEntry(queryKey);
-    return cached && cached.data ? normalizeTour(cached.data, lang) : null;
+    if (!cached || !cached.data) return null;
+    try {
+      return normalizeTour(cached.data, lang);
+    } catch {
+      return cached.data;
+    }
   });
   const [loading, setLoading] = useState(() => {
     if (!queryKey) return false;
@@ -163,6 +184,7 @@ export function useTour(slug, options = {}) {
 
     if (!slug) {
       setTour(null);
+      setError(null);
       setLoading(false);
       return undefined;
     }
@@ -191,6 +213,7 @@ export function useTour(slug, options = {}) {
       }
     });
 
+    setError(null);
     const cached = getCachedEntry(currentKey);
     if (cached && cached.data) {
       try {
@@ -203,6 +226,7 @@ export function useTour(slug, options = {}) {
         setLoading(false);
       }
     } else {
+      setTour(null);
       setLoading(true);
     }
 

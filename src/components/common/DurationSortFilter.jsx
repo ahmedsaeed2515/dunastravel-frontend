@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaSortAmountDown, FaSortAmountUp, FaFilter, FaClock } from 'react-icons/fa';
 
@@ -33,6 +33,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
   const { t, i18n } = useTranslation();
   const [sortOrder, setSortOrder] = useState('default'); // 'default' | 'duration-asc' | 'duration-desc'
   const [rangeFilter, setRangeFilter] = useState('all'); // 'all' | 'short' (1-5) | 'medium' (6-9) | 'long' (10+)
+  const lastEmittedSignatureRef = useRef(null);
 
   const isRtl = i18n.dir() === 'rtl' || i18n.language === 'ar';
 
@@ -66,10 +67,14 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
   }, [tours, sortOrder, rangeFilter]);
 
   useEffect(() => {
-    if (typeof onFilterChange === 'function') {
-      onFilterChange(filteredAndSortedTours);
-    }
-  }, [filteredAndSortedTours, onFilterChange]);
+    if (typeof onFilterChange !== 'function') return;
+    const signature = `${rangeFilter}:${sortOrder}:${filteredAndSortedTours
+      .map((tour, idx) => tour?.id || tour?.slug || idx)
+      .join('|')}`;
+    if (lastEmittedSignatureRef.current === signature) return;
+    lastEmittedSignatureRef.current = signature;
+    onFilterChange(filteredAndSortedTours);
+  }, [filteredAndSortedTours, onFilterChange, rangeFilter, sortOrder]);
 
   return (
     <div className={`populer-single-box style-classic group relative overflow-hidden bg-white dark:bg-[#061d5d] border border-primary-500/20 dark:border-gold-500/30 shadow-[0_4px_20px_rgba(12,28,72,0.08)] hover:shadow-[0_20px_45px_rgba(245,166,35,0.2)] hover:border-gold-500 transition-all duration-500 rounded-2xl p-4 sm:p-5 ${className}`}>

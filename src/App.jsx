@@ -17,12 +17,9 @@ const isChunkLoadFailed = (error) => {
     msg.includes('failed to fetch dynamically imported module') ||
     msg.includes('importing a module script failed') ||
     msg.includes('error loading dynamically imported module') ||
-    msg.includes('cannot read properties of undefined') ||
-    msg.includes('reading \'default\'') ||
-    msg.includes('unexpected token') ||
     msg.includes('expected a javascript module') ||
-    msg.includes('syntaxerror') ||
-    msg.includes('failed to load resource')
+    msg.includes('loading chunk') ||
+    msg.includes('loading css chunk')
   );
 };
 
@@ -183,11 +180,14 @@ const CookiePolicy = lazyWithRetry(() => import("./pages/legal/CookiePolicy"));
 const CookieConsentBanner = lazyWithRetry(() => import("./components/privacy/CookieConsentBanner"));
 const CookiePreferencesModal = lazyWithRetry(() => import("./components/privacy/CookiePreferencesModal"));
 
-const PageTransition = ({ children }) => (
-  <div className="animate-page-fade">
-    {children}
-  </div>
-);
+const PageTransition = ({ children }) => {
+  const location = useLocation();
+  return (
+    <div key={location.pathname} className="animate-page-fade">
+      {children}
+    </div>
+  );
+};
 
 const CinematicLoader = ({ onComplete }) => (
   <div
@@ -436,7 +436,7 @@ function App() {
                     }
                   />
                   <Route path="honeymooners" element={<PageTransition><Honeymooners /></PageTransition>} />
-                  <Route path="honeymooners/:id" element={<PageTransition><TourDetails /></PageTransition>} />
+                  <Route path="honeymooners/:id" element={<PageTransition><HoneymoonersDetails /></PageTransition>} />
                   <Route path="religious" element={<PageTransition><BackendToursPage titleKey="programs.religiousTitle" titleDefault="Religious Tours" filters={{ category: 'Religious' }} /></PageTransition>} />
                   <Route path="religious/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="multi-country" element={<PageTransition><MultiCountryTours /></PageTransition>} />
@@ -444,9 +444,9 @@ function App() {
                   <Route path="multi-country/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="multi_country/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="extension" element={<PageTransition><ExtensionTours /></PageTransition>} />
-                  <Route path="extension/:id" element={<PageTransition><TourDetails /></PageTransition>} />
+                  <Route path="extension/:id" element={<PageTransition><ExtensionDetails /></PageTransition>} />
                   <Route path="extensions" element={<PageTransition><ExtensionTours /></PageTransition>} />
-                  <Route path="extensions/:id" element={<PageTransition><TourDetails /></PageTransition>} />
+                  <Route path="extensions/:id" element={<PageTransition><ExtensionDetails /></PageTransition>} />
                   <Route path="classic/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                   <Route path="turkey" element={<PageTransition><BackendToursPage titleKey="nav.turkey" titleDefault="Turkey Tours" filters={{ destination: 'Turkey' }} bgImage="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1920&q=85" /></PageTransition>} />
                   <Route path="turkey/:programId" element={<PageTransition><TourDetails /></PageTransition>} />
@@ -722,7 +722,7 @@ function App() {
                   }
                 />
                 <Route path="honeymooners" element={<PageTransition><Honeymooners /></PageTransition>} />
-                <Route path="honeymooners/:id" element={<PageTransition><TourDetails /></PageTransition>} />
+                <Route path="honeymooners/:id" element={<PageTransition><HoneymoonersDetails /></PageTransition>} />
                 <Route path="religious" element={<PageTransition><ReligiousTours /></PageTransition>} />
                 <Route path="religious/:slug" element={<PageTransition><TourDetails /></PageTransition>} />
                 <Route path="multi-country" element={<PageTransition><MultiCountryTours /></PageTransition>} />

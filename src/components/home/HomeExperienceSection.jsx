@@ -114,7 +114,7 @@ const _packagesData = [
     tag3Key: "egyptPackages.classic.tag3",
     price: 1290,
     image: "https://res.cloudinary.com/degbrq3ck/image/upload/w_600,h_450,c_fill,q_60,f_webp/v1783029636/Classic_Program_gfal0s.jpg",
-    link: "/programs/classic/classic-program",
+    link: "/tours/complete-egypt-8d",
     featured: true,
   },
   {

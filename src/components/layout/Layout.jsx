@@ -40,7 +40,7 @@ const Layout = () => {
 
   // Global Scroll Reveal Observer for all pages
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -51,7 +51,7 @@ const Layout = () => {
           }
         });
       },
-      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+      { threshold: 0.01, rootMargin: '0px 0px -20px 0px' }
     );
 
     const observeElements = () => {
@@ -61,7 +61,10 @@ const Layout = () => {
 
       targets.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
+        if (
+          (rect.top < window.innerHeight && rect.bottom > 0) ||
+          rect.height > window.innerHeight * 1.1
+        ) {
           el.classList.add('in');
         } else {
           el.classList.add('reveal-on-scroll');
@@ -83,7 +86,15 @@ const Layout = () => {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow">
-          <Outlet />
+          <Suspense
+            fallback={
+              <div className="min-h-[60vh] flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-gold-300 border-t-gold-500 rounded-full animate-spin" />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
 
         <Suspense fallback={null}>

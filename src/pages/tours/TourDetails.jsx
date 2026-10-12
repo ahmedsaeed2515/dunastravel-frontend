@@ -31,8 +31,9 @@ const TourDetails = () => {
   const lang = i18n.language || 'en';
   const { formatPrice } = useCurrency();
   const params = useParams();
-  const rawSlug = params.slug || params['*'] || params.programId || params.id;
-  const slug = rawSlug ? String(rawSlug).trim() : 'complete-egypt-8d';
+  const rawSlug = params.slug || params.programSlug || params['*'] || params.programId || params.id;
+  const trimmedSlug = rawSlug ? String(rawSlug).trim() : '';
+  const slug = !trimmedSlug || trimmedSlug === 'classic-program' ? 'complete-egypt-8d' : trimmedSlug;
 
   const { tour, loading, error } = useTour(slug);
 
@@ -206,7 +207,7 @@ const TourDetails = () => {
       </div>
 
       {/* 4. Content Section */}
-      <section className="container mx-auto px-6 pt-16">
+      <section className="container mx-auto px-6 pt-16 no-reveal">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
 
           <div className="lg:col-span-2">
