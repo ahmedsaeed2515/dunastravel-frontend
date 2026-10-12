@@ -21,6 +21,7 @@ import { getTourDestinationSlug, getDestinationName, getDestinationUrl } from '.
 import SEOHead from '../../components/seo/SEOHead';
 import SuggestedTours from '../../components/tour/SuggestedTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import TripHotelSection from '../../components/tour/TripHotelSection';
 
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
 const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
@@ -109,6 +110,7 @@ const TourDetails = () => {
     ? tour.seasonRules
     : (Array.isArray(tour.seasonPricing?.rules) ? tour.seasonPricing.rules : []);
   const hasHotelsData =
+    Boolean(tour?.tripHotel) ||
     Boolean(accommodationSummary) ||
     assignedAccommodations.length > 0 ||
     (Array.isArray(tour.hotels) && tour.hotels.length > 0) ||
@@ -559,216 +561,16 @@ const TourDetails = () => {
 
         {/* Accommodation & Assigned Hotels Section */}
         {hasHotelsData && (
-          <div className="relative mt-20 mb-8">
-            <div className="absolute inset-0 bg-gradient-to-r from-obsidian-50 via-gold-50/20 to-obsidian-50 dark:from-[#07163c] dark:via-[#0c225c] dark:to-[#07163c] rounded-3xl border border-gold-500/20"></div>
-            <div className="relative z-10 px-4 md:px-12 py-16">
-              <motion.div
-                variants={fadeInUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
-                <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-                  <div>
-                    <span className="text-caption text-gold-500 dark:text-gold-400 uppercase tracking-widest font-extrabold block mb-2">
-                      {t('tour.hotelCategory', 'ACCOMMODATION & HOSPITALITY')}
-                      {tour.hotelCategory ? ` — ${resolveLocalizedText(tour.hotelCategory, t, lang)}` : ''}
-                    </span>
-                    <h2 className="text-display-md text-3xl font-extrabold text-obsidian-900 dark:text-white flex items-center gap-3" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
-                      <FaHotel className="text-gold-500" />
-                      {t('dest.greece.hotelsTitle', 'Handpicked Partner Hotels & Rooms')}
-                    </h2>
-                    <p className="text-body-md text-obsidian-600 dark:text-slate-100 font-semibold mt-2">
-                      {accommodationSummary
-                        ? resolveLocalizedText(accommodationSummary, t, lang)
-                        : t('dest.greece.hotelsDesc', 'Subject to availability, accommodation is provided in our handpicked luxury partner hotels at each destination.')}
-                    </p>
-                  </div>
-                  <Link
-                    to="/hotels"
-                    className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-gold-600 dark:text-gold-400 hover:underline shrink-0"
-                  >
-                    <span>{t('hotelsCatalog.browseAll', 'Browse All Partner Hotels')}</span>
-                    <FaChevronRight className="rtl-flip text-[10px]" />
-                  </Link>
-                </div>
-
-                {/* Relational TripAccommodation Cards */}
-                {assignedAccommodations.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {assignedAccommodations.map((acc, idx) => {
-                      const hotelObj = acc.hotel || {};
-                      const roomObj = acc.room || null;
-                      const isGlobal = hotelObj.isGlobal !== false;
-                      const hotelName = resolveLocalizedText(hotelObj.name || acc.hotelName || 'Luxury Partner Hotel', t, lang);
-                      const hotelSlug = hotelObj.slug || null;
-                      const stars = Number(hotelObj.stars ?? hotelObj.starRating ?? 5);
-                      const supplement = Number(acc.priceSupplement ?? acc.priceSupplementUsd ?? 0);
-                      const roomRate = Number(roomObj?.ratePerNight ?? roomObj?.basePriceUsd ?? 0);
-
-                      return (
-                        <div
-                          key={acc.id || `${acc.hotelId}-${idx}`}
-                          className="bg-white dark:bg-[#07163c] rounded-2xl shadow-lg border-2 border-gold-400/60 dark:border-gold-500/40 overflow-hidden flex flex-col justify-between"
-                        >
-                          <div>
-                            <div className="bg-obsidian-900 dark:bg-[#040f2b] px-5 py-3.5 border-b border-gold-500/30 flex items-center justify-between gap-2">
-                              <span className="text-gold-400 font-black text-xs uppercase tracking-widest flex items-center gap-1.5">
-                                <FaMapMarkerAlt className="shrink-0" />
-                                {resolveLocalizedText(hotelObj.city || acc.destination || acc.city || destinationName, t, lang)}
-                              </span>
-                              <span className="flex items-center gap-0.5 text-gold-400 text-xs">
-                                {Array.from({ length: Math.min(Math.max(stars, 1), 5) }).map((_, sIdx) => (
-                                  <FaStar key={sIdx} />
-                                ))}
-                              </span>
-                            </div>
-
-                            <div className="p-5 space-y-3">
-                              <div className="flex items-start justify-between gap-3">
-                                <h3 className="text-lg font-display font-bold text-slate-900 dark:text-white">
-                                  {hotelName}
-                                </h3>
-                                {acc.nights && (
-                                  <span className="px-3 py-1 rounded-full text-xs font-black bg-gold-500/20 text-amber-900 dark:text-gold-300 border border-gold-500/40 shrink-0">
-                                    {acc.nights} {t('hotel.room.nightsCount', 'Nights')}
-                                  </span>
-                                )}
-                              </div>
-
-                              <div className="flex flex-wrap gap-2 text-xs">
-                                {(acc.boardBasis || acc.regime) && (
-                                  <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-obsidian-800 text-slate-800 dark:text-slate-200 font-bold">
-                                    🍽️ {acc.boardBasis || acc.regime}
-                                  </span>
-                                )}
-                                {acc.dayRange && (
-                                  <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-obsidian-800 text-slate-700 dark:text-slate-300 font-semibold">
-                                    📅 {acc.dayRange}
-                                  </span>
-                                )}
-                                {roomObj && (
-                                  <span className="px-2.5 py-1 rounded-lg bg-sky-500/15 text-sky-900 dark:text-sky-300 border border-sky-500/30 font-bold flex items-center gap-1.5">
-                                    <FaBed /> {resolveLocalizedText(roomObj.name, t, lang)}
-                                  </span>
-                                )}
-                                {supplement > 0 && (
-                                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30 font-bold">
-                                    +{formatPrice(supplement)}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          {hotelSlug && isGlobal ? (
-                            <div className="px-5 py-3 bg-slate-50 dark:bg-[#040f2b]/60 border-t border-gold-500/20 flex items-center justify-between">
-                              <Link
-                                to={roomObj?.slug ? `/hotels/${hotelSlug}/${roomObj.slug}` : `/hotels/${hotelSlug}`}
-                                className="text-xs font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400 hover:underline flex items-center gap-1.5"
-                              >
-                                <span>{roomObj?.slug ? t('tourDetail.viewRoomDetails', 'View Assigned Room') : t('hotelsCatalog.exploreHotel', 'Explore Hotel')}</span>
-                                <FaChevronRight className="rtl-flip text-[10px]" />
-                              </Link>
-                              {roomRate > 0 && (
-                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
-                                  {formatPrice(roomRate)} / {t('hotel.night', 'night')}
-                                </span>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="px-5 py-3 bg-slate-50 dark:bg-[#040f2b]/60 border-t border-gold-500/20 flex items-center justify-between">
-                              <span className="text-xs font-bold text-amber-800 dark:text-gold-300 flex items-center gap-1.5">
-                                <FaHotel className="text-gold-500" />
-                                {t('tourDetail.tripExclusiveHotel', 'Exclusive Trip Accommodation')}
-                              </span>
-                              {roomRate > 0 && (
-                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
-                                  {formatPrice(roomRate)} / {t('hotel.night', 'night')}
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : Array.isArray(tour.hotels) ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {tour.hotels.map((hotelItem, idx) => (
-                      <div
-                        key={`${hotelItem?.name || idx}-${idx}`}
-                        className="bg-gradient-to-br from-amber-50/50 via-orange-50/40 to-amber-50/30 dark:bg-[#07163c] rounded-2xl shadow-md border-2 border-gold-400/60 dark:border-gold-500/40 p-5 space-y-2"
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <h3 className="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-                            <FaHotel className="text-gold-500" />
-                            {resolveLocalizedText(hotelItem.name || hotelItem, t, lang)}
-                          </h3>
-                          {hotelItem.stars && (
-                            <span className="flex items-center gap-0.5 text-gold-500 text-xs">
-                              {Array.from({ length: Math.min(Math.max(Number(hotelItem.stars), 1), 5) }).map((_, i) => (
-                                <FaStar key={i} />
-                              ))}
-                            </span>
-                          )}
-                        </div>
-                        {(hotelItem.city || hotelItem.category || hotelItem.nights || hotelItem.roomType) && (
-                          <p className="text-xs text-slate-600 dark:text-slate-300 font-semibold">
-                            {[
-                              hotelItem.city,
-                              hotelItem.category,
-                              hotelItem.roomType,
-                              hotelItem.boardBasis,
-                              hotelItem.nights ? `${hotelItem.nights} ${t('hotel.room.nightsCount', 'Nights')}` : null,
-                            ]
-                              .filter(Boolean)
-                              .join(' • ')}
-                          </p>
-                        )}
-                        {hotelItem.slug && hotelItem.isGlobal !== false && (
-                          <Link
-                            to={`/hotels/${hotelItem.slug}`}
-                            className="inline-flex items-center gap-1 text-xs font-bold text-gold-600 dark:text-gold-400 hover:underline pt-1"
-                          >
-                            <span>{t('hotelsCatalog.exploreHotel', 'Explore Hotel')}</span>
-                            <FaChevronRight className="rtl-flip text-[10px]" />
-                          </Link>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {Object.entries(tour.hotels || {}).map(([city, hotelList]) => (
-                      <div
-                        key={city}
-                        className="bg-gradient-to-br from-amber-50/50 via-orange-50/40 to-amber-50/30 dark:bg-[#07163c] rounded-2xl shadow-md border-2 border-gold-400/60 dark:border-gold-500/40 overflow-hidden"
-                      >
-                        <div className="bg-obsidian-900 dark:bg-[#040f2b] px-4 py-3 border-b border-gold-500/30">
-                          <h3 className="text-gold-400 dark:text-gold-400 font-black text-xs md:text-sm uppercase tracking-widest flex items-center gap-2">
-                            <FaMapMarkerAlt className="flex-shrink-0 text-xs" />
-                            {resolveLocalizedText(city, t, lang)}
-                          </h3>
-                        </div>
-                        <ul className="p-4 flex flex-col gap-1.5">
-                          {Array.isArray(hotelList) && hotelList.map((hotel, idx) => (
-                            <li
-                              key={idx}
-                              className="flex items-center gap-2 text-body-sm text-black dark:text-slate-100 font-bold py-1 border-b border-gold-500/15 dark:border-gold-500/20 last:border-0"
-                            >
-                              <span className="w-2 h-2 rounded-full bg-gold-600 dark:bg-gold-400 flex-shrink-0 shadow-[0_0_6px_rgba(245,166,35,0.6)]" />
-                              {resolveLocalizedText(hotel, t, lang)}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            </div>
-          </div>
+          <TripHotelSection
+            tour={tour}
+            assignedAccommodations={assignedAccommodations}
+            accommodationSummary={accommodationSummary}
+            destinationName={destinationName}
+            t={t}
+            lang={lang}
+            formatPrice={formatPrice}
+            onOpenGlobalLightbox={openLightboxAt}
+          />
         )}
 
       </section>
