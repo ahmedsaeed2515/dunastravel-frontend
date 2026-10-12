@@ -599,6 +599,7 @@ const TourDetails = () => {
                     {assignedAccommodations.map((acc, idx) => {
                       const hotelObj = acc.hotel || {};
                       const roomObj = acc.room || null;
+                      const isGlobal = hotelObj.isGlobal !== false;
                       const hotelName = resolveLocalizedText(hotelObj.name || acc.hotelName || 'Luxury Partner Hotel', t, lang);
                       const hotelSlug = hotelObj.slug || null;
                       const stars = Number(hotelObj.stars ?? hotelObj.starRating ?? 5);
@@ -660,7 +661,7 @@ const TourDetails = () => {
                             </div>
                           </div>
 
-                          {hotelSlug && (
+                          {hotelSlug && isGlobal ? (
                             <div className="px-5 py-3 bg-slate-50 dark:bg-[#040f2b]/60 border-t border-gold-500/20 flex items-center justify-between">
                               <Link
                                 to={roomObj?.slug ? `/hotels/${hotelSlug}/${roomObj.slug}` : `/hotels/${hotelSlug}`}
@@ -669,6 +670,18 @@ const TourDetails = () => {
                                 <span>{roomObj?.slug ? t('tourDetail.viewRoomDetails', 'View Assigned Room') : t('hotelsCatalog.exploreHotel', 'Explore Hotel')}</span>
                                 <FaChevronRight className="rtl-flip text-[10px]" />
                               </Link>
+                              {roomRate > 0 && (
+                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                                  {formatPrice(roomRate)} / {t('hotel.night', 'night')}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="px-5 py-3 bg-slate-50 dark:bg-[#040f2b]/60 border-t border-gold-500/20 flex items-center justify-between">
+                              <span className="text-xs font-bold text-amber-800 dark:text-gold-300 flex items-center gap-1.5">
+                                <FaHotel className="text-gold-500" />
+                                {t('tourDetail.tripExclusiveHotel', 'Exclusive Trip Accommodation')}
+                              </span>
                               {roomRate > 0 && (
                                 <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
                                   {formatPrice(roomRate)} / {t('hotel.night', 'night')}
@@ -713,7 +726,7 @@ const TourDetails = () => {
                               .join(' • ')}
                           </p>
                         )}
-                        {hotelItem.slug && (
+                        {hotelItem.slug && hotelItem.isGlobal !== false && (
                           <Link
                             to={`/hotels/${hotelItem.slug}`}
                             className="inline-flex items-center gap-1 text-xs font-bold text-gold-600 dark:text-gold-400 hover:underline pt-1"
