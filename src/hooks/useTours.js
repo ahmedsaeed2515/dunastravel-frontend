@@ -262,9 +262,9 @@ export function useTours(filters = {}) {
       const response = await api.get(`/tours?${params.toString()}`, { signal });
       let { items, meta } = parseToursResponse(response, cleanFilters, lang);
 
-      // If a category filter was specified (e.g. Classic, Religious, Honeymoon, Extension)
-      // and returned few items, fetch broad catalog to ensure all relevant tours are included
-      if (cleanFilters.category && items.length < 3) {
+      // If a category filter was specified and returned 0 items (e.g. synonym mismatch),
+      // attempt broad fallback only on complete zero-result misses to avoid waterfalls on valid results
+      if (cleanFilters.category && items.length === 0) {
         try {
           const catLower = cleanFilters.category.toLowerCase();
           const broadParams = new URLSearchParams({ lang, limit: '70' });

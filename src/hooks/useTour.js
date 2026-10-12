@@ -141,9 +141,9 @@ export function useTour(slug, options = {}) {
   const lang = supportedLocale(i18n.language);
   const queryKey = slug ? ['tour', slug, lang] : null;
 
-  // Live Sync: keep tour details (incl. Interactive Itinerary Journey Map / routeMap)
-  // in sync with dashboard edits. Defaults to ON for tour detail pages.
-  const liveSync = options.liveSync !== false;
+  // Live Sync: keep tour details in sync when explicitly requested (e.g. admin preview or configured interval).
+  // Defaults to OFF for regular customer views to eliminate redundant serverless polling storms.
+  const liveSync = options.liveSync === true || (options.liveSync !== false && options.liveSyncInterval !== undefined);
   const liveSyncInterval = options.liveSyncInterval ?? 10_000;
 
   const [tour, setTour] = useState(() => {

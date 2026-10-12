@@ -6,9 +6,24 @@
  */
 export function getOptimizedCloudinaryUrl(url, options = {}) {
   if (!url || typeof url !== 'string') return url;
-  if (!url.includes('res.cloudinary.com')) return url;
 
   const { width = 600, quality = 'auto:eco', format = 'auto', crop = 'limit' } = options;
+
+  // Handle Unsplash image optimization
+  if (url.includes('images.unsplash.com')) {
+    try {
+      const u = new URL(url);
+      u.searchParams.set('auto', format === 'auto' ? 'format' : format);
+      u.searchParams.set('fit', crop === 'fill' ? 'crop' : 'crop');
+      u.searchParams.set('w', String(width));
+      u.searchParams.set('q', quality === 'auto:eco' ? '80' : '85');
+      return u.toString();
+    } catch {
+      return url;
+    }
+  }
+
+  if (!url.includes('res.cloudinary.com')) return url;
 
   if (!url.includes('/image/upload/')) return url;
 
