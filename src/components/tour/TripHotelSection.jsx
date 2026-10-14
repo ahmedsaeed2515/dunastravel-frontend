@@ -188,12 +188,12 @@ export default function TripHotelSection({
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-900 dark:text-gold-300 font-black text-xs uppercase tracking-widest">
                 {isTripDedicated ? (
                   <>
-                    <FaLock className="text-amber-600 dark:text-gold-400 text-[10px]" />
+                    <FaLock className="text-amber-600 dark:text-gold-300 text-[10px]" />
                     {t('tourDetail.tripDedicatedTag', 'EXCLUSIVE TRIP ACCOMMODATION')}
                   </>
                 ) : (
                   <>
-                    <FaHotel className="text-amber-600 dark:text-gold-400 text-xs" />
+                    <FaHotel className="text-amber-600 dark:text-gold-300 text-xs" />
                     {t('tour.hotelCategory', 'ACCOMMODATION & HOSPITALITY')}
                   </>
                 )}
@@ -227,7 +227,7 @@ export default function TripHotelSection({
           {!isTripDedicated && (
             <Link
               to="/hotels"
-              className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-amber-700 dark:text-gold-400 hover:text-amber-900 dark:hover:text-gold-300 hover:underline shrink-0 pb-1"
+              className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-amber-700 dark:text-gold-300 hover:text-amber-900 dark:hover:text-gold-300 hover:underline shrink-0 pb-1"
             >
               <span>{t('hotelsCatalog.browseAll', 'Browse All Partner Hotels')}</span>
               <FaChevronRight className="rtl-flip text-[10px]" />
@@ -272,7 +272,7 @@ export default function TripHotelSection({
                 <button
                   type="button"
                   onClick={() => handleOpenPhoto(0)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 dark:text-gold-400 hover:underline cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 dark:text-gold-300 hover:underline cursor-pointer"
                 >
                   <FaImages className="text-gold-500" />
                   <span>{t('tourDetail.viewAllPhotos', 'View Gallery')} ({galleryList.length})</span>
@@ -353,7 +353,7 @@ export default function TripHotelSection({
             {/* 3. Amenities Chip Grid */}
             {amenitiesList.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-sm font-black uppercase tracking-wider text-amber-900 dark:text-gold-400 flex items-center gap-2">
+                <h4 className="text-sm font-black uppercase tracking-wider text-amber-900 dark:text-gold-300 flex items-center gap-2">
                   <FaStar className="text-gold-500 text-xs" />
                   {t('hotel.amenities', 'Hotel Amenities & Curated Perks')}
                 </h4>
@@ -379,12 +379,12 @@ export default function TripHotelSection({
                   <div className="flex flex-wrap items-center gap-4">
                     {policies.checkIn && (
                       <span className="font-semibold text-slate-800 dark:text-slate-200">
-                        <strong className="text-amber-900 dark:text-gold-400">{t('hotel.checkIn', 'Check-In')}:</strong> {policies.checkIn}
+                        <strong className="text-amber-900 dark:text-gold-300">{t('hotel.checkIn', 'Check-In')}:</strong> {policies.checkIn}
                       </span>
                     )}
                     {policies.checkOut && (
                       <span className="font-semibold text-slate-800 dark:text-slate-200">
-                        <strong className="text-amber-900 dark:text-gold-400">{t('hotel.checkOut', 'Check-Out')}:</strong> {policies.checkOut}
+                        <strong className="text-amber-900 dark:text-gold-300">{t('hotel.checkOut', 'Check-Out')}:</strong> {policies.checkOut}
                       </span>
                     )}
                   </div>
@@ -407,7 +407,7 @@ export default function TripHotelSection({
                     <FaBed className="text-gold-500" />
                     {t('hotel.roomsAndSuites', 'Available Rooms & Suites for this Journey')}
                   </h4>
-                  <span className="text-xs font-bold text-amber-800 dark:text-gold-400">
+                  <span className="text-xs font-bold text-amber-800 dark:text-gold-300">
                     {roomsList.length} {t('hotel.roomTypes', 'Room Options')}
                   </span>
                 </div>
@@ -455,7 +455,7 @@ export default function TripHotelSection({
                           {/* Room Seasonal Pricing Tiers */}
                           {seasonPricings.length > 0 && (
                             <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-[#061842] border border-gold-500/20 space-y-2">
-                              <span className="text-[11px] font-black uppercase text-amber-800 dark:text-gold-400 flex items-center gap-1">
+                              <span className="text-[11px] font-black uppercase text-amber-800 dark:text-gold-300 flex items-center gap-1">
                                 <FaCalendarAlt className="text-xs" />
                                 {t('tourDetail.seasonalTariff', 'Seasonal Tariff Overrides')}:
                               </span>
@@ -521,54 +521,100 @@ export default function TripHotelSection({
         {/* Columns only render when the dashboard entered data for them.       */}
         {/* ------------------------------------------------------------------ */}
         {!isTripDedicated && rateSheetRows.length > 0 && hasRateSheet && (
-          <div className="p-6 md:p-10">
-            <div className="overflow-x-auto rounded-2xl shadow-lg border-2 border-gold-400/60 dark:border-gold-500/40 bg-white dark:bg-[#040f2b]">
+          <div className="p-4 sm:p-6 md:p-10">
+            {/* Rate-sheet panel header */}
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 text-slate-950 shadow-lg shadow-gold-500/30">
+                  <FaHotel className="text-lg" />
+                </span>
+                <div>
+                  <h3
+                    className="text-lg font-black leading-tight text-slate-900 dark:text-white md:text-xl"
+                    style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}
+                  >
+                    {t('hotelTable.rateSheetTitle', 'Accommodation Rate Sheet')}
+                  </h3>
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 md:text-xs">
+                    {t('hotelTable.rateSheetSubtitle', 'Indicative room rates per night, in USD.')}
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-gold-500/40 bg-gold-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-amber-800 dark:text-gold-300">
+                <FaShieldAlt className="text-[10px]" />
+                {t('hotelTable.bestRate', 'Best Available Rate')}
+              </span>
+            </div>
+
+            <div className="overflow-x-auto rounded-3xl border-2 border-gold-500/35 bg-white shadow-[0_24px_60px_-28px_rgba(30,58,138,0.45)] dark:border-gold-500/30 dark:bg-[#040f2b] dark:shadow-[0_28px_70px_-30px_rgba(0,0,0,0.85)]">
               <table className="w-full min-w-[720px] text-start border-collapse">
                 <thead>
-                  <tr className="bg-obsidian-900 dark:bg-[#02091c] text-gold-300 text-[11px] md:text-xs font-black uppercase tracking-wider">
+                  <tr className="bg-gradient-to-r from-primary-900 via-primary-700 to-primary-900 text-gold-300 text-[11px] md:text-xs font-black uppercase tracking-[0.14em] shadow-[inset_0_-2px_0_0_rgba(245,166,35,0.55)] dark:from-[#02091c] dark:via-[#071a3f] dark:to-[#02091c]">
                     {rateSheetColumns.category && (
-                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
-                        {t('hotelTable.category', 'Hotel Category')}
+                      <th className="px-4 py-4 text-start whitespace-nowrap">
+                        <span className="inline-flex items-center gap-2">
+                          <FaStar className="text-[10px] text-gold-500" />
+                          {t('hotelTable.category', 'Hotel Category')}
+                        </span>
                       </th>
                     )}
                     {rateSheetColumns.hotelCity && (
-                      <th className="px-4 py-3.5 text-start">
-                        {t('hotelTable.hotelAndCity', 'Hotel & City Names')}
+                      <th className="px-4 py-4 text-start">
+                        <span className="inline-flex items-center gap-2">
+                          <FaHotel className="text-[10px] text-gold-500" />
+                          {t('hotelTable.hotelAndCity', 'Hotel & City Names')}
+                        </span>
                       </th>
                     )}
                     {rateSheetColumns.double && (
-                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
-                        {t('hotelTable.doublePrice', 'Double Room Rate')}
+                      <th className="px-4 py-4 text-start whitespace-nowrap">
+                        <span className="inline-flex items-center gap-2">
+                          <FaBed className="text-[10px] text-gold-500" />
+                          {t('hotelTable.doublePrice', 'Double Room Rate')}
+                        </span>
                       </th>
                     )}
                     {rateSheetColumns.single && (
-                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
-                        {t('hotelTable.singlePrice', 'Single Room Rate')}
+                      <th className="px-4 py-4 text-start whitespace-nowrap">
+                        <span className="inline-flex items-center gap-2">
+                          <FaBed className="text-[10px] text-gold-500" />
+                          {t('hotelTable.singlePrice', 'Single Room Rate')}
+                        </span>
                       </th>
                     )}
                     {rateSheetColumns.season && (
-                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
-                        {t('hotelTable.seasonFee', 'Seasonal Fee')}
+                      <th className="px-4 py-4 text-start whitespace-nowrap">
+                        <span className="inline-flex items-center gap-2">
+                          <FaCalendarAlt className="text-[10px] text-gold-500" />
+                          {t('hotelTable.seasonFee', 'Seasonal Fee')}
+                        </span>
                       </th>
                     )}
                     {rateSheetColumns.boat && (
-                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
-                        {t('hotelTable.boat', 'Boats')}
+                      <th className="px-4 py-4 text-start whitespace-nowrap">
+                        <span className="inline-flex items-center gap-2">
+                          <FaStar className="text-[10px] text-gold-500" />
+                          {t('hotelTable.boat', 'Boats')}
+                        </span>
                       </th>
                     )}
                   </tr>
                 </thead>
                 <tbody>
-                  {rateSheetRows.map((row) => (
+                  {rateSheetRows.map((row, rowIdx) => (
                     <tr
                       key={row.acc.id || `${row.acc.hotelId || 'acc'}-${row.idx}`}
-                      className="border-t border-gold-500/20 align-top"
+                      className={`group border-t border-gold-500/15 align-top transition-colors ${
+                        rowIdx % 2 === 1
+                          ? 'bg-amber-50/40 dark:bg-white/[0.02]'
+                          : 'bg-white dark:bg-transparent'
+                      } hover:bg-amber-50 dark:hover:bg-white/[0.05]`}
                     >
                       {rateSheetColumns.category && (
-                        <td className="px-4 py-4 text-xs md:text-sm font-bold text-slate-800 dark:text-slate-100">
+                        <td className="px-4 py-4 align-top">
                           {row.categoryTier ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gold-500/15 text-amber-900 dark:text-gold-300 border border-gold-500/40">
-                              <FaStar className="text-gold-500 text-[10px]" />
+                            <span className="inline-flex items-center gap-2 rounded-xl border border-gold-500/40 bg-gradient-to-br from-gold-500/20 to-gold-500/5 px-3 py-1.5 text-xs font-black text-amber-900 shadow-sm dark:text-gold-300">
+                              <FaStar className="text-[10px] text-gold-500" />
                               {categoryTierLabel(row.categoryTier)}
                             </span>
                           ) : (
@@ -578,58 +624,64 @@ export default function TripHotelSection({
                       )}
 
                       {rateSheetColumns.hotelCity && (
-                        <td className="px-4 py-4">
-                          <div className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
-                            <FaHotel className="text-gold-500 shrink-0" />
-                            <span>{row.hName || t('hotelTable.unnamedHotel', 'Partner Hotel')}</span>
-                          </div>
-                          {row.city && (
-                            <div className="text-xs font-semibold text-slate-500 dark:text-slate-300 flex items-center gap-1.5 mt-1">
-                              <FaMapMarkerAlt className="text-gold-500 shrink-0" />
-                              <span>{row.city}</span>
-                            </div>
-                          )}
-                          {(row.acc.nights || row.acc.boardBasis || row.acc.regime) && (
-                            <div className="flex flex-wrap items-center gap-2 mt-2">
-                              {row.acc.nights ? (
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-gold-500/20 text-amber-900 dark:text-gold-300 border border-gold-500/40">
-                                  {row.acc.nights} {t('hotel.room.nightsCount', 'Nights')}
-                                </span>
-                              ) : null}
-                              {(row.acc.boardBasis || row.acc.regime) && (
-                                <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-obsidian-800 text-slate-700 dark:text-slate-200 font-bold text-[10px]">
-                                  🍽️ {row.acc.boardBasis || row.acc.regime}
-                                </span>
+                        <td className="px-4 py-4 align-top">
+                          <div className="flex items-start gap-3">
+                            <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary-900/5 text-gold-500 dark:bg-white/5">
+                              <FaHotel className="text-sm" />
+                            </span>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2 text-sm font-bold leading-tight text-slate-900 dark:text-white">
+                                <span>{row.hName || t('hotelTable.unnamedHotel', 'Partner Hotel')}</span>
+                              </div>
+                              {row.city && (
+                                <div className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-300">
+                                  <FaMapMarkerAlt className="shrink-0 text-[10px] text-gold-500" />
+                                  <span>{row.city}</span>
+                                </div>
+                              )}
+                              {(row.acc.nights || row.acc.boardBasis || row.acc.regime) && (
+                                <div className="mt-2 flex flex-wrap items-center gap-2">
+                                  {row.acc.nights ? (
+                                    <span className="rounded-full border border-gold-500/40 bg-gold-500/20 px-2 py-0.5 text-[10px] font-black text-amber-900 dark:text-gold-300">
+                                      {row.acc.nights} {t('hotel.room.nightsCount', 'Nights')}
+                                    </span>
+                                  ) : null}
+                                  {(row.acc.boardBasis || row.acc.regime) && (
+                                    <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700 dark:bg-white/10 dark:text-slate-200">
+                                      🍽️ {row.acc.boardBasis || row.acc.regime}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                              {row.roomRate > 0 && (
+                                <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                                  <FaBed className="shrink-0 text-sky-500" />
+                                  <span className="font-mono font-bold">{formatPrice(row.roomRate)}</span>
+                                  <span>/ {t('hotel.night', 'night')}</span>
+                                </div>
+                              )}
+                              {row.hotelSlug && row.isGlobal && (
+                                <Link
+                                  to={row.roomSlug ? `/hotels/${row.hotelSlug}/${row.roomSlug}` : `/hotels/${row.hotelSlug}`}
+                                  className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 hover:underline dark:text-gold-300"
+                                >
+                                  <span>
+                                    {row.roomSlug
+                                      ? t('tourDetail.viewRoomDetails', 'View Assigned Room')
+                                      : t('hotelsCatalog.exploreHotel', 'Explore Hotel')}
+                                  </span>
+                                  <FaChevronRight className="rtl-flip text-[9px]" />
+                                </Link>
                               )}
                             </div>
-                          )}
-                          {row.roomRate > 0 && (
-                            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-1.5">
-                              <FaBed className="text-sky-500 shrink-0" />
-                              <span className="font-mono font-bold">{formatPrice(row.roomRate)}</span>
-                              <span>/ {t('hotel.night', 'night')}</span>
-                            </div>
-                          )}
-                          {row.hotelSlug && row.isGlobal && (
-                            <Link
-                              to={row.roomSlug ? `/hotels/${row.hotelSlug}/${row.roomSlug}` : `/hotels/${row.hotelSlug}`}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 dark:text-gold-400 hover:underline mt-2"
-                            >
-                              <span>
-                                {row.roomSlug
-                                  ? t('tourDetail.viewRoomDetails', 'View Assigned Room')
-                                  : t('hotelsCatalog.exploreHotel', 'Explore Hotel')}
-                              </span>
-                              <FaChevronRight className="rtl-flip text-[9px]" />
-                            </Link>
-                          )}
+                          </div>
                         </td>
                       )}
 
                       {rateSheetColumns.double && (
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 align-top">
                           {row.doublePrice > 0 ? (
-                            <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 text-sm whitespace-nowrap">
+                            <span className="inline-flex items-center whitespace-nowrap rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 font-mono text-sm font-black text-emerald-700 dark:text-emerald-300">
                               {formatPrice(row.doublePrice)}
                             </span>
                           ) : (
@@ -639,9 +691,9 @@ export default function TripHotelSection({
                       )}
 
                       {rateSheetColumns.single && (
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 align-top">
                           {row.singlePrice > 0 ? (
-                            <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 text-sm whitespace-nowrap">
+                            <span className="inline-flex items-center whitespace-nowrap rounded-xl border border-sky-500/20 bg-sky-500/10 px-3 py-1.5 font-mono text-sm font-black text-sky-700 dark:text-sky-300">
                               {formatPrice(row.singlePrice)}
                             </span>
                           ) : (
@@ -651,9 +703,9 @@ export default function TripHotelSection({
                       )}
 
                       {rateSheetColumns.season && (
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 align-top">
                           {row.seasonFee > 0 ? (
-                            <span className="font-mono font-bold text-amber-600 dark:text-gold-400 text-sm whitespace-nowrap">
+                            <span className="inline-flex items-center whitespace-nowrap rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 font-mono text-sm font-black text-amber-700 dark:text-gold-300">
                               +{formatPrice(row.seasonFee)}
                             </span>
                           ) : (
@@ -663,16 +715,17 @@ export default function TripHotelSection({
                       )}
 
                       {rateSheetColumns.boat && (
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 align-top">
                           {row.boatName || row.boatPrice > 0 ? (
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-1.5">
                               {row.boatName && (
-                                <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
-                                  🚢 {row.boatName}
+                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-100">
+                                  <span aria-hidden>🚢</span>
+                                  {row.boatName}
                                 </span>
                               )}
                               {row.boatPrice > 0 && (
-                                <span className="font-mono font-bold text-sky-700 dark:text-sky-400 text-xs whitespace-nowrap">
+                                <span className="inline-flex w-fit items-center whitespace-nowrap rounded-lg border border-sky-500/20 bg-sky-500/10 px-2 py-1 font-mono text-xs font-black text-sky-700 dark:text-sky-300">
                                   +{formatPrice(row.boatPrice)}
                                 </span>
                               )}
@@ -712,16 +765,16 @@ export default function TripHotelSection({
                 return (
                   <div
                     key={acc.id || `${acc.hotelId}-${idx}`}
-                    className="bg-white dark:bg-[#040f2b] rounded-2xl shadow-lg border-2 border-gold-400/60 dark:border-gold-500/40 overflow-hidden flex flex-col justify-between"
+                    className="bg-white dark:bg-[#040f2b] rounded-2xl shadow-lg border-2 border-gold-500/50 dark:border-gold-500/40 overflow-hidden flex flex-col justify-between"
                   >
                     <div>
                       {/* Top Bar */}
                       <div className="bg-obsidian-900 dark:bg-[#02091c] px-5 py-3.5 border-b border-gold-500/30 flex items-center justify-between gap-2">
-                        <span className="text-gold-400 font-black text-xs uppercase tracking-widest flex items-center gap-1.5">
+                        <span className="text-gold-300 font-black text-xs uppercase tracking-widest flex items-center gap-1.5">
                           <FaMapMarkerAlt className="shrink-0" />
                           {resolveLocalizedText(acc.cityJsonb || hotelObj.city || acc.destination || acc.city || destinationName, t, lang)}
                         </span>
-                        <span className="flex items-center gap-0.5 text-gold-400 text-xs">
+                        <span className="flex items-center gap-0.5 text-gold-300 text-xs">
                           {Array.from({ length: Math.min(Math.max(stars, 1), 5) }).map((_, sIdx) => (
                             <FaStar key={sIdx} />
                           ))}
@@ -793,7 +846,7 @@ export default function TripHotelSection({
                       <div className="px-5 py-3.5 bg-slate-50 dark:bg-[#02091c]/70 border-t border-gold-500/20 flex items-center justify-between">
                         <Link
                           to={roomObj?.slug ? `/hotels/${hSlug}/${roomObj.slug}` : `/hotels/${hSlug}`}
-                          className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-gold-400 hover:underline flex items-center gap-1.5"
+                          className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-gold-300 hover:underline flex items-center gap-1.5"
                         >
                           <span>{roomObj?.slug ? t('tourDetail.viewRoomDetails', 'View Assigned Room') : t('hotelsCatalog.exploreHotel', 'Explore Hotel')}</span>
                           <FaChevronRight className="rtl-flip text-[10px]" />
@@ -832,7 +885,7 @@ export default function TripHotelSection({
                 {tour.hotels.map((hotelItem, idx) => (
                   <div
                     key={`${hotelItem?.name || idx}-${idx}`}
-                    className="bg-white dark:bg-[#040f2b] rounded-2xl shadow-md border-2 border-gold-400/60 dark:border-gold-500/40 p-5 space-y-2"
+                    className="bg-white dark:bg-[#040f2b] rounded-2xl shadow-md border-2 border-gold-500/50 dark:border-gold-500/40 p-5 space-y-2"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <h3 className="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
@@ -863,7 +916,7 @@ export default function TripHotelSection({
                     {hotelItem.slug && hotelItem.isGlobal !== false && (
                       <Link
                         to={`/hotels/${hotelItem.slug}`}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 dark:text-gold-400 hover:underline pt-1"
+                        className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 dark:text-gold-300 hover:underline pt-1"
                       >
                         <span>{t('hotelsCatalog.exploreHotel', 'Explore Hotel')}</span>
                         <FaChevronRight className="rtl-flip text-[10px]" />
@@ -877,10 +930,10 @@ export default function TripHotelSection({
                 {Object.entries(tour.hotels).map(([city, hotelList]) => (
                   <div
                     key={city}
-                    className="bg-white dark:bg-[#040f2b] rounded-2xl shadow-md border-2 border-gold-400/60 dark:border-gold-500/40 overflow-hidden"
+                    className="bg-white dark:bg-[#040f2b] rounded-2xl shadow-md border-2 border-gold-500/50 dark:border-gold-500/40 overflow-hidden"
                   >
                     <div className="bg-obsidian-900 dark:bg-[#02091c] px-4 py-3 border-b border-gold-500/30">
-                      <h3 className="text-gold-400 font-black text-xs md:text-sm uppercase tracking-widest flex items-center gap-2">
+                      <h3 className="text-gold-300 font-black text-xs md:text-sm uppercase tracking-widest flex items-center gap-2">
                         <FaMapMarkerAlt className="flex-shrink-0 text-xs" />
                         {resolveLocalizedText(city, t, lang)}
                       </h3>
@@ -917,7 +970,7 @@ export default function TripHotelSection({
             <button
               type="button"
               onClick={() => setSelectedPhotoIndex(null)}
-              className="absolute top-6 right-6 text-white hover:text-gold-400 p-2 text-2xl cursor-pointer z-50 transition-colors"
+              className="absolute top-6 right-6 text-white hover:text-gold-300 p-2 text-2xl cursor-pointer z-50 transition-colors"
             >
               <FaTimes />
             </button>
@@ -934,7 +987,7 @@ export default function TripHotelSection({
             </div>
 
             <div className="mt-4 flex items-center gap-3">
-              <span className="text-gold-400 font-bold text-sm">
+              <span className="text-gold-300 font-bold text-sm">
                 {selectedPhotoIndex + 1} / {galleryList.length}
               </span>
               <span className="text-white/60 text-xs">
