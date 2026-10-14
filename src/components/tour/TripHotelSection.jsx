@@ -64,7 +64,7 @@ export default function TripHotelSection({
   // Hotel rate sheet (6 columns) derived from dashboard-entered data.
   // A column is rendered only when at least one row carries a value for it,
   // so nothing appears in the storefront before it was entered in the dashboard.
-  // Seeded placeholder rows (nights/regime/destination only) are ignored so they
+  // Seeded placeholder rows (nights/destination only) are ignored so they
   // never surface as a fake "partner hotel".
   const meaningfulAccommodations = filterMeaningfulAccommodations(assignedAccommodations);
   const rateSheetRows = meaningfulAccommodations
@@ -418,7 +418,6 @@ export default function TripHotelSection({
                     const roomRate = Number(room.ratePerNight ?? room.ratePerNightUsd ?? room.basePriceUsd ?? 0);
                     const bedType = room.roomType || resolveLocalizedText(room.bedType, t, lang) || 'King / Twin';
                     const occupancy = Number(room.maxOccupancy ?? room.capacity ?? 2);
-                    const mealPlan = room.mealPlan || 'BB';
                     const seasonPricings = Array.isArray(room.seasonPricings) ? room.seasonPricings : [];
 
                     return (
@@ -444,9 +443,6 @@ export default function TripHotelSection({
                           </div>
 
                           <div className="flex flex-wrap gap-2 text-xs">
-                            <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold">
-                              🍽️ {mealPlan === 'BB' ? 'Bed & Breakfast' : mealPlan === 'HB' ? 'Half Board' : mealPlan === 'FB' ? 'Full Board' : mealPlan === 'AI' ? 'All Inclusive' : mealPlan}
-                            </span>
                             <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                               ✓ {t('hotel.roomAssigned', 'Included in Selection')}
                             </span>
@@ -631,7 +627,7 @@ export default function TripHotelSection({
                             </span>
                             <div className="min-w-0">
                               <div className="flex items-center gap-2 text-sm font-bold leading-tight text-slate-900 dark:text-white">
-                                <span>{row.hName || t('hotelTable.unnamedHotel', 'Partner Hotel')}</span>
+                                <span className="whitespace-pre-line">{row.hName || t('hotelTable.unnamedHotel', 'Partner Hotel')}</span>
                               </div>
                               {row.city && (
                                 <div className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-300">
@@ -639,18 +635,11 @@ export default function TripHotelSection({
                                   <span>{row.city}</span>
                                 </div>
                               )}
-                              {(row.acc.nights || row.acc.boardBasis || row.acc.regime) && (
+                              {row.acc.nights && (
                                 <div className="mt-2 flex flex-wrap items-center gap-2">
-                                  {row.acc.nights ? (
-                                    <span className="rounded-full border border-gold-500/40 bg-gold-500/20 px-2 py-0.5 text-[10px] font-black text-amber-900 dark:text-gold-300">
-                                      {row.acc.nights} {t('hotel.room.nightsCount', 'Nights')}
-                                    </span>
-                                  ) : null}
-                                  {(row.acc.boardBasis || row.acc.regime) && (
-                                    <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700 dark:bg-white/10 dark:text-slate-200">
-                                      🍽️ {row.acc.boardBasis || row.acc.regime}
-                                    </span>
-                                  )}
+                                  <span className="rounded-full border border-gold-500/40 bg-gold-500/20 px-2 py-0.5 text-[10px] font-black text-amber-900 dark:text-gold-300">
+                                    {row.acc.nights} {t('hotel.room.nightsCount', 'Nights')}
+                                  </span>
                                 </div>
                               )}
                               {row.roomRate > 0 && (
@@ -808,11 +797,6 @@ export default function TripHotelSection({
                               {acc.nights} {t('hotel.room.nightsCount', 'Nights')}
                             </span>
                           )}
-                          {(acc.boardBasis || acc.regime) && (
-                            <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-obsidian-800 text-slate-800 dark:text-slate-200 font-bold text-xs">
-                              🍽️ {acc.boardBasis || acc.regime}
-                            </span>
-                          )}
                           {acc.dayRange && (
                             <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-obsidian-800 text-slate-700 dark:text-slate-300 font-semibold text-xs">
                               📅 {acc.dayRange}
@@ -906,7 +890,6 @@ export default function TripHotelSection({
                           hotelItem.city,
                           hotelItem.category,
                           hotelItem.roomType,
-                          hotelItem.boardBasis,
                           hotelItem.nights ? `${hotelItem.nights} ${t('hotel.room.nightsCount', 'Nights')}` : null,
                         ]
                           .filter(Boolean)
