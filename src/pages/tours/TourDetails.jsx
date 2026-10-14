@@ -17,6 +17,7 @@ import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
 import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage, extractTourDays, resolveTourType } from '../../utils/titleHelper';
 import { getTourDestinationSlug, getDestinationName, getDestinationUrl } from '../../utils/destinationHelper';
+import { filterMeaningfulAccommodations } from '../../utils/accommodationHelper';
 
 import SEOHead from '../../components/seo/SEOHead';
 import SuggestedTours from '../../components/tour/SuggestedTours';
@@ -114,8 +115,7 @@ const TourDetails = () => {
     : (Array.isArray(tour.seasonPricing?.rules) ? tour.seasonPricing.rules : []);
   const hasHotelsData =
     Boolean(tour?.tripHotel) ||
-    Boolean(accommodationSummary) ||
-    assignedAccommodations.length > 0 ||
+    filterMeaningfulAccommodations(assignedAccommodations).length > 0 ||
     (Array.isArray(tour.hotels) && tour.hotels.length > 0) ||
     (tour.hotels && typeof tour.hotels === 'object' && Object.keys(tour.hotels).length > 0);
 

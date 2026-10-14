@@ -109,4 +109,38 @@ describe('TripHotelSection rate sheet (6 columns)', () => {
     expect(screen.queryByText('Seasonal Fee')).not.toBeInTheDocument();
     expect(screen.queryByText('Hotel & City Names')).not.toBeInTheDocument();
   });
+
+  it('never renders a fake "Luxury Partner Hotel" card for seeded placeholder rows', () => {
+    const assignedAccommodations = [
+      { nights: 3, regime: 'Bed & Breakfast', destination: 'Cairo' },
+      { nights: 3, regime: 'Bed & Breakfast', destination: 'Cairo', isDefault: true, sortOrder: 0 },
+    ];
+
+    const { container } = render(
+      <MemoryRouter>
+        <TripHotelSection {...baseProps} assignedAccommodations={assignedAccommodations} />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('Luxury Partner Hotel')).not.toBeInTheDocument();
+    expect(screen.queryByText('Exclusive Trip Accommodation')).not.toBeInTheDocument();
+    // Placeholder-only accommodations hide the whole section.
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('keeps real hotels while ignoring placeholder rows mixed in', () => {
+    const assignedAccommodations = [
+      { nights: 3, regime: 'Bed & Breakfast', destination: 'Cairo' },
+      { id: 'acc-4', nameJsonb: 'Real Hotel', cityJsonb: 'Luxor', nights: 2, regime: 'BB' },
+    ];
+
+    render(
+      <MemoryRouter>
+        <TripHotelSection {...baseProps} assignedAccommodations={assignedAccommodations} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Real Hotel')).toBeInTheDocument();
+    expect(screen.queryByText('Luxury Partner Hotel')).not.toBeInTheDocument();
+  });
 });

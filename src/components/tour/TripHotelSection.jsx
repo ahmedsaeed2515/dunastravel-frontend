@@ -8,6 +8,7 @@ import {
   FaInfoCircle, FaSearchPlus, FaTimes
 } from 'react-icons/fa';
 import { resolveLocalizedText } from '../../utils/titleHelper';
+import { filterMeaningfulAccommodations } from '../../utils/accommodationHelper';
 
 const FALLBACK_HOTEL_IMG = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200';
 
@@ -63,8 +64,10 @@ export default function TripHotelSection({
   // Hotel rate sheet (6 columns) derived from dashboard-entered data.
   // A column is rendered only when at least one row carries a value for it,
   // so nothing appears in the storefront before it was entered in the dashboard.
-  const rateSheetRows = (Array.isArray(assignedAccommodations) ? assignedAccommodations : [])
-    .filter((acc) => acc && typeof acc === 'object')
+  // Seeded placeholder rows (nights/regime/destination only) are ignored so they
+  // never surface as a fake "partner hotel".
+  const meaningfulAccommodations = filterMeaningfulAccommodations(assignedAccommodations);
+  const rateSheetRows = meaningfulAccommodations
     .map((acc, idx) => {
       const hotelObj = acc.hotel || {};
       const roomObj = acc.room || null;
@@ -157,6 +160,21 @@ export default function TripHotelSection({
       setSelectedPhotoIndex(idx);
     }
   };
+
+  // Legacy `tour.hotels` payload (array or { city: [names] } dictionary).
+  const hasLegacyHotels =
+    (Array.isArray(tour?.hotels) && tour.hotels.length > 0) ||
+    Boolean(
+      tour?.hotels &&
+        typeof tour.hotels === 'object' &&
+        Object.keys(tour.hotels).length > 0
+    );
+
+  // Nothing real to show (no dedicated hotel, no dashboards rate-sheet data, no
+  // legacy hotels): hide the whole section instead of rendering an empty shell.
+  if (!isTripDedicated && meaningfulAccommodations.length === 0 && !hasLegacyHotels) {
+    return null;
+  }
 
   return (
     <section className="relative mt-20 mb-12">
@@ -676,14 +694,15 @@ export default function TripHotelSection({
         {/* VIEW B (2): GLOBAL CATALOG PARTNER HOTELS (legacy card grid)        */}
         {/* Shown only when no dashboard rate-sheet data exists.                */}
         {/* ------------------------------------------------------------------ */}
-        {!isTripDedicated && assignedAccommodations.length > 0 && !hasRateSheet && (
+        {!isTripDedicated && meaningfulAccommodations.length > 0 && !hasRateSheet && (
           <div className="p-6 md:p-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {assignedAccommodations.map((acc, idx) => {
+              {meaningfulAccommodations.map((acc, idx) => {
                 const hotelObj = acc.hotel || {};
                 const roomObj = acc.room || null;
                 const isGlobal = hotelObj.isGlobal !== false;
-                const hName = resolveLocalizedText(acc.nameJsonb || hotelObj.nameJsonb || hotelObj.name || acc.hotelName || acc.name || 'Luxury Partner Hotel', t, lang);
+                const accCity = resolveLocalizedText(acc.cityJsonb || acc.city || acc.destination || hotelObj.city, t, lang);
+                const hName = resolveLocalizedText(acc.nameJsonb || hotelObj.nameJsonb || hotelObj.name || acc.hotelName || acc.name, t, lang) || accCity || '';
                 const hSlug = hotelObj.slug || null;
                 const stars = Number(hotelObj.stars ?? hotelObj.starRating ?? 5);
                 const supplement = Number(acc.priceSupplement ?? acc.priceSupplementUsd ?? 0);
@@ -806,7 +825,7 @@ export default function TripHotelSection({
         )}
 
         {/* Fallback for legacy tour.hotels array or dictionary */}
-        {!isTripDedicated && assignedAccommodations.length === 0 && tour?.hotels && (
+        {!isTripDedicated && meaningfulAccommodations.length === 0 && tour?.hotels && (
           <div className="p-6 md:p-10">
             {Array.isArray(tour.hotels) ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
