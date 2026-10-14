@@ -243,12 +243,22 @@ export default function HomeHeroSection() {
               <FaTimes />
             </button>
             <video
-              src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.webm"
               controls
               autoPlay
               playsInline
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
+            >
+              {/* H.264 MP4 first — universal support (fixes black screen with audio on VP9-unfriendly browsers) */}
+              <source
+                src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.mp4"
+                type="video/mp4"
+              />
+              {/* WebM/VP9 fallback for browsers with VP9 support */}
+              <source
+                src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.webm"
+                type="video/webm"
+              />
+            </video>
           </div>
         </div>
       )}
