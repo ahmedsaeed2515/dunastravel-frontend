@@ -859,31 +859,16 @@
 /* Video Modal Overlay */
 .video-modal-backdrop {
   position: fixed;
-  /* Start below the fixed site header (top bar h-8/h-9 + main header h-14/h-16)
-     so the header stays visible and is never covered by the modal. */
-  top: 88px;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
+  /* Full-screen opaque black overlay that also covers the fixed site header
+     so the video plays on a clean black stage. */
   z-index: 99999;
-  background: rgba(10, 16, 28, 0.96);
+  background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
   overscroll-behavior: contain;
-}
-
-@media (min-width: 640px) {
-  .video-modal-backdrop {
-    top: 92px; /* top bar h-9 (36px) + main header h-14 (56px) */
-  }
-}
-
-@media (min-width: 1024px) {
-  .video-modal-backdrop {
-    top: 100px; /* top bar h-9 (36px) + main header h-16 (64px) */
-  }
 }
 
 .video-modal-content {
