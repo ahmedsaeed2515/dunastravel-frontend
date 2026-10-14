@@ -33,7 +33,9 @@ const TourDetails = () => {
   const params = useParams();
   const rawSlug = params.slug || params.programSlug || params['*'] || params.programId || params.id;
   const trimmedSlug = rawSlug ? String(rawSlug).trim() : '';
-  const slug = !trimmedSlug || trimmedSlug === 'classic-program' ? 'complete-egypt-8d' : trimmedSlug;
+  // NOTE: `classic-program` is a real, published tour (slug "classic-program") in the backend.
+  // It must resolve to itself; only a genuinely missing slug falls back to a default tour.
+  const slug = !trimmedSlug ? 'complete-egypt-8d' : trimmedSlug;
 
   const { tour, loading, error } = useTour(slug);
 

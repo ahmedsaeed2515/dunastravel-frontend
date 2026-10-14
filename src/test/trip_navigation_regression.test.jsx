@@ -85,6 +85,28 @@ const MOCK_TOURS_BY_SLUG = {
     excludedServices: ['Personal Expenses'],
     highlights: ['Pyramids of Giza', 'Karnak Temple'],
   },
+  'classic-program': {
+    id: 'tour-classic-program',
+    slug: 'classic-program',
+    title: 'Classic Egypt Programme',
+    overview: 'Timeless wonders of Cairo, the Pyramids and a luxury Nile Cruise.',
+    destination: 'egypt',
+    country: 'Egypt',
+    duration: '8 Days / 7 Nights',
+    durationDays: 8,
+    basePriceUsd: 1890,
+    price: 1890,
+    currency: 'USD',
+    heroImage: 'https://example.com/classic.jpg',
+    images: ['https://example.com/classic.jpg'],
+    itinerary: [
+      { day: 1, title: 'Arrival in Cairo', description: 'VIP airport meet and assist.' },
+      { day: 2, title: 'Nile Cruise: Aswan to Luxor Temples', description: 'Sail the Nile in luxury.' },
+    ],
+    includedServices: ['5-Star Nile Cruise', 'Private Egyptologist'],
+    excludedServices: ['International Flights'],
+    highlights: ['Pyramids of Giza', 'Nile Cruise Aswan to Luxor'],
+  },
   'egypt-jordan-combined-12d': {
     id: 'tour-multi-1',
     slug: 'egypt-jordan-combined-12d',
@@ -307,7 +329,7 @@ describe('Trip Details Client-Side Navigation & Routing Regression Suite', () =>
     expect(screen.queryByText(/Giza Pyramids & Sphinx/i)).not.toBeInTheDocument();
   });
 
-  it('Resolves /programs/:category/:programSlug and legacy classic-program alias in TourDetails', async () => {
+  it('Resolves /programs/:category/:programSlug to the requested classic-program tour without silently aliasing it to another tour', async () => {
     render(
       <HelmetProvider>
         <MemoryRouter initialEntries={['/programs/classic/classic-program']}>
@@ -318,7 +340,9 @@ describe('Trip Details Client-Side Navigation & Routing Regression Suite', () =>
       </HelmetProvider>
     );
 
-    expect(await screen.findByText(/Giza Pyramids & Sphinx/i)).toBeInTheDocument();
+    // The real classic-program tour must be rendered (not complete-egypt-8d).
+    expect(await screen.findByText(/Nile Cruise: Aswan to Luxor Temples/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Giza Pyramids & Sphinx/i)).not.toBeInTheDocument();
   });
 
   it('Clicking an Extension card on /programs/extension opens ExtensionDetails smoothly', async () => {
