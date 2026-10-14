@@ -60,6 +60,81 @@ export default function TripHotelSection({
   const policies = tripHotel?.policies || tripHotel?.policiesJsonb || {};
   const roomsList = Array.isArray(tripHotel?.rooms) ? tripHotel.rooms : [];
 
+  // Hotel rate sheet (6 columns) derived from dashboard-entered data.
+  // A column is rendered only when at least one row carries a value for it,
+  // so nothing appears in the storefront before it was entered in the dashboard.
+  const rateSheetRows = (Array.isArray(assignedAccommodations) ? assignedAccommodations : [])
+    .filter((acc) => acc && typeof acc === 'object')
+    .map((acc, idx) => {
+      const hotelObj = acc.hotel || {};
+      const roomObj = acc.room || null;
+      const hName = resolveLocalizedText(
+        acc.nameJsonb || acc.hotelName || hotelObj.nameJsonb || hotelObj.name,
+        t,
+        lang
+      ) || '';
+      const city = resolveLocalizedText(
+        acc.cityJsonb || acc.city || hotelObj.city || acc.destination || destinationName,
+        t,
+        lang
+      ) || '';
+      const categoryTier = String(acc.categoryTier || acc.category || '').trim();
+      const toAmount = (value) => {
+        const numeric = Number(value);
+        return Number.isFinite(numeric) && numeric > 0 ? numeric : 0;
+      };
+      const doublePrice = toAmount(acc.doubleRoomPriceUsd ?? acc.doubleRoomPrice);
+      const singlePrice = toAmount(acc.singleRoomPriceUsd ?? acc.singleRoomPrice);
+      const seasonFee = toAmount(
+        acc.seasonSupplementUsd ?? acc.seasonSupplement ?? acc.priceSupplementUsd ?? acc.priceSupplement
+      );
+      const boatName = resolveLocalizedText(acc.boatJsonb || acc.boatName, t, lang) || '';
+      const boatPrice = toAmount(acc.boatPriceUsd ?? acc.boatPrice);
+      const roomRate = toAmount(roomObj?.ratePerNight ?? roomObj?.basePriceUsd);
+      return {
+        acc,
+        idx,
+        hName,
+        city,
+        categoryTier,
+        doublePrice,
+        singlePrice,
+        seasonFee,
+        boatName,
+        boatPrice,
+        roomRate,
+        hotelSlug: hotelObj.slug || null,
+        roomSlug: roomObj?.slug || null,
+        isGlobal: hotelObj.isGlobal !== false,
+      };
+    });
+
+  const rateSheetColumns = {
+    category: rateSheetRows.some((r) => Boolean(r.categoryTier)),
+    hotelCity: rateSheetRows.some((r) => Boolean(r.hName || r.city)),
+    double: rateSheetRows.some((r) => r.doublePrice > 0),
+    single: rateSheetRows.some((r) => r.singlePrice > 0),
+    season: rateSheetRows.some((r) => r.seasonFee > 0),
+    boat: rateSheetRows.some((r) => Boolean(r.boatName) || r.boatPrice > 0),
+  };
+  const hasRateSheet =
+    rateSheetColumns.category ||
+    rateSheetColumns.double ||
+    rateSheetColumns.single ||
+    rateSheetColumns.season ||
+    rateSheetColumns.boat;
+
+  const categoryTierLabel = (tier) => {
+    const key = String(tier || '').toUpperCase();
+    if (key.includes('5')) return t('hotelTable.category5Star', '5-Star Luxury');
+    if (key.includes('4')) return t('hotelTable.category4Star', '4-Star Superior');
+    if (key.includes('3')) return t('hotelTable.category3Star', '3-Star Comfort');
+    if (key.includes('VIP')) return t('hotelTable.categoryVip', 'Royal VIP');
+    if (key.includes('CRUISE')) return t('hotelTable.categoryCruise', 'Nile Cruise');
+    if (key.includes('LUX')) return t('hotelTable.categoryLuxury', 'Luxury');
+    return tier;
+  };
+
   const handleOpenPhoto = (idx) => {
     if (onOpenGlobalLightbox) {
       onOpenGlobalLightbox(idx);
@@ -409,16 +484,191 @@ export default function TripHotelSection({
         )}
 
         {/* ------------------------------------------------------------------ */}
-        {/* VIEW B: GLOBAL CATALOG PARTNER HOTELS (Relational Accommodations) */}
+        {/* VIEW B (1): HOTEL RATE SHEET — 6 conditional columns                */}
+        {/* Columns only render when the dashboard entered data for them.       */}
         {/* ------------------------------------------------------------------ */}
-        {!isTripDedicated && assignedAccommodations.length > 0 && (
+        {!isTripDedicated && rateSheetRows.length > 0 && hasRateSheet && (
+          <div className="p-6 md:p-10">
+            <div className="overflow-x-auto rounded-2xl shadow-lg border-2 border-gold-400/60 dark:border-gold-500/40 bg-white dark:bg-[#040f2b]">
+              <table className="w-full min-w-[720px] text-start border-collapse">
+                <thead>
+                  <tr className="bg-obsidian-900 dark:bg-[#02091c] text-gold-400 text-[11px] md:text-xs font-black uppercase tracking-wider">
+                    {rateSheetColumns.category && (
+                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
+                        {t('hotelTable.category', 'Hotel Category')}
+                      </th>
+                    )}
+                    {rateSheetColumns.hotelCity && (
+                      <th className="px-4 py-3.5 text-start">
+                        {t('hotelTable.hotelAndCity', 'Hotel & City Names')}
+                      </th>
+                    )}
+                    {rateSheetColumns.double && (
+                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
+                        {t('hotelTable.doublePrice', 'Double Room Rate')}
+                      </th>
+                    )}
+                    {rateSheetColumns.single && (
+                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
+                        {t('hotelTable.singlePrice', 'Single Room Rate')}
+                      </th>
+                    )}
+                    {rateSheetColumns.season && (
+                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
+                        {t('hotelTable.seasonFee', 'Seasonal Fee')}
+                      </th>
+                    )}
+                    {rateSheetColumns.boat && (
+                      <th className="px-4 py-3.5 text-start whitespace-nowrap">
+                        {t('hotelTable.boat', 'Boats')}
+                      </th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rateSheetRows.map((row) => (
+                    <tr
+                      key={row.acc.id || `${row.acc.hotelId || 'acc'}-${row.idx}`}
+                      className="border-t border-gold-500/20 align-top"
+                    >
+                      {rateSheetColumns.category && (
+                        <td className="px-4 py-4 text-xs md:text-sm font-bold text-slate-800 dark:text-slate-100">
+                          {row.categoryTier ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gold-500/15 text-amber-900 dark:text-gold-300 border border-gold-500/40">
+                              <FaStar className="text-gold-500 text-[10px]" />
+                              {categoryTierLabel(row.categoryTier)}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-600">—</span>
+                          )}
+                        </td>
+                      )}
+
+                      {rateSheetColumns.hotelCity && (
+                        <td className="px-4 py-4">
+                          <div className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                            <FaHotel className="text-gold-500 shrink-0" />
+                            <span>{row.hName || t('hotelTable.unnamedHotel', 'Partner Hotel')}</span>
+                          </div>
+                          {row.city && (
+                            <div className="text-xs font-semibold text-slate-500 dark:text-slate-300 flex items-center gap-1.5 mt-1">
+                              <FaMapMarkerAlt className="text-gold-500 shrink-0" />
+                              <span>{row.city}</span>
+                            </div>
+                          )}
+                          {(row.acc.nights || row.acc.boardBasis || row.acc.regime) && (
+                            <div className="flex flex-wrap items-center gap-2 mt-2">
+                              {row.acc.nights ? (
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-gold-500/20 text-amber-900 dark:text-gold-300 border border-gold-500/40">
+                                  {row.acc.nights} {t('hotel.room.nightsCount', 'Nights')}
+                                </span>
+                              ) : null}
+                              {(row.acc.boardBasis || row.acc.regime) && (
+                                <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-obsidian-800 text-slate-700 dark:text-slate-200 font-bold text-[10px]">
+                                  🍽️ {row.acc.boardBasis || row.acc.regime}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          {row.roomRate > 0 && (
+                            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-1.5">
+                              <FaBed className="text-sky-500 shrink-0" />
+                              <span className="font-mono font-bold">{formatPrice(row.roomRate)}</span>
+                              <span>/ {t('hotel.night', 'night')}</span>
+                            </div>
+                          )}
+                          {row.hotelSlug && row.isGlobal && (
+                            <Link
+                              to={row.roomSlug ? `/hotels/${row.hotelSlug}/${row.roomSlug}` : `/hotels/${row.hotelSlug}`}
+                              className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 dark:text-gold-400 hover:underline mt-2"
+                            >
+                              <span>
+                                {row.roomSlug
+                                  ? t('tourDetail.viewRoomDetails', 'View Assigned Room')
+                                  : t('hotelsCatalog.exploreHotel', 'Explore Hotel')}
+                              </span>
+                              <FaChevronRight className="rtl-flip text-[9px]" />
+                            </Link>
+                          )}
+                        </td>
+                      )}
+
+                      {rateSheetColumns.double && (
+                        <td className="px-4 py-4">
+                          {row.doublePrice > 0 ? (
+                            <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 text-sm whitespace-nowrap">
+                              {formatPrice(row.doublePrice)}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-600">—</span>
+                          )}
+                        </td>
+                      )}
+
+                      {rateSheetColumns.single && (
+                        <td className="px-4 py-4">
+                          {row.singlePrice > 0 ? (
+                            <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 text-sm whitespace-nowrap">
+                              {formatPrice(row.singlePrice)}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-600">—</span>
+                          )}
+                        </td>
+                      )}
+
+                      {rateSheetColumns.season && (
+                        <td className="px-4 py-4">
+                          {row.seasonFee > 0 ? (
+                            <span className="font-mono font-bold text-amber-600 dark:text-gold-400 text-sm whitespace-nowrap">
+                              +{formatPrice(row.seasonFee)}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-600">—</span>
+                          )}
+                        </td>
+                      )}
+
+                      {rateSheetColumns.boat && (
+                        <td className="px-4 py-4">
+                          {row.boatName || row.boatPrice > 0 ? (
+                            <div className="flex flex-col gap-1">
+                              {row.boatName && (
+                                <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
+                                  🚢 {row.boatName}
+                                </span>
+                              )}
+                              {row.boatPrice > 0 && (
+                                <span className="font-mono font-bold text-sky-700 dark:text-sky-400 text-xs whitespace-nowrap">
+                                  +{formatPrice(row.boatPrice)}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-600">—</span>
+                          )}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ------------------------------------------------------------------ */}
+        {/* VIEW B (2): GLOBAL CATALOG PARTNER HOTELS (legacy card grid)        */}
+        {/* Shown only when no dashboard rate-sheet data exists.                */}
+        {/* ------------------------------------------------------------------ */}
+        {!isTripDedicated && assignedAccommodations.length > 0 && !hasRateSheet && (
           <div className="p-6 md:p-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {assignedAccommodations.map((acc, idx) => {
                 const hotelObj = acc.hotel || {};
                 const roomObj = acc.room || null;
                 const isGlobal = hotelObj.isGlobal !== false;
-                const hName = resolveLocalizedText(hotelObj.name || acc.hotelName || 'Luxury Partner Hotel', t, lang);
+                const hName = resolveLocalizedText(acc.nameJsonb || hotelObj.nameJsonb || hotelObj.name || acc.hotelName || acc.name || 'Luxury Partner Hotel', t, lang);
                 const hSlug = hotelObj.slug || null;
                 const stars = Number(hotelObj.stars ?? hotelObj.starRating ?? 5);
                 const supplement = Number(acc.priceSupplement ?? acc.priceSupplementUsd ?? 0);
@@ -435,7 +685,7 @@ export default function TripHotelSection({
                       <div className="bg-obsidian-900 dark:bg-[#02091c] px-5 py-3.5 border-b border-gold-500/30 flex items-center justify-between gap-2">
                         <span className="text-gold-400 font-black text-xs uppercase tracking-widest flex items-center gap-1.5">
                           <FaMapMarkerAlt className="shrink-0" />
-                          {resolveLocalizedText(hotelObj.city || acc.destination || acc.city || destinationName, t, lang)}
+                          {resolveLocalizedText(acc.cityJsonb || hotelObj.city || acc.destination || acc.city || destinationName, t, lang)}
                         </span>
                         <span className="flex items-center gap-0.5 text-gold-400 text-xs">
                           {Array.from({ length: Math.min(Math.max(stars, 1), 5) }).map((_, sIdx) => (
