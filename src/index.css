@@ -1841,6 +1841,25 @@ html:not([dir="rtl"]) [contenteditable="true"] {
   animation: pageFadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Page-route transition wrapper.
+   NOTE: must NOT animate/retain a `transform`. With `animation-fill-mode: forwards`,
+   a lingering `transform` on this wrapper turns it into the containing block for
+   every `position: fixed` descendant (video modals, overlays, etc.), which makes
+   them position/size against the full page instead of the viewport. Fading only
+   opacity keeps fixed descendants correctly pinned to the viewport. */
+@keyframes pageFadeOnly {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-transition-fade {
+  animation: pageFadeOnly 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 
 
 

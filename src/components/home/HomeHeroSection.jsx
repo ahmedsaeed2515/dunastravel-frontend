@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { FaPlay, FaTimes } from "react-icons/fa";
@@ -179,13 +180,42 @@ export default function HomeHeroSection() {
   const isRtl = i18n.language === 'ar' || (i18n.dir && i18n.dir() === 'rtl');
 
   // Infinite non-stop loop across all 3 slides (0 ➔ 1 ➔ 2 ➔ 0 ➔ 1 ➔ 2...)
+  // Paused while the video modal is open so nothing moves behind it.
   useEffect(() => {
+    if (isVideoOpen) return undefined;
+
     const timer = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % SLIDE_DATA.length);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isVideoOpen]);
+
+  // Lock background scrolling while the video modal is open.
+  useEffect(() => {
+    if (!isVideoOpen || typeof document === "undefined") return undefined;
+
+    const { body, documentElement } = document;
+    const scrollbarWidth = window.innerWidth - documentElement.clientWidth;
+    const previous = {
+      bodyOverflow: body.style.overflow,
+      htmlOverflow: documentElement.style.overflow,
+      bodyPaddingRight: body.style.paddingRight,
+    };
+
+    body.style.overflow = "hidden";
+    documentElement.style.overflow = "hidden";
+    // Compensate for the disappearing scrollbar to avoid a layout shift.
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      body.style.overflow = previous.bodyOverflow;
+      documentElement.style.overflow = previous.htmlOverflow;
+      body.style.paddingRight = previous.bodyPaddingRight;
+    };
+  }, [isVideoOpen]);
 
   const handleSlideTo = (index) => {
     setActiveIndex(index);
@@ -225,43 +255,48 @@ export default function HomeHeroSection() {
         </div>
       </div>
 
-      {/* Video Popup Modal */}
-      {isVideoOpen && (
-        <div
-          className="video-modal-backdrop"
-          onClick={() => setIsVideoOpen(false)}
-        >
+      {/* Video Popup Modal (portaled to <body> so no ancestor transform/overflow can
+          break its `position: fixed` viewport centering) */}
+      {isVideoOpen && typeof document !== "undefined" &&
+        createPortal(
           <div
-            className="video-modal-content"
-            onClick={(e) => e.stopPropagation()}
+            className="video-modal-backdrop"
+            onClick={() => setIsVideoOpen(false)}
           >
-            <button
-              type="button"
-              className="video-modal-close"
-              onClick={() => setIsVideoOpen(false)}
+            <div
+              className="video-modal-content"
+              onClick={(e) => e.stopPropagation()}
             >
-              <FaTimes />
-            </button>
-            <video
-              controls
-              autoPlay
-              playsInline
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            >
-              {/* H.264 MP4 first — universal support (fixes black screen with audio on VP9-unfriendly browsers) */}
-              <source
-                src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.mp4"
-                type="video/mp4"
-              />
-              {/* WebM/VP9 fallback for browsers with VP9 support */}
-              <source
-                src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.webm"
-                type="video/webm"
-              />
-            </video>
-          </div>
-        </div>
-      )}
+              <button
+                type="button"
+                className="video-modal-close"
+                onClick={() => setIsVideoOpen(false)}
+              >
+                <FaTimes />
+              </button>
+              <video
+                controls
+                autoPlay
+                playsInline
+                preload="auto"
+                poster="https://res.cloudinary.com/degbrq3ck/video/upload/so_2/v1789316780/hero_jiyrsh.jpg"
+                style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", background: "#000" }}
+              >
+                {/* H.264 MP4 first — universal support */}
+                <source
+                  src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.mp4"
+                  type="video/mp4"
+                />
+                {/* WebM/VP9 fallback for browsers with VP9 support */}
+                <source
+                  src="https://res.cloudinary.com/degbrq3ck/video/upload/v1789316780/hero_jiyrsh.webm"
+                  type="video/webm"
+                />
+              </video>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

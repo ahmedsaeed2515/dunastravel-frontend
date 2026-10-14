@@ -183,7 +183,7 @@ const CookiePreferencesModal = lazyWithRetry(() => import("./components/privacy/
 const PageTransition = ({ children }) => {
   const location = useLocation();
   return (
-    <div key={location.pathname} className="animate-page-fade">
+    <div key={location.pathname} className="page-transition-fade">
       {children}
     </div>
   );
