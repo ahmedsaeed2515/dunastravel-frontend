@@ -125,14 +125,29 @@ export default function TripHotelSection({
     rateSheetColumns.boat;
 
   const categoryTierLabel = (tier) => {
-    const key = String(tier || '').toUpperCase();
-    if (key.includes('5')) return t('hotelTable.category5Star', '5-Star Luxury');
-    if (key.includes('4')) return t('hotelTable.category4Star', '4-Star Superior');
-    if (key.includes('3')) return t('hotelTable.category3Star', '3-Star Comfort');
-    if (key.includes('VIP')) return t('hotelTable.categoryVip', 'Royal VIP');
-    if (key.includes('CRUISE')) return t('hotelTable.categoryCruise', 'Nile Cruise');
-    if (key.includes('LUX')) return t('hotelTable.categoryLuxury', 'Luxury');
-    return tier;
+    // Only map the legacy enum codes to localized labels; a manually-typed
+    // category (free text entered in the dashboard) is shown exactly as typed.
+    const key = String(tier || '').trim().toUpperCase();
+    switch (key) {
+      case '5_STAR':
+      case '5_STARS':
+        return t('hotelTable.category5Star', '5-Star Luxury');
+      case '4_STAR':
+      case '4_STARS':
+        return t('hotelTable.category4Star', '4-Star Superior');
+      case '3_STAR':
+      case '3_STARS':
+        return t('hotelTable.category3Star', '3-Star Comfort');
+      case 'VIP':
+        return t('hotelTable.categoryVip', 'Royal VIP');
+      case 'CRUISE':
+        return t('hotelTable.categoryCruise', 'Nile Cruise');
+      case 'LUXURY':
+      case 'LUX':
+        return t('hotelTable.categoryLuxury', 'Luxury');
+      default:
+        return tier;
+    }
   };
 
   const handleOpenPhoto = (idx) => {
