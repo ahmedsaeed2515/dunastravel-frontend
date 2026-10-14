@@ -5,6 +5,7 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import LandingPageDetails from '../pages/destinations/LandingPageDetails';
+import Egipto from '../pages/destinations/Egipto';
 import BackendToursPage from '../pages/tours/BackendToursPage';
 import MultiCountryTours from '../pages/programs/MultiCountryTours';
 import ExtensionTours from '../pages/programs/ExtensionTours';
@@ -341,6 +342,34 @@ describe('Trip Details Client-Side Navigation & Routing Regression Suite', () =>
     );
 
     // The real classic-program tour must be rendered (not complete-egypt-8d).
+    expect(await screen.findByText(/Nile Cruise: Aswan to Luxor Temples/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Giza Pyramids & Sphinx/i)).not.toBeInTheDocument();
+  });
+
+  it('The Egypt destination "Classic Egypt Programme" card opens the real classic-program tour, not another trip', async () => {
+    render(
+      <HelmetProvider>
+        <MemoryRouter initialEntries={['/destinations/egypt']}>
+          <LocationDisplay />
+          <Routes>
+            <Route path="/destinations/:slug" element={<Egipto />} />
+            <Route path="/tours/:slug" element={<TourDetails />} />
+          </Routes>
+        </MemoryRouter>
+      </HelmetProvider>
+    );
+
+    // The card title falls back to the Arabic default under this mocked i18n.
+    const classicCard = await screen.findByText('برنامج مصر الكلاسيكي');
+    expect(classicCard).toBeInTheDocument();
+
+    fireEvent.click(classicCard);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('current-pathname').textContent).toBe('/tours/classic-program');
+    });
+
+    // The real classic-program tour renders — never the "Complete Egypt" tour.
     expect(await screen.findByText(/Nile Cruise: Aswan to Luxor Temples/i)).toBeInTheDocument();
     expect(screen.queryByText(/Giza Pyramids & Sphinx/i)).not.toBeInTheDocument();
   });
