@@ -525,7 +525,7 @@ export default function TripHotelSection({
             <div className="overflow-x-auto rounded-2xl shadow-lg border-2 border-gold-400/60 dark:border-gold-500/40 bg-white dark:bg-[#040f2b]">
               <table className="w-full min-w-[720px] text-start border-collapse">
                 <thead>
-                  <tr className="bg-obsidian-900 dark:bg-[#02091c] text-gold-400 text-[11px] md:text-xs font-black uppercase tracking-wider">
+                  <tr className="bg-obsidian-900 dark:bg-[#02091c] text-gold-300 text-[11px] md:text-xs font-black uppercase tracking-wider">
                     {rateSheetColumns.category && (
                       <th className="px-4 py-3.5 text-start whitespace-nowrap">
                         {t('hotelTable.category', 'Hotel Category')}

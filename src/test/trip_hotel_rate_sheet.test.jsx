@@ -57,6 +57,37 @@ describe('TripHotelSection rate sheet (6 columns)', () => {
     expect(screen.getByText('+$75')).toBeInTheDocument();
   });
 
+  it('renders the rate-sheet header titles with a defined gold class visible in light and dark mode', () => {
+    const assignedAccommodations = [
+      {
+        id: 'acc-vis',
+        categoryTier: '4_STAR',
+        nameJsonb: 'Nile Palace',
+        cityJsonb: 'Cairo',
+        doubleRoomPriceUsd: 220,
+        singleRoomPriceUsd: 160,
+        seasonSupplementUsd: 45,
+        boatJsonb: 'Nile Cruise Boat',
+        boatPriceUsd: 75,
+      },
+    ];
+
+    const { container } = render(
+      <MemoryRouter>
+        <TripHotelSection {...baseProps} assignedAccommodations={assignedAccommodations} />
+      </MemoryRouter>
+    );
+
+    const headerRow = container.querySelector('thead tr');
+    expect(headerRow).not.toBeNull();
+
+    // `gold-400` is NOT defined in tailwind.config.js, so any `text-gold-400`
+    // is a dead class and the header text inherits an invisible color.
+    expect(headerRow.className).not.toMatch(/text-gold-400/);
+    // A defined, bright gold (gold-300) keeps the titles legible on the dark header row.
+    expect(headerRow.className).toMatch(/text-gold-300/);
+  });
+
   it('hides columns that have no dashboard data', () => {
     const assignedAccommodations = [
       {
