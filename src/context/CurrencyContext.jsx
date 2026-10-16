@@ -5,7 +5,13 @@ const defaultCurrencyContext = {
   currency: 'USD',
   setCurrency: () => {},
   isFallbackRate: false,
-  eurRate: 0.92,
+  eurRate: 0.888652,
+  ecbEurUsdRate: 1.1253,
+  ecbUsdEurRate: 0.888652,
+  convertPrice: (amount, itemCurrency = 'USD') => {
+    const numericAmount = Number(amount);
+    return isNaN(numericAmount) ? 0 : numericAmount;
+  },
   formatPrice: (amount) => {
     const numericAmount = Number(amount);
     if (isNaN(numericAmount)) return '';
@@ -23,7 +29,9 @@ export const CurrencyProvider = ({ children }) => {
     const storedCurrency = typeof window !== 'undefined' ? localStorage.getItem('currency') : 'USD';
     return storedCurrency === 'USD' || storedCurrency === 'EUR' ? storedCurrency : 'USD';
   });
-  const [eurRate, setEurRate] = useState(0.92);
+  const [eurRate, setEurRate] = useState(0.888652);
+  const [ecbEurUsdRate, setEcbEurUsdRate] = useState(1.1253);
+  const [ecbUsdEurRate, setEcbUsdEurRate] = useState(0.888652);
   const [isFallbackRate, setIsFallbackRate] = useState(false);
 
   useEffect(() => {
@@ -35,10 +43,14 @@ export const CurrencyProvider = ({ children }) => {
           () => api.get('/currency/rates'),
           { policy: CACHE_POLICIES.CURRENCY }
         );
-        const eur = data?.rates?.EUR || data?.EUR;
-        if (eur && isMounted) {
-          setEurRate(eur);
-          setIsFallbackRate(false);
+        const usdEurVal = Number(data?.meta?.ecbUsdEurRate ?? data?.rates?.EUR ?? data?.EUR);
+        const eurUsdVal = Number(data?.meta?.ecbEurUsdRate ?? (usdEurVal > 0 ? 1 / usdEurVal : 1.1253));
+
+        if (usdEurVal > 0 && isMounted) {
+          setEurRate(usdEurVal);
+          setEcbUsdEurRate(usdEurVal);
+          setEcbEurUsdRate(eurUsdVal > 0 ? eurUsdVal : 1.1253);
+          setIsFallbackRate(Boolean(data?.meta?.isStale || data?.meta?.status === 'fallback'));
         }
       } catch (err) {
         if (isMounted) {
@@ -61,29 +73,49 @@ export const CurrencyProvider = ({ children }) => {
     }
   }, []);
 
-  const formatPrice = useCallback((amount) => {
+  const convertPrice = useCallback((amount, itemCurrency = 'USD') => {
+    const numericAmount = Number(amount);
+    if (isNaN(numericAmount) || numericAmount < 0) return 0;
+    const sourceCurrency = String(itemCurrency || 'USD').toUpperCase();
+    const targetCurrency = currency.toUpperCase();
+
+    if (sourceCurrency === targetCurrency) {
+      return numericAmount;
+    }
+    if (sourceCurrency === 'EUR' && targetCurrency === 'USD') {
+      return numericAmount * ecbEurUsdRate;
+    }
+    if (sourceCurrency === 'USD' && targetCurrency === 'EUR') {
+      return numericAmount * ecbUsdEurRate;
+    }
+    return numericAmount;
+  }, [currency, ecbEurUsdRate, ecbUsdEurRate]);
+
+  const formatPrice = useCallback((amount, itemCurrency = 'USD') => {
     const numericAmount = Number(amount);
     if (isNaN(numericAmount)) return '';
 
-    if (currency === 'USD') {
-      const formatted = numericAmount.toLocaleString('en-US', {
-        minimumFractionDigits: numericAmount % 1 === 0 ? 0 : 2,
-        maximumFractionDigits: 2,
-      });
-      return `$${formatted}`;
-    } else {
-      const converted = numericAmount * eurRate;
-      const formatted = converted.toLocaleString('en-US', {
-        minimumFractionDigits: converted % 1 === 0 ? 0 : 2,
-        maximumFractionDigits: 2,
-      });
-      return `€${formatted}`;
-    }
-  }, [currency, eurRate]);
+    const converted = convertPrice(numericAmount, itemCurrency);
+    const formatted = converted.toLocaleString('en-US', {
+      minimumFractionDigits: converted % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2,
+    });
+
+    return currency === 'EUR' ? `€${formatted}` : `$${formatted}`;
+  }, [currency, convertPrice]);
 
   const value = useMemo(
-    () => ({ currency, setCurrency, formatPrice, eurRate, isFallbackRate }),
-    [currency, setCurrency, formatPrice, eurRate, isFallbackRate]
+    () => ({
+      currency,
+      setCurrency,
+      convertPrice,
+      formatPrice,
+      eurRate,
+      ecbEurUsdRate,
+      ecbUsdEurRate,
+      isFallbackRate,
+    }),
+    [currency, setCurrency, convertPrice, formatPrice, eurRate, ecbEurUsdRate, ecbUsdEurRate, isFallbackRate]
   );
 
   return (

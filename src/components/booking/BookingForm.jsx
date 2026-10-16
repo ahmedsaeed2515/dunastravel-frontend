@@ -23,6 +23,7 @@ import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { trackEvent } from '../../utils/analytics';
 import { useAuth } from '../../context/AuthContext';
+import { useCurrency } from '../../context/CurrencyContext';
 import { addDaysToDate } from '../../utils/titleHelper';
 import { getBookingScheduleStatus } from '../../utils/bookingSchedule';
 
@@ -53,6 +54,7 @@ const languages = [
 const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoice, requireTransportChoice, initialPrice = 0, priceDisplayMode = 'PRICE', priceLabel = '', bookingRules = null }) => {
   const { t, i18n } = useTranslation();
   const { user, resendVerification } = useAuth();
+  const { currency: selectedCurrency, convertPrice, ecbEurUsdRate, ecbUsdEurRate, eurRate } = useCurrency();
   const bookingTourKey = tourSlug || tourId;
 
   useEffect(() => {
@@ -446,6 +448,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
         availabilityId: selectedAvailability.id,
         tourTitle,
         transportChoice: transportChoice || '',
+        currency: selectedCurrency || 'USD',
         arrivalDate: b.arrivalDate,
         departureDate: b.departureDate,
         arrivalTime: b.arrivalTime,
@@ -1121,9 +1124,26 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                 {(() => {
                   const baseRate = Number(initialPrice) || Number(pricePreview?.basePriceUsd) || 0;
                   const clientTotal = (baseRate * b.adults) + (baseRate * 0.5 * b.children);
-                  const rawTotal = pricePreview?.totalAmountUsd !== undefined ? Number(pricePreview.totalAmountUsd) : clientTotal;
-                  const totalToDisplay = Number.isFinite(rawTotal) && rawTotal >= 0 ? rawTotal : 0;
-                  const formattedPrice = totalToDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                  const safeConvert = typeof convertPrice === 'function'
+                    ? convertPrice
+                    : (amt) => (selectedCurrency === 'EUR' ? Number(amt) * (Number(eurRate) || 0.888652) : Number(amt) || 0);
+                  const usdEurRate = Number(ecbUsdEurRate) || Number(eurRate) || 0.888652;
+                  const eurUsdRate = Number(ecbEurUsdRate) || (usdEurRate > 0 ? 1 / usdEurRate : 1.1253);
+
+                  let totalToDisplay = clientTotal;
+                  if (selectedCurrency === 'EUR' && pricePreview?.totalAmountEur !== undefined) {
+                    totalToDisplay = Number(pricePreview.totalAmountEur);
+                  } else if (selectedCurrency === 'USD' && pricePreview?.totalAmountUsd !== undefined) {
+                    totalToDisplay = Number(pricePreview.totalAmountUsd);
+                  } else {
+                    const usdTotal = pricePreview?.totalAmountUsd !== undefined ? Number(pricePreview.totalAmountUsd) : clientTotal;
+                    totalToDisplay = safeConvert(usdTotal, 'USD');
+                  }
+
+                  const currencySymbol = selectedCurrency === 'EUR' ? '€' : '$';
+                  const formattedPrice = (Number.isFinite(totalToDisplay) && totalToDisplay >= 0 ? totalToDisplay : 0)
+                    .toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                   const normalizedPriceMode = String(priceDisplayMode || 'PRICE').toUpperCase();
                   const trimmedPriceLabel = String(priceLabel || '').trim();
@@ -1151,9 +1171,16 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                                 {trimmedPriceLabel}
                               </span>
                             ) : (
-                              <span className="text-display-sm text-gold-400 font-display font-bold">
-                                ${formattedPrice}
-                              </span>
+                              <div>
+                                <span className="text-display-sm text-gold-400 font-display font-bold">
+                                  {currencySymbol}{formattedPrice}
+                                </span>
+                                <div className="text-[10px] text-ivory-400/80 font-mono">
+                                  ≈ {selectedCurrency === 'EUR'
+                                    ? `$${(totalToDisplay * eurUsdRate).toFixed(2)} USD`
+                                    : `€${(totalToDisplay * usdEurRate).toFixed(2)} EUR`}
+                                </div>
+                              </div>
                             )}
                           </div>
                         </div>

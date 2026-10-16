@@ -30,6 +30,7 @@ vi.mock('react-i18next', () => ({
 vi.mock('../context/CurrencyContext', () => ({
   useCurrency: () => ({
     formatPrice: (price) => `$${price}`,
+    convertPrice: (amt) => Number(amt) || 0,
     currency: 'USD',
   }),
 }));
