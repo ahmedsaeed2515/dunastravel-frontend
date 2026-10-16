@@ -272,7 +272,7 @@ export default function MultiCountryTourDetails() {
           {/* Sticky Sidebar Booking Column */}
           <div className="lg:col-span-1 sticky top-24 self-start z-40">
             <div>
-              <AdvancedBooking tourTitle={title} />
+              <AdvancedBooking tourTitle={title} bookingRules={tour?.bookingRules || null} />
             </div>
           </div>
         </div>

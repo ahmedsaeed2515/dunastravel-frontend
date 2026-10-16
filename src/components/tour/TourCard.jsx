@@ -107,6 +107,12 @@ const TourCard = ({
 
   const resolvePrice = (tData) => Number(tData?.price ?? tData?.basePriceUsd ?? 0);
   const displayPrice = resolvePrice(tour);
+
+  // Price display mode (PRICE | HIDDEN | CUSTOM_LABEL) configured from the dashboard
+  const priceMode = String(tour.priceDisplayMode || 'PRICE').toUpperCase();
+  const customPriceLabel = (tour.priceLabel || '').trim();
+  const isCustomPrice = priceMode === 'CUSTOM_LABEL' && Boolean(customPriceLabel);
+  const isPriceHidden = priceMode === 'HIDDEN' || (priceMode === 'CUSTOM_LABEL' && !customPriceLabel);
   const rawTourImage =
     resolveTourHeroImage(tour) ||
     (typeof tour.heroImageUrl === 'string' ? tour.heroImageUrl.trim() : null) ||
@@ -322,19 +328,29 @@ const TourCard = ({
         </div>
 
         {/* Footer CTA & Price Section (.populer-btn-and-days) */}
-        <div className="populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center justify-between gap-3">
+        <div className={`populer-btn-and-days pt-3.5 border-t border-gray-200 dark:border-gold-500/20 mt-auto flex items-center gap-3 ${isPriceHidden ? 'justify-end' : 'justify-between'}`}>
           {/* Price - Displayed on the right side in RTL, opposite to Book Now button */}
-          <div className="flex flex-col text-start">
-            <span className="text-[10px] font-extrabold text-gray-500 dark:text-gold-300/90 uppercase tracking-wider">
-              {t('tourCard.startingFrom', 'يبدأ من')}
-            </span>
-            <div className="flex items-baseline gap-1 text-[#D97706] dark:text-gold-400 font-black text-lg md:text-xl">
-              <span className="dark:text-gold-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] font-black">{formatPrice(displayPrice || 0)}</span>
-              <span className="text-[11px] font-bold text-gray-500 dark:text-slate-200">
-                / {perPersonText}
-              </span>
+          {!isPriceHidden && (
+            <div className="flex flex-col text-start">
+              {isCustomPrice ? (
+                <span className="text-[#D97706] dark:text-gold-400 font-black text-base md:text-lg leading-tight max-w-[180px]">
+                  {customPriceLabel}
+                </span>
+              ) : (
+                <>
+                  <span className="text-[10px] font-extrabold text-gray-500 dark:text-gold-300/90 uppercase tracking-wider">
+                    {t('tourCard.startingFrom', 'يبدأ من')}
+                  </span>
+                  <div className="flex items-baseline gap-1 text-[#D97706] dark:text-gold-400 font-black text-lg md:text-xl">
+                    <span className="dark:text-gold-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] font-black">{formatPrice(displayPrice || 0)}</span>
+                    <span className="text-[11px] font-bold text-gray-500 dark:text-slate-200">
+                      / {perPersonText}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
-          </div>
+          )}
 
           {/* Book Now Button */}
           <div className="populer-btn defult-btn shrink-0">

@@ -417,6 +417,7 @@ export default function TurkeyProgramDetails() {
                 tourTitle={title}
                 transportChoice={selectedTransport}
                 requireTransportChoice={!!transportOptions}
+                bookingRules={program?.bookingRules || null}
               />
             </div>
           </div>
@@ -452,6 +453,8 @@ export default function TurkeyProgramDetails() {
                     overview: relProg.overview,
                     duration: relProg.duration,
                     price: relProg.raw?.price || 899,
+                    priceDisplayMode: relProg.priceDisplayMode,
+                    priceLabel: relProg.priceLabel,
                     images: relProg.images,
                     type: relProg.raw?.type || 'Turkey Tour',
                     code: relProg.code,

@@ -192,12 +192,14 @@ const RoomDetails = () => {
     fullName: '',
     email: '',
     phone: '',
+    nationality: '',
     checkInDate: '',
     checkOutDate: '',
     guests: '1',
     specialRequests: '',
   });
   const [isSending, setIsSending] = useState(false);
+  const [formError, setFormError] = useState('');
   const [requestSent, setRequestSent] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
@@ -315,6 +317,21 @@ const RoomDetails = () => {
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     if (bookingForm.checkInDate && bookingForm.checkInDate < todayStr) return;
+
+    // Nationality is mandatory to submit a room booking request.
+    if (!bookingForm.nationality || !bookingForm.nationality.trim()) {
+      setFormError(
+        t('hotel.room.nationalityRequired', 'Please enter your nationality to submit the request.')
+      );
+      const el = document.getElementById('hotel-nationality');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus({ preventScroll: true });
+      }
+      return;
+    }
+    setFormError('');
+
     setIsSending(true);
     try {
       const payload = {
@@ -323,6 +340,7 @@ const RoomDetails = () => {
         guestName: bookingForm.fullName.trim(),
         guestEmail: bookingForm.email.trim(),
         guestPhone: bookingForm.phone.trim(),
+        guestNationality: bookingForm.nationality.trim(),
         checkInDate: bookingForm.checkInDate,
         checkOutDate: bookingForm.checkOutDate,
         guestsCount: parseInt(bookingForm.guests, 10) || 1,
@@ -667,7 +685,7 @@ const RoomDetails = () => {
                 {t('hotel.room.requestBooking', 'Reserve Your Stay')}
               </h3>
               <p className="text-slate-300 text-xs mb-6 font-medium">
-                {t('hotel.room.bookingDesc', 'Official direct booking with instant reservation reference code and VIP concierge confirmation.')}
+                {t('hotel.room.bookingDesc', 'Send a room booking request — our VIP concierge will check availability and confirm your reservation.')}
               </p>
 
               {requestSent ? (
@@ -677,7 +695,7 @@ const RoomDetails = () => {
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-extrabold tracking-widest text-emerald-400 block mb-1">
-                      {t('hotel.room.confirmedTitle', 'Reservation Received')}
+                      {t('hotel.room.confirmedTitle', 'Request Received')}
                     </span>
                     <h4 className="font-display font-bold text-white text-lg">
                       {room.name}
@@ -687,7 +705,7 @@ const RoomDetails = () => {
                   {/* Reference Code Pill */}
                   <div className="p-3.5 rounded-xl bg-[#0b1222] border border-gold-500/40 text-center">
                     <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold mb-1">
-                      {t('hotel.room.refCode', 'Official Reservation Code')}
+                      {t('hotel.room.refCode', 'Request Reference Number')}
                     </span>
                     <div className="flex items-center justify-center gap-2">
                       <span className="font-mono text-base font-black text-gold-400 tracking-wider">
@@ -733,7 +751,7 @@ const RoomDetails = () => {
                   {/* WhatsApp VIP Concierge Action */}
                   <a
                     href={`https://wa.me/201149401111?text=${encodeURIComponent(
-                      `Hello Dunas Travel Luxury Concierge! I just placed hotel booking ${confirmedBooking?.referenceCode} for ${room.name} at ${apiHotel?.name || 'Sol Pyramid Hotel'} (${bookingForm.checkInDate} to ${bookingForm.checkOutDate}). Please confirm my stay.`
+                      `Hello Dunas Travel Luxury Concierge! I just submitted a room booking request ${confirmedBooking?.referenceCode} for ${room.name} at ${apiHotel?.name || 'Sol Pyramid Hotel'} (${bookingForm.checkInDate} to ${bookingForm.checkOutDate}, ${bookingForm.guests} guest(s), nationality: ${bookingForm.nationality}). Please confirm availability and final rates.`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -796,6 +814,26 @@ const RoomDetails = () => {
                       value={bookingForm.phone}
                       onChange={handleInputChange}
                       className="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
+                      {t('hotel.room.nationality', 'Nationality')}
+                    </label>
+                    <input
+                      id="hotel-nationality"
+                      type="text"
+                      name="nationality"
+                      required
+                      aria-required="true"
+                      placeholder={t('hotel.room.nationalityPlaceholder', 'e.g. Egyptian, Saudi, Italian...')}
+                      value={bookingForm.nationality}
+                      onChange={handleInputChange}
+                      className={`w-full p-3.5 rounded-xl bg-[#17233d] border text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors ${
+                        !bookingForm.nationality || !bookingForm.nationality.trim()
+                          ? 'border-red-500/60'
+                          : 'border-blue-900/60'
+                      }`}
                     />
                   </div>
 
@@ -879,12 +917,18 @@ const RoomDetails = () => {
                     />
                   </div>
 
+                  {formError && (
+                    <p className="text-[11px] font-semibold text-red-400 text-center leading-snug">
+                      {formError}
+                    </p>
+                  )}
+
                   <button
                     type="submit"
                     disabled={isSending}
                     className="w-full py-4 px-6 text-xs uppercase font-extrabold tracking-wider text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-slate-700 rounded-xl shadow-lg transition-all text-center"
                   >
-                    {isSending ? t('common.sending', 'Confirming Reservation...') : t('hotel.room.requestBookingBtn', 'Reserve Room Now')}
+                    {isSending ? t('hotel.room.sendingRequest', 'Sending Request...') : t('hotel.room.requestBookingBtn', 'Send Booking Request')}
                   </button>
                 </form>
               )}

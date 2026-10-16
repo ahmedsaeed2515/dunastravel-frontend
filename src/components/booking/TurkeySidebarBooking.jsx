@@ -24,6 +24,7 @@ import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { useAuth } from '../../context/AuthContext';
 import { addDaysToDate } from '../../utils/titleHelper';
+import { getBookingScheduleStatus } from '../../utils/bookingSchedule';
 
 const inputStyle =
   'w-full p-3 rounded-xl outline-none transition-all text-[14px] bg-[rgba(255,252,247,0.04)] text-ivory-50 placeholder:text-[rgba(245,237,214,0.3)] border border-[rgba(201,162,39,0.15)] focus:border-[rgba(201,162,39,0.5)] focus:shadow-[0_0_20px_rgba(201,162,39,0.1)] [color-scheme:dark]';
@@ -49,7 +50,7 @@ const LANGUAGES = [
   { value: 'ar', flag: '🇪🇬', labelKey: 'languages.arabic', fallback: 'Arabic' }
 ];
 
-export default function TurkeySidebarBooking({ tourTitle, durationDays, transportChoice, requireTransportChoice }) {
+export default function TurkeySidebarBooking({ tourTitle, durationDays, transportChoice, requireTransportChoice, bookingRules = null }) {
   const { t } = useTranslation();
   const { user, resendVerification } = useAuth();
   const [tab, setTab] = useState('booking'); // 'booking' | 'inquiry'
@@ -109,6 +110,7 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
     fullName: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
+    nationality: '',
     invoiceType: 'PERSONAL',
     companyName: '',
     taxId: '',
@@ -194,9 +196,21 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
     }))
   ];
 
+  const scheduleStatus = getBookingScheduleStatus(bookingRules, bookingForm.arrivalDate);
+
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+
+    // Recurring booking rules (daily cutoff / blocked weekdays / date ranges)
+    if (scheduleStatus.closed) {
+      setErrorMessage(scheduleStatus.reasonText);
+      const el = document.getElementById('arrival-date-input');
+      if (el && typeof el.scrollIntoView === 'function') {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
 
     // Require authentication before submitting booking
     if (!user) {
@@ -241,6 +255,19 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
       return;
     }
     setShowTransportError(false);
+
+    if (!bookingForm.nationality || !bookingForm.nationality.trim()) {
+      setErrorMessage(
+        t('booking.nationalityRequired', 'Please enter your nationality to complete the booking.')
+      );
+      const el = document.getElementById('turkey-booking-nationality');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus({ preventScroll: true });
+      }
+      return;
+    }
+
     setSubmitStatus('submitting');
 
     try {
@@ -262,6 +289,7 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
         fullName: bookingForm.fullName,
         email: bookingForm.email,
         phone: bookingForm.phone,
+        nationality: bookingForm.nationality,
         invoiceType: bookingForm.invoiceType,
         companyName: bookingForm.companyName || undefined,
         taxId: bookingForm.taxId || undefined,
@@ -469,6 +497,21 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                   />
                 </div>
               </div>
+
+              {/* Booking closed banner (recurring rules) */}
+              {scheduleStatus.closed && (
+                <div
+                  role="alert"
+                  className="bg-red-500/15 border border-red-500/40 rounded-xl px-4 py-3 space-y-1"
+                >
+                  <p className="text-[13px] text-red-400 font-bold">
+                    {t('booking.scheduleClosed.title', 'Bookings are currently closed')}
+                  </p>
+                  <p className="text-[11px] text-red-300/90 leading-snug">
+                    {scheduleStatus.reasonText}
+                  </p>
+                </div>
+              )}
 
 
 
@@ -702,6 +745,15 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                     className={inputStyle}
                   />
                 </div>
+                <input
+                  id="turkey-booking-nationality"
+                  type="text"
+                  placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
+                  value={bookingForm.nationality}
+                  onChange={(e) => updateBookingField('nationality', e.target.value)}
+                  required
+                  className={inputStyle}
+                />
               </div>
 
               {/* Billing Information Accordion */}
@@ -862,10 +914,12 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={submitStatus === 'submitting'}
+                disabled={submitStatus === 'submitting' || scheduleStatus.closed}
                 className="w-full py-3 bg-gradient-to-r from-gold-500 to-gold-700 text-obsidian-900 font-bold rounded-xl shadow-[0_0_25px_rgba(201,162,39,0.2)] hover:shadow-[0_0_35px_rgba(201,162,39,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.5px] flex items-center justify-center gap-2 cursor-pointer"
               >
-                {submitStatus === 'submitting' ? (
+                {scheduleStatus.closed ? (
+                  t('booking.scheduleClosed.button', 'Bookings Closed')
+                ) : submitStatus === 'submitting' ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-obsidian-900 border-t-transparent rounded-full animate-spin" />
                     {t('common.sending', 'Sending...')}

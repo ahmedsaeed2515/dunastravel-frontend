@@ -182,12 +182,14 @@ describe('Prompt 04: Booking Engine & Customer Inquiries Integration', () => {
     const fullNameInput = container.querySelector('#contact-fullname');
     const emailInput = container.querySelector('#contact-email');
     const phoneInput = container.querySelector('#contact-phone');
+    const nationalityInput = container.querySelector('#booking-nationality');
 
     fireEvent.change(arrivalInput, { target: { value: '2027-05-10' } });
     fireEvent.change(departureInput, { target: { value: '2027-05-18' } });
     fireEvent.change(fullNameInput, { target: { value: 'Robert Miller' } });
     fireEvent.change(emailInput, { target: { value: 'robert@dunas.com' } });
     fireEvent.change(phoneInput, { target: { value: '+1987654321' } });
+    fireEvent.change(nationalityInput, { target: { value: 'American' } });
 
     const form = container.querySelector('form');
     await act(async () => {
@@ -233,12 +235,14 @@ describe('Prompt 04: Booking Engine & Customer Inquiries Integration', () => {
     const fullNameInput = container.querySelector('#contact-fullname');
     const emailInput = container.querySelector('#contact-email');
     const phoneInput = container.querySelector('#contact-phone');
+    const nationalityInput = container.querySelector('#booking-nationality');
 
     fireEvent.change(arrivalInput, { target: { value: '2027-05-10' } });
     fireEvent.change(departureInput, { target: { value: '2027-05-18' } });
     fireEvent.change(fullNameInput, { target: { value: 'Robert Miller' } });
     fireEvent.change(emailInput, { target: { value: 'robert@dunas.com' } });
     fireEvent.change(phoneInput, { target: { value: '+1987654321' } });
+    fireEvent.change(nationalityInput, { target: { value: 'American' } });
 
     const form = container.querySelector('form');
     await act(async () => {

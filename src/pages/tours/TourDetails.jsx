@@ -83,6 +83,17 @@ const TourDetails = () => {
   const duration = resolveTourDuration(tour, t, lang);
   const heroImg = resolveTourHeroImage(tour);
 
+  // Price display mode (PRICE | HIDDEN | CUSTOM_LABEL) configured from the dashboard.
+  // Only PRICE mode shows numeric tariff tables; HIDDEN and CUSTOM_LABEL suppress them.
+  const priceMode = String(tour.priceDisplayMode || 'PRICE').toUpperCase();
+  const customPriceLabel = (tour.priceLabel || '').trim();
+  const showNumericPricing = priceMode === 'PRICE';
+
+  // Recurring booking rules (daily cutoff / blocked weekdays / date ranges).
+  // Passed to the booking form, which blocks submission per selected date.
+  // The server re-validates these on POST /bookings regardless.
+  const bookingRules = tour.bookingRules || null;
+
   const galleryImages = Array.isArray(tour.images) && tour.images.length > 0
     ? tour.images.map((img) => (typeof img === 'string' ? img : img?.imageUrl || img?.url || '')).filter(Boolean)
     : (heroImg ? [heroImg] : []);
@@ -343,7 +354,7 @@ const TourDetails = () => {
             </motion.div>
 
             {/* Seasonal Pricing Tiers Section */}
-            {seasonRules.length > 0 && (
+            {showNumericPricing && seasonRules.length > 0 && (
               <motion.div
                 variants={fadeInUp}
                 initial="hidden"
@@ -547,7 +558,7 @@ const TourDetails = () => {
           {/* Sidebar - Booking Form */}
           <div className="lg:col-span-1">
             <div className="sticky top-28">
-              <BookingForm tourId={tour.id} tourSlug={tour.slug} tourTitle={title} durationDays={extractTourDays(tour)} initialPrice={tour.basePriceUsd || tour.price} />
+              <BookingForm tourId={tour.id} tourSlug={tour.slug} tourTitle={title} durationDays={extractTourDays(tour)} initialPrice={tour.basePriceUsd || tour.price} priceDisplayMode={priceMode} priceLabel={customPriceLabel} bookingRules={bookingRules} />
             </div>
           </div>
 

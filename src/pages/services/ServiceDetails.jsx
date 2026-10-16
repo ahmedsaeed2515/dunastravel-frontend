@@ -719,7 +719,7 @@ const ServiceDetails = () => {
             onClick={() => setActiveForm(null)}
           >
             <div onClick={(e) => e.stopPropagation()}>
-              {activeForm === 'booking' && <AdvancedBooking onClose={() => setActiveForm(null)} tourTitle={service.title} basePricePerPerson={service.price} />}
+              {activeForm === 'booking' && <AdvancedBooking onClose={() => setActiveForm(null)} tourTitle={service.title} basePricePerPerson={service.price} bookingRules={service?.bookingRules || null} />}
             </div>
           </motion.div>
         )}

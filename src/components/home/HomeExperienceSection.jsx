@@ -1336,6 +1336,12 @@ const HomeExperienceSection = () => {
                   const resolvedDest = t(`nav.${rawDest}`, rawDest.charAt(0).toUpperCase() + rawDest.slice(1));
                   const imageUrl = tourImageUrl(tData);
 
+                  const marqueePriceMode = String(tData.priceDisplayMode || 'PRICE').toUpperCase();
+                  const marqueeCustomLabel = String(tData.priceLabel || '').trim();
+                  const marqueeShowCustom = marqueePriceMode === 'CUSTOM_LABEL' && Boolean(marqueeCustomLabel);
+                  const marqueeShowNumeric = marqueePriceMode === 'PRICE' && Number.isFinite(Number(tData.price)) && Number(tData.price) > 0;
+                  const marqueeShowPrice = marqueeShowCustom || marqueeShowNumeric;
+
                   return (
                     <Link
                       key={`dest-tour-${tData.id || idx}-${idx}`}
@@ -1370,9 +1376,9 @@ const HomeExperienceSection = () => {
                               <FaClock className="text-gold-400 text-xs" />
                               <span>{resolvedDuration}</span>
                             </span>
-                            {Number.isFinite(Number(tData.price)) && Number(tData.price) > 0 && (
+                            {marqueeShowPrice && (
                               <span className="text-gold-400 font-bold text-xs">
-                                {formatPrice(tData.price)}
+                                {marqueeShowCustom ? marqueeCustomLabel : formatPrice(tData.price)}
                               </span>
                             )}
                           </div>

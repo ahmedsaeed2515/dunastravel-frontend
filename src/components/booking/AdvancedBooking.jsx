@@ -24,6 +24,7 @@ import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { useAuth } from '../../context/AuthContext';
 import { addDaysToDate } from '../../utils/titleHelper';
+import { getBookingScheduleStatus } from '../../utils/bookingSchedule';
 
 const inputStyle =
   'w-full px-3.5 py-3 rounded-xl bg-[rgba(255,252,247,0.03)] text-ivory-50 placeholder:text-ivory-400/40 border border-[rgba(201,162,39,0.18)] focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 focus:outline-none text-[13.5px] transition-all [color-scheme:dark]';
@@ -50,6 +51,7 @@ export default function AdvancedBooking({
   predefinedTourId = null,
   transportChoice = null,
   basePricePerPerson = 0,
+  bookingRules = null,
 }) {
   const { t, i18n } = useTranslation();
   const { user, resendVerification } = useAuth();
@@ -103,6 +105,7 @@ export default function AdvancedBooking({
     fullName: '',
     email: '',
     phone: '',
+    nationality: '',
     invoiceType: 'PERSONAL',
     companyName: '',
     taxId: '',
@@ -154,6 +157,8 @@ export default function AdvancedBooking({
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
+  const scheduleStatus = getBookingScheduleStatus(bookingRules, formData.arrivalDate);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -187,6 +192,28 @@ export default function AdvancedBooking({
           sessionStorage.setItem('dunas_pending_booking_intent', JSON.stringify(draftIntent));
           const verifyUrl = `/verify-email?email=${encodeURIComponent(user.email)}`;
           window.location.assign(verifyUrl);
+        }
+        return;
+      }
+
+      if (!formData.nationality || !formData.nationality.trim()) {
+        setError(
+          t('booking.nationalityRequired', 'Please enter your nationality to complete the booking.')
+        );
+        const el = document.getElementById('modal-nationality');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.focus({ preventScroll: true });
+        }
+        return;
+      }
+
+      // Recurring booking rules (daily cutoff / blocked weekdays / date ranges)
+      if (scheduleStatus.closed) {
+        setError(scheduleStatus.reasonText);
+        const el = document.getElementById('modal-arrival-date');
+        if (el && typeof el.scrollIntoView === 'function') {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         return;
       }
@@ -232,6 +259,7 @@ export default function AdvancedBooking({
           fullName: formData.fullName,
           email: formData.email,
           phone: formData.phone,
+          nationality: formData.nationality,
           invoiceType: formData.invoiceType,
           companyName: formData.companyName || undefined,
           taxId: formData.taxId || undefined,
@@ -432,7 +460,20 @@ export default function AdvancedBooking({
                 </div>
               </div>
 
-
+              {/* Booking closed banner (recurring rules: cutoff / blocked days / date ranges) */}
+              {scheduleStatus.closed && (
+                <div
+                  role="alert"
+                  className="bg-red-500/15 border border-red-500/40 rounded-xl px-4 py-3 space-y-1"
+                >
+                  <p className="text-body-sm text-red-400 font-bold">
+                    {t('booking.scheduleClosed.title', 'Bookings are currently closed')}
+                  </p>
+                  <p className="text-[11px] text-red-300/90 leading-snug">
+                    {scheduleStatus.reasonText}
+                  </p>
+                </div>
+              )}
 
               {/* Preferred Language */}
               <div className="relative">
@@ -640,6 +681,21 @@ export default function AdvancedBooking({
                     />
                   </div>
                 </div>
+
+                <div>
+                  <label htmlFor="modal-nationality" className={labelStyle}>
+                    {t('booking.nationality', 'Nationality')}
+                  </label>
+                  <input
+                    id="modal-nationality"
+                    type="text"
+                    required
+                    value={formData.nationality}
+                    onChange={(e) => updateField('nationality', e.target.value)}
+                    placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
+                    className={inputStyle}
+                  />
+                </div>
               </div>
 
               {/* Pricing Summary Breakdown Card */}
@@ -722,10 +778,12 @@ export default function AdvancedBooking({
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={status === 'submitting'}
+                disabled={status === 'submitting' || scheduleStatus.closed}
                 className="w-full py-3.5 px-6 rounded-xl font-bold uppercase tracking-[1.5px] transition-all duration-200 text-[13px] bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-obsidian-900 hover:shadow-[0_4px_25px_rgba(245,166,35,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4 cursor-pointer"
               >
-                {status === 'submitting' ? (
+                {scheduleStatus.closed ? (
+                  t('booking.scheduleClosed.button', 'Bookings Closed')
+                ) : status === 'submitting' ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-obsidian-900 border-t-transparent rounded-full animate-spin" />
                     {t('booking.sending', 'Locking Reservation...')}

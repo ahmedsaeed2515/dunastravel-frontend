@@ -24,6 +24,7 @@ import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { trackEvent } from '../../utils/analytics';
 import { useAuth } from '../../context/AuthContext';
 import { addDaysToDate } from '../../utils/titleHelper';
+import { getBookingScheduleStatus } from '../../utils/bookingSchedule';
 
 const inputClass =
   'w-full px-3.5 py-3 rounded-xl bg-[rgba(255,252,247,0.03)] text-ivory-50 placeholder:text-ivory-400/40 border border-[rgba(201,162,39,0.18)] focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 focus:outline-none text-[13.5px] transition-all [color-scheme:dark]';
@@ -49,7 +50,7 @@ const languages = [
   { value: 'ar', flag: '🇪🇬', labelKey: 'languages.arabic', fallback: 'Arabic' },
 ];
 
-const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoice, requireTransportChoice, initialPrice = 0 }) => {
+const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoice, requireTransportChoice, initialPrice = 0, priceDisplayMode = 'PRICE', priceLabel = '', bookingRules = null }) => {
   const { t, i18n } = useTranslation();
   const { user, resendVerification } = useAuth();
   const bookingTourKey = tourSlug || tourId;
@@ -117,6 +118,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
     fullName: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
+    nationality: '',
     invoiceType: 'PERSONAL',
     companyName: '',
     taxId: '',
@@ -335,9 +337,23 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
     tab,
   ]);
 
+  // Recurring booking rules (daily cutoff / blocked weekdays / date ranges),
+  // evaluated in the tour's timezone (Africa/Cairo) — mirrors server enforcement.
+  const scheduleStatus = getBookingScheduleStatus(bookingRules, b.arrivalDate);
+
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Enforce recurring booking rules before anything else
+    if (scheduleStatus.closed) {
+      setError(scheduleStatus.reasonText);
+      const dateEl = document.getElementById('arrival-date-input');
+      if (dateEl && typeof dateEl.scrollIntoView === 'function') {
+        dateEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
 
     // Require authentication before submitting booking
     if (!user) {
@@ -384,6 +400,20 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
       return;
     }
     setTransportAlert(false);
+
+    // Nationality is mandatory for bookings — bring the user back to the form
+    if (!b.nationality || !b.nationality.trim()) {
+      setError(
+        t('booking.nationalityRequired', 'Please enter your nationality to complete the booking.')
+      );
+      const el = document.getElementById('booking-nationality');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus({ preventScroll: true });
+      }
+      return;
+    }
+
     if (!selectedAvailability?.id) {
       setError(
         t(
@@ -432,6 +462,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
         fullName: b.fullName,
         email: b.email,
         phone: b.phone,
+        nationality: b.nationality,
         invoiceType: b.invoiceType,
         companyName: b.companyName,
         taxId: b.taxId,
@@ -697,6 +728,21 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                   </div>
                 </div>
 
+                {/* Booking closed banner (recurring rules: cutoff / blocked days / date ranges) */}
+                {scheduleStatus.closed && (
+                  <div
+                    role="alert"
+                    className="bg-red-500/15 border border-red-500/40 rounded-xl px-4 py-3 space-y-1"
+                  >
+                    <p className="text-body-sm text-red-400 font-bold">
+                      {t('booking.scheduleClosed.title', 'Bookings are currently closed')}
+                    </p>
+                    <p className="text-[11px] text-red-300/90 leading-snug">
+                      {scheduleStatus.reasonText}
+                    </p>
+                  </div>
+                )}
+
 
 
 
@@ -943,6 +989,18 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                       className={inputClass}
                     />
                   </div>
+                  <input
+                    id="booking-nationality"
+                    type="text"
+                    placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
+                    value={b.nationality}
+                    onChange={(e) => updateB('nationality', e.target.value)}
+                    required
+                    aria-required="true"
+                    className={`${inputClass} ${
+                      !b.nationality || !b.nationality.trim() ? 'border-red-500/60' : ''
+                    }`}
+                  />
                 </div>
 
                 {/* Billing Info Accordion */}
@@ -1067,6 +1125,12 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                   const totalToDisplay = Number.isFinite(rawTotal) && rawTotal >= 0 ? rawTotal : 0;
                   const formattedPrice = totalToDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                  const normalizedPriceMode = String(priceDisplayMode || 'PRICE').toUpperCase();
+                  const trimmedPriceLabel = String(priceLabel || '').trim();
+                  const hideNumericTotal = normalizedPriceMode === 'HIDDEN' ||
+                    (normalizedPriceMode === 'CUSTOM_LABEL' && !trimmedPriceLabel);
+                  const showCustomTotal = normalizedPriceMode === 'CUSTOM_LABEL' && Boolean(trimmedPriceLabel);
+
                   return (
                     <div className="bg-gradient-to-br from-[rgba(201,162,39,0.08)] to-transparent border border-gold-500/30 rounded-xl p-4 space-y-2">
                       <div className="flex items-center justify-between text-[11px] text-ivory-400">
@@ -1076,16 +1140,24 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                         <span>{b.arrivalDate}</span>
                       </div>
 
-                      <div className="flex items-baseline justify-between pt-1 border-t border-gold-500/15">
-                        <span className="text-[12px] font-semibold text-ivory-200 uppercase tracking-wider">
-                          {t('booking.totalPrice', 'Authoritative Total')}
-                        </span>
-                        <div className="text-right">
-                          <span className="text-display-sm text-gold-400 font-display font-bold">
-                            ${formattedPrice}
+                      {!hideNumericTotal && (
+                        <div className="flex items-baseline justify-between pt-1 border-t border-gold-500/15">
+                          <span className="text-[12px] font-semibold text-ivory-200 uppercase tracking-wider">
+                            {t('booking.totalPrice', 'Authoritative Total')}
                           </span>
+                          <div className="text-right">
+                            {showCustomTotal ? (
+                              <span className="text-display-sm text-gold-400 font-display font-bold">
+                                {trimmedPriceLabel}
+                              </span>
+                            ) : (
+                              <span className="text-display-sm text-gold-400 font-display font-bold">
+                                ${formattedPrice}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       <div className="flex items-center gap-1.5 text-[10px] text-ivory-400/80 pt-1">
                         <FaShieldAlt className="text-gold-400" size={10} />
@@ -1143,10 +1215,12 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                 {/* Submit Action */}
                 <button
                   type="submit"
-                  disabled={status === 'submitting'}
+                  disabled={status === 'submitting' || scheduleStatus.closed}
                   className="w-full py-3.5 px-6 bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-obsidian-900 font-bold rounded-xl shadow-[0_4px_20px_rgba(245,166,35,0.3)] hover:shadow-[0_6px_30px_rgba(245,166,35,0.45)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.5px] flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  {status === 'submitting' ? (
+                  {scheduleStatus.closed ? (
+                    t('booking.scheduleClosed.button', 'Bookings Closed')
+                  ) : status === 'submitting' ? (
                     <span className="flex items-center gap-2">
                       <span className="w-4 h-4 border-2 border-obsidian-900 border-t-transparent rounded-full animate-spin" />
                       {t('common.sending', 'Locking Experience...')}

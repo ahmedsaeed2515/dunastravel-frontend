@@ -323,7 +323,7 @@ export default function JordanProgramDetails() {
           {/* Right Column: Advanced Booking Component Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-28 self-start z-30">
-              <AdvancedBooking tourTitle={title} />
+              <AdvancedBooking tourTitle={title} bookingRules={program?.bookingRules || null} />
             </div>
           </div>
         </div>

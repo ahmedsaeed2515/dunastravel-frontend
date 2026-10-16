@@ -154,7 +154,7 @@ export default function ExtensionDetails() {
           {/* Sidebar Booking Form */}
           <motion.div variants={fadeInUp} className="lg:col-span-1">
             <div className="sticky top-28">
-              <AdvancedBooking tourTitle={title} basePricePerPerson={tourData.price} />
+              <AdvancedBooking tourTitle={title} basePricePerPerson={tourData.price} bookingRules={tourData?.bookingRules || null} />
             </div>
           </motion.div>
         </div>
