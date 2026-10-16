@@ -901,13 +901,30 @@
   transform: scale(1.15);
 }
 
-/* --- RTL / Arabic Hero Typography & Layout Overrides --- */
+/* --- RTL / Arabic Hero Typography & Layout Overrides ---
+   The Arabic hero mirrors the LTR hero 1:1 — same font size at every breakpoint,
+   same second-line indent (0.37em), same margins below the title and the same
+   optical gap between the two lines.
+
+   Arabic glyphs carry deeper descenders (ر، ح) and taller ascenders (ا) than the
+   LTR display face, so an Arabic line box needs to be a little taller to keep the
+   same *visual* gap between the two lines. That is the only value that differs:
+   the two em values keep the LTR line-height proportion (102 / 97.75 at 1600px)
+   while adding the ~0.24em of extra ink the Arabic script needs, so the white
+   space between the two lines matches the LTR hero (0.148em) pixel-for-pixel.
+   The line-height is expressed in em so it scales automatically with every
+   breakpoint below. */
 .rtl .slider-section .hero_content h1,
 [dir="rtl"] .slider-section .hero_content h1 {
   font-family: "Cairo", "Tajawal", "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 95px;
-  line-height: 98px;
+  font-size: 135px;
+  line-height: 1.144em;
+}
+
+.rtl .slider-section .hero_content h1.hero-heading-2,
+[dir="rtl"] .slider-section .hero_content h1.hero-heading-2 {
+  line-height: 1.095em;
 }
 
 .rtl .slider-section .hero_content h1 img.dunas-logo,
@@ -916,10 +933,34 @@
   margin-right: 16px;
 }
 
+/* Same width, alignment and weight as the LTR description — only the Arabic
+   font stack is swapped in so the copy is never rendered by a Latin-only face. */
 .rtl .slider-section .hero_content .slider-contect-des,
 [dir="rtl"] .slider-section .hero_content .slider-contect-des {
-  width: 50%;
+  font-family: "Cairo", "Tajawal", "Montserrat", sans-serif;
   text-align: right;
+}
+
+/* Arabic is a cursive script: letter-spacing would visually break the joins, and
+   the LTR display face has no Arabic glyphs. */
+.rtl .defult-btn a,
+[dir="rtl"] .defult-btn a {
+  font-family: "Cairo", "Tajawal", "Montserrat", sans-serif;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.rtl .defult-btn a svg,
+[dir="rtl"] .defult-btn a svg {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+.rtl .circle__video text,
+[dir="rtl"] .circle__video text {
+  font-family: "Cairo", "Tajawal", "Montserrat", sans-serif;
+  font-weight: 700;
+  letter-spacing: normal;
 }
 
 .rtl .circle__video,
@@ -934,12 +975,12 @@
   left: 40px !important;
 }
 
+/* Arabic keeps the exact LTR type scale at every breakpoint. */
 @media only screen and (max-width: 1600px) {
 
   .rtl .slider-section .hero_content h1,
   [dir="rtl"] .slider-section .hero_content h1 {
-    font-size: 82px;
-    line-height: 86px;
+    font-size: 115px;
   }
 }
 
@@ -947,8 +988,7 @@
 
   .rtl .slider-section .hero_content h1,
   [dir="rtl"] .slider-section .hero_content h1 {
-    font-size: 68px;
-    line-height: 72px;
+    font-size: 95px;
   }
 }
 
@@ -956,13 +996,7 @@
 
   .rtl .slider-section .hero_content h1,
   [dir="rtl"] .slider-section .hero_content h1 {
-    font-size: 54px;
-    line-height: 58px;
-  }
-
-  .rtl .slider-section .hero_content .slider-contect-des,
-  [dir="rtl"] .slider-section .hero_content .slider-contect-des {
-    width: 80%;
+    font-size: 78px;
   }
 }
 
@@ -970,13 +1004,7 @@
 
   .rtl .slider-section .hero_content h1,
   [dir="rtl"] .slider-section .hero_content h1 {
-    font-size: 38px;
-    line-height: 42px;
-  }
-
-  .rtl .slider-section .hero_content .slider-contect-des,
-  [dir="rtl"] .slider-section .hero_content .slider-contect-des {
-    width: 92%;
+    font-size: 50px;
   }
 }
 
@@ -984,8 +1012,15 @@
 
   .rtl .slider-section .hero_content h1,
   [dir="rtl"] .slider-section .hero_content h1 {
-    font-size: 30px;
-    line-height: 34px;
+    font-size: 40px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+
+  .rtl .slider-section .hero_content h1,
+  [dir="rtl"] .slider-section .hero_content h1 {
+    font-size: 34px;
   }
 }
 

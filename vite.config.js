@@ -11,7 +11,15 @@ function asyncCssPlugin() {
     transformIndexHtml(html) {
       return html.replace(
         /<link rel="stylesheet"([^>]*?)href="([^"]+)"([^>]*?)>/g,
-        '<link rel="preload" $1href="$2"$3 as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" $1href="$2"$3></noscript>'
+        (match, pre, href, post) => {
+          // Hand-authored links (e.g. the Google Fonts link in index.html) already
+          // opt into the async pattern with `media="print" onload="this.media='all'"`.
+          // Rewriting them would append a SECOND `onload`, and the browser keeps only
+          // the first attribute — so `this.media='all'` runs but `rel` stays `preload`,
+          // meaning the stylesheet is never applied. Leave those links untouched.
+          if (/\bonload\s*=/.test(match)) return match;
+          return `<link rel="preload" ${pre}href="${href}"${post} as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" ${pre}href="${href}"${post}></noscript>`;
+        }
       );
     }
   };

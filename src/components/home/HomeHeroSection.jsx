@@ -42,13 +42,22 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
   const renderAnimatedWord = (text, startCharIdx = 0) => {
     if (!text) return null;
     if (isRtl) {
-      return text.split(" ").map((w, idx) => (
+      // Arabic words must stay intact: splitting them into single letters would
+      // break the cursive glyph joining. Each word therefore animates as one unit,
+      // and the word gap mirrors the LTR gap (only between words, never trailing).
+      const words = text.split(" ");
+
+      return words.map((wordStr, wordIdx) => (
         <span
-          key={idx}
+          key={wordIdx}
           className="char ar-word"
-          style={{ display: 'inline-block', marginLeft: '0.3em', '--char-index': startCharIdx + idx }}
+          style={{
+            display: 'inline-block',
+            marginInlineEnd: wordIdx < words.length - 1 ? '0.3em' : '0',
+            '--char-index': startCharIdx + wordIdx,
+          }}
         >
-          {w}
+          {wordStr}
         </span>
       ));
     }
@@ -78,7 +87,7 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
           style={{
             display: 'inline-block',
             whiteSpace: 'nowrap',
-            marginRight: wordIdx < words.length - 1 ? '0.3em' : '0'
+            marginInlineEnd: wordIdx < words.length - 1 ? '0.3em' : '0'
           }}
         >
           {chars}
