@@ -18,6 +18,7 @@ import ErrorState from '../../components/ui/ErrorState';
 import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage, extractTourDays, resolveTourType } from '../../utils/titleHelper';
 import { getTourDestinationSlug, getDestinationName, getDestinationUrl } from '../../utils/destinationHelper';
 import { filterMeaningfulAccommodations } from '../../utils/accommodationHelper';
+import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary';
 
 import SEOHead from '../../components/seo/SEOHead';
 import SuggestedTours from '../../components/tour/SuggestedTours';
@@ -97,6 +98,17 @@ const TourDetails = () => {
   const galleryImages = Array.isArray(tour.images) && tour.images.length > 0
     ? tour.images.map((img) => (typeof img === 'string' ? img : img?.imageUrl || img?.url || '')).filter(Boolean)
     : (heroImg ? [heroImg] : []);
+
+  // Serve width-capped, auto-compressed Cloudinary variants instead of the raw
+  // full-resolution originals so the gallery and hero stay light on mobile.
+  const optimizedGalleryImages = galleryImages.map((url) =>
+    getOptimizedCloudinaryUrl(url, { width: 800, quality: 'auto:eco' })
+  );
+  // Hero rotates through the whole gallery (hero shot first). Width 1920 keeps
+  // it crisp on large screens while still far smaller than the original.
+  const heroRotationImages = Array.from(
+    new Set([heroImg, ...galleryImages].filter(Boolean))
+  ).map((url) => getOptimizedCloudinaryUrl(url, { width: 1920, quality: 'auto:eco' }));
 
   const openLightboxAt = (idx) => {
     setLightboxIndex(idx);
@@ -179,7 +191,8 @@ const TourDetails = () => {
         badge={resolveTourType(tour.type || tour.category, t, lang) || resolveLocalizedText(tour.type || tour.category, t, lang) || t('tour.luxuryExperience', 'رحلة سياحية فاخرة')}
         title={title}
         subtitle={duration}
-        bgImage={heroImg}
+        bgImage={heroRotationImages[0] || heroImg}
+        bgImages={heroRotationImages}
         onImageClick={() => openLightboxAt(0)}
         breadcrumbs={
           <div className="flex flex-wrap items-center justify-center gap-2 text-caption text-gold-400 mb-2 tracking-wider text-xs md:text-sm font-semibold">
@@ -538,9 +551,10 @@ const TourDetails = () => {
                       }`}
                     >
                       <img
-                        src={imgUrl}
+                        src={optimizedGalleryImages[idx]}
                         alt={`${title} - ${idx + 1}`}
                         loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -632,7 +646,7 @@ const TourDetails = () => {
               )}
 
               <img
-                src={galleryImages[lightboxIndex] || heroImg}
+                src={getOptimizedCloudinaryUrl(galleryImages[lightboxIndex] || heroImg, { width: 1600, quality: 'auto:eco' })}
                 alt={`${title} - ${lightboxIndex + 1}`}
                 className="max-w-[90vw] max-h-[75vh] object-contain rounded-xl shadow-2xl"
               />
@@ -663,7 +677,7 @@ const TourDetails = () => {
                       idx === lightboxIndex ? 'border-gold-400 scale-105' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={thumbUrl} alt="" className="w-full h-full object-cover" />
+                    <img src={getOptimizedCloudinaryUrl(thumbUrl, { width: 200, quality: 'auto:eco' })} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

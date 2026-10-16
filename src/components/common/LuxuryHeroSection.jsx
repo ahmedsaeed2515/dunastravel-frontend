@@ -1,7 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaCompass, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+
+const FALLBACK_HERO_IMAGE = 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920/v1783026771/8_mpyvu4.jpg';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,6 +31,9 @@ export default function LuxuryHeroSection({
   primaryCta = { text: 'استكشف الباقات', link: '#tours' },
   secondaryCta = { text: 'صمّم رحلتك الخاصة', link: '/tailor-tour' },
   bgImage = '/imgs/egyothero.webp',
+  bgImages = null,
+  rotateInterval = 6000,
+  rotateTransition = 1.2,
   stats = [],
   breadcrumbs = null,
   onImageClick = null,
@@ -37,6 +42,114 @@ export default function LuxuryHeroSection({
   ease = 'easeOut'
 }) {
   const isRtl = document.dir === 'rtl' || true;
+
+  // ---- Hero background rotation (optional) -------------------------------
+  // Callers may pass `bgImages` (e.g. the tour gallery) to cycle the hero
+  // background. When omitted we keep the original single-image behaviour so
+  // every other page using this component is unaffected.
+  const images = useMemo(() => {
+    const source = Array.isArray(bgImages) && bgImages.length > 0 ? bgImages : [bgImage];
+    const cleaned = source.filter((url) => typeof url === 'string' && url.trim().length > 0);
+    const unique = Array.from(new Set(cleaned));
+    return unique.length > 0 ? unique : [FALLBACK_HERO_IMAGE];
+  }, [bgImages, bgImage]);
+
+  const imagesKey = images.join('|');
+  const canRotate = images.length > 1;
+  // Latest playlist kept in a ref so the rotation timer is not restarted by
+  // unrelated parent re-renders (the array identity changes on every render).
+  const imagesRef = useRef(images);
+  useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
+
+  const sectionRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isInView, setIsInView] = useState(true);
+  const [isTabVisible, setIsTabVisible] = useState(
+    typeof document === 'undefined' ? true : document.visibilityState !== 'hidden'
+  );
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // The zoom lives on a wrapper so it keeps running smoothly while the inner
+  // cross-fade swaps images.
+  const zoomControls = useAnimationControls();
+
+  // Reset to the first frame whenever the playlist itself changes (new tour).
+  // (Kept as a clamped index instead of state so prop changes never cascade.)
+  const safeIndex = images.length > 0 ? activeIndex % images.length : 0;
+
+  // Respect the user's reduced-motion preference.
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return undefined;
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(query.matches);
+    update();
+    if (typeof query.addEventListener === 'function') {
+      query.addEventListener('change', update);
+      return () => query.removeEventListener('change', update);
+    }
+    query.addListener(update);
+    return () => query.removeListener(update);
+  }, []);
+
+  // Stop rotating/zooming once the hero scrolls out of the viewport.
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => setIsInView(entry.isIntersecting));
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  // Stop when the browser tab is backgrounded.
+  useEffect(() => {
+    if (typeof document === 'undefined') return undefined;
+    const handleVisibility = () => setIsTabVisible(document.visibilityState !== 'hidden');
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, []);
+
+  const shouldAnimate = isInView && isTabVisible && !prefersReducedMotion;
+
+  // Continuous cinematic zoom (wrapper-level).
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      zoomControls.set({ scale: 1 });
+      return;
+    }
+    if (shouldAnimate) {
+      zoomControls.start({
+        scale: zoomScale,
+        transition: { duration: zoomDuration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }
+      });
+    } else {
+      zoomControls.stop();
+    }
+  }, [shouldAnimate, prefersReducedMotion, zoomScale, zoomDuration, zoomControls]);
+
+  // Advance the playlist, preloading the next frame first so the cross-fade
+  // never flashes a blank image.
+  useEffect(() => {
+    if (!canRotate || !shouldAnimate) return undefined;
+    const playlist = imagesRef.current;
+    const current = activeIndex % playlist.length;
+    const upcoming = playlist[(current + 1) % playlist.length];
+    if (upcoming) {
+      const preloader = new Image();
+      preloader.decoding = 'async';
+      preloader.src = upcoming;
+    }
+    const timer = setTimeout(() => {
+      setActiveIndex((prev) => (prev + 1) % playlist.length);
+    }, rotateInterval);
+    return () => clearTimeout(timer);
+  }, [activeIndex, canRotate, shouldAnimate, imagesKey, rotateInterval]);
 
   const handleCtaClick = (e, target) => {
     if (target?.onClick) {
@@ -52,33 +165,40 @@ export default function LuxuryHeroSection({
   };
 
   return (
-    <section className="relative w-full min-h-[100dvh] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none">
-      {/* Background Image Container with Cinematic Zoom & Multi-layer Overlay */}
+    <section ref={sectionRef} className="relative w-full min-h-[100dvh] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-obsidian-950 text-ivory-50 select-none">
+      {/* Background Image Container with Cinematic Zoom & Cross-fade */}
       <div
         className={`absolute inset-0 z-0 overflow-hidden bg-obsidian-950 ${onImageClick ? 'cursor-pointer group' : ''}`}
         onClick={onImageClick || undefined}
       >
-        <motion.img
+        <motion.div
           initial={{ scale: 1 }}
-          animate={{ scale: zoomScale }}
-          transition={{
-            duration: zoomDuration,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut'
-          }}
-          src={bgImage || 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920/v1783026771/8_mpyvu4.jpg'}
-          onError={(e) => {
-            if (!e.currentTarget.dataset.fallback) {
-              e.currentTarget.dataset.fallback = 'true';
-              e.currentTarget.src = 'https://res.cloudinary.com/degbrq3ck/image/upload/f_auto,q_auto,w_1920/v1783026771/8_mpyvu4.jpg';
-            }
-          }}
-          alt={title}
-          className={`w-full h-full object-cover object-[center_35%] sm:object-center ${onImageClick ? 'transition-transform duration-700 group-hover:scale-105' : ''}`}
-          loading="eager"
-          fetchPriority="high"
-        />
+          animate={zoomControls}
+          className="absolute inset-0 w-full h-full"
+        >
+          <div className={`absolute inset-0 w-full h-full transition-transform duration-700 ${onImageClick ? 'group-hover:scale-105' : ''}`}>
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={`${safeIndex}-${images[safeIndex]}`}
+                src={images[safeIndex] || FALLBACK_HERO_IMAGE}
+                onError={(e) => {
+                  if (!e.currentTarget.dataset.fallback) {
+                    e.currentTarget.dataset.fallback = 'true';
+                    e.currentTarget.src = FALLBACK_HERO_IMAGE;
+                  }
+                }}
+                alt={title}
+                className="absolute inset-0 w-full h-full object-cover object-[center_35%] sm:object-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: canRotate ? rotateTransition : 0, ease: 'easeInOut' }}
+                loading={safeIndex === 0 ? 'eager' : 'lazy'}
+                fetchPriority={safeIndex === 0 ? 'high' : 'auto'}
+              />
+            </AnimatePresence>
+          </div>
+        </motion.div>
       </div>
 
 

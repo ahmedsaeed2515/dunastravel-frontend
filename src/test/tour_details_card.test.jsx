@@ -180,4 +180,23 @@ describe('TourDetails component', () => {
     expect(screen.getByText(/Winter Peak/i)).toBeInTheDocument();
     expect(screen.getByText('$2600')).toBeInTheDocument();
   });
+
+  it('serves width-capped, auto-compressed image variants for the hero and gallery (light payload)', () => {
+    const { container } = render(
+      <HelmetProvider>
+        <MemoryRouter initialEntries={['/tours/egypt-jordan-combined-14d']}>
+          <Routes>
+            <Route path="/tours/:slug" element={<TourDetails />} />
+          </Routes>
+        </MemoryRouter>
+      </HelmetProvider>
+    );
+
+    const srcs = Array.from(container.querySelectorAll('img')).map((img) => img.getAttribute('src') || '');
+
+    // Gallery frames are capped at width 800 (Cloudinary uses w_, Unsplash w=).
+    expect(srcs.some((s) => s.includes('w_800') || s.includes('w=800'))).toBe(true);
+    // Hero background is capped at width 1920.
+    expect(srcs.some((s) => s.includes('w_1920') || s.includes('w=1920'))).toBe(true);
+  });
 });
