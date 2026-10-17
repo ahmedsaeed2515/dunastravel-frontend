@@ -382,15 +382,32 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
     >
       {submitStatus === 'success' && submittedData ? (
         <div className="flex flex-col items-center text-center py-12 px-6">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center mb-4 shadow-[0_0_25px_rgba(201,162,39,0.3)]">
-            <FaCheck className="text-obsidian-900 text-xl" />
+          <div
+            className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 shadow-[0_0_25px_rgba(201,162,39,0.3)] ${
+              submittedData.paymentUnavailable
+                ? 'bg-gradient-to-br from-amber-500 to-amber-700 ring-4 ring-amber-500/20'
+                : 'bg-gradient-to-br from-gold-500 to-gold-700'
+            }`}
+          >
+            {submittedData.paymentUnavailable ? (
+              <FaClock className="text-obsidian-900 text-xl" />
+            ) : (
+              <FaCheck className="text-obsidian-900 text-xl" />
+            )}
           </div>
           <h3 className="text-display-md text-ivory-50 mb-2 font-serif">
-            {submittedData.type === 'booking' ? t('booking.created', 'Booking Created') : t('booking.inquirySent', 'Inquiry Sent')}
+            {submittedData.paymentUnavailable
+              ? t('payment.unavailableTitle', 'Payment Unavailable — Reservation Pending')
+              : submittedData.type === 'booking'
+                ? t('booking.created', 'Booking Created')
+                : t('booking.inquirySent', 'Inquiry Sent')}
           </h3>
           <p className="text-body-sm text-ivory-400">
             {submittedData.paymentUnavailable
-              ? t('payment.getPayInPending', 'Your booking is saved. Secure online payment will be available after GetPayIn activation; our team will contact you with the next step.')
+              ? t(
+                  'payment.unavailableDesc',
+                  'Payment is currently unavailable. Your booking has not been confirmed. Our team will contact you shortly with payment details.'
+                )
               : t('booking.successDesc', 'Our team will contact you within 24 hours.')}
           </p>
 

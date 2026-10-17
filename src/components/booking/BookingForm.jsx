@@ -582,22 +582,38 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col items-center text-center py-10 px-6"
           >
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(201,162,39,0.35)] ring-4 ring-gold-500/20">
-              <FaCheckCircle className="text-obsidian-900 text-2xl" />
+            <div
+              className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ring-4 ${
+                bookingResult.paymentUnavailable
+                  ? 'bg-gradient-to-br from-amber-500 to-amber-700 shadow-[0_0_30px_rgba(245,158,11,0.35)] ring-amber-500/20'
+                  : 'bg-gradient-to-br from-gold-500 to-gold-700 shadow-[0_0_30px_rgba(201,162,39,0.35)] ring-gold-500/20'
+              }`}
+            >
+              {bookingResult.paymentUnavailable ? (
+                <FaClock className="text-obsidian-900 text-2xl" />
+              ) : (
+                <FaCheckCircle className="text-obsidian-900 text-2xl" />
+              )}
             </div>
-            <span className="text-[11px] font-mono text-gold-400 uppercase tracking-widest block mb-1">
-              Ref: #{bookingResult.referenceCode || bookingResult.id || 'CONFIRMED'}
+            <span
+              className={`text-[11px] font-mono uppercase tracking-widest block mb-1 ${
+                bookingResult.paymentUnavailable ? 'text-amber-400' : 'text-gold-400'
+              }`}
+            >
+              Ref: #{bookingResult.referenceCode || bookingResult.id || (bookingResult.paymentUnavailable ? 'PENDING' : 'CONFIRMED')}
             </span>
             <h3 className="text-display-sm text-ivory-50 mb-2 font-display">
-              {bookingResult.type === 'booking'
-                ? t('booking.created', 'Booking Created')
-                : t('booking.inquirySent', 'Inquiry Sent')}
+              {bookingResult.paymentUnavailable
+                ? t('payment.unavailableTitle', 'Payment Unavailable — Booking Pending')
+                : bookingResult.type === 'booking'
+                  ? t('booking.created', 'Booking Created')
+                  : t('booking.inquirySent', 'Inquiry Sent')}
             </h3>
             <p className="text-body-sm text-ivory-300 max-w-sm mx-auto leading-relaxed">
               {bookingResult.paymentUnavailable
                 ? t(
-                    'payment.getPayInPending',
-                    'Your reservation is securely created. An official GetPayIn payment invoice will be dispatched to your email.'
+                    'payment.unavailableDesc',
+                    'Payment is currently unavailable. Your booking has not been confirmed. Our team will contact you shortly with payment details.'
                   )
                 : t('booking.successDesc', 'Our private travel concierge will reach out to you within 24 hours.')}
             </p>
