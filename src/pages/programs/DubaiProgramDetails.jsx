@@ -223,7 +223,7 @@ export default function DubaiProgramDetails() {
                         <div className="bg-ivory-50 rounded-2xl p-6 shadow-sm border border-gold-100 hover:shadow-md transition-shadow">
                           <div className="flex items-center gap-3 mb-3">
                             <span className="font-semibold text-obsidian-900">
-                              {d.title ? d.title : `${t('tour.day', 'Day')} ${d.day}`}
+                              {formatDayLabel(d.title || '', d.day, t)}
                             </span>
                             {d.meals && (
                               <span className="text-caption text-obsidian-400 flex items-center gap-1.5 ml-auto text-xs">

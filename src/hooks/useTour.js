@@ -10,6 +10,17 @@ import {
   subscribeToQueryKey,
   CACHE_POLICIES,
 } from '../utils/apiCache';
+import { isBareDayLabel } from '../utils/titleHelper';
+
+/** Word used right before the day number, per language (fallback chain). */
+const DAY_WORD_BY_LANG = {
+  ar: 'اليوم',
+  en: 'Day',
+  es: 'Día',
+  it: 'Giorno',
+  pt: 'Dia',
+  fr: 'Jour',
+};
 
 export function getFallbackTour() {
   return null;
@@ -75,13 +86,27 @@ function normalizeTour(data, lang = 'en', fallback = null) {
     return String(val);
   };
 
-  const itinerary = rawItineraryList.map((item, idx) => ({
-    ...item,
-    day: item.sortOrder !== undefined ? item.sortOrder + 1 : (item.day || idx + 1),
-    title: resolveField(item.title) || resolveField(item.dayLabel) || `Day ${idx + 1}`,
-    description: resolveField(item.description) || resolveField(item.desc) || '',
-    meals: resolveField(item.meals) || null,
-  }));
+  const itinerary = rawItineraryList.map((item, idx) => {
+    const dayNum = item.sortOrder !== undefined ? item.sortOrder + 1 : (item.day || idx + 1);
+    const resolvedTitle = resolveField(item.title) || resolveField(item.dayLabel);
+    let title = resolvedTitle;
+    // Legacy data stores the English "Day N" (or another locale's bare label) in
+    // every locale's title. Rewrite any bare label with the active language's word.
+    if (isBareDayLabel(title)) {
+      title = '';
+    }
+    if (!title) {
+      const dayWord = DAY_WORD_BY_LANG[lang] || DAY_WORD_BY_LANG.en;
+      title = `${dayWord} ${dayNum}`;
+    }
+    return {
+      ...item,
+      day: dayNum,
+      title,
+      description: resolveField(item.description) || resolveField(item.desc) || '',
+      meals: resolveField(item.meals) || null,
+    };
+  });
 
   const included = (Array.isArray(data.includedServices) && data.includedServices.length > 0)
     ? data.includedServices

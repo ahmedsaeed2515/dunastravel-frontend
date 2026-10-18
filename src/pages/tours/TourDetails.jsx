@@ -15,7 +15,7 @@ import { useTour } from '../../hooks/useTour';
 import { trackEvent } from '../../utils/analytics';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
-import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage, extractTourDays, resolveTourType } from '../../utils/titleHelper';
+import { resolveTourTitle, resolveTourDuration, resolveTourOverview, resolveLocalizedText, resolveTourHeroImage, extractTourDays, resolveTourType, formatDayLabel } from '../../utils/titleHelper';
 import { getTourDestinationSlug, getDestinationName, getDestinationUrl } from '../../utils/destinationHelper';
 import { filterMeaningfulAccommodations } from '../../utils/accommodationHelper';
 import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary';
@@ -331,9 +331,7 @@ const TourDetails = () => {
                       <div className="bg-gradient-to-br from-amber-50/90 via-orange-50/90 to-amber-100/60 dark:bg-gradient-to-br dark:from-[#0b1d4b] dark:via-[#0e245e] dark:to-[#112c72] rounded-2xl p-6 md:p-7 border-2 border-gold-500/80 dark:border-gold-500/70 hover:border-gold-600 dark:hover:border-gold-400 shadow-[0_10px_30px_rgba(245,166,35,0.25)] dark:shadow-[0_14px_45px_rgba(0,0,0,0.85),0_0_20px_rgba(245,166,35,0.2)] transition-all duration-300">
                         <div className="flex flex-wrap items-center gap-3 mb-3.5 pb-2.5 border-b border-gold-600/30 dark:border-gold-500/30">
                           <span className="font-black text-amber-900 dark:text-gold-400 text-base md:text-xl tracking-wide">
-                            {day.title
-                              ? resolveLocalizedText(day.title, t, lang)
-                              : `${t('tour.day', 'Day')} ${day.day}`}
+                            {formatDayLabel(day.title ? resolveLocalizedText(day.title, t, lang) : '', day.day, t)}
                           </span>
                           {day.meals && (
                             <span className="text-caption font-black text-black dark:text-gold-300 flex items-center gap-1.5 ml-auto rtl:ml-0 rtl:mr-auto text-xs bg-gold-500/30 dark:bg-gold-500/25 px-3.5 py-1.5 rounded-full border border-gold-600/50 shadow-sm">

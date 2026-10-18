@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { formatDayLabel } from '../../utils/titleHelper';
 import {
   FaPaperPlane,
   FaTimes,
@@ -543,7 +544,7 @@ const JaiderChatWindow = () => {
                                           {day.dayNumber}
                                         </span>
                                         <span className="font-semibold text-slate-200 truncate max-w-[240px]">
-                                          {day.title}
+                                          {formatDayLabel(day.title, day.dayNumber || day.day || day.dayNum, t)}
                                         </span>
                                       </div>
                                       {isExpanded ? (

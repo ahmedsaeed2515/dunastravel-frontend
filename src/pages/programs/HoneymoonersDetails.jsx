@@ -8,6 +8,7 @@ import AdvancedBooking from '../../components/booking/AdvancedBooking';
 import RouteMap from '../../components/tour/RouteMap';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 import { fadeInUp } from '../../animations/variants';
+import { formatDayLabel } from '../../utils/titleHelper';
 
 const HONEYMOON_ITINERARY = [
   {
@@ -186,7 +187,7 @@ export default function HoneymoonersDetails() {
                             className="text-display-md text-obsidian-900 dark:text-white text-lg"
                             style={{ fontFamily: "'Playfair Display', serif" }}
                           >
-                            {t(day.titleKey, day.titleDefault)}
+                            {formatDayLabel(t(day.titleKey, day.titleDefault) || day.titleDefault || '', day.day, t)}
                           </h4>
                         </div>
                         <p className="text-body-md text-obsidian-500 dark:text-gray-300 leading-relaxed">

@@ -488,6 +488,36 @@ const ITINERARY_DAY_DICTIONARY = {
   "country of origin": { ar: "بلد المغادرة", en: "Country of Origin", es: "País de Origen", pt: "País de Origem", it: "Paese d'Origine" }
 };
 
+/** Matches a label that is *only* a localized day word + number (never a real title). */
+const BARE_DAY_LABEL_PATTERN = /^(?:day|d[ií]a|giorno|jour|dia|اليوم|يوم)\s*#?\s*[0-9٠-٩]+\s*$/iu;
+
+/** True only for bare numbered day labels such as "Day 1" or "اليوم 2". */
+export function isBareDayLabel(value) {
+  if (typeof value !== 'string') return false;
+  const trimmed = value.trim();
+  return trimmed ? BARE_DAY_LABEL_PATTERN.test(trimmed) : false;
+}
+
+/**
+ * Returns a localized itinerary day label for the active language.
+ *
+ * Legacy dashboard data stored the English label "Day N" inside every locale's
+ * `titleJsonb`, so a literal "Day 1" reaches the frontend even in Spanish,
+ * Italian or Portuguese. Bare labels are rewritten with the translation of
+ * `tour.day`, while real titles (e.g. "DAY 1: TUNIS") are returned unchanged.
+ */
+export function formatDayLabel(title, dayNumber, t = (k, d) => d || k) {
+  const safeT = typeof t === 'function' ? t : (k, d) => d || k;
+  const fallback = `${safeT('tour.day', 'Day')} ${dayNumber}`;
+  if (title === undefined || title === null) return fallback;
+  const str = String(title).trim();
+  if (!str || isBareDayLabel(str)) return fallback;
+  // If title still contains only a bare day word+number (case variants), fallback
+  const bareRe = /^(?:day|d[ií]a|giorno|jour|dia|اليوم|يوم)\s*#?\s*[0-9٠-٩]+\s*$/iu;
+  if (bareRe.test(str)) return fallback;
+  return str;
+}
+
 export function resolveItineraryDayTitle(day, t = (k) => k, lang = 'en') {
   if (!day) return '';
   const val = day.titleJsonb || day.title || day.dayLabel || day.label || (typeof day === 'string' ? day : '');
@@ -717,5 +747,7 @@ export default {
   resolveTourType,
   resolveItineraryDayTitle,
   resolveTourHeroImage,
+  isBareDayLabel,
+  formatDayLabel,
 };
 

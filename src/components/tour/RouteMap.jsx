@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { fadeInUp } from '../../animations/variants';
 import useInViewport from '../../hooks/useInViewport';
+import { formatDayLabel } from '../../utils/titleHelper';
 
 const COORDINATES_DATABASE = {
   // Egypt
@@ -354,9 +355,23 @@ const getDayLabel = (days, langCode) => {
     es: 'Día',
     it: 'Giorno',
     pt: 'Dia',
+    fr: 'Jour',
   };
   const word = dayWordMap[langCode] || 'Day';
-  return `${word} ${rangeStr}`;
+  // Normalize if rangeStr is already prefixed (defensive)
+  if (!rangeStr) return '';
+  const cleaned = rangeStr.replace(/^(day|d[ií]a|giorno|jour|dia|اليوم|يوم)\s*#?/iu, '').trim();
+  // If cleaned is still just numbers, fine; if not, extract numbers
+  const numRe = /[0-9٠-٩]+/g;
+  const nums = cleaned.match(numRe);
+  if (nums && nums.length > 0) {
+    if (nums.length === 1) {
+      return `${word} ${nums[0]}`;
+    }
+    // try to build range if consecutive-ish pattern
+    return `${word} ${nums[0]}-${nums[nums.length - 1]}`;
+  }
+  return `${word} ${cleaned}`;
 };
 
 const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
@@ -559,9 +574,11 @@ const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
       dayMatches.forEach((m) => {
         if (!addedInDay.has(m.dbKey)) {
           addedInDay.add(m.dbKey);
-          const rawTitle = extractText(day.title) || extractText(day.titleDefault) || `${t('tour.day', 'Day')} ${dayNum}`;
+          const rawTitle = formatDayLabel(extractText(day.title) || extractText(day.titleDefault) || '', dayNum, t);
           const firstLineTitle = rawTitle.split('\n')[0].replace(/^اليوم\s+\S+\s*—?\s*/i, '').trim();
-          addOrUpdateLocation(m.dbKey, `${t('tour.day', 'Day')} ${dayNum}: ${firstLineTitle}`, dayNum);
+          const cleanFirstLine = formatDayLabel(firstLineTitle || '', dayNum, t);
+          const prefix = `${t('tour.day', 'Day')} ${dayNum}`;
+          addOrUpdateLocation(m.dbKey, cleanFirstLine.startsWith(prefix) ? cleanFirstLine : `${prefix}${cleanFirstLine && cleanFirstLine !== prefix ? `: ${cleanFirstLine}` : ''}`, dayNum);
         }
       });
     });

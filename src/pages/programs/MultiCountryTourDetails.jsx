@@ -12,7 +12,7 @@ import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 import { useTour } from '../../hooks/useTour';
 import { useTours } from '../../hooks/useTours';
 
-import { resolveTourType } from '../../utils/titleHelper';
+import { formatDayLabel, resolveTourType } from '../../utils/titleHelper';
 
 const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
@@ -189,9 +189,7 @@ export default function MultiCountryTourDetails() {
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gold-100 hover:shadow-md transition-shadow">
                           <div className="flex items-center gap-3 mb-3">
                             <span className="font-semibold text-obsidian-900">
-                              {day.title
-                                ? t(`data.${day.title}`, day.title)
-                                : `${t('tour.day', 'Day')} ${day.day}`}
+                              {formatDayLabel((day.title ? t(`data.${day.title}`, day.title) : '') || '', day.day, t)}
                             </span>
                           </div>
 

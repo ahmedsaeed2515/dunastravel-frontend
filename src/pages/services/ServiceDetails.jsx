@@ -18,6 +18,7 @@ import AdvancedBooking from '../../components/booking/AdvancedBooking';
 import { useCurrency } from '../../context/CurrencyContext';
 import { services as staticServices } from '../../data/services';
 import SuggestedTours from '../../components/tour/SuggestedTours';
+import { formatDayLabel } from '../../utils/titleHelper';
 
 const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
@@ -223,9 +224,7 @@ const ServiceDetails = () => {
                             <div className="bg-ivory-50 rounded-2xl p-6 shadow-sm border border-gold-100 hover:shadow-md transition-shadow text-start">
                               <div className="flex items-center gap-3 mb-3">
                                 <span className="font-semibold text-obsidian-900">
-                                  {day.title
-                                    ? translateData(day.title, day.title)
-                                    : `${t('tour.day', 'Day')} ${day.day}`}
+                                  {formatDayLabel(day.title ? translateData(day.title, day.title) : '', day.day, t)}
                                 </span>
                               </div>
 
