@@ -47,7 +47,7 @@ const HotelDetails = () => {
   const location = useLocation();
   const basePath = location.pathname.startsWith('/programs') ? '/programs' : '/services';
   const roomLinkBase = location.pathname.startsWith('/hotels') ? '/hotels' : `${basePath}/hotels`;
-  const currentSlug = slug || 'sol-pyramid-hotel';
+  const currentSlug = slug || '';
   const { hotel: apiHotel, loading, error } = useHotel(currentSlug);
 
   const [activeImage, setActiveImage] = useState(null);
@@ -73,8 +73,6 @@ const HotelDetails = () => {
     window.scrollTo(0, 0);
   }, [currentSlug]);
 
-  const isDefaultHotel = !slug || currentSlug === 'sol-pyramid-hotel';
-
   if (loading) {
     return (
       <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto">
@@ -83,7 +81,7 @@ const HotelDetails = () => {
     );
   }
 
-  if (!apiHotel && !isDefaultHotel && error) {
+  if (!apiHotel && error) {
     return (
       <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto flex items-center justify-center">
         <ErrorState
@@ -96,8 +94,16 @@ const HotelDetails = () => {
     );
   }
 
+  if (!apiHotel) {
+    return (
+      <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto">
+        <SkeletonLoader count={1} type="card" />
+      </div>
+    );
+  }
+
   const hotelInfo = {
-    name: apiHotel?.name || 'Sol Pyramid Hotel',
+    name: apiHotel?.name || '',
     stars: apiHotel?.stars || 5,
     yearBuilt: '2025',
     totalRooms: apiHotel?.rooms?.length ? `${apiHotel.rooms.length} ${t('hotel.roomTypesAvailable', 'room types')}` : t('hotel.overview.roomsCount', '20 rooms'),
@@ -107,90 +113,32 @@ const HotelDetails = () => {
     pets: apiHotel?.policies?.pets || t('hotel.overview.petsPolicyVal', 'Not allowed'),
     location:
       apiHotel?.address ||
-      (apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug || ''}` : '05 Rawdet al Ahram, Haram, Giza, Egypt'),
-    telephones: apiHotel?.phone ? [apiHotel.phone] : ['+2 02 33775511'],
-    cell: apiHotel?.phone || '(+2) 01149401111',
-    email: apiHotel?.email || 'info@solpyramid-egypt.com',
-    facebook: 'https://www.facebook.com/people/Solpyramid-Hotel/61584597357251/?rdid=nHbjJUmnT0fCQTG3&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1aiB2ma5oi%2F',
-    instagram: 'https://www.instagram.com/solpyramidhotel',
-    website: apiHotel?.website || 'https://dunastravel.com/',
+      (apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug || ''}` : ''),
+    telephones: apiHotel?.phone ? [apiHotel.phone] : [],
+    cell: apiHotel?.phone || '',
+    email: apiHotel?.email || '',
+    facebook: '',
+    instagram: '',
+    website: apiHotel?.website || '',
   };
-
-  const defaultRoomTypes = [
-    {
-      id: 'single-room',
-      name: isAr ? 'غرفة مفردة' : t('hotel.room.singleTitle', 'Single Room'),
-      price: 75,
-      capacity: isAr ? 'شخص واحد' : '1 Guest',
-      bed: isAr ? 'سرير مفرد' : t('hotel.room.singleBed', '1 Single Bed'),
-      view: isAr ? 'إطلالة على الحديقة / المدينة' : t('hotel.room.singleView', 'City / Garden View'),
-      image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200',
-    },
-    {
-      id: 'twin-room',
-      name: isAr ? 'غرفة توأم' : t('hotel.room.twinTitle', 'Twin Room'),
-      price: 85,
-      capacity: isAr ? 'شخصين' : '2 Guests',
-      bed: isAr ? 'مزدوجة / توأم' : t('hotel.room.twinBed', 'Double / Twin Beds'),
-      view: isAr ? 'إطلالة قياسية' : t('hotel.room.twinView', 'Standard View'),
-      image: 'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=1200',
-    },
-    {
-      id: 'double-room',
-      name: isAr ? 'غرفة مزدوجة' : t('hotel.room.doubleTitle', 'Double Room'),
-      price: 95,
-      capacity: isAr ? 'شخصين' : '1–2 Guests',
-      bed: isAr ? '1 سرير كينج مزدوج' : t('hotel.room.doubleBed', '1 King Bed'),
-      view: isAr ? 'إطلالة على الأهرامات' : t('hotel.room.doubleView', 'Pyramids View'),
-      image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-    },
-    {
-      id: 'triple-room',
-      name: isAr ? 'غرفة ثلاثية' : t('hotel.room.tripleTitle', 'Triple Room'),
-      price: 125,
-      capacity: isAr ? '3 ضيوف' : '3 Guests',
-      bed: isAr ? 'مزدوجة / توأم' : t('hotel.room.tripleBed', 'Double/Twin'),
-      view: isAr ? 'إطلالة قياسية' : t('hotel.room.tripleView', 'Standard View'),
-      image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200',
-    },
-    {
-      id: 'executive-suite',
-      name: isAr ? 'جناح تنفيذي' : t('hotel.room.suiteTitle', 'Executive Suite'),
-      price: 190,
-      capacity: isAr ? '2–3 ضيوف' : '2–3 Guests',
-      bed: isAr ? '1 سرير كينج + صالون استراحة' : t('hotel.room.suiteBed', '1 King Bed + Lounge'),
-      view: isAr ? 'إطلالة بانورامية على الأهرامات' : t('hotel.room.suiteView', 'Panoramic Pyramids View'),
-      image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-    },
-    {
-      id: 'royal-pyramid-view-suite',
-      name: isAr ? 'الجناح الملكي بإطلالة الأهرامات' : t('hotel.room.royalTitle', 'Royal Pyramid View Suite'),
-      price: 280,
-      capacity: isAr ? '2–4 ضيوف' : '2–4 Guests',
-      bed: isAr ? 'ماستر كينج + صالة ملكية' : t('hotel.room.royalBed', 'Master King Bed + Royal Lounge'),
-      view: isAr ? 'إطلالة مباشرة صف أول على الأهرامات' : t('hotel.room.royalView', 'Front-Row Direct Pyramids View'),
-      image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=1200',
-    },
-  ];
 
   const roomTypes = (apiHotel?.rooms && apiHotel.rooms.length > 0)
     ? apiHotel.rooms.map((r) => {
-        const fallback = defaultRoomTypes.find((d) => d.id === r.slug);
         const resolvedPrice = (r.ratePerNight !== undefined && r.ratePerNight !== null && Number(r.ratePerNight) > 0)
           ? Number(r.ratePerNight)
-          : (fallback?.price || 75);
+          : null;
         return {
           id: r.slug,
-          name: r.name || fallback?.name || r.slug,
+          name: r.name || r.slug,
           price: resolvedPrice,
-          capacity: r.maxOccupancy ? (isAr ? (r.maxOccupancy === 1 ? 'شخص واحد' : r.maxOccupancy === 2 ? 'شخصين' : `${r.maxOccupancy} ضيوف`) : `${r.maxOccupancy} Guests`) : (fallback?.capacity || '2 Guests'),
-          bed: r.bedType || r.description || fallback?.bed || '1 King Bed',
-          view: r.viewType || fallback?.view || 'Panoramic View',
-          image: r.image || r.imageUrl || fallback?.image || apiHotel?.heroImageUrl || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
+          capacity: r.maxOccupancy ? (isAr ? (r.maxOccupancy === 1 ? 'شخص واحد' : r.maxOccupancy === 2 ? 'شخصين' : `${r.maxOccupancy} ضيوف`) : `${r.maxOccupancy} Guests`) : (isAr ? 'شخصين' : '2 Guests'),
+          bed: r.bedType || r.description || (isAr ? 'مزدوجة / توأم' : 'Double / Twin Beds'),
+          view: r.viewType || (isAr ? 'إطلالة قياسية' : 'Standard View'),
+          image: r.image || r.imageUrl || apiHotel?.heroImageUrl || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
           seasonPricings: Array.isArray(r.seasonPricings) ? r.seasonPricings : [],
         };
       })
-    : defaultRoomTypes;
+    : [];
 
   const inRoomAmenities = [
     { label: isAr ? 'إنترنت لاسلكي مجاني' : t('hotel.fac.wifi', 'Free Wi-Fi'), icon: <FaWifi className="text-gold-500" /> },
@@ -214,22 +162,20 @@ const HotelDetails = () => {
 
   const hotelHeroImage = apiHotel?.heroImageUrl || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200';
 
-  const rawGallery = (apiHotel?.images && apiHotel.images.length > 0)
-    ? apiHotel.images.map((img) => (typeof img === 'string' ? img : img?.url)).filter(Boolean)
+  // Prefer the gallery explicitly saved from the dashboard (stored on
+  // amenities.images). Fall back to the API `images` collection for older
+  // responses that still resolve the gallery from linked media assets.
+  const configuredGallery = Array.isArray(apiHotel?.amenities?.images)
+    ? apiHotel.amenities.images
     : [];
-
-  const defaultSolGallery = [
-    'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200',
-    'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-    'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-    'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=1200',
-    'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=1200',
-    'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200',
-  ];
+  const gallerySource = configuredGallery.length > 0 ? configuredGallery : (apiHotel?.images || []);
+  const rawGallery = gallerySource
+    .map((img) => (typeof img === 'string' ? img : img?.url))
+    .filter(Boolean);
 
   const galleryImages = rawGallery.length > 0
     ? (apiHotel?.heroImageUrl && !rawGallery.includes(apiHotel.heroImageUrl) ? [apiHotel.heroImageUrl, ...rawGallery] : rawGallery)
-    : (apiHotel?.heroImageUrl ? [apiHotel.heroImageUrl, ...defaultSolGallery] : defaultSolGallery);
+    : (apiHotel?.heroImageUrl ? [apiHotel.heroImageUrl] : []);
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
@@ -629,7 +575,7 @@ const HotelDetails = () => {
       </section>
 
       {/* Location Section */}
-      <section className="container mx-auto px-6 py-20 max-w-6xl text-left rtl:text-right scroll-mt-28">
+      <section id="location" className="container mx-auto px-6 py-20 max-w-6xl text-left rtl:text-right scroll-mt-28">
         <div className="text-center mb-12">
           <span className="text-gold-600 uppercase tracking-widest text-xs font-semibold block mb-2">
             {t('hotel.location.subtitle', 'HOW TO FIND US')}
@@ -695,7 +641,7 @@ const HotelDetails = () => {
       </section>
 
       {/* Video Walkthrough */}
-      {(apiHotel?.amenities?.youtubeId || currentSlug === 'sol-pyramid-hotel') && (
+      {apiHotel?.amenities?.youtubeId && (
         <section className="bg-slate-900 py-20 text-white border-y border-slate-800 text-center">
           <div className="container mx-auto px-6 max-w-4xl">
             <span className="text-gold-500 uppercase tracking-widest text-xs font-semibold block mb-2">
@@ -717,11 +663,11 @@ const HotelDetails = () => {
                   category="marketing"
                   providerName="YouTube"
                   height="100%"
-                  fallbackThumbnail={`https://img.youtube.com/vi/${apiHotel?.amenities?.youtubeId || 'RFeQ5fjkYt8'}/hqdefault.jpg`}
+                  fallbackThumbnail={`https://img.youtube.com/vi/${apiHotel?.amenities?.youtubeId}/hqdefault.jpg`}
                 >
                   <iframe
                     className="w-full h-full absolute inset-0"
-                    src={`https://www.youtube.com/embed/${apiHotel?.amenities?.youtubeId || 'RFeQ5fjkYt8'}?autoplay=1`}
+                    src={`https://www.youtube.com/embed/${apiHotel?.amenities?.youtubeId}?autoplay=1`}
                     title={`${hotelInfo.name} Cinematic Video Tour`}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -737,7 +683,7 @@ const HotelDetails = () => {
                   aria-label={`Play ${hotelInfo.name} Cinematic Video Tour`}
                 >
                   <img
-                    src={`https://img.youtube.com/vi/${apiHotel?.amenities?.youtubeId || 'RFeQ5fjkYt8'}/hqdefault.jpg`}
+                    src={`https://img.youtube.com/vi/${apiHotel?.amenities?.youtubeId}/hqdefault.jpg`}
                     alt={`${hotelInfo.name} Cinematic Video Tour Placeholder`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
@@ -905,50 +851,60 @@ const HotelDetails = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <a
-              href="tel:+20233775511"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
-              aria-label="Call Hotel"
-              title="Call (+2) 02 33775511"
-            >
-              <FaPhoneAlt size={16} />
-            </a>
-            <a
-              href={hotelInfo.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
-              aria-label="Facebook"
-            >
-              <FaFacebook size={18} />
-            </a>
-            <a
-              href={hotelInfo.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
-              aria-label="Instagram"
-            >
-              <FaInstagram size={18} />
-            </a>
-            <a
-              href="https://wa.me/201149401111"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all text-slate-300"
-              aria-label="WhatsApp"
-              title="WhatsApp"
-            >
-              <FaWhatsapp size={18} />
-            </a>
-            <a
-              href="mailto:info@solpyramidhotel.com"
-              className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
-              aria-label="Email"
-              title="Email info@solpyramidhotel.com"
-            >
-              <FaEnvelope size={18} />
-            </a>
+            {hotelInfo.telephones[0] && (
+              <a
+                href={`tel:${hotelInfo.telephones[0].replace(/[^\d+]/g, '')}`}
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+                aria-label="Call Hotel"
+                title={`Call ${hotelInfo.telephones[0]}`}
+              >
+                <FaPhoneAlt size={16} />
+              </a>
+            )}
+            {hotelInfo.facebook && (
+              <a
+                href={hotelInfo.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+                aria-label="Facebook"
+              >
+                <FaFacebook size={18} />
+              </a>
+            )}
+            {hotelInfo.instagram && (
+              <a
+                href={hotelInfo.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+                aria-label="Instagram"
+              >
+                <FaInstagram size={18} />
+              </a>
+            )}
+            {hotelInfo.telephones[0] && (
+              <a
+                href={`https://wa.me/${hotelInfo.telephones[0].replace(/[^\d]/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all text-slate-300"
+                aria-label="WhatsApp"
+                title="WhatsApp"
+              >
+                <FaWhatsapp size={18} />
+              </a>
+            )}
+            {hotelInfo.email && (
+              <a
+                href={`mailto:${hotelInfo.email}`}
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-gold-500 hover:text-slate-900 transition-all text-slate-300"
+                aria-label="Email"
+                title={`Email ${hotelInfo.email}`}
+              >
+                <FaEnvelope size={18} />
+              </a>
+            )}
           </div>
         </div>
       </section>

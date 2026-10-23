@@ -37,7 +37,7 @@ export function useHotel(slug) {
             const item = await api.get(`/hotels/${encodeURIComponent(slug)}?locale=${lang}`, { signal });
             return item || null;
           },
-          CACHE_POLICIES.TOUR_DETAILS
+          CACHE_POLICIES.HOTEL_DETAILS
         );
 
         if (active) {
@@ -98,32 +98,17 @@ export function useHotels({ destinationSlug, limit = 24 } = {}) {
             const res = await api.get(`/hotels?${queryParams.toString()}`, { signal });
             return Array.isArray(res) ? res : [];
           },
-          CACHE_POLICIES.TOUR_CATALOG
+          CACHE_POLICIES.HOTEL_CATALOG
         );
 
         if (active) {
-          const finalData = (Array.isArray(data) && data.length > 0) ? data : [{
-            id: 'sol-pyramid-hotel',
-            slug: 'sol-pyramid-hotel',
-            name: 'Sol Pyramid Hotel',
-            stars: 5,
-            price: 0,
-            image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80',
-          }];
-          setHotels(finalData);
+          setHotels(Array.isArray(data) ? data : []);
         }
       } catch (err) {
         if (err?.name === 'AbortError' || err?.code === 'ERR_CANCELED') return;
         if (active) {
-          setHotels([{
-            id: 'sol-pyramid-hotel',
-            slug: 'sol-pyramid-hotel',
-            name: 'Sol Pyramid Hotel',
-            stars: 5,
-            price: 0,
-            image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80',
-          }]);
-          setError(null);
+          setHotels([]);
+          setError(err);
         }
       } finally {
         if (active) setLoading(false);

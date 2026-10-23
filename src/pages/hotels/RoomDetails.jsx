@@ -44,142 +44,39 @@ const RoomDetails = () => {
   const { hotelSlug, roomSlug } = useParams();
   const location = useLocation();
   const { formatPrice } = useCurrency();
-  const currentHotelSlug = hotelSlug || 'sol-pyramid-hotel';
+  const currentHotelSlug = hotelSlug || '';
   const { hotel: apiHotel, loading, error } = useHotel(currentHotelSlug);
 
   const [activeImage, setActiveImage] = useState(null);
   const basePath = location.pathname.startsWith('/programs') ? '/programs' : '/services';
   const hotelLinkBase = location.pathname.startsWith('/hotels') ? '/hotels' : `${basePath}/hotels`;
 
-  const roomDataMap = {
-    'single-room': {
-      id: 'single-room',
-      name: isAr ? 'غرفة مفردة' : t('hotel.room.singleTitle', 'Single Room'),
-      price: 75,
-      capacity: isAr ? 'شخص واحد' : t('hotel.room.singleCapacity', '1 Guest'),
-      bed: isAr ? 'سرير مفرد' : t('hotel.room.singleBed', '1 Single Bed'),
-      view: isAr ? 'إطلالة على الحديقة / المدينة' : t('hotel.room.singleView', 'City / Garden View'),
-      smokingAllowed: false,
-      petsAllowed: false,
-      image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200',
-      gallery: [
-        'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200',
-        'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-      ],
-    },
-    'twin-room': {
-      id: 'twin-room',
-      name: isAr ? 'غرفة توأم' : t('hotel.room.twinTitle', 'Twin Room'),
-      price: 85,
-      capacity: isAr ? 'شخصين' : t('hotel.room.twinCapacity', '2 Guests'),
-      bed: isAr ? 'مزدوجة / توأم' : t('hotel.room.twinBed', 'Double / Twin Beds'),
-      view: isAr ? 'إطلالة قياسية' : t('hotel.room.twinView', 'Standard View'),
-      smokingAllowed: false,
-      petsAllowed: false,
-      image: 'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=1200',
-      gallery: [
-        'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=1200',
-        'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-        'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200',
-      ],
-    },
-    'double-room': {
-      id: 'double-room',
-      name: isAr ? 'غرفة مزدوجة' : t('hotel.room.doubleTitle', 'Double Room'),
-      price: 95,
-      capacity: isAr ? 'شخصين' : t('hotel.room.doubleCapacity', '1–2 Guests'),
-      bed: isAr ? '1 سرير كينج مزدوج' : t('hotel.room.doubleBed', '1 King Bed'),
-      view: isAr ? 'إطلالة على الأهرامات' : t('hotel.room.doubleView', 'Pyramids View'),
-      smokingAllowed: false,
-      petsAllowed: false,
-      image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-      gallery: [
-        'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-        'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200',
-        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-        'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=1200',
-      ],
-    },
-    'triple-room': {
-      id: 'triple-room',
-      name: isAr ? 'غرفة ثلاثية' : t('hotel.room.tripleTitle', 'Triple Room'),
-      price: 125,
-      capacity: isAr ? '3 ضيوف' : t('hotel.room.tripleCapacity', '3 Guests'),
-      bed: isAr ? 'مزدوجة / توأم' : t('hotel.room.tripleBed', 'Double/Twin'),
-      view: isAr ? 'إطلالة قياسية' : t('hotel.room.tripleView', 'Standard View'),
-      smokingAllowed: false,
-      petsAllowed: false,
-      image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200',
-      gallery: [
-        'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200',
-        'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=1200',
-        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-      ],
-    },
-    'executive-suite': {
-      id: 'executive-suite',
-      name: isAr ? 'جناح تنفيذي' : t('hotel.room.suiteTitle', 'Executive Suite'),
-      price: 190,
-      capacity: isAr ? '2–3 ضيوف' : t('hotel.room.suiteCapacity', '2–3 Guests'),
-      bed: isAr ? '1 سرير كينج + صالون استراحة' : t('hotel.room.suiteBed', '1 King Bed + Lounge'),
-      view: isAr ? 'إطلالة بانورامية على الأهرامات' : t('hotel.room.suiteView', 'Panoramic Pyramids View'),
-      smokingAllowed: false,
-      petsAllowed: false,
-      image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-      gallery: [
-        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-        'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-        'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200',
-      ],
-    },
-    'royal-pyramid-view-suite': {
-      id: 'royal-pyramid-view-suite',
-      name: isAr ? 'الجناح الملكي بإطلالة الأهرامات' : t('hotel.room.royalTitle', 'Royal Pyramid View Suite'),
-      price: 280,
-      capacity: isAr ? '2–4 ضيوف' : t('hotel.room.royalCapacity', '2–4 Guests'),
-      bed: isAr ? 'ماستر كينج + صالة ملكية' : t('hotel.room.royalBed', 'Master King Bed + Royal Lounge'),
-      view: isAr ? 'إطلالة مباشرة صف أول على الأهرامات' : t('hotel.room.royalView', 'Front-Row Direct Pyramids View'),
-      smokingAllowed: false,
-      petsAllowed: false,
-      image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=1200',
-      gallery: [
-        'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=1200',
-        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200',
-        'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200',
-        'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=1200',
-      ],
-    },
-  };
-
   const apiRoom = apiHotel?.rooms?.find((r) => r.slug === roomSlug);
-  const matchedStatic = roomDataMap[roomSlug];
-  const defaultFallbackImage = apiHotel?.heroImageUrl || matchedStatic?.image || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200';
-  const defaultFallbackGallery = (apiRoom?.gallery && apiRoom.gallery.length > 0)
+  const fallbackImage = apiHotel?.heroImageUrl || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200';
+  const fallbackGallery = (apiRoom?.gallery && apiRoom.gallery.length > 0)
     ? apiRoom.gallery
-    : (matchedStatic?.gallery || (apiHotel?.images && apiHotel.images.length > 0
+    : (apiHotel?.images && apiHotel.images.length > 0
         ? apiHotel.images.map((img) => (typeof img === 'string' ? img : img?.url)).filter(Boolean)
-        : [defaultFallbackImage]));
+        : [fallbackImage]);
 
-  const room = (matchedStatic || apiRoom) ? {
+  const room = apiRoom ? {
     id: roomSlug,
-    name: (apiRoom?.name) || (matchedStatic?.name) || (isAr ? 'غرفة فاخرة' : 'Luxury Room'),
+    name: apiRoom.name || (isAr ? 'غرفة فاخرة' : 'Luxury Room'),
     description: apiRoom?.description || null,
     price: (apiRoom?.ratePerNight !== undefined && apiRoom?.ratePerNight !== null && Number(apiRoom.ratePerNight) > 0)
       ? Number(apiRoom.ratePerNight)
-      : (matchedStatic?.price || 85),
+      : null,
     capacity: apiRoom?.maxOccupancy
       ? (isAr
           ? (apiRoom.maxOccupancy === 1 ? 'شخص واحد' : apiRoom.maxOccupancy === 2 ? 'شخصين' : `${apiRoom.maxOccupancy} ضيوف`)
           : `${apiRoom.maxOccupancy} Guests`)
-      : (matchedStatic?.capacity || (isAr ? 'شخصين' : '2 Guests')),
-    bed: (apiRoom?.bedType) || (matchedStatic?.bed) || (isAr ? 'مزدوجة / توأم' : 'Double / Twin Beds'),
-    view: (apiRoom?.viewType) || (matchedStatic?.view) || (isAr ? 'إطلالة قياسية' : 'Standard View'),
-    smokingAllowed: apiRoom?.smokingAllowed ?? matchedStatic?.smokingAllowed ?? false,
-    petsAllowed: apiRoom?.petsAllowed ?? matchedStatic?.petsAllowed ?? false,
-    image: apiRoom?.image || matchedStatic?.image || defaultFallbackImage,
-    gallery: defaultFallbackGallery,
+      : (isAr ? 'شخصين' : '2 Guests'),
+    bed: (apiRoom?.bedType) || (isAr ? 'مزدوجة / توأم' : 'Double / Twin Beds'),
+    view: (apiRoom?.viewType) || (isAr ? 'إطلالة قياسية' : 'Standard View'),
+    smokingAllowed: apiRoom?.smokingAllowed ?? false,
+    petsAllowed: apiRoom?.petsAllowed ?? false,
+    image: apiRoom?.image || fallbackImage,
+    gallery: fallbackGallery,
     seasonPricings: Array.isArray(apiRoom?.seasonPricings) ? apiRoom.seasonPricings : [],
   } : null;
 
@@ -257,8 +154,6 @@ const RoomDetails = () => {
     window.scrollTo(0, 0);
   }, [roomSlug]);
 
-  const isDefaultHotel = !hotelSlug || currentHotelSlug === 'sol-pyramid-hotel';
-
   if (loading) {
     return (
       <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto">
@@ -267,7 +162,7 @@ const RoomDetails = () => {
     );
   }
 
-  if (!apiHotel && !isDefaultHotel && error) {
+  if (!apiHotel && error) {
     return (
       <div className="w-full min-h-[60vh] flex items-center justify-center p-6">
         <ErrorState
@@ -276,6 +171,14 @@ const RoomDetails = () => {
           actionLabel={t('hotel.backToServices', 'Back to Services')}
           actionLink={`${basePath}/hotels`}
         />
+      </div>
+    );
+  }
+
+  if (!apiHotel) {
+    return (
+      <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 min-h-screen pt-32 pb-24 px-6 container mx-auto">
+        <SkeletonLoader count={4} />
       </div>
     );
   }
@@ -289,7 +192,7 @@ const RoomDetails = () => {
         <p className="text-body-md mb-8">
           {t('hotel.room.notFoundDesc', 'The requested room type could not be loaded.')}
         </p>
-        <Link to={`${basePath}/hotels/${hotelSlug || 'sol-pyramid-hotel'}`}>
+        <Link to={`${basePath}/hotels/${hotelSlug || apiHotel.slug}`}>
           <Button variant="gold-glow">{t('hotel.room.backToHotel', 'Back to Hotel Details')}</Button>
         </Link>
       </div>
@@ -358,7 +261,7 @@ const RoomDetails = () => {
       setConfirmedBooking({
         referenceCode: `HTL-REQ-FBK1`,
         summary: {
-          hotelName: apiHotel?.name || 'Sol Pyramid Hotel',
+          hotelName: apiHotel?.name || '',
           roomName: room.name,
           checkInDate: bookingForm.checkInDate,
           checkOutDate: bookingForm.checkOutDate,
@@ -387,23 +290,22 @@ const RoomDetails = () => {
   };
 
   const hotelContact = {
+    name: apiHotel?.name || '',
     location:
-      '05 Rawdet al Ahram, Behind Le Meridien Pyramids St., Old Hadayek al Ahram – Haram – Giza – Egypt',
-    telephones: ['+2 02 33775511', '+2 02 33775522'],
-    cell: '(+2) 01149401111',
-    email: 'info@solpyramid-egypt.com',
-    facebook: 'https://www.facebook.com/people/Solpyramid-Hotel/61584597357251/?rdid=nHbjJUmnT0fCQTG3&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1aiB2ma5oi%2F',
-    instagram: 'https://www.instagram.com/solpyramidhotel',
-    website: 'https://www.solpyramid-egypt.com/',
+      apiHotel?.address ||
+      (apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug || ''}` : ''),
+    telephones: apiHotel?.phone ? [apiHotel.phone] : [],
+    email: apiHotel?.email || '',
+    website: apiHotel?.website || '',
   };
 
   return (
     <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 pb-24 text-slate-800 dark:text-slate-200 leading-relaxed font-body">
       <Helmet>
-        <title>{`${room.name} | Sol Pyramid Hotel | Dunas Travel`}</title>
+        <title>{`${room.name} | ${apiHotel?.name || ''} | Dunas Travel`}</title>
         <meta
           name="description"
-          content={`Book the elegant ${room.name} at Sol Pyramid Hotel. Enjoy premium Giza amenities, 100% Egyptian cotton linen, direct pyramid views, and luxury concierge support.`}
+          content={`Book the elegant ${room.name} at ${apiHotel?.name || ''}. Enjoy premium amenities, 100% Egyptian cotton linen, and luxury concierge support.`}
         />
       </Helmet>
 
@@ -941,55 +843,43 @@ const RoomDetails = () => {
       <section className="container mx-auto px-6 py-6 max-w-6xl mt-12 border-t border-slate-200 dark:border-blue-900/40">
         <div className="bg-[#0d162a] dark:bg-[#0b1222] text-white p-6 md:p-8 rounded-3xl border-2 border-slate-800 dark:border-blue-900/60 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 text-left rtl:text-right">
           <div>
-            <h3 className="text-2xl font-display font-bold text-gold-400 mb-2">Sol Pyramid Hotel</h3>
+            <h3 className="text-2xl font-display font-bold text-gold-400 mb-2">{hotelContact.name}</h3>
             <p className="text-xs text-slate-300 max-w-md font-medium">{hotelContact.location}</p>
           </div>
 
           <div className="flex items-center gap-3">
-            <a
-              href="tel:+20233775511"
-              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
-              aria-label="Call Hotel"
-              title="Call (+2) 02 33775511"
-            >
-              <FaPhoneAlt size={18} />
-            </a>
-            <a
-              href={hotelContact.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
-              aria-label="Facebook"
-            >
-              <FaFacebook size={20} />
-            </a>
-            <a
-              href={hotelContact.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
-              aria-label="Instagram"
-            >
-              <FaInstagram size={20} />
-            </a>
-            <a
-              href="https://wa.me/201149401111"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all text-slate-200 shadow-md"
-              aria-label="WhatsApp"
-              title="WhatsApp"
-            >
-              <FaWhatsapp size={20} />
-            </a>
-            <a
-              href="mailto:info@solpyramidhotel.com"
-              className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
-              aria-label="Email"
-              title="Email info@solpyramidhotel.com"
-            >
-              <FaEnvelope size={20} />
-            </a>
+            {hotelContact.telephones[0] && (
+              <a
+                href={`tel:${hotelContact.telephones[0].replace(/[^\d+]/g, '')}`}
+                className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
+                aria-label="Call Hotel"
+                title={`Call ${hotelContact.telephones[0]}`}
+              >
+                <FaPhoneAlt size={18} />
+              </a>
+            )}
+            {hotelContact.telephones[0] && (
+              <a
+                href={`https://wa.me/${hotelContact.telephones[0].replace(/[^\d]/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all text-slate-200 shadow-md"
+                aria-label="WhatsApp"
+                title="WhatsApp"
+              >
+                <FaWhatsapp size={20} />
+              </a>
+            )}
+            {hotelContact.email && (
+              <a
+                href={`mailto:${hotelContact.email}`}
+                className="w-11 h-11 rounded-xl bg-[#17233d] border border-blue-900/60 flex items-center justify-center hover:bg-gold-500 hover:text-slate-950 transition-all text-slate-200 shadow-md"
+                aria-label="Email"
+                title={`Email ${hotelContact.email}`}
+              >
+                <FaEnvelope size={20} />
+              </a>
+            )}
           </div>
         </div>
       </section>

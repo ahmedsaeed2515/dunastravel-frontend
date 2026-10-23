@@ -20,28 +20,6 @@ import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import Button from '../../components/ui/Button';
 import { fadeInUp } from '../../animations/variants';
 
-const FALLBACK_HOTELS = [
-  {
-    id: 'sol-pyramid-hotel-fallback',
-    slug: 'sol-pyramid-hotel',
-    name: 'Sol Pyramid Hotel',
-    destinationSlug: 'egypt',
-    city: 'Giza',
-    address: '05 Rawdet al Ahram, Haram, Giza, Egypt',
-    stars: 5,
-    heroImageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200',
-    pricePerNight: 75,
-    currency: 'USD',
-    description:
-      'Steps away from the Great Pyramids of Giza with panoramic rooftop views, 100% Egyptian cotton linen, and bespoke luxury hospitality.',
-    rooms: [
-      { id: 'r1', slug: 'single-room', name: 'Single Room', maxOccupancy: 1, bedType: '1 Single Bed', ratePerNight: 75, seasonPricings: [] },
-      { id: 'r2', slug: 'double-room', name: 'Double Room (Pyramids View)', maxOccupancy: 2, bedType: '1 King Bed', ratePerNight: 95, seasonPricings: [] },
-      { id: 'r3', slug: 'executive-suite', name: 'Executive Suite', maxOccupancy: 3, bedType: '1 King Bed + Lounge', ratePerNight: 190, seasonPricings: [] },
-    ],
-  },
-];
-
 const HotelsCatalog = () => {
   const { t, i18n } = useTranslation();
   const isAr = (i18n.language || '').startsWith('ar');
@@ -54,10 +32,7 @@ const HotelsCatalog = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const allHotels = useMemo(() => {
-    if (Array.isArray(apiHotels) && apiHotels.length > 0) {
-      return apiHotels;
-    }
-    return FALLBACK_HOTELS;
+    return Array.isArray(apiHotels) ? apiHotels : [];
   }, [apiHotels]);
 
   const destinations = useMemo(() => {
@@ -168,15 +143,18 @@ const HotelsCatalog = () => {
                   className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
                     selectedStars === starVal
                       ? 'bg-slate-900 dark:bg-gold-500 text-gold-400 dark:text-slate-950'
-                      : 'bg-slate-100 dark:bg-obsidian-900 text-slate-700 dark:text-slate-300'
+                      : 'bg-white dark:bg-obsidian-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-transparent hover:border-gold-500/50'
                   }`}
                 >
                   {starVal === 'all' ? (
-                    t('hotelsCatalog.allStars', 'All ★')
+                    <span className="flex items-center gap-1">
+                      <span>{t('hotelsCatalog.allStars', 'All')}</span>
+                      <FaStar className="text-amber-500 text-[10px]" />
+                    </span>
                   ) : (
                     <>
                       <span>{starVal}</span>
-                      <FaStar className="text-amber-400 dark:text-current text-[10px]" />
+                      <FaStar className="text-amber-500 dark:text-current text-[10px]" />
                     </>
                   )}
                 </button>

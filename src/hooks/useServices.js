@@ -133,26 +133,7 @@ function localeFor(language) {
   return ['en', 'ar', 'es', 'pt', 'it'].includes(locale) ? locale : 'en';
 }
 
-import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
-
-export const FALLBACK_HOTEL_SERVICE = {
-  id: 'sol-pyramid-hotel',
-  slug: 'sol-pyramid-hotel',
-  category: 'hotels',
-  title: 'Sol Pyramid Hotel',
-  name: 'Sol Pyramid Hotel',
-  location: 'Giza • Pyramids View',
-  images: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80'],
-  image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80',
-  rating: 5,
-  stars: 5,
-  price: 0,
-  pricePerNight: 0,
-  overview: ['Sol Pyramid Hotel is a modern establishment situated in Giza, Egypt, offering direct views of the Pyramids.'],
-  highlights: ['Free Wi-Fi', 'Pyramid Views', 'Air Conditioning', '100% Egyptian Cotton Linen'],
-  shortDesc: 'Sol Pyramid Hotel is a modern establishment situated in Giza, Egypt, offering direct views of the Pyramids.',
-  isActive: true,
-};
+import { fetchWithSmartCache, getCachedEntry, CACHE_POLICIES } from '../utils/apiCache';
 
 export function useServices(category = null, options = {}) {
   const { i18n } = useTranslation();
@@ -198,7 +179,7 @@ export function useServices(category = null, options = {}) {
               ]);
               const hotels = hotelsResult.status === 'fulfilled'
                 ? readItems(hotelsResult.value, 'hotels').map(transformHotelToService)
-                : [FALLBACK_HOTEL_SERVICE];
+                : [];
               const transportation = transportResult.status === 'fulfilled'
                 ? readItems(transportResult.value, 'transportation').map(transformTransportToService)
                 : [];
@@ -206,22 +187,17 @@ export function useServices(category = null, options = {}) {
             }
             return resItems;
           },
-          CACHE_POLICIES.TOUR_CATALOG
+          CACHE_POLICIES.HOTEL_CATALOG
         );
 
         if (isMounted) {
-          const finalItems = (Array.isArray(items) && items.length > 0)
-            ? items
-            : (!category || category === 'hotels') ? [FALLBACK_HOTEL_SERVICE] : [];
-          setServices(finalItems);
+          setServices(Array.isArray(items) ? items : []);
         }
       } catch (requestError) {
         if (requestError?.name === 'AbortError' || requestError?.code === 'ERR_CANCELED') return;
         if (isMounted) {
-          console.warn('[useServices] API fetch failed, deploying graceful fallback:', requestError);
-          const fallback = (!category || category === 'hotels') ? [FALLBACK_HOTEL_SERVICE] : [];
-          setServices(fallback);
-          setError(null);
+          setServices([]);
+          setError(requestError);
         }
       } finally {
         if (isMounted) setLoading(false);

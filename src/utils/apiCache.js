@@ -28,6 +28,13 @@ export const CACHE_POLICIES = {
   
   // Tour detail pages: 5m stale, 30m maxAge
   TOUR_DETAILS: { staleTime: 5 * 60 * 1000, ttl: 30 * 60 * 1000 },
+
+  // Hotel catalog list (admin-editable content): short-lived so dashboard edits
+  // surface to visitors quickly.
+  HOTEL_CATALOG: { staleTime: 60 * 1000, ttl: 5 * 60 * 1000 },
+
+  // Hotel detail pages (admin-editable rooms/rates): 1m stale, 5m maxAge
+  HOTEL_DETAILS: { staleTime: 60 * 1000, ttl: 5 * 60 * 1000 },
   
   // Blog posts & FAQ articles: 15m stale, 1h maxAge
   CMS_CONTENT: { staleTime: 15 * 60 * 1000, ttl: 60 * 60 * 1000 },
