@@ -6020,13 +6020,11 @@
   "hotel.room.seasonalRates": "أسعار المواسم",
   "hotel.room.seasonalRatesTitle": "أسعار الغرفة حسب الموسم",
   "common.onRequest": "عند الطلب",
-  "hotel": {
-    "room": {
-      "viewRooms": "عرض الغرف المتاحة"
-    },
-    "overview": {
-      "locationGiza": "الجيزة، مصر",
-      "threeStarHotel": "فندق ٣ نجوم"
-    }
-  }
+  "hotel.room.viewRooms": "عرض الغرف المتاحة",
+  "hotel.overview.locationGiza": "الجيزة، مصر",
+  "hotel.overview.threeStarHotel": "فندق ٣ نجوم",
+  "hotel.hero.gizaLocation": "الجيزة، مصر",
+  "hotel.hero.starHotel": "فندق ٣ نجوم",
+  "hotel.hero.viewRooms": "عرض الغرف المتاحة",
+  "hotel.roomTypesAvailable": "نوع غرفة"
 }

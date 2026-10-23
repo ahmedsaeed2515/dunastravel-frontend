@@ -6020,13 +6020,11 @@
   "hotel.room.seasonalRates": "Seasonal Rates",
   "hotel.room.seasonalRatesTitle": "Seasonal Room Rates",
   "common.onRequest": "On Request",
-  "hotel": {
-    "room": {
-      "viewRooms": "View Available Rooms"
-    },
-    "overview": {
-      "locationGiza": "Giza, Egypt",
-      "threeStarHotel": "3-Star Hotel"
-    }
-  }
+  "hotel.room.viewRooms": "View Available Rooms",
+  "hotel.overview.locationGiza": "Giza, Egypt",
+  "hotel.overview.threeStarHotel": "3-Star Hotel",
+  "hotel.hero.gizaLocation": "Giza, Egypt",
+  "hotel.hero.starHotel": "3-Star Hotel",
+  "hotel.hero.viewRooms": "View Available Rooms",
+  "hotel.roomTypesAvailable": "room types"
 }

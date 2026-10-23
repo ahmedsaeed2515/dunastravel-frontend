@@ -6012,13 +6012,11 @@
   "hotel.room.seasonalRates": "Tarifas Sazonais",
   "hotel.room.seasonalRatesTitle": "Tarifas do Quarto por Temporada",
   "common.onRequest": "Sob Consulta",
-  "hotel": {
-    "room": {
-      "viewRooms": "Ver quartos disponíveis"
-    },
-    "overview": {
-      "locationGiza": "Gizé, Egito",
-      "threeStarHotel": "Hotel 3 estrelas"
-    }
-  }
+  "hotel.room.viewRooms": "Ver quartos disponíveis",
+  "hotel.overview.locationGiza": "Gizé, Egito",
+  "hotel.overview.threeStarHotel": "Hotel 3 estrelas",
+  "hotel.hero.gizaLocation": "Gizé, Egito",
+  "hotel.hero.starHotel": "Hotel 3 estrelas",
+  "hotel.hero.viewRooms": "Ver quartos disponíveis",
+  "hotel.roomTypesAvailable": "tipo de quarto"
 }

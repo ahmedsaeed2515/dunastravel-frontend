@@ -313,7 +313,6 @@ const RoomDetails = () => {
       <section className="relative min-h-[100svh] md:h-[60vh] md:min-h-[400px] flex items-end justify-center overflow-hidden pb-12 pt-32 md:pb-16 md:pt-0">
         <div className="absolute inset-0 z-0">
           <img src={room.image} alt={room.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-slate-900/60 bg-gradient-to-t from-[#FAF9F5] via-slate-900/40 to-transparent dark:from-obsidian-900" />
         </div>
         <div className="relative z-10 container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-start md:items-end gap-6 w-full">
           <div className="text-left w-full md:w-auto rtl:text-right">
