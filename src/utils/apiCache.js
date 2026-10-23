@@ -440,6 +440,13 @@ export async function fetchWithSmartCache(rawKey, fetcher, options = {}) {
   // 2. REQUEST DEDUPLICATION: Join already running in-flight request
   if (inFlightPromises.has(key)) {
     metrics.deduplicated++;
+    // The in-flight request may be a background SWR revalidation. Those callers
+    // must still receive the (stale but valid) cached payload immediately,
+    // otherwise they would get the revalidation promise result (potentially
+    // undefined) and crash consumers that expect data (e.g. .filter/.map).
+    if (cached && now < cached.expiresAt) {
+      return cached.data;
+    }
     return inFlightPromises.get(key);
   }
 
@@ -455,6 +462,7 @@ export async function fetchWithSmartCache(rawKey, fetcher, options = {}) {
         if (freshData !== undefined && freshData !== null) {
           setCachedEntry(key, freshData, policy);
           notifyKeySubscribers(key, freshData);
+          return freshData;
         }
       } catch (err) {
         // Stale data remains usable on background refresh network failure
@@ -463,6 +471,9 @@ export async function fetchWithSmartCache(rawKey, fetcher, options = {}) {
         inFlightPromises.delete(key);
         activeAbortControllers.delete(key);
       }
+      // Callers that joined this in-flight revalidation must always receive
+      // usable data rather than undefined.
+      return cached.data;
     })();
 
     inFlightPromises.set(key, backgroundPromise);

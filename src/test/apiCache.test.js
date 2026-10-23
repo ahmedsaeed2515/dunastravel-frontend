@@ -120,6 +120,36 @@ describe('Smart Query Cache & Deduplication Engine (apiCache.js)', () => {
       expect(metrics.staleHits).toBe(1);
       expect(metrics.backgroundRefetches).toBe(1);
     });
+
+    it('returns stale data (never undefined) to a concurrent caller joining the background revalidation', async () => {
+      const key = ['settings', 'public', 'locales'];
+      const initialData = ['en', 'ar'];
+      const updatedData = ['en', 'ar', 'es'];
+
+      setCachedEntry(key, initialData, { staleTime: -1000, ttl: 60_000 });
+
+      let resolveFetch;
+      const fetcher = vi.fn(() => new Promise((resolve) => {
+        resolveFetch = resolve;
+      }));
+
+      const policy = { staleTime: 10_000, ttl: 60_000 };
+
+      // First subscriber gets stale data and kicks off the background refetch.
+      const first = await fetchWithSmartCache(key, fetcher, { policy });
+      expect(first).toEqual(initialData);
+
+      // Second subscriber joins the in-flight revalidation and must still
+      // receive the cached payload instead of the background promise result.
+      const second = await fetchWithSmartCache(key, fetcher, { policy });
+      expect(second).toEqual(initialData);
+      expect(fetcher).toHaveBeenCalledTimes(1);
+
+      resolveFetch(updatedData);
+      await vi.waitFor(() => {
+        expect(getCachedEntry(key).data).toEqual(updatedData);
+      });
+    });
   });
 
   describe('Targeted Cache Invalidation', () => {

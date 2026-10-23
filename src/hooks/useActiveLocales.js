@@ -11,13 +11,19 @@ const DEFAULT_LOCALES = [
 
 import { fetchWithSmartCache, getCachedEntry, abortQuery, CACHE_POLICIES } from '../utils/apiCache';
 
+const DEFAULT_LOCALE_CODES = ['en', 'ar', 'es', 'pt', 'it'];
+
+const normalizeCodes = (value) => {
+  if (!Array.isArray(value)) return DEFAULT_LOCALE_CODES;
+  const codes = value.filter((code) => typeof code === 'string' && code.length > 0);
+  return codes.length > 0 ? codes : DEFAULT_LOCALE_CODES;
+};
+
 export function useActiveLocales() {
   const queryKey = ['settings', 'public', 'locales'];
   const cached = getCachedEntry(queryKey);
 
-  const [activeCodes, setActiveCodes] = useState(() => {
-    return cached?.data || ['en', 'ar', 'es', 'pt', 'it'];
-  });
+  const [activeCodes, setActiveCodes] = useState(() => normalizeCodes(cached?.data));
   const [loading, setLoading] = useState(!cached);
 
   useEffect(() => {
@@ -40,12 +46,12 @@ export function useActiveLocales() {
         );
 
         if (isMounted) {
-          setActiveCodes(list);
+          setActiveCodes(normalizeCodes(list));
         }
       } catch {
         // Resilient fallback to default locales on network error or offline
         if (isMounted && !cached) {
-          setActiveCodes(['en', 'ar', 'es', 'pt', 'it']);
+          setActiveCodes(DEFAULT_LOCALE_CODES);
         }
       } finally {
         if (isMounted) setLoading(false);
