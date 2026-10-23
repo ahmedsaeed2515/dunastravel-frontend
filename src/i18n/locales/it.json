@@ -5723,7 +5723,6 @@
   "tourCard.book": "Prenota →",
   "tourCard.from": "Da",
   "tourCard.reviews": "recensioni",
-  "tourCard.startingFrom": "A partire da",
   "tourCard.viewDetails": "Visualizza dettagli",
   "tour.minPax": "Min. Pax",
   "tourDetail.aboutTourTag": "SCOPERTA DEL VIAGGIO",
@@ -6012,5 +6011,14 @@
   "tourDetail.viewRoomDetails": "Vedi Camera Assegnata",
   "hotel.room.seasonalRates": "Tariffe Stagionali",
   "hotel.room.seasonalRatesTitle": "Tariffe Camera per Stagione",
-  "common.onRequest": "Su Richiesta"
+  "common.onRequest": "Su Richiesta",
+  "hotel": {
+    "room": {
+      "viewRooms": "Visualizza le camere disponibles"
+    },
+    "overview": {
+      "locationGiza": "Giza, Egitto",
+      "threeStarHotel": "Hotel 3 stelle"
+    }
+  }
 }

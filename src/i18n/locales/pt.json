@@ -570,7 +570,7 @@
   "booking.nationalityRequired": "Introduza a sua nacionalidade para concluir a reserva.",
   "booking.scheduleClosed.title": "As reservas estão atualmente encerradas",
   "booking.scheduleClosed.button": "Reservas encerradas",
-  "tourCard.startingFrom": "A partir de",
+  "tourCard.startingFrom": "Começando de",
   "tourCard.perPerson": "Por pessoa",
   "booking.pickupLocation": "Local de retirada",
   "booking.pickupTime": "Horário de Embarque",
@@ -5723,7 +5723,6 @@
   "tourCard.book": "Reservar →",
   "tourCard.from": "A partir de",
   "tourCard.reviews": "avaliações",
-  "tourCard.startingFrom": "Começando de",
   "tourCard.viewDetails": "Ver Detalhes",
   "tour.minPax": "Mín. Pax",
   "tourDetail.aboutTourTag": "DESCOBERTA DA VIAGEM",
@@ -6012,5 +6011,14 @@
   "tourDetail.viewRoomDetails": "Ver Quarto Designado",
   "hotel.room.seasonalRates": "Tarifas Sazonais",
   "hotel.room.seasonalRatesTitle": "Tarifas do Quarto por Temporada",
-  "common.onRequest": "Sob Consulta"
+  "common.onRequest": "Sob Consulta",
+  "hotel": {
+    "room": {
+      "viewRooms": "Ver quartos disponíveis"
+    },
+    "overview": {
+      "locationGiza": "Gizé, Egito",
+      "threeStarHotel": "Hotel 3 estrelas"
+    }
+  }
 }

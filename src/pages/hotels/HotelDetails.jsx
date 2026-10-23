@@ -224,13 +224,13 @@ const HotelDetails = () => {
                   ))}
                 </span>
                 <span className="text-white text-[11px] md:text-xs font-semibold uppercase tracking-widest">
-                  {apiHotel?.stars ? `${apiHotel.stars}-Star Hotel` : t('hotel.overview.starsLabel', 'Luxury Hotel')}
+                  {apiHotel?.stars ? t('hotel.overview.threeStarHotel', `${apiHotel.stars}-Star Hotel`) : t('hotel.overview.starsLabel', 'Luxury Hotel')}
                 </span>
               </div>
               <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-gold-400" />
               <div className="flex items-center gap-1.5 text-white text-[11px] md:text-xs font-bold uppercase tracking-widest bg-black/50 px-4 py-1.5 rounded-full border border-gold-400/60 backdrop-blur-sm shadow-lg">
                 <FaMapMarkerAlt className="text-sm shrink-0 text-gold-400" />
-                <span>{apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug}` : (isAr ? 'الجيزة • إطلالة على الأهرامات' : t('hotel.overview.gizaPyramidsView', 'Giza • Pyramids View'))}</span>
+                <span>{apiHotel?.city ? t('hotel.overview.locationGiza', `${apiHotel.city}, Egypt`) : (isAr ? 'الجيزة • إطلالة على الأهرامات' : t('hotel.overview.gizaPyramidsView', 'Giza • Pyramids View'))}</span>
               </div>
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-display-2xl text-white font-display font-bold drop-shadow-2xl mb-4 leading-tight tracking-wide">

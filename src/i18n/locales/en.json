@@ -575,7 +575,7 @@
   "booking.nationalityRequired": "Please enter your nationality to complete the booking.",
   "booking.scheduleClosed.title": "Bookings are currently closed",
   "booking.scheduleClosed.button": "Bookings Closed",
-  "tourCard.startingFrom": "Starting from",
+  "tourCard.startingFrom": "Starting From",
   "tourCard.perPerson": "Per Person",
   "booking.pickupLocation": "Pick Up Location",
   "booking.pickupTime": "Pickup Time",
@@ -5731,7 +5731,6 @@
   "tourCard.book": "Book →",
   "tourCard.from": "From",
   "tourCard.reviews": "reviews",
-  "tourCard.startingFrom": "Starting From",
   "tourCard.viewDetails": "View Details",
   "tour.minPax": "Min Pax",
   "tourDetail.aboutTourTag": "TRIP DISCOVERY",
@@ -6020,5 +6019,14 @@
   "tourDetail.viewRoomDetails": "View Assigned Room",
   "hotel.room.seasonalRates": "Seasonal Rates",
   "hotel.room.seasonalRatesTitle": "Seasonal Room Rates",
-  "common.onRequest": "On Request"
+  "common.onRequest": "On Request",
+  "hotel": {
+    "room": {
+      "viewRooms": "View Available Rooms"
+    },
+    "overview": {
+      "locationGiza": "Giza, Egypt",
+      "threeStarHotel": "3-Star Hotel"
+    }
+  }
 }

@@ -6019,5 +6019,14 @@
   "tourDetail.viewRoomDetails": "عرض الغرفة المخصصة",
   "hotel.room.seasonalRates": "أسعار المواسم",
   "hotel.room.seasonalRatesTitle": "أسعار الغرفة حسب الموسم",
-  "common.onRequest": "عند الطلب"
+  "common.onRequest": "عند الطلب",
+  "hotel": {
+    "room": {
+      "viewRooms": "عرض الغرف المتاحة"
+    },
+    "overview": {
+      "locationGiza": "الجيزة، مصر",
+      "threeStarHotel": "فندق ٣ نجوم"
+    }
+  }
 }
