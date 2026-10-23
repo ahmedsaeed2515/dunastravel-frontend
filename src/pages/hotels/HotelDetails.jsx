@@ -213,8 +213,6 @@ const HotelDetails = () => {
             alt={hotelInfo.name}
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
         </div>
         <div className="relative z-10 container mx-auto px-6 max-w-6xl flex flex-col items-center justify-center text-center w-full">
           <div className="max-w-3xl">
