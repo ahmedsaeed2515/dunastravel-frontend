@@ -206,20 +206,21 @@ const HotelDetails = () => {
       </Helmet>
 
       {/* Hero Header */}
-      <section className="relative min-h-[100svh] md:h-[75vh] md:min-h-[500px] flex items-end justify-center overflow-hidden pb-12 pt-32 md:pb-20 md:pt-0">
+      <section className="relative min-h-[90svh] md:h-[85vh] md:min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={hotelHeroImage}
             alt={hotelInfo.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-slate-900/60 bg-gradient-to-t from-[#FAF9F5] via-slate-900/40 to-transparent dark:from-obsidian-900" />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
         </div>
-        <div className="relative z-10 container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-start md:items-end gap-6 w-full">
-          <div className="text-left w-full md:w-auto rtl:text-right">
-            <div className="flex flex-wrap items-center justify-start gap-x-3 gap-y-2 mb-3">
+        <div className="relative z-10 container mx-auto px-6 max-w-6xl flex flex-col items-center justify-center text-center w-full">
+          <div className="max-w-3xl">
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 mb-4">
               <div className="flex items-center gap-2">
-                <span className="flex items-center gap-0.5 text-gold-500 text-base md:text-lg">
+                <span className="flex items-center gap-0.5 text-gold-400 text-base md:text-lg">
                   {Array.from({ length: Math.min(Math.max(Number(apiHotel?.stars) || 5, 1), 5) }).map((_, i) => (
                     <FaStar key={i} />
                   ))}
@@ -228,50 +229,57 @@ const HotelDetails = () => {
                   {apiHotel?.stars ? `${apiHotel.stars}-Star Hotel` : t('hotel.overview.starsLabel', 'Luxury Hotel')}
                 </span>
               </div>
-              <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-gold-500" />
-              <div className="flex items-center gap-1.5 text-white dark:text-gold-300 text-[11px] md:text-xs font-bold uppercase tracking-widest bg-black/40 dark:bg-slate-900/80 px-3 py-1 rounded-full border border-gold-500/40 backdrop-blur-xs shadow-md">
+              <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-gold-400" />
+              <div className="flex items-center gap-1.5 text-white text-[11px] md:text-xs font-bold uppercase tracking-widest bg-black/50 px-4 py-1.5 rounded-full border border-gold-400/60 backdrop-blur-sm shadow-lg">
                 <FaMapMarkerAlt className="text-sm shrink-0 text-gold-400" />
                 <span>{apiHotel?.city ? `${apiHotel.city}, ${apiHotel.destinationSlug}` : (isAr ? 'الجيزة • إطلالة على الأهرامات' : t('hotel.overview.gizaPyramidsView', 'Giza • Pyramids View'))}</span>
               </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-display-xl text-white font-display font-semibold drop-shadow-lg mb-3 leading-tight">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-display-2xl text-white font-display font-bold drop-shadow-2xl mb-4 leading-tight tracking-wide">
               {hotelInfo.name}
             </h1>
-            <p className="text-slate-200 text-lg md:text-xl font-medium italic mb-6">
-              "{apiHotel?.description ? (apiHotel.description.slice(0, 140) + '...') : t('hotel.tagline', 'Where History Meets Supreme Luxury')}"
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              <span className="bg-slate-900/70 border border-slate-700 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white">
-                {t('hotel.overview.checkInLabel', 'Check-in')}: {hotelInfo.checkIn}
-              </span>
-              <span className="bg-slate-900/70 border border-slate-700 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white">
-                {t('hotel.overview.checkOutLabel', 'Check-out')}: {hotelInfo.checkOut}
-              </span>
-              <span className="bg-slate-900/70 border border-slate-700 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white">
-                {hotelInfo.totalRooms}
-              </span>
-              <span className="bg-slate-900/70 border border-slate-700 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1">
-                <FaBan className="text-red-400" /> {t('hotel.overview.smokingPolicyVal', 'No Smoking')}
-              </span>
-              <span className="bg-slate-900/70 border border-slate-700 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1">
-                <FaPaw className="text-red-400" /> {t('hotel.overview.petsPolicyVal', 'No Pets')}
-              </span>
+            {currentSlug !== 'sol-pyramid-hotel' && (
+              <>
+                <p className="text-white/90 text-xl md:text-2xl font-medium italic mb-8 drop-shadow-lg">
+                  "{apiHotel?.description ? (apiHotel.description.slice(0, 160) + '...') : t('hotel.tagline', 'Where History Meets Supreme Luxury')}"
+                </p>
+                <div className="flex flex-wrap justify-center gap-2.5 mb-8">
+                  <span className="bg-black/60 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-xs font-semibold text-white">
+                    {t('hotel.overview.checkInLabel', 'Check-in')}: {hotelInfo.checkIn}
+                  </span>
+                  <span className="bg-black/60 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-xs font-semibold text-white">
+                    {t('hotel.overview.checkOutLabel', 'Check-out')}: {hotelInfo.checkOut}
+                  </span>
+                  <span className="bg-black/60 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-xs font-semibold text-white">
+                    {hotelInfo.totalRooms}
+                  </span>
+                  <span className="bg-black/60 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-xs font-semibold text-white flex items-center gap-1.5">
+                    <FaBan className="text-red-400" /> {t('hotel.overview.smokingPolicyVal', 'No Smoking')}
+                  </span>
+                  <span className="bg-black/60 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-xs font-semibold text-white flex items-center gap-1.5">
+                    <FaPaw className="text-red-400" /> {t('hotel.overview.petsPolicyVal', 'No Pets')}
+                  </span>
+                </div>
+              </>
+            )}
+            {currentSlug === 'sol-pyramid-hotel' && <div className="mb-10" />}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="#rooms">
+                <button className="px-8 py-3 text-sm uppercase font-extrabold tracking-wider text-white bg-gold-500 hover:bg-gold-600 rounded-xl shadow-2xl transition-all duration-300 hover:scale-105">
+                  {t('hotel.room.viewRooms', 'View Available Rooms')}
+                </button>
+              </a>
+              <a href="#location">
+                <button className="px-8 py-3 text-sm uppercase font-extrabold tracking-wider text-white bg-black/60 backdrop-blur-sm hover:bg-black/80 border border-white/30 rounded-xl shadow-2xl transition-all duration-300 hover:scale-105">
+                  {t('hotel.location.subtitle', 'View Location')}
+                </button>
+              </a>
             </div>
           </div>
-
-          <div className="bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-white w-full md:w-auto shadow-xl shrink-0 text-center md:text-right rtl:md:text-left">
-            <div className="text-gold-500 text-xs uppercase tracking-widest mb-1">
-              {t('tourCard.startingFrom', 'Rooms From')}
-            </div>
-            <div className="text-3xl font-semibold text-gold-400 mb-3">
-              {formatPrice(0)}
-              <span className="text-sm font-normal text-slate-300"> / {t('hotel.night', 'night')}</span>
-            </div>
-            <a href="#rooms">
-              <button className="w-full px-6 py-2.5 text-xs uppercase font-extrabold tracking-wider text-white bg-[#1e3a8a] hover:bg-[#1d4ed8] rounded-xl shadow-md transition-all">
-                {t('hotel.room.viewRooms', 'View Available Rooms')}
-              </button>
-            </a>
+        </div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/60 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-white/80 rounded-full"></div>
           </div>
         </div>
       </section>
