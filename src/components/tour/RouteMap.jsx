@@ -6,6 +6,12 @@ import { fadeInUp } from '../../animations/variants';
 import useInViewport from '../../hooks/useInViewport';
 import { formatDayLabel } from '../../utils/titleHelper';
 
+const DEFAULT_ROUTE_MAP_TITLE = 'Interactive Itinerary Journey Map';
+const DEFAULT_ROUTE_MAP_SUBTITLE = 'Explore your day-by-day path across premier luxury landmarks';
+
+const isDefaultRouteMapText = (value, defaultText) =>
+  String(value || '').trim().toLowerCase() === defaultText.toLowerCase();
+
 const COORDINATES_DATABASE = {
   // Egypt
   "cairo": [30.0444, 31.2357],
@@ -407,23 +413,33 @@ const RouteMap = ({ itinerary, highlights, tourTitle, routeMap }) => {
     return String(val);
   }, [langCode]);
 
+  // Section headings should follow the active site language. Only use the
+  // current language from the dashboard payload; fall back to the localized
+  // i18n copy when the stored value is missing or is still the English default.
+  const extractRouteText = useCallback((val) => {
+    if (!val) return '';
+    if (typeof val === 'string') return val;
+    if (typeof val === 'object') return val[langCode] || '';
+    return String(val);
+  }, [langCode]);
+
   const customMapData = routeMap || itinerary?.routeMap || itinerary?.routeMapJsonb;
 
   const displayTitle = useMemo(() => {
     if (customMapData) {
-      const extracted = extractText(customMapData.titleJsonb) || extractText(customMapData.title);
-      if (extracted) return extracted;
+      const extracted = extractRouteText(customMapData.titleJsonb) || extractRouteText(customMapData.title);
+      if (extracted && !isDefaultRouteMapText(extracted, DEFAULT_ROUTE_MAP_TITLE)) return extracted;
     }
-    return t('tour.routeMapTitle', 'Interactive Itinerary Journey Map');
-  }, [customMapData, extractText, t]);
+    return t('tour.routeMapTitle', DEFAULT_ROUTE_MAP_TITLE);
+  }, [customMapData, extractRouteText, t]);
 
   const displaySubtitle = useMemo(() => {
     if (customMapData) {
-      const extracted = extractText(customMapData.subtitleJsonb) || extractText(customMapData.subtitle);
-      if (extracted) return extracted;
+      const extracted = extractRouteText(customMapData.subtitleJsonb) || extractRouteText(customMapData.subtitle);
+      if (extracted && !isDefaultRouteMapText(extracted, DEFAULT_ROUTE_MAP_SUBTITLE)) return extracted;
     }
-    return t('tour.routeMapSub', 'EXPLORE THE JOURNEY ROUTE');
-  }, [customMapData, extractText, t]);
+    return t('tour.routeMapSub', DEFAULT_ROUTE_MAP_SUBTITLE);
+  }, [customMapData, extractRouteText, t]);
 
   // Lazy load Leaflet library dynamically only when map section enters near-viewport
   useEffect(() => {
