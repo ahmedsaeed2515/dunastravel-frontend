@@ -279,6 +279,7 @@ export default function LuxuryHeroSection({
         )}
 
         {/* Call to Actions (CTAs) */}
+        {(primaryCta || secondaryCta) && (
         <motion.div
           variants={itemVariants}
           className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 w-full sm:w-auto"
@@ -331,6 +332,7 @@ export default function LuxuryHeroSection({
             )
           )}
         </motion.div>
+        )}
 
         {/* Optional Stats Bar */}
         {stats && stats.length > 0 && (

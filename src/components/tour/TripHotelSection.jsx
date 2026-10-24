@@ -94,6 +94,8 @@ export default function TripHotelSection({
       const boatName = resolveLocalizedText(acc.boatJsonb || acc.boatName, t, lang) || '';
       const boatPrice = toAmount(acc.boatPriceUsd ?? acc.boatPrice);
       const roomRate = toAmount(roomObj?.ratePerNight ?? roomObj?.basePriceUsd);
+      const roomRateMode = String(roomObj?.priceDisplayMode || 'PRICE').toUpperCase();
+      const roomRateLabel = typeof roomObj?.priceLabel === 'string' ? roomObj.priceLabel.trim() : '';
       return {
         acc,
         idx,
@@ -106,6 +108,8 @@ export default function TripHotelSection({
         boatName,
         boatPrice,
         roomRate,
+        roomRateMode,
+        roomRateLabel,
         hotelSlug: hotelObj.slug || null,
         roomSlug: roomObj?.slug || null,
         isGlobal: hotelObj.isGlobal !== false,
@@ -416,6 +420,8 @@ export default function TripHotelSection({
                   {roomsList.map((room, rIdx) => {
                     const roomName = resolveLocalizedText(room.nameJsonb || room.name, t, lang) || `Suite ${rIdx + 1}`;
                     const roomRate = Number(room.ratePerNight ?? room.ratePerNightUsd ?? room.basePriceUsd ?? 0);
+                    const roomPriceMode = String(room.priceDisplayMode || 'PRICE').toUpperCase();
+                    const roomPriceLabel = typeof room.priceLabel === 'string' ? room.priceLabel.trim() : '';
                     const bedType = room.roomType || resolveLocalizedText(room.bedType, t, lang) || 'King / Twin';
                     const occupancy = Number(room.maxOccupancy ?? room.capacity ?? 2);
                     const seasonPricings = Array.isArray(room.seasonPricings) ? room.seasonPricings : [];
@@ -449,7 +455,7 @@ export default function TripHotelSection({
                           </div>
 
                           {/* Room Seasonal Pricing Tiers */}
-                          {seasonPricings.length > 0 && (
+                          {roomPriceMode === 'PRICE' && seasonPricings.length > 0 && (
                             <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-[#061842] border border-gold-500/20 space-y-2">
                               <span className="text-[11px] font-black uppercase text-amber-800 dark:text-gold-300 flex items-center gap-1">
                                 <FaCalendarAlt className="text-xs" />
@@ -494,14 +500,20 @@ export default function TripHotelSection({
                         </div>
 
                         {/* Room Price Bar */}
+                        {roomPriceMode !== 'HIDDEN' && (
                         <div className="pt-3 border-t border-gold-500/20 flex items-center justify-between">
                           <span className="text-xs text-slate-600 dark:text-slate-300 font-semibold">
                             {t('hotel.roomBaseRate', 'Standard Room Rate')}:
                           </span>
                           <span className="text-base font-black text-amber-900 dark:text-white">
-                            {roomRate > 0 ? `${formatPrice(roomRate)} / ${t('hotel.night', 'night')}` : t('tour.includedInTour', 'Included in Tour')}
+                            {roomPriceMode === 'CUSTOM_LABEL'
+                              ? (roomPriceLabel || t('common.onRequest', 'On Request'))
+                              : roomPriceMode === 'PRICE' && roomRate > 0
+                              ? `${formatPrice(roomRate)} / ${t('hotel.night', 'night')}`
+                              : t('tour.includedInTour', 'Included in Tour')}
                           </span>
                         </div>
+                        )}
                       </div>
                     );
                   })}
@@ -642,13 +654,18 @@ export default function TripHotelSection({
                                   </span>
                                 </div>
                               )}
-                              {row.roomRate > 0 && (
+                              {row.roomRateMode === 'CUSTOM_LABEL' ? (
+                                <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                                  <FaBed className="shrink-0 text-sky-500" />
+                                  <span className="font-bold">{row.roomRateLabel || t('common.onRequest', 'On Request')}</span>
+                                </div>
+                              ) : row.roomRateMode === 'PRICE' && row.roomRate > 0 ? (
                                 <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                                   <FaBed className="shrink-0 text-sky-500" />
                                   <span className="font-mono font-bold">{formatPrice(row.roomRate)}</span>
                                   <span>/ {t('hotel.night', 'night')}</span>
                                 </div>
-                              )}
+                              ) : null}
                               {row.hotelSlug && row.isGlobal && (
                                 <Link
                                   to={row.roomSlug ? `/hotels/${row.hotelSlug}/${row.roomSlug}` : `/hotels/${row.hotelSlug}`}
@@ -749,6 +766,8 @@ export default function TripHotelSection({
                 const stars = Number(hotelObj.stars ?? hotelObj.starRating ?? 5);
                 const supplement = Number(acc.priceSupplement ?? acc.priceSupplementUsd ?? 0);
                 const roomRate = Number(roomObj?.ratePerNight ?? roomObj?.basePriceUsd ?? 0);
+                const roomPriceMode = String(roomObj?.priceDisplayMode || 'PRICE').toUpperCase();
+                const roomPriceLabel = typeof roomObj?.priceLabel === 'string' ? roomObj.priceLabel.trim() : '';
                 const cardImg = hotelObj.heroImageUrl || (Array.isArray(hotelObj.images) && hotelObj.images[0]?.imageUrl) || FALLBACK_HOTEL_IMG;
 
                 return (
@@ -809,11 +828,15 @@ export default function TripHotelSection({
                             <span className="font-bold text-sky-900 dark:text-sky-300 flex items-center gap-1.5">
                               <FaBed /> {resolveLocalizedText(roomObj.name, t, lang)}
                             </span>
-                            {roomRate > 0 && (
+                            {roomPriceMode === 'CUSTOM_LABEL' ? (
+                              <span className="font-bold text-slate-700 dark:text-slate-300">
+                                {roomPriceLabel || t('common.onRequest', 'On Request')}
+                              </span>
+                            ) : roomPriceMode === 'PRICE' && roomRate > 0 ? (
                               <span className="font-mono font-bold text-slate-700 dark:text-slate-300">
                                 {formatPrice(roomRate)}/nt
                               </span>
-                            )}
+                            ) : null}
                           </div>
                         )}
 
@@ -835,11 +858,15 @@ export default function TripHotelSection({
                           <span>{roomObj?.slug ? t('tourDetail.viewRoomDetails', 'View Assigned Room') : t('hotelsCatalog.exploreHotel', 'Explore Hotel')}</span>
                           <FaChevronRight className="rtl-flip text-[10px]" />
                         </Link>
-                        {roomRate > 0 && (
+                        {roomPriceMode === 'CUSTOM_LABEL' ? (
+                          <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                            {roomPriceLabel || t('common.onRequest', 'On Request')}
+                          </span>
+                        ) : roomPriceMode === 'PRICE' && roomRate > 0 ? (
                           <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
                             {formatPrice(roomRate)} / {t('hotel.night', 'night')}
                           </span>
-                        )}
+                        ) : null}
                       </div>
                     ) : (
                       <div className="px-5 py-3.5 bg-slate-50 dark:bg-[#02091c]/70 border-t border-gold-500/20 flex items-center justify-between">
@@ -847,11 +874,15 @@ export default function TripHotelSection({
                           <FaHotel className="text-gold-500" />
                           {t('tourDetail.tripExclusiveHotel', 'Exclusive Trip Accommodation')}
                         </span>
-                        {roomRate > 0 && (
+                        {roomPriceMode === 'CUSTOM_LABEL' ? (
+                          <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                            {roomPriceLabel || t('common.onRequest', 'On Request')}
+                          </span>
+                        ) : roomPriceMode === 'PRICE' && roomRate > 0 ? (
                           <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
                             {formatPrice(roomRate)} / {t('hotel.night', 'night')}
                           </span>
-                        )}
+                        ) : null}
                       </div>
                     )}
                   </div>

@@ -131,6 +131,8 @@ const HotelDetails = () => {
           id: r.slug,
           name: r.name || r.slug,
           price: resolvedPrice,
+          priceDisplayMode: String(r.priceDisplayMode || 'PRICE').toUpperCase(),
+          priceLabel: typeof r.priceLabel === 'string' ? r.priceLabel.trim() : '',
           capacity: r.maxOccupancy ? (isAr ? (r.maxOccupancy === 1 ? 'شخص واحد' : r.maxOccupancy === 2 ? 'شخصين' : `${r.maxOccupancy} ضيوف`) : `${r.maxOccupancy} Guests`) : (isAr ? 'شخصين' : '2 Guests'),
           bed: r.bedType || r.description || (isAr ? 'مزدوجة / توأم' : 'Double / Twin Beds'),
           view: r.viewType || (isAr ? 'إطلالة قياسية' : 'Standard View'),
@@ -473,7 +475,7 @@ const HotelDetails = () => {
                       <span>5 Star Service</span>
                     </span>
                   </div>
-                  {Array.isArray(room.seasonPricings) && room.seasonPricings.length > 0 && (
+                  {Array.isArray(room.seasonPricings) && room.seasonPricings.length > 0 && room.priceDisplayMode === 'PRICE' && (
                     <div className="pt-3 border-t border-slate-100 dark:border-obsidian-700 space-y-1.5">
                       <span className="block text-[10px] uppercase tracking-wider font-bold text-gold-600 dark:text-gold-400">
                         {t('hotel.room.seasonalRates', 'Seasonal Rates')}
@@ -494,17 +496,33 @@ const HotelDetails = () => {
                 </div>
               </div>
 
-              {/* Footer Section (Royal Blue View Details Button & $0 Price Display) */}
+              {/* Footer Section (Royal Blue View Details Button & Room Price) */}
               <div className="p-5 sm:p-6 bg-slate-100 dark:bg-[#070e1c] border-t-2 border-slate-200/90 dark:border-blue-900/60 flex items-center justify-between gap-3">
                 <div>
-                  <span className="block text-[11px] text-slate-600 dark:text-slate-400 uppercase tracking-widest font-black mb-0.5">
-                    {t('tourCard.startingFrom', 'Price')}
-                  </span>
-                  <div className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
-                    <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t('tourCard.from', 'From')}</span>
-                    <span className="text-[#1e3a8a] dark:text-gold-400 font-extrabold">{formatPrice(0)}</span>
-                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">/ {t('hotel.night', 'night')}</span>
-                  </div>
+                  {room.priceDisplayMode !== 'HIDDEN' && (
+                    <>
+                      <span className="block text-[11px] text-slate-600 dark:text-slate-400 uppercase tracking-widest font-black mb-0.5">
+                        {room.priceDisplayMode === 'CUSTOM_LABEL' && room.priceLabel
+                          ? (isAr ? 'السعر' : 'Price')
+                          : t('tourCard.startingFrom', 'Price')}
+                      </span>
+                      <div className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
+                        {room.priceDisplayMode === 'CUSTOM_LABEL' && room.priceLabel ? (
+                          <span className="text-[#1e3a8a] dark:text-gold-400 font-extrabold">{room.priceLabel}</span>
+                        ) : room.priceDisplayMode === 'PRICE' && room.price > 0 ? (
+                          <>
+                            <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t('tourCard.from', 'From')}</span>
+                            <span className="text-[#1e3a8a] dark:text-gold-400 font-extrabold">{formatPrice(room.price)}</span>
+                            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">/ {t('hotel.night', 'night')}</span>
+                          </>
+                        ) : (
+                          <span className="text-[#1e3a8a] dark:text-gold-400 font-extrabold">
+                            {isAr ? 'عند الطلب' : t('common.onRequest', 'On Request')}
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <Link to={`${roomLinkBase}/${currentSlug}/${room.id}`}>
                   <button className="px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white bg-[#1e3a8a] hover:bg-[#1d4ed8] dark:bg-[#1e40af] dark:hover:bg-[#2563eb] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95">

@@ -66,6 +66,8 @@ const RoomDetails = () => {
     price: (apiRoom?.ratePerNight !== undefined && apiRoom?.ratePerNight !== null && Number(apiRoom.ratePerNight) > 0)
       ? Number(apiRoom.ratePerNight)
       : null,
+    priceDisplayMode: String(apiRoom?.priceDisplayMode || 'PRICE').toUpperCase(),
+    priceLabel: typeof apiRoom?.priceLabel === 'string' ? apiRoom.priceLabel.trim() : '',
     capacity: apiRoom?.maxOccupancy
       ? (isAr
           ? (apiRoom.maxOccupancy === 1 ? 'شخص واحد' : apiRoom.maxOccupancy === 2 ? 'شخصين' : `${apiRoom.maxOccupancy} ضيوف`)
@@ -309,50 +311,153 @@ const RoomDetails = () => {
         />
       </Helmet>
 
-      {/* Header Banner */}
-      <section className="relative min-h-[100svh] md:h-[60vh] md:min-h-[400px] flex items-end justify-center overflow-hidden pb-12 pt-32 md:pb-16 md:pt-0">
+      {/* Luxury Hero Banner */}
+      <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-[#070b14] md:min-h-[680px]">
         <div className="absolute inset-0 z-0">
-          <img src={room.image} alt={room.name} className="w-full h-full object-cover" />
+          <motion.img
+            src={room.image}
+            alt={room.name}
+            initial={{ scale: 1.08 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+            className="h-full w-full object-cover object-center"
+            loading="eager"
+            fetchPriority="high"
+          />
         </div>
-        <div className="relative z-10 container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-start md:items-end gap-6 w-full">
-          <div className="text-left w-full md:w-auto rtl:text-right">
+
+        {/* Top gold accent line */}
+        <div className="absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-gold-500/90 to-transparent" />
+
+        <div className="relative z-20 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-between gap-10 px-6 pb-12 pt-28 md:pb-16 md:pt-32">
+          {/* Top bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <Link
               to={`${hotelLinkBase}/${currentHotelSlug}`}
-              className="inline-flex items-center gap-2 text-gold-500 hover:text-gold-600 font-semibold mb-4 transition-colors"
+              className="group inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-[#080f1c]/85 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white/90 transition-all duration-300 hover:border-gold-300/70 hover:bg-[#0b1424] hover:text-gold-300"
             >
-              <FaArrowLeft className={isRtl ? 'rotate-180' : ''} />
+              <FaArrowLeft className={`text-xs transition-transform duration-300 ${isRtl ? 'rotate-180' : 'group-hover:-translate-x-0.5'}`} />
               <span>{t('common.back', 'Back to Hotel')}</span>
             </Link>
-            <h1 className="text-4xl md:text-6xl text-white font-display font-semibold drop-shadow-md mb-2 leading-tight">
-              {room.name}
-            </h1>
-            <p className="text-white/95 text-base md:text-lg font-medium flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="flex items-center gap-1 text-gold-500">
-                <FaBed className="shrink-0" /> {room.bed}
-              </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="flex items-center gap-1 text-gold-500">
-                <FaUserFriends className="shrink-0" /> {room.capacity}
-              </span>
-              {room.view && (
-                <>
-                  <span className="hidden sm:inline">•</span>
-                  <span className="text-gold-500 w-full sm:w-auto">{room.view}</span>
-                </>
-              )}
-            </p>
+
+            <button
+              type="button"
+              onClick={() => setActiveImage(room.image)}
+              className="inline-flex items-center gap-2 rounded-full border border-gold-300/40 bg-[#080f1c]/85 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-gold-300 transition-all duration-300 hover:border-gold-300 hover:bg-[#0b1424] hover:text-white"
+            >
+              <FaSearchPlus className="text-xs" />
+              {t('hotel.room.galleryTitle', 'Room Gallery')}
+            </button>
           </div>
 
-          <div className="bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-white w-full md:w-auto shadow-xl shrink-0 text-center md:text-right rtl:md:text-left">
-            <div className="text-gold-500 text-xs uppercase tracking-widest mb-1">
-              {t('tourCard.startingFrom', 'Price')}
+          {/* Main hero content */}
+          <div className="flex w-full flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
+            <div className="w-full max-w-3xl text-left [text-shadow:0_1px_10px_rgba(0,0,0,0.9)] rtl:text-right">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="h-px w-12 bg-gradient-to-r from-gold-500 to-transparent rtl:bg-gradient-to-l" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-gold-300 md:text-[11px]">
+                  {apiHotel?.name || 'Dunas Travel'}
+                </span>
+              </div>
+
+              <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white drop-shadow-2xl sm:text-5xl md:text-6xl lg:text-7xl">
+                {room.name}
+              </h1>
+
+              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-white/80 md:text-base">
+                <span className="flex items-center gap-2 text-gold-300">
+                  <FaBed className="text-xs" /> {room.bed}
+                </span>
+                <span className="hidden h-1 w-1 rounded-full bg-gold-500/70 sm:block" />
+                <span className="flex items-center gap-2 text-gold-300">
+                  <FaUserFriends className="text-xs" /> {room.capacity}
+                </span>
+                {room.view && (
+                  <>
+                    <span className="hidden h-1 w-1 rounded-full bg-gold-500/70 sm:block" />
+                    <span className="flex items-center gap-2 text-gold-300">
+                      <FaGlobe className="text-xs" /> {room.view}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {room.description && (
+                <p className="mt-5 line-clamp-2 max-w-2xl text-sm leading-relaxed text-white/70 md:text-[15px]">
+                  {room.description}
+                </p>
+              )}
             </div>
-            <div className="text-3xl font-semibold text-gold-400 mb-1">
-              {formatPrice(0)}
-              <span className="text-sm font-normal text-slate-300"> / {t('hotel.night', 'night')}</span>
-            </div>
-            <div className="text-[11px] text-slate-400">
-              {t('hotel.room.taxesInc', 'Taxes & fees included')}
+
+            {/* Floating rate card */}
+            <div className="w-full shrink-0 md:max-w-[340px] lg:w-[340px]">
+              <div className="relative overflow-hidden rounded-[1.75rem] border border-gold-300/35 bg-[#080f1c]/95 p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)] md:p-7">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-300 to-transparent" />
+
+                <div className="relative">
+                  {room.priceDisplayMode !== 'HIDDEN' && (
+                    <>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold-300">
+                        {room.priceDisplayMode === 'CUSTOM_LABEL' && room.priceLabel
+                          ? (t('hotel.room.priceLabel', 'Price'))
+                          : t('tourCard.startingFrom', 'Starting From')}
+                      </span>
+                      <div className="mt-2 flex flex-wrap items-end gap-x-2 gap-y-1">
+                        {room.priceDisplayMode === 'CUSTOM_LABEL' ? (
+                          <span className="font-display text-4xl font-semibold leading-none text-white">
+                            {room.priceLabel || t('common.onRequest', 'On Request')}
+                          </span>
+                        ) : (
+                          <>
+                            <span className="font-display text-4xl font-semibold leading-none text-white">
+                              {room.price ? formatPrice(room.price) : t('hotel.room.rateComing', 'Rate Coming Soon')}
+                            </span>
+                            {room.price && (
+                              <span className="pb-0.5 text-sm font-medium text-white/55">
+                                / {t('hotel.night', 'night')}
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </div>
+                      <p className="mt-2 text-[11px] text-white/50">
+                        {t('hotel.room.taxesInc', 'Taxes & fees included')}
+                      </p>
+                    </>
+                  )}
+
+                  <a
+                    href="#room-booking"
+                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-300 px-5 py-3.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#070b14] shadow-lg shadow-gold-500/20 transition-all duration-300 hover:from-gold-300 hover:to-gold-500 hover:shadow-gold-500/40"
+                  >
+                    {t('hotel.room.requestBooking', 'Reserve Your Stay')}
+                    <FaArrowLeft className={`text-[10px] ${isRtl ? '' : 'rotate-180'}`} />
+                  </a>
+
+                  {room.gallery.length > 1 && (
+                    <div className="mt-5 border-t border-white/10 pt-4">
+                      <div className="grid grid-cols-3 gap-2">
+                        {room.gallery.slice(0, 3).map((url, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setActiveImage(url)}
+                            aria-label={`${room.name} ${idx + 1}`}
+                            className="group relative h-14 overflow-hidden rounded-lg border border-white/10 transition-colors hover:border-gold-300/60"
+                          >
+                            <img
+                              src={url}
+                              alt={`${room.name} ${idx + 1}`}
+                              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <span className="absolute inset-0 bg-black/20 transition-colors group-hover:bg-black/0" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -371,14 +476,20 @@ const RoomDetails = () => {
             )}
             {/* Room Features Bar */}
             <div className="bg-white dark:bg-[#0d162a] p-6 md:p-8 rounded-3xl shadow-xl dark:shadow-2xl border-2 border-slate-200/90 dark:border-blue-900/60 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+              {room.priceDisplayMode !== 'HIDDEN' && (
               <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
                 <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                   {t('hotel.room.priceLabel', 'Price')}
                 </span>
                 <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
-                  {formatPrice(0)} / {t('hotel.night', 'night')}
+                  {room.priceDisplayMode === 'CUSTOM_LABEL'
+                    ? (room.priceLabel || t('common.onRequest', 'On Request'))
+                    : room.price
+                    ? `${formatPrice(room.price)} / ${t('hotel.night', 'night')}`
+                    : t('hotel.room.rateComing', 'Rate Coming Soon')}
                 </span>
               </div>
+              )}
               <div className="bg-slate-50 dark:bg-[#0f172a] p-4 rounded-2xl border border-slate-200/80 dark:border-blue-900/40 shadow-xs flex flex-col justify-between">
                 <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1 font-extrabold">
                   {t('hotel.room.capacityLabel', 'Capacity')}
@@ -418,7 +529,7 @@ const RoomDetails = () => {
             </div>
 
             {/* Seasonal Room Pricing Matrix */}
-            {Array.isArray(room.seasonPricings) && room.seasonPricings.length > 0 && (
+            {Array.isArray(room.seasonPricings) && room.seasonPricings.length > 0 && room.priceDisplayMode === 'PRICE' && (
               <div className="bg-white dark:bg-obsidian-800 p-5 md:p-8 rounded-2xl shadow-sm border border-gold-500/40">
                 <h2 className="text-2xl font-display font-semibold text-slate-900 dark:text-white mb-4 pb-3 border-b border-slate-100 dark:border-obsidian-700 flex items-center gap-3">
                   <span className="w-1.5 h-6 bg-gold-500 rounded-full" />
@@ -580,7 +691,7 @@ const RoomDetails = () => {
           </div>
 
           {/* Booking Sidebar Form */}
-          <div className="lg:col-span-1">
+          <div id="room-booking" className="lg:col-span-1 scroll-mt-28">
             <div className="bg-[#0d162a] dark:bg-[#0b1222] text-white p-6 md:p-8 rounded-3xl border-2 border-slate-800 dark:border-blue-900/80 shadow-2xl sticky top-24 text-left rtl:text-right">
               <h3 className="text-xl font-display font-bold text-gold-400 mb-2">
                 {t('hotel.room.requestBooking', 'Reserve Your Stay')}
@@ -645,7 +756,13 @@ const RoomDetails = () => {
                     </div>
                     <div className="flex justify-between border-t border-slate-700/60 pt-1.5">
                       <span className="font-bold text-slate-200">{t('hotel.room.estimatedTotal', 'Total Amount')}:</span>
-                      <span className="font-black text-gold-400 font-mono text-sm">{formatPrice(0)}</span>
+                      <span className="font-black text-gold-400 font-mono text-sm">
+                        {room.priceDisplayMode === 'HIDDEN'
+                          ? '—'
+                          : room.priceDisplayMode === 'CUSTOM_LABEL'
+                          ? (room.priceLabel || '—')
+                          : formatPrice(confirmedBooking?.summary?.totalAmountUsd ?? estimatedTotal)}
+                      </span>
                     </div>
                   </div>
 
@@ -778,12 +895,20 @@ const RoomDetails = () => {
                       </div>
                       <div className="flex items-center justify-between text-slate-300">
                         <span className="font-medium">{t('hotel.room.ratePerNight', 'Rate per Night')}:</span>
-                        <span className="font-bold text-gold-400 font-mono">{formatPrice(0)}</span>
+                        <span className="font-bold text-gold-400 font-mono">
+                          {room.priceDisplayMode === 'HIDDEN'
+                            ? '—'
+                            : room.priceDisplayMode === 'CUSTOM_LABEL'
+                            ? (room.priceLabel || '—')
+                            : formatPrice(unitPrice)}
+                        </span>
                       </div>
-                      <div className="flex items-center justify-between text-slate-200 border-t border-slate-700/60 pt-2">
-                        <span className="font-bold">{t('hotel.room.estimatedTotal', 'Estimated Total')}:</span>
-                        <span className="font-black text-sm text-gold-400 font-mono">{formatPrice(0)}</span>
-                      </div>
+                      {room.priceDisplayMode === 'PRICE' && (
+                        <div className="flex items-center justify-between text-slate-200 border-t border-slate-700/60 pt-2">
+                          <span className="font-bold">{t('hotel.room.estimatedTotal', 'Estimated Total')}:</span>
+                          <span className="font-black text-sm text-gold-400 font-mono">{formatPrice(estimatedTotal)}</span>
+                        </div>
+                      )}
                     </div>
                   )}
 
