@@ -5,6 +5,8 @@
  * records, so the i18n resolver is retained. Static tour/program title maps
  * are intentionally not used at runtime: the API response is authoritative.
  */
+import { DEST_ALIASES, DEST_INFO, getDestinationName } from './destinationHelper';
+
 const TAG_FALLBACK_DICTIONARY = {
   'honeymooners.tag1': {
     ar: 'استقبال بالورد وعشاء رومانسي خاص',
@@ -721,6 +723,14 @@ export function resolveTourType(type, t, lang = 'en') {
       return lang === 'ar' ? 'رحلات كبرى عبر بلدان متعددة' : lang === 'es' ? 'Gran Tour Multi-País' : lang === 'pt' ? 'Grand Tour Multi-Países' : lang === 'it' ? 'Gran Tour Multi-Paese' : 'Multi-Country Grand Tour';
     }
     return lang === 'ar' ? 'جولات متعددة الدول' : lang === 'es' ? 'Tours Multi-País' : lang === 'pt' ? 'Tours Multi-Países' : lang === 'it' ? 'Tour Multi-Paese' : 'Multi-Country Tours';
+  }
+
+  // Some tours use the destination itself as their category (Egypt, Jordan,
+  // Dubai, etc.). Resolve those through the shared destination dictionary so
+  // the "Tour Type" value follows the active site language.
+  const destinationSlug = DEST_ALIASES[lower];
+  if (destinationSlug && destinationSlug !== 'multi-country' && DEST_INFO[destinationSlug]) {
+    return getDestinationName(destinationSlug, t, lang);
   }
 
   if (lower.includes('classic') || lower.includes('كلاسيك')) {
