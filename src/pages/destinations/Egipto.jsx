@@ -94,7 +94,6 @@ export default function Egipto() {
           )}
         />
         <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
-        <link rel="preconnect" href="https://ar.scoopempire.com" />
         <link rel="preconnect" href="https://sft-nationaltours.com" />
         <link rel="preconnect" href="https://hl-tourism.com" />
         <link rel="preload" as="image" href={dynamicHeroImage} fetchpriority="high" />
@@ -451,7 +450,7 @@ export default function Egipto() {
             <div className="populer-thumb relative h-[255px] bg-gray-100 dark:bg-[#041446] dunas-img-container overflow-hidden rounded-t-2xl">
               <Link to="/programs/extension" className="block w-full h-full overflow-hidden">
                 <img
-                  src={getOptimizedCloudinaryUrl("https://ar.scoopempire.com/wp-content/uploads/sites/4/2026/03/pexels-vika-glitter-392079-18895967-scaled-1.jpg", { width: 500, quality: 'auto:eco' })}
+                  src="/imgs/extensions-card.webp"
                   alt="Egypt Extensions"
                   className="w-full h-full object-cover"
                   loading="lazy"

@@ -185,7 +185,7 @@ const _packagesData = [
     tag2Key: "egyptPackages.extension.tag2",
     tag3Key: "egyptPackages.extension.tag3",
     price: 0,
-    image: "https://ar.scoopempire.com/wp-content/uploads/sites/4/2026/03/pexels-vika-glitter-392079-18895967-scaled-1.jpg",
+    image: "/imgs/extensions-card.webp",
     link: "/programs/extension",
     featured: false,
   }

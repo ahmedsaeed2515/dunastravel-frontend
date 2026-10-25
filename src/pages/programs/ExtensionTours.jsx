@@ -109,7 +109,7 @@ export default function ExtensionTours() {
           text: t('extensions.ctaSecondary', 'إضافة أيام لرحلتك الحالية'),
           link: '/tailor-tour'
         }}
-        bgImage="https://ar.scoopempire.com/wp-content/uploads/sites/4/2026/03/pexels-vika-glitter-392079-18895967-scaled-1.jpg"
+        bgImage="/imgs/extensions-hero.webp"
       />
 
       {/* Breadcrumb Navigation */}
