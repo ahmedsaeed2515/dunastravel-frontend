@@ -18,6 +18,7 @@ const BookingSuccess = () => {
   const callbackStatus = searchParams.get('invoice_status');
   const callbackMessage = searchParams.get('message');
   const callbackSignature = searchParams.get('signature');
+  const callbackAuthCode = searchParams.get('auth_code');
   const bookingId = searchParams.get('booking_id') || searchParams.get('bookingId') || searchParams.get('referenceCode');
 
   const [paymentStatus, setPaymentStatus] = useState('loading'); // loading, SUCCEEDED, PENDING, FAILED
@@ -64,6 +65,7 @@ const BookingSuccess = () => {
               invoice_status: callbackStatus,
               message: callbackMessage,
               signature: callbackSignature,
+              ...(callbackAuthCode ? { auth_code: callbackAuthCode } : {}),
             });
 
         if (res?.paymentId && isUUID(res.paymentId)) {
