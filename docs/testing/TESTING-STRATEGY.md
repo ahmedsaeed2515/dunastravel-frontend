@@ -106,7 +106,7 @@
 
 | Concern | Decision |
 | --- | --- |
-| Target indirection variables | `VITE_API_URL` (default: `http://localhost:5000/api` dev, `https://dunastravel-backend-seven.vercel.app/api` prod) |
+| Target indirection variables | `VITE_API_URL` (default: `http://localhost:5000/api` dev, `https://api.dunas-travel.com/api` prod) |
 | Disposable datastore | LocalStorage & SessionStorage memory mock setup in `src/test/setup.js` |
 | Readiness signal | Vite dev server listener (`http://localhost:5173`) |
 | Seed profiles | Mock booking data, mock tour catalog (`blogs.js`, `tours.js`), mock user profiles in test files |
