@@ -231,6 +231,7 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
     sections: [],
   } : null);
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const sortedTours = React.useMemo(() => {
     const providedTours = Array.isArray(landingPage?.tours) && landingPage.tours.length > 0
       ? landingPage.tours

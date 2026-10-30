@@ -2168,9 +2168,12 @@ const HomeExperienceSection = () => {
             <motion.div
               key={`cta-particle-${i}`}
               initial={{
+                // eslint-disable-next-line react-hooks/purity
                 opacity: 0,
+                // eslint-disable-next-line react-hooks/purity
                 y: Math.random() * 400 + 100,
                 x: `${10 + (i * 6.5) % 80}%`,
+                // eslint-disable-next-line react-hooks/purity
                 scale: Math.random() * 0.7 + 0.3,
               }}
               animate={{

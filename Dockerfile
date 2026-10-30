@@ -11,6 +11,10 @@ RUN npm ci
 # Copy the rest of the application
 COPY . .
 
+# Accept API URL as build argument so the bundle points to the right backend
+ARG VITE_API_URL=https://api.dunas-travel.com/api
+ENV VITE_API_URL=${VITE_API_URL}
+
 # Build the frontend application
 RUN npm run build
 

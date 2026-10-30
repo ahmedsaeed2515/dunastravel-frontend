@@ -114,8 +114,8 @@ export default defineConfig(({ mode }) => {
   const envDir = path.resolve(process.cwd());
   const env = { ...loadEnv(mode, process.cwd(), ''), ...loadEnv(mode, envDir, '') };
   // Keep local development fully integrated. VITE_API_URL wins (e.g. http://localhost:5000/api if running local backend),
-  // defaulting to the live deployed API so local frontend works immediately out of the box.
-  const upstreamApi = env.VITE_API_URL || 'https://dunastravel-backend-seven.vercel.app/api';
+  // Default is local backend — the production API rejects localhost CORS origins, never use it as a dev fallback.
+  const upstreamApi = env.VITE_API_URL || 'http://localhost:5000/api';
   const apiOrigin = new URL(upstreamApi).origin;
 
   return {

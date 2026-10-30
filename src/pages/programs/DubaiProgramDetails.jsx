@@ -22,6 +22,7 @@ import TourCard from '../../components/tour/TourCard';
 import AdvancedBooking from '../../components/booking/AdvancedBooking';
 import SuggestedTours from '../../components/tour/SuggestedTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
+import { formatDayLabel } from '../../utils/titleHelper';
 
 const RouteMap = lazy(() => import('../../components/tour/RouteMap'));
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));

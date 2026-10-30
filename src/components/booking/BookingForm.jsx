@@ -1147,7 +1147,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                   const usdEurRate = Number(ecbUsdEurRate) || Number(eurRate) || 0.888652;
                   const eurUsdRate = Number(ecbEurUsdRate) || (usdEurRate > 0 ? 1 / usdEurRate : 1.1253);
 
-                  let totalToDisplay = clientTotal;
+                  let totalToDisplay;
                   if (selectedCurrency === 'EUR' && pricePreview?.totalAmountEur !== undefined) {
                     totalToDisplay = Number(pricePreview.totalAmountEur);
                   } else if (selectedCurrency === 'USD' && pricePreview?.totalAmountUsd !== undefined) {

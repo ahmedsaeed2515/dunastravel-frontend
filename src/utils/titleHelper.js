@@ -242,7 +242,7 @@ export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
 
   const cleanLang = (lang || 'en').substring(0, 2).toLowerCase();
 
-  let rawResult = '';
+  let rawResult;
   if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
     rawResult = val[cleanLang] || val[lang] || val.en || val.ar || val.es || val.pt || val.it || Object.values(val)[0] || '';
   } else if (typeof val !== 'string') {
@@ -252,6 +252,7 @@ export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
     const safeT = typeof t === 'function' ? t : (k) => k;
 
     // Pattern Matcher for Duration (e.g., "11 days / 10 nights", "11 Days / 10 Nights")
+    // eslint-disable-next-line no-useless-escape
     const durationMatch = cleanVal.match(/^(\d+)\s*(?:days?|días|dias|giorni|أيام|يومًا|يوم)\s*[\/&,\-]\s*(\d+)\s*(?:nights?|noches|noites|notti|ليالٍ|ليالي|ليلة)$/i);
     if (durationMatch) {
       const d = durationMatch[1];
@@ -316,7 +317,7 @@ export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
     rawResult = rawResult.replace(/^data\./i, '');
   }
 
-  return formatPascalCase(rawResult, cleanLang);
+  return formatPascalCase(rawResult ?? '', cleanLang);
 }
 
 function getObjectOrFallback(tour, fields) {

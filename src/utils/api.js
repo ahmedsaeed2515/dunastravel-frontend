@@ -17,8 +17,7 @@ import { clearPrivateUserCache, fetchWithSmartCache, CACHE_POLICIES } from './ap
 
 const rawApiUrl = import.meta.env.DEV
   ? '/api'
-  : import.meta.env.VITE_API_URL ||
-    'https://dunastravel-backend-seven.vercel.app/api';
+  : import.meta.env.VITE_API_URL || 'https://api.dunas-travel.com/api';
 const normalizedApiUrl = String(rawApiUrl).replace(/\/+$/, '');
 export const BASE_URL = normalizedApiUrl.endsWith('/api') ? normalizedApiUrl : `${normalizedApiUrl}/api`;
 
