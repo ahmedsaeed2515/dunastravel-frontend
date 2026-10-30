@@ -31,5 +31,5 @@ jobs:
 
       - name: Build Vite application
         env:
-          VITE_API_URL: "https://api.dunastravel.com/api"
+          VITE_API_URL: "https://api.dunas-travel.com/api"
         run: npm run build
