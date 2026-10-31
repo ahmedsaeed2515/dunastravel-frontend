@@ -100,6 +100,14 @@ async function fetchCsrfToken() {
 export function clearCsrfToken() {
   _csrfToken = null;
   clearPrivateUserCache();
+  if (typeof window !== 'undefined') {
+    try {
+      sessionStorage.removeItem('dunas_guest_token');
+      localStorage.removeItem('dunas_guest_token');
+    } catch {
+      // ignore storage errors
+    }
+  }
 }
 
 /**
@@ -107,11 +115,21 @@ export function clearCsrfToken() {
  */
 export function getOrCreateGuestToken() {
   if (typeof window === 'undefined') return null;
-  let token = localStorage.getItem('dunas_guest_token') || sessionStorage.getItem('dunas_guest_token');
+  try {
+    if (localStorage.getItem('dunas_guest_token')) {
+      const legacyToken = localStorage.getItem('dunas_guest_token');
+      sessionStorage.setItem('dunas_guest_token', legacyToken);
+      localStorage.removeItem('dunas_guest_token');
+    }
+  } catch {
+    // ignore storage errors
+  }
+
+  let token = sessionStorage.getItem('dunas_guest_token');
   if (!token) {
     token = createClientRequestId('gt');
     try {
-      localStorage.setItem('dunas_guest_token', token);
+      sessionStorage.setItem('dunas_guest_token', token);
     } catch {
       // ignore storage errors
     }
@@ -226,8 +244,9 @@ export async function apiRequest(path, options = {}, { raw = false, _retry = fal
   const method = (options.method || 'GET').toUpperCase();
   const isMutating = MUTATING_METHODS.includes(method);
 
-  // Build headers
-  const guestToken = getOrCreateGuestToken();
+  const url = resolveFullUrl(path);
+  const isFirstParty = !/^https?:\/\//i.test(path) || (typeof window !== 'undefined' && window.location?.origin && url.startsWith(window.location.origin)) || (typeof BASE_URL === 'string' && url.startsWith(BASE_URL));
+  const guestToken = isFirstParty ? getOrCreateGuestToken() : null;
   const requestId = options.headers?.['x-request-id'] || createClientRequestId('req');
   // The currently deployed API does not advertise X-Request-Id in its CORS
   // preflight response. Keep the header for local development and explicit
@@ -254,7 +273,6 @@ export async function apiRequest(path, options = {}, { raw = false, _retry = fal
     }
   }
 
-  const url = resolveFullUrl(path);
   const startTime = typeof performance !== 'undefined' ? performance.now() : Date.now();
 
   if (isDevLogging) {

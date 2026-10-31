@@ -45,7 +45,7 @@ const Invoice = () => {
     setPaymentLoading(true);
     setError('');
     try {
-      const guestToken = typeof window !== 'undefined' ? localStorage.getItem('dunas_guest_token') : undefined;
+      const guestToken = typeof window !== 'undefined' ? (sessionStorage.getItem('dunas_guest_token') || localStorage.getItem('dunas_guest_token')) : undefined;
       const data = await api.post('/payments/initiate', {
         bookingId: booking.bookingId,
         guestToken: guestToken || undefined

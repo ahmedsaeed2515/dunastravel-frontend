@@ -84,6 +84,24 @@ const contentStaggerVariants = {
   }
 };
 
+export function getTourPriceDisplay(tour) {
+  const displayPrice = Number(tour?.price ?? tour?.basePriceUsd ?? 0);
+  const priceMode = String(tour?.priceDisplayMode || 'PRICE').toUpperCase();
+  const customPriceLabel = (tour?.priceLabel || '').trim();
+  const isCustomPrice =
+    priceMode === 'CUSTOM_LABEL' && Boolean(customPriceLabel);
+  const isPriceHidden =
+    priceMode === 'HIDDEN' ||
+    (priceMode === 'CUSTOM_LABEL' && !customPriceLabel);
+
+  return {
+    displayPrice,
+    customPriceLabel,
+    isCustomPrice,
+    isPriceHidden,
+  };
+}
+
 const TourCard = ({
   tour,
   linkBase = '/tours',
@@ -105,14 +123,12 @@ const TourCard = ({
   const durationStr = typeof duration === 'string' ? duration : String(duration || '');
   const durationLabel = durationStr.includes('/') ? durationStr.split('/')[0].trim() : durationStr;
 
-  const resolvePrice = (tData) => Number(tData?.price ?? tData?.basePriceUsd ?? 0);
-  const displayPrice = resolvePrice(tour);
-
-  // Price display mode (PRICE | HIDDEN | CUSTOM_LABEL) configured from the dashboard
-  const priceMode = String(tour.priceDisplayMode || 'PRICE').toUpperCase();
-  const customPriceLabel = (tour.priceLabel || '').trim();
-  const isCustomPrice = priceMode === 'CUSTOM_LABEL' && Boolean(customPriceLabel);
-  const isPriceHidden = priceMode === 'HIDDEN' || (priceMode === 'CUSTOM_LABEL' && !customPriceLabel);
+  const {
+    displayPrice,
+    customPriceLabel,
+    isCustomPrice,
+    isPriceHidden,
+  } = getTourPriceDisplay(tour);
   const rawTourImage =
     resolveTourHeroImage(tour) ||
     (typeof tour.heroImageUrl === 'string' ? tour.heroImageUrl.trim() : null) ||

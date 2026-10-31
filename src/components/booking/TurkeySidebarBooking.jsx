@@ -302,7 +302,8 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
       const data = await api.post('/bookings', payload);
       const tokenToSave = data?.guestToken || data?.data?.guestToken;
       if (tokenToSave && typeof window !== 'undefined') {
-        localStorage.setItem('dunas_guest_token', tokenToSave);
+        sessionStorage.setItem('dunas_guest_token', tokenToSave);
+        try { localStorage.removeItem('dunas_guest_token'); } catch {}
       }
 
       const bookingResultData = { ...data, type: 'booking' };
