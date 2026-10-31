@@ -65,6 +65,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
   const [status, setStatus] = useState('idle');
   const [langOpen, setLangOpen] = useState(null);
   const [activityOpen, setActivityOpen] = useState(false);
+  const [inqActivityOpen, setInqActivityOpen] = useState(false);
   const [transportAlert, setTransportAlert] = useState(false);
   const [bookingResult, setBookingResult] = useState(null);
   const [showInvoice, setShowInvoice] = useState(false);
@@ -76,6 +77,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
   const [otpResentSuccess, setOtpResentSuccess] = useState('');
   const langRef = useRef(null);
   const activityRef = useRef(null);
+  const inqActivityRef = useRef(null);
 
   const handleResendOtpFromBooking = async () => {
     if (!user?.email) return;
@@ -97,6 +99,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
     const onClick = (e) => {
       if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(null);
       if (activityRef.current && !activityRef.current.contains(e.target)) setActivityOpen(false);
+      if (inqActivityRef.current && !inqActivityRef.current.contains(e.target)) setInqActivityOpen(false);
     };
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
@@ -120,7 +123,8 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
     fullName: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    nationality: '',
+    nationality: user?.nationality || '',
+
     invoiceType: 'PERSONAL',
     companyName: '',
     taxId: '',
@@ -137,7 +141,9 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
+    nationality: user?.nationality || '',
     language: user?.preferredLanguage || i18n.language || 'en',
+    activityType: '',
     message: '',
   });
 
@@ -252,6 +258,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
         fullName: prev.fullName || user.name || '',
         email: prev.email || user.email || '',
         phone: prev.phone || user.phone || '',
+        nationality: prev.nationality || user.nationality || '',
         language: prev.language || user.preferredLanguage || i18n.language || 'en',
       }));
       setInq((prev) => ({
@@ -259,6 +266,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
         name: prev.name || user.name || '',
         email: prev.email || user.email || '',
         phone: prev.phone || user.phone || '',
+        nationality: prev.nationality || user.nationality || '',
         language: prev.language || user.preferredLanguage || i18n.language || 'en',
       }));
     });
@@ -559,7 +567,19 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
         destinations: [tourTitle || tourId || 'Custom Experience'],
         adults: 1,
         children: 0,
-        notes: inq.message,
+        notes: (() => {
+          const tags = [];
+          if (inq.nationality?.trim()) tags.push(`[Nationality: ${inq.nationality.trim()}]`);
+          if (inq.activityType) {
+            const tierLabel = inq.activityType === 'premium' ? 'VIP Signature' : 'Classic Luxury';
+            tags.push(`[Tier: ${tierLabel}]`);
+          }
+          const prefix = tags.join(' ');
+          if (prefix) {
+            return inq.message?.trim() ? `${prefix}\n${inq.message.trim()}` : prefix;
+          }
+          return inq.message;
+        })(),
       });
       const data = await api.post('/inquiries', payload);
       setBookingResult({ ...data, type: 'inquiry' });
@@ -1335,6 +1355,20 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                     className={inputClass}
                   />
                 </div>
+                <div>
+                  <label htmlFor="inquiry-nationality" className={labelClass}>
+                    <FaGlobeAmericas className="text-gold-400" size={11} />
+                    {t('booking.nationalityLabel', 'الجنسية')}
+                  </label>
+                  <input
+                    id="inquiry-nationality"
+                    type="text"
+                    placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
+                    value={inq.nationality}
+                    onChange={(e) => setInq((p) => ({ ...p, nationality: e.target.value }))}
+                    className={inputClass}
+                  />
+                </div>
                 <div className="relative">
                   <label htmlFor="inquiry-lang" className={labelClass}>
                     <FaGlobeAmericas className="text-gold-400" size={11} />
@@ -1379,6 +1413,57 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                           <span>{t(lang.labelKey, lang.fallback)}</span>
                         </button>
                       ))}
+                    </div>
+                  )}
+                </div>
+                <div className="relative" ref={inqActivityRef}>
+                  <label htmlFor="inquiry-activity-btn" className={labelClass}>
+                    <FaStar className="text-gold-400" size={11} />
+                    {t('booking.activityType', 'Tier Category')}
+                  </label>
+                  <button
+                    id="inquiry-activity-btn"
+                    type="button"
+                    onClick={() => setInqActivityOpen(!inqActivityOpen)}
+                    className={`${inputClass} text-left flex items-center justify-between cursor-pointer`}
+                  >
+                    {inq.activityType ? (
+                      <span className="text-ivory-100 font-medium">
+                        {inq.activityType === 'standard'
+                          ? t('booking.standardCategory', 'Classic Luxury')
+                          : t('booking.premiumCategory', 'VIP Signature')}
+                      </span>
+                    ) : (
+                      <span className="text-ivory-400">{t('booking.selectActivity', 'Select Tier')}</span>
+                    )}
+                    <FaChevronDown size={10} className="text-gold-400" />
+                  </button>
+                  {inqActivityOpen && (
+                    <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-[#1a1a2e] border border-gold-500/30 rounded-xl overflow-hidden shadow-2xl">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setInq((p) => ({ ...p, activityType: 'standard' }));
+                          setInqActivityOpen(false);
+                        }}
+                        className={`w-full text-left px-3.5 py-2.5 text-body-sm transition-colors hover:bg-gold-500/10 cursor-pointer ${
+                          inq.activityType === 'standard' ? 'text-gold-400 bg-gold-500/15 font-semibold' : 'text-ivory-100'
+                        }`}
+                      >
+                        {t('booking.standardCategory', 'Classic Luxury')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setInq((p) => ({ ...p, activityType: 'premium' }));
+                          setInqActivityOpen(false);
+                        }}
+                        className={`w-full text-left px-3.5 py-2.5 text-body-sm transition-colors hover:bg-gold-500/10 cursor-pointer ${
+                          inq.activityType === 'premium' ? 'text-gold-400 bg-gold-500/15 font-semibold' : 'text-ivory-100'
+                        }`}
+                      >
+                        {t('booking.premiumCategory', 'VIP Signature')}
+                      </button>
                     </div>
                   )}
                 </div>

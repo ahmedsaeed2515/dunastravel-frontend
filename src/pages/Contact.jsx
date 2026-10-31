@@ -533,8 +533,8 @@ const Contact = () => {
                       onClick={() => setSelectedSubject(subj.id)}
                       className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                         selectedSubject === subj.id
-                          ? 'bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 text-obsidian-950 shadow-md shadow-gold-500/30 font-black'
-                          : 'bg-slate-100 dark:bg-slate-900/90 border border-gold-500/30 text-slate-900 dark:text-gold-200 hover:border-gold-400 hover:text-gold-600 dark:hover:text-gold-300'
+                          ? 'bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 text-obsidian-950 dark:text-white shadow-md shadow-gold-500/30 font-black dark:ring-2 dark:ring-white dark:ring-offset-2 dark:ring-offset-[#090D1F] dark:shadow-lg dark:shadow-gold-500/50 scale-105'
+                          : 'bg-slate-100 dark:bg-gold-500 border border-gold-500/30 dark:border-gold-400 text-slate-900 dark:text-white hover:border-gold-400 hover:text-gold-600 hover:dark:bg-gold-400 hover:dark:text-white'
                       }`}
                     >
                       {subj.label}

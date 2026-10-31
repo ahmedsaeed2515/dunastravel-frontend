@@ -572,6 +572,7 @@
   "booking.personal": "شخصي",
   "booking.phone": "رقم الهاتف",
   "booking.nationality": "الجنسية (مثال: مصري، سعودي...)",
+  "booking.nationalityLabel": "الجنسية",
   "booking.nationalityRequired": "من فضلك اكتب جنسيتك لإتمام الحجز.",
   "booking.scheduleClosed.title": "الحجز متوقف حاليًا",
   "booking.scheduleClosed.button": "الحجز مغلق",

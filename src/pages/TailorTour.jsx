@@ -655,7 +655,8 @@ const TailorTour = () => {
       </Helmet>
 
       {/* Styled Embed block for component custom CSS and Keyframes */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .stepper-container {
           position: relative;
           max-width: 800px;
@@ -1046,18 +1047,16 @@ const TailorTour = () => {
             <div className="flex justify-between relative z-10">
               <div className="text-center w-32">
                 <div
-                  className={`w-12 h-12 rounded-full mx-auto flex items-center justify-center font-bold text-lg border-2 transition-all duration-500 ${
-                    step >= 1
+                  className={`w-12 h-12 rounded-full mx-auto flex items-center justify-center font-bold text-lg border-2 transition-all duration-500 ${step >= 1
                       ? 'bg-gold-500 text-obsidian-900 border-gold-500 shadow-gold'
                       : 'bg-white text-obsidian-300 border-gray-200'
-                  }`}
+                    }`}
                 >
                   1
                 </div>
                 <div
-                  className={`mt-2 text-sm font-semibold transition-colors duration-500 ${
-                    step >= 1 ? 'text-gold-500' : 'text-obsidian-300'
-                  }`}
+                  className={`mt-2 text-sm font-semibold transition-colors duration-500 ${step >= 1 ? 'text-gold-500' : 'text-obsidian-300'
+                    }`}
                 >
                   {t('tailor.step1Label', 'Destinations')}
                 </div>
@@ -1065,18 +1064,16 @@ const TailorTour = () => {
 
               <div className="text-center w-32">
                 <div
-                  className={`w-12 h-12 rounded-full mx-auto flex items-center justify-center font-bold text-lg border-2 transition-all duration-500 ${
-                    step >= 2
+                  className={`w-12 h-12 rounded-full mx-auto flex items-center justify-center font-bold text-lg border-2 transition-all duration-500 ${step >= 2
                       ? 'bg-gold-500 text-obsidian-900 border-gold-500 shadow-gold'
                       : 'bg-white text-obsidian-300 border-gray-200'
-                  }`}
+                    }`}
                 >
                   2
                 </div>
                 <div
-                  className={`mt-2 text-sm font-semibold transition-colors duration-500 ${
-                    step >= 2 ? 'text-gold-500' : 'text-obsidian-300'
-                  }`}
+                  className={`mt-2 text-sm font-semibold transition-colors duration-500 ${step >= 2 ? 'text-gold-500' : 'text-obsidian-300'
+                    }`}
                 >
                   {t('tailor.step2Label', 'Trip Details')}
                 </div>
@@ -1145,11 +1142,10 @@ const TailorTour = () => {
                           tabIndex={0}
                           aria-pressed={isSelected}
                           aria-label={`${isSelected ? t('tailor.unselect', 'إلغاء تحديد') : t('home.select', 'تحديد')} ${dest.name}`}
-                          className={`dest-card-container group relative h-[480px] sm:h-[520px] rounded-[24px] overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2.5 cursor-pointer focus:outline-none flex flex-col justify-between ${
-                            isSelected
+                          className={`dest-card-container group relative h-[480px] sm:h-[520px] rounded-[24px] overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2.5 cursor-pointer focus:outline-none flex flex-col justify-between ${isSelected
                               ? 'border-2 border-[#F5A623] shadow-[0_0_35px_rgba(245,166,35,0.75)] ring-4 ring-[#F5A623]/60 scale-[1.02]'
                               : 'border border-white/15 hover:border-[#F5A623]/80'
-                          }`}
+                            }`}
                         >
                           {/* Full Background Cover Photo */}
                           <img
@@ -1178,7 +1174,7 @@ const TailorTour = () => {
 
                           {/* Top Badge: Country Name in Ultra-Luxury Gold Box with Bold Black Text */}
                           <div className="absolute top-0 ltr:right-8 rtl:left-8 z-20">
-                            <div 
+                            <div
                               className="px-7 py-3 rounded-b-2xl font-extrabold text-2xl sm:text-3xl font-serif shadow-[0_8px_25px_rgba(245,166,35,0.45)] flex items-center justify-center tracking-wide border-b-2 border-x-2 border-[#B38728]/70 hover:brightness-110 transition-all duration-300"
                               style={{ background: 'linear-gradient(135deg, #FFE082 0%, #F5A623 45%, #D4AF37 80%, #B38728 100%)' }}
                             >
@@ -1189,9 +1185,8 @@ const TailorTour = () => {
                           </div>
 
                           {/* Bottom Translucent Strip Overlay: Royal Blue Background & Pure White Text Above Line */}
-                          <div className={`absolute bottom-6 left-6 right-6 z-20 rounded-[20px] p-4 sm:p-5 shadow-2xl backdrop-blur-md transition-all duration-300 bg-[#041446]/90 border ${
-                            isSelected ? 'border-2 border-[#F5A623] bg-[#041446]' : 'border border-[#F5A623]/40 group-hover:bg-[#041446] group-hover:border-[#F5A623]/80'
-                          }`}>
+                          <div className={`absolute bottom-6 left-6 right-6 z-20 rounded-[20px] p-4 sm:p-5 shadow-2xl backdrop-blur-md transition-all duration-300 bg-[#041446]/90 border ${isSelected ? 'border-2 border-[#F5A623] bg-[#041446]' : 'border border-[#F5A623]/40 group-hover:bg-[#041446] group-hover:border-[#F5A623]/80'
+                            }`}>
                             {/* Description (Text above line: Pure Crisp White) */}
                             <p className="dest-card-white-text text-sm sm:text-base font-bold leading-relaxed line-clamp-2 mb-3 text-white tracking-wide" style={{ color: '#FFFFFF' }}>
                               {dest.description || t("destination.luxuryGuide", "Explore Sea & Get Relax")}
@@ -1264,11 +1259,10 @@ const TailorTour = () => {
                         }}
                         placeholder={t('tailor.fullNamePlaceholder', 'Name as shown in passport')}
                         aria-invalid={Boolean(fieldErrors.fullName)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${
-                          fieldErrors.fullName
+                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${fieldErrors.fullName
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
-                        }`}
+                          }`}
                       />
                       {fieldErrors.fullName && (
                         <p className="mt-1.5 text-xs text-red-600 font-bold flex items-center gap-1">
@@ -1290,11 +1284,10 @@ const TailorTour = () => {
                         }}
                         placeholder={t('tailor.emailPlaceholder', 'name@example.com')}
                         aria-invalid={Boolean(fieldErrors.email)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${
-                          fieldErrors.email
+                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${fieldErrors.email
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
-                        }`}
+                          }`}
                       />
                       {fieldErrors.email && (
                         <p className="mt-1.5 text-xs text-red-600 font-bold flex items-center gap-1">
@@ -1317,11 +1310,10 @@ const TailorTour = () => {
                           clearFieldError('nationality');
                         }}
                         aria-invalid={Boolean(fieldErrors.nationality)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 cursor-pointer ${
-                          fieldErrors.nationality
+                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 cursor-pointer ${fieldErrors.nationality
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
-                        }`}
+                          }`}
                       >
                         <option value="">{t('tailor.selectNationality', 'Select nationality...')}</option>
                         <option value="مصرية">{t('tailor.nationalityEgypt', 'مصرية (Egyptian)')}</option>
@@ -1365,11 +1357,10 @@ const TailorTour = () => {
                         }}
                         placeholder={t('tailor.phonePlaceholder', 'Example: 00201xxxxxxxxx')}
                         aria-invalid={Boolean(fieldErrors.phone)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${
-                          fieldErrors.phone
+                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${fieldErrors.phone
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
-                        }`}
+                          }`}
                       />
                       {fieldErrors.phone && (
                         <p className="mt-1.5 text-xs text-red-600 font-bold flex items-center gap-1">
@@ -1391,11 +1382,10 @@ const TailorTour = () => {
                         min={todayStr}
                         onChange={handleDateChange}
                         aria-invalid={Boolean(fieldErrors.travelDate || dateError)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 cursor-pointer ${
-                          fieldErrors.travelDate || dateError
+                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 cursor-pointer ${fieldErrors.travelDate || dateError
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
-                        }`}
+                          }`}
                       />
                       {(fieldErrors.travelDate || dateError) && (
                         <p className="mt-1.5 text-xs text-red-600 font-bold flex items-center gap-1">
@@ -1415,11 +1405,10 @@ const TailorTour = () => {
                           clearFieldError('budget');
                         }}
                         aria-invalid={Boolean(fieldErrors.budget)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 cursor-pointer ${
-                          fieldErrors.budget
+                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 cursor-pointer ${fieldErrors.budget
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
-                        }`}
+                          }`}
                       >
                         <option value="">{t('tailor.selectBudget', 'Select expected budget...')}</option>
                         <option value="1000-2000">{t('tailor.budgetOption1', '$1000 to $2000')}</option>
@@ -1584,13 +1573,12 @@ const TailorTour = () => {
                         maxLength={8}
                         inputMode="numeric"
                         placeholder="••••••••"
-                        className={`w-full p-4 bg-white border rounded-xl tracking-widest font-mono text-base outline-none transition-all ${
-                          partnerVerificationState === 'verified'
+                        className={`w-full p-4 bg-white border rounded-xl tracking-widest font-mono text-base outline-none transition-all ${partnerVerificationState === 'verified'
                             ? '!border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.18)] bg-emerald-50/20'
                             : partnerVerificationState === 'unverified'
                               ? '!border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.15)] bg-amber-50/20'
                               : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
-                        }`}
+                          }`}
                       />
                       {partnerVerificationState === 'verifying' && (
                         <div className="absolute end-4 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -1693,7 +1681,7 @@ const TailorTour = () => {
             </p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <a
-                href="https://wa.me/201004146843"
+                href="https://wa.me/201149401111"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 border border-emerald-500/30 text-xs font-bold transition-all shadow-xs hover:scale-105"

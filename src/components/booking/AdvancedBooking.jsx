@@ -81,6 +81,7 @@ export default function AdvancedBooking({
 
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [activityDropdownOpen, setActivityDropdownOpen] = useState(false);
+  const [inqActivityDropdownOpen, setInqActivityDropdownOpen] = useState(false);
 
   const containerRef = useRef(null);
 
@@ -151,6 +152,7 @@ export default function AdvancedBooking({
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setLangDropdownOpen(false);
         setActivityDropdownOpen(false);
+        setInqActivityDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleOutsideClick);
@@ -233,7 +235,19 @@ export default function AdvancedBooking({
           destinations: [tourTitle || 'Custom Luxury Experience'],
           adults: formData.adults,
           children: formData.children,
-          notes: formData.message || formData.notes,
+          notes: (() => {
+            const tags = [];
+            if (formData.nationality?.trim()) tags.push(`[Nationality: ${formData.nationality.trim()}]`);
+            if (formData.activityType) {
+              const tierLabel = formData.activityType === 'premium' ? 'Option 5* (VIP Signature)' : 'Option 4* (Classic Luxury)';
+              tags.push(`[Tier: ${tierLabel}]`);
+            }
+            const prefix = tags.join(' ');
+            if (prefix) {
+              return formData.message || formData.notes ? `${prefix}\n${formData.message || formData.notes}` : prefix;
+            }
+            return formData.message || formData.notes;
+          })(),
         };
 
         const data = await api.post('/inquiries', payload);
@@ -575,6 +589,7 @@ export default function AdvancedBooking({
                       onClick={() => {
                         updateField('activityType', 'standard');
                         setActivityDropdownOpen(false);
+        setInqActivityDropdownOpen(false);
                       }}
                       className={`w-full text-left px-3.5 py-2.5 text-body-sm transition-colors hover:bg-gold-500/10 ${
                         formData.activityType === 'standard'
@@ -589,6 +604,7 @@ export default function AdvancedBooking({
                       onClick={() => {
                         updateField('activityType', 'premium');
                         setActivityDropdownOpen(false);
+        setInqActivityDropdownOpen(false);
                       }}
                       className={`w-full text-left px-3.5 py-2.5 text-body-sm transition-colors hover:bg-gold-500/10 ${
                         formData.activityType === 'premium'
@@ -870,6 +886,80 @@ export default function AdvancedBooking({
                     className={inputStyle}
                   />
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="modal-inq-nationality" className={labelStyle}>
+                  {t('booking.nationalityLabel', 'الجنسية')}
+                </label>
+                <input
+                  id="modal-inq-nationality"
+                  type="text"
+                  value={formData.nationality}
+                  onChange={(e) => updateField('nationality', e.target.value)}
+                  placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
+                  className={inputStyle}
+                />
+              </div>
+
+              {/* Activity Tier Category */}
+              <div className="relative">
+                <label htmlFor="modal-inq-tier-btn" className={labelStyle}>
+                  <FaBuilding className="text-gold-400" size={11} />
+                  {t('booking.activityType', 'Hotel Category / Tier')}
+                </label>
+                <button
+                  id="modal-inq-tier-btn"
+                  type="button"
+                  onClick={() => setInqActivityDropdownOpen(!inqActivityDropdownOpen)}
+                  className={`${inputStyle} text-left flex items-center justify-between cursor-pointer`}
+                >
+                  {formData.activityType ? (
+                    <span className="text-ivory-100">
+                      {formData.activityType === 'standard'
+                        ? t('booking.standardCategory', 'Option 4* (Classic Luxury)')
+                        : t('booking.premiumCategory', 'Option 5* (VIP Signature)')}
+                    </span>
+                  ) : (
+                    <span className="text-ivory-400">
+                      {t('booking.selectActivity', 'Select Hotel Tier...')}
+                    </span>
+                  )}
+                  <FaChevronDown size={10} className="text-gold-400" />
+                </button>
+
+                {inqActivityDropdownOpen && (
+                  <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-[#1a1a2e] border border-gold-500/30 rounded-xl overflow-hidden shadow-2xl">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        updateField('activityType', 'standard');
+                        setInqActivityDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2.5 text-body-sm transition-colors hover:bg-gold-500/10 cursor-pointer ${
+                        formData.activityType === 'standard'
+                          ? 'text-gold-400 bg-gold-500/15 font-semibold'
+                          : 'text-ivory-100'
+                      }`}
+                    >
+                      {t('booking.standardCategory', 'Option 4* (Classic Luxury)')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        updateField('activityType', 'premium');
+                        setInqActivityDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2.5 text-body-sm transition-colors hover:bg-gold-500/10 cursor-pointer ${
+                        formData.activityType === 'premium'
+                          ? 'text-gold-400 bg-gold-500/15 font-semibold'
+                          : 'text-ivory-100'
+                      }`}
+                    >
+                      {t('booking.premiumCategory', 'Option 5* (VIP Signature)')}
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div>

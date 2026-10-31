@@ -110,7 +110,8 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
     fullName: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    nationality: '',
+    nationality: user?.nationality || '',
+
     invoiceType: 'PERSONAL',
     companyName: '',
     taxId: '',
@@ -157,7 +158,9 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
+    nationality: user?.nationality || '',
     language: '',
+    activityType: '',
     message: ''
   });
 
@@ -364,7 +367,19 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
         destinations: [tourTitle || 'Turkey Experience'],
         adults: 1,
         children: 0,
-        notes: inquiryForm.message
+        notes: (() => {
+          const tags = [];
+          if (inquiryForm.nationality?.trim()) tags.push(`[Nationality: ${inquiryForm.nationality.trim()}]`);
+          if (inquiryForm.activityType) {
+            const tierLabel = inquiryForm.activityType === 'premium' ? 'Premium Category' : 'Standard Category';
+            tags.push(`[Tier: ${tierLabel}]`);
+          }
+          const prefix = tags.join(' ');
+          if (prefix) {
+            return inquiryForm.message?.trim() ? `${prefix}\n${inquiryForm.message.trim()}` : prefix;
+          }
+          return inquiryForm.message;
+        })()
       };
 
       const data = await api.post('/inquiries', payload);
@@ -1009,6 +1024,20 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                 />
               </div>
 
+              <div>
+                <label htmlFor="inquiry-nationality" className={labelStyle}>
+                  {t('booking.nationalityLabel', 'الجنسية')}
+                </label>
+                <input
+                  id="inquiry-nationality"
+                  type="text"
+                  value={inquiryForm.nationality}
+                  onChange={(e) => setInquiryForm({ ...inquiryForm, nationality: e.target.value })}
+                  placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
+                  className={inputStyle}
+                />
+              </div>
+
               {/* Inquiry Language */}
               <div className="relative">
                 <label htmlFor="inquiry-lang" className={labelStyle}>
@@ -1056,6 +1085,59 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                         <span>{t(item.labelKey, item.fallback)}</span>
                       </button>
                     ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Type of Activity Category */}
+              <div className="relative">
+                <label htmlFor="inquiry-activity-btn" className={labelStyle}>
+                  <FaStar className="inline mr-1.5 text-gold-400 text-[11px]" />
+                  {t('booking.activityType', 'Type of Activity')}
+                </label>
+                <button
+                  id="inquiry-activity-btn"
+                  type="button"
+                  onClick={() => setOpenDropdown(openDropdown === 'inquiry_activity' ? null : 'inquiry_activity')}
+                  className={`${inputStyle} text-left flex items-center gap-2 cursor-pointer`}
+                >
+                  {inquiryForm.activityType ? (
+                    <span>
+                      {inquiryForm.activityType === 'standard'
+                        ? t('booking.standardCategory', 'Standard Category')
+                        : t('booking.premiumCategory', 'Premium Category')}
+                    </span>
+                  ) : (
+                    <span className="text-ivory-400">{t('booking.selectActivity', 'Select...')}</span>
+                  )}
+                </button>
+
+                {openDropdown === 'inquiry_activity' && (
+                  <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-[#1a1a2e] border border-[rgba(201,162,39,0.15)] rounded-xl overflow-hidden shadow-xl">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setInquiryForm({ ...inquiryForm, activityType: 'standard' });
+                        setOpenDropdown(null);
+                      }}
+                      className={`w-full text-left px-4 py-3 flex items-center gap-2 text-body-md transition-colors hover:bg-[rgba(255,252,247,0.06)] cursor-pointer ${
+                        inquiryForm.activityType === 'standard' ? 'text-gold-500 bg-[rgba(201,162,39,0.06)]' : 'text-ivory-50'
+                      }`}
+                    >
+                      {t('booking.standardCategory', 'Standard Category')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setInquiryForm({ ...inquiryForm, activityType: 'premium' });
+                        setOpenDropdown(null);
+                      }}
+                      className={`w-full text-left px-4 py-3 flex items-center gap-2 text-body-md transition-colors hover:bg-[rgba(255,252,247,0.06)] cursor-pointer ${
+                        inquiryForm.activityType === 'premium' ? 'text-gold-500 bg-[rgba(201,162,39,0.06)]' : 'text-ivory-50'
+                      }`}
+                    >
+                      {t('booking.premiumCategory', 'Premium Category')}
+                    </button>
                   </div>
                 )}
               </div>

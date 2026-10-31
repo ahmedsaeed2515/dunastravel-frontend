@@ -567,6 +567,7 @@
   "booking.personal": "Personale",
   "booking.phone": "Numero di telefono",
   "booking.nationality": "Nazionalità (es. Egiziano, Saudita...)",
+  "booking.nationalityLabel": "Nazionalità",
   "booking.nationalityRequired": "Inserisci la tua nazionalità per completare la prenotazione.",
   "booking.scheduleClosed.title": "Le prenotazioni sono attualmente chiuse",
   "booking.scheduleClosed.button": "Prenotazioni chiuse",
