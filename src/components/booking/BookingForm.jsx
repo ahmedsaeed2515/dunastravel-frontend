@@ -51,11 +51,16 @@ const languages = [
   { value: 'ar', flag: '🇪🇬', labelKey: 'languages.arabic', fallback: 'Arabic' },
 ];
 
-const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoice, requireTransportChoice, initialPrice = 0, priceDisplayMode = 'PRICE', priceLabel = '', bookingRules = null }) => {
+const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoice, requireTransportChoice, initialPrice, priceDisplayMode = 'PRICE', priceLabel = '', bookingRules = null }) => {
   const { t, i18n } = useTranslation();
   const { user, resendVerification } = useAuth();
   const { currency: selectedCurrency, convertPrice, ecbEurUsdRate, ecbUsdEurRate, eurRate } = useCurrency();
   const bookingTourKey = tourSlug || tourId;
+
+  // A tour is only bookable online when it has a real numeric price.
+  // `undefined` means the caller deliberately doesn't manage pricing (e.g. services).
+  const isPriceUnavailable =
+    initialPrice !== undefined && !(Number(initialPrice) > 0);
 
   useEffect(() => {
     trackEvent('booking_started', { tourSlug: tourTitle || tourId });
@@ -78,6 +83,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
   const langRef = useRef(null);
   const activityRef = useRef(null);
   const inqActivityRef = useRef(null);
+  const priceNoticeRef = useRef(null);
 
   const handleResendOtpFromBooking = async () => {
     if (!user?.email) return;
@@ -354,6 +360,15 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Tours without a price (or with a 0 price) cannot be booked online.
+    if (isPriceUnavailable) {
+      const noticeEl = priceNoticeRef.current;
+      if (noticeEl && typeof noticeEl.scrollIntoView === 'function') {
+        noticeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
 
     // Enforce recurring booking rules before anything else
     if (scheduleStatus.closed) {
@@ -1185,7 +1200,8 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
 
                   const normalizedPriceMode = String(priceDisplayMode || 'PRICE').toUpperCase();
                   const trimmedPriceLabel = String(priceLabel || '').trim();
-                  const hideNumericTotal = normalizedPriceMode === 'HIDDEN' ||
+                  const hideNumericTotal = isPriceUnavailable ||
+                    normalizedPriceMode === 'HIDDEN' ||
                     (normalizedPriceMode === 'CUSTOM_LABEL' && !trimmedPriceLabel);
                   const showCustomTotal = normalizedPriceMode === 'CUSTOM_LABEL' && Boolean(trimmedPriceLabel);
 
@@ -1277,9 +1293,39 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                   </div>
                 )}
 
+                {/* Price unavailable — online booking disabled */}
+                {isPriceUnavailable && (
+                  <div
+                    ref={priceNoticeRef}
+                    role="alert"
+                    className="bg-red-500/15 border border-red-500/40 rounded-xl px-4 py-3 space-y-1 text-center"
+                  >
+                    <p className="text-body-sm text-red-400 font-bold">
+                      {t(
+                        'booking.priceUnavailable.title',
+                        'This trip cannot be booked at the moment'
+                      )}
+                    </p>
+                    <p className="text-[11px] text-red-300/90 leading-snug">
+                      {t(
+                        'booking.priceUnavailable.desc',
+                        'This trip cannot be booked at the moment. For more details, please contact Dunas Travel customer service.'
+                      )}
+                    </p>
+                  </div>
+                )}
+
                 {/* Submit Action */}
                 <button
                   type="submit"
+                  onClick={() => {
+                    if (isPriceUnavailable) {
+                      const noticeEl = priceNoticeRef.current;
+                      if (noticeEl && typeof noticeEl.scrollIntoView === 'function') {
+                        noticeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }
+                    }
+                  }}
                   disabled={status === 'submitting' || scheduleStatus.closed}
                   className="w-full py-3.5 px-6 bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-obsidian-900 font-bold rounded-xl shadow-[0_4px_20px_rgba(245,166,35,0.3)] hover:shadow-[0_6px_30px_rgba(245,166,35,0.45)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-[13px] uppercase tracking-[1.5px] flex items-center justify-center gap-2 cursor-pointer"
                 >

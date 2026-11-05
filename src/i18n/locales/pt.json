@@ -571,6 +571,8 @@
   "booking.nationalityRequired": "Introduza a sua nacionalidade para concluir a reserva.",
   "booking.scheduleClosed.title": "As reservas estão atualmente encerradas",
   "booking.scheduleClosed.button": "Reservas encerradas",
+  "booking.priceUnavailable.title": "Esta viagem não pode ser reservada neste momento",
+  "booking.priceUnavailable.desc": "Esta viagem não pode ser reservada neste momento. Para mais detalhes, entre em contato com o atendimento ao cliente da Dunas Travel.",
   "tourCard.startingFrom": "Começando de",
   "tourCard.perPerson": "Por pessoa",
   "booking.pickupLocation": "Local de retirada",

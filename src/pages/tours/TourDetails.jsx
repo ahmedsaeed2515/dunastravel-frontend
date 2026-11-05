@@ -90,6 +90,17 @@ const TourDetails = () => {
   const customPriceLabel = (tour.priceLabel || '').trim();
   const showNumericPricing = priceMode === 'PRICE';
 
+  // Base price used by the booking form. Tours without a valid numeric price
+  // resolve to 0 so the form can block online booking and ask the guest to
+  // contact customer service instead.
+  const bookingBasePrice = (() => {
+    const base = Number(tour.basePriceUsd);
+    if (Number.isFinite(base) && base > 0) return base;
+    const legacy = Number(tour.price);
+    if (Number.isFinite(legacy) && legacy > 0) return legacy;
+    return 0;
+  })();
+
   // Recurring booking rules (daily cutoff / blocked weekdays / date ranges).
   // Passed to the booking form, which blocks submission per selected date.
   // The server re-validates these on POST /bookings regardless.
@@ -570,7 +581,7 @@ const TourDetails = () => {
           {/* Sidebar - Booking Form */}
           <div className="lg:col-span-1">
             <div className="sticky top-28">
-              <BookingForm tourId={tour.id} tourSlug={tour.slug} tourTitle={title} durationDays={extractTourDays(tour)} initialPrice={tour.basePriceUsd || tour.price} priceDisplayMode={priceMode} priceLabel={customPriceLabel} bookingRules={bookingRules} />
+              <BookingForm tourId={tour.id} tourSlug={tour.slug} tourTitle={title} durationDays={extractTourDays(tour)} initialPrice={bookingBasePrice} priceDisplayMode={priceMode} priceLabel={customPriceLabel} bookingRules={bookingRules} />
             </div>
           </div>
 

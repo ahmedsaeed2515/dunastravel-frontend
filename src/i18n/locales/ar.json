@@ -576,6 +576,8 @@
   "booking.nationalityRequired": "من فضلك اكتب جنسيتك لإتمام الحجز.",
   "booking.scheduleClosed.title": "الحجز متوقف حاليًا",
   "booking.scheduleClosed.button": "الحجز مغلق",
+  "booking.priceUnavailable.title": "هذه الرحلة لا يمكن حجزها الآن",
+  "booking.priceUnavailable.desc": "هذه الرحلة لا يمكن حجزها الآن. ولمزيد من التفاصيل، يُرجى التواصل مع خدمة عملاء دوناس ترافل.",
   "tourCard.perPerson": "للشخص",
   "booking.pickupLocation": "موقع الالتقاط",
   "booking.pickupTime": "وقت الاستقبال",

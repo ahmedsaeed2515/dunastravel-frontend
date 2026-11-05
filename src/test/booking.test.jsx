@@ -212,6 +212,32 @@ describe('Prompt 04: Booking Engine & Customer Inquiries Integration', () => {
     );
   });
 
+  it('blocks online booking and shows the contact-customer-service notice when the trip price is 0 (PRICE-001)', async () => {
+    mockAuthUser = { id: 'usr-1', name: 'Robert Miller', email: 'robert@dunas.com', phone: '+1987654321', isVerified: true };
+    vi.spyOn(api, 'post').mockImplementation((path) => {
+      if (path === '/bookings/calculate') return Promise.resolve({});
+      return Promise.resolve({});
+    });
+
+    const { container } = render(
+      <BookingForm tourId="tour-1" tourTitle="Cairo Discovery" initialPrice={0} />,
+    );
+
+    expect(
+      screen.getAllByText(/This trip cannot be booked at the moment/i).length,
+    ).toBeGreaterThanOrEqual(2);
+    expect(
+      screen.getByText(/contact Dunas Travel customer service/i),
+    ).toBeInTheDocument();
+
+    const form = container.querySelector('form');
+    await act(async () => {
+      fireEvent.submit(form);
+    });
+
+    expect(api.post).not.toHaveBeenCalledWith('/bookings', expect.anything());
+  });
+
   it('handles 409 conflict and 422 validation errors with localized alert messages', async () => {
     mockAuthUser = { id: 'usr-1', name: 'Robert Miller', email: 'robert@dunas.com', phone: '+1987654321' };
     vi.spyOn(api, 'post').mockImplementation((path) => {
