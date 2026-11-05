@@ -5,6 +5,11 @@ import { Link } from "react-router-dom";
 import { FaPlay, FaTimes } from "react-icons/fa";
 import "./HomeHeroSection.css";
 
+// The circular badge keeps the same English lettering in every language so the
+// rotating-ring design looks identical across the whole site.
+const VIDEO_RING_LABEL = "WATCH VIDEO";
+const VIDEO_RING_COPIES = 3;
+
 const SLIDE_DATA = [
   {
     id: "hero-s1",
@@ -39,6 +44,9 @@ const SLIDE_DATA = [
 ];
 
 function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
+  const watchVideoLabel = t("home.heroWatchVideo", "WATCH VIDEO");
+  const ringPathId = `circlePath-${slide.id}`;
+
   const renderAnimatedWord = (text, startCharIdx = 0) => {
     if (!text) return null;
     if (isRtl) {
@@ -146,18 +154,25 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
             onClick={() => setIsVideoOpen(true)}
             style={{ cursor: "pointer" }}
           >
-            <svg viewBox="0 0 200 200">
+            <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
               <defs>
                 <path
-                  id={`circlePath-${slide.id}`}
-                  d="M 100, 100 m -62, 0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"
+                  id={ringPathId}
+                  d="M 100, 100 m -78, 0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0"
                 ></path>
               </defs>
-              <g className="rotate-text" style={{ transformOrigin: "100px 100px" }}>
-                <text>
-                  <textPath href={`#circlePath-${slide.id}`} startOffset="0%">
-                    {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp; {t("home.heroWatchVideo", "WATCH VIDEO")} &nbsp;
-                  </textPath>
+              <g className="rotate-text">
+                <text className="no-capitalize">
+                  {Array.from({ length: VIDEO_RING_COPIES }, (_, copyIndex) => (
+                    <textPath
+                      key={copyIndex}
+                      className="no-capitalize"
+                      href={`#${ringPathId}`}
+                      startOffset={`${(copyIndex * 100) / VIDEO_RING_COPIES}%`}
+                    >
+                      {VIDEO_RING_LABEL}
+                    </textPath>
+                  ))}
                 </text>
               </g>
             </svg>
@@ -169,10 +184,10 @@ function HeroSlideItem({ slide, isActive, isRtl, setIsVideoOpen, t }) {
                 e.stopPropagation();
                 setIsVideoOpen(true);
               }}
-              aria-label="Play Video"
+              aria-label={watchVideoLabel}
             >
               <span className="play-now">
-                <FaPlay style={{ fontSize: "7px", marginLeft: "1px" }} />
+                <FaPlay />
               </span>
             </button>
           </div>
