@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet-async';
 import { 
   FaUserCircle, FaBookmark, FaLock, FaUser, FaEnvelope, 
   FaPhone, FaSignOutAlt, FaCalendarAlt, FaFileInvoiceDollar, FaGlobeAmericas,
-  FaHeart, FaTimesCircle, FaEye, FaEyeSlash, FaCheck, FaTimes
+  FaHeart, FaTimesCircle, FaEye, FaEyeSlash, FaCheck, FaTimes, FaHeadset
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import { useWishlist } from '../../hooks/useWishlist';
@@ -412,16 +412,18 @@ const UserDashboard = ({ initialTab = 'overview' }) => {
                             >
                               <FaFileInvoiceDollar /> {t('booking.viewInvoice', 'Invoice')}
                             </button>
-                            {b.status !== 'CANCELLED' && b.status !== 'cancelled' && (
-                              <button
-                                type="button"
-                                disabled={cancellingCode === (b.referenceCode || b.id)}
-                                onClick={() => handleCancelBooking(b.referenceCode || b.id)}
-                                className="px-3 py-2 bg-red-500/15 border border-red-500/30 text-red-400 font-semibold rounded-lg text-[11px] uppercase tracking-[1px] flex items-center gap-1 hover:bg-red-500/25 transition-all"
-                              >
-                                <FaTimesCircle /> {t('common.cancel', 'Cancel')}
-                              </button>
-                            )}
+                            <a
+                              href={`https://wa.me/201111940114?text=${encodeURIComponent(
+                                i18n.language === 'ar'
+                                  ? 'مرحباً، أود الاستفسار بخصوص الحجز رقم ' + (b.referenceCode || b.id)
+                                  : 'Hello, I would like to inquire about booking ref ' + (b.referenceCode || b.id)
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-3 py-2 bg-white/5 border border-white/10 text-ivory-300 hover:text-gold-400 font-semibold rounded-lg text-[11px] uppercase tracking-[1px] flex items-center gap-1 hover:bg-white/10 transition-all"
+                            >
+                              <FaHeadset /> {t('booking.support', 'Concierge')}
+                            </a>
                           </div>
                         </div>
                       </div>
