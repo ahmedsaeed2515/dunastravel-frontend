@@ -1552,10 +1552,10 @@ const HomeExperienceSection = () => {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="overflow-hidden mt-12 bg-white/5 backdrop-blur-2xl rounded-3xl p-8 border border-gold-500/20 shadow-2xl"
+                    className="overflow-hidden mt-10 sm:mt-14"
                   >
-                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gold-500/20">
-                      <h3 className="text-2xl md:text-3xl text-white font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-6 sm:mb-8 pb-4 border-b border-gold-500/20">
+                      <h3 className="text-xl sm:text-2xl md:text-3xl text-white font-serif" style={{ fontFamily: "'Playfair Display', serif" }}>
                         {livePackageCards.find(p => p.id === activePackage)?.name} — {t("nav.tours", "Tours")}
                       </h3>
                       <button
@@ -1566,7 +1566,7 @@ const HomeExperienceSection = () => {
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                       {activePackageTours.slice(0, 6).map((tour) => (
                         <Suspense key={tour.id} fallback={<div className="h-64 bg-primary-800/20 rounded-xl animate-pulse" />}>
                           <TourCard
