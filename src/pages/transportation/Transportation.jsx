@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
@@ -128,10 +128,12 @@ const Transportation = () => {
 
   return (
     <div className="w-full bg-obsidian-50 dark:bg-obsidian-950 pb-24 transition-colors duration-300">
-      <Helmet>
-        <title>{t('nav.transportation', 'Transportation')} | {t('services.seoServices', 'Luxury Services')}</title>
-        <meta name="description" content={t('transportation.seoDesc', 'Premium vehicles with professional drivers across Egypt, Jordan & Turkey')} />
-      </Helmet>
+      <SEOHead
+        title={`${t('nav.transportation', 'Transportation')} | ${t('services.seoServices', 'Luxury Services')}`}
+        description={t('transportation.seoDesc', 'Premium VIP vehicles with certified professional drivers across Egypt, Jordan & Turkey. Airport meet and assist, private luxury transfers.')}
+        canonical="https://dunas-travel.com/transportation"
+        ogImage="/imgs/transportation-hero.png"
+      />
 
       {/* Hero Section */}
       <section className="relative w-full h-[480px] md:h-[650px] lg:h-[720px] flex items-center justify-start overflow-hidden bg-obsidian-950">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaChevronRight } from 'react-icons/fa';
@@ -18,10 +18,11 @@ export default function MultiCountryTours() {
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
-      <Helmet>
-        <title>{`${t('programs.multiCountryTitle', lang === 'ar' ? 'جولات متعددة الدول' : 'Multi-Country Tours')} | Dunas Travel`}</title>
-        <meta name="description" content={t('programs.multiCountryDesc', lang === 'ar' ? 'استكشف جولاتنا عبر بلدان متعددة' : 'Explore our multi-country tours')} />
-      </Helmet>
+      <SEOHead
+        title={lang === 'ar' ? 'رحلات سياحية متعددة الدول | مصر، الأردن، تركيا ودبي' : 'Multi-Country Luxury Tours | Egypt, Jordan, Turkey & Dubai Combinations'}
+        description={lang === 'ar' ? 'باقات سياحية مجمعة فاخرة تربط بين مصر، الأردن، تركيا، دبي، المغرب واليونان مع إرشاد خاص وتنقلات VIP.' : 'Seamless luxury multi-destination journeys combining Egypt with Jordan, Turkey, Dubai, Morocco, or Greece. Private guides and VIP logistics.'}
+        canonical="https://dunas-travel.com/programs/multi-country"
+      />
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection

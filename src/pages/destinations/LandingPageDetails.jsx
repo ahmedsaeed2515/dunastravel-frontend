@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -366,11 +367,21 @@ export default function LandingPageDetails({ destinationOnly = false, slug: slug
 
   return (
     <main className="bg-obsidian-50 dark:bg-[#0c0d19] pb-24 text-start">
-      <Helmet>
-        <title>{`${effectiveLandingPage.seoTitle || heroTitle} | Dunas Travel`}</title>
-        {effectiveLandingPage.seoDescription && <meta name="description" content={effectiveLandingPage.seoDescription} />}
-        {effectiveLandingPage.seoKeywords && <meta name="keywords" content={effectiveLandingPage.seoKeywords} />}
-      </Helmet>
+      <SEOHead
+        title={effectiveLandingPage.seoTitle || heroTitle}
+        description={effectiveLandingPage.seoDescription || effectiveLandingPage.subtitle || effectiveLandingPage.description}
+        keywords={effectiveLandingPage.seoKeywords || `${heroTitle} luxury tours, ${heroTitle} travel, private guide`}
+        canonical={`https://dunas-travel.com${destinationOnly ? `/destinations/${effectiveLandingPage.slug || ''}` : `/programs/${effectiveLandingPage.slug || ''}`}`}
+        ogImage={heroImage}
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'TouristDestination',
+          name: heroTitle,
+          description: effectiveLandingPage.seoDescription || effectiveLandingPage.subtitle,
+          image: heroImage,
+          url: `https://dunas-travel.com${destinationOnly ? `/destinations/${effectiveLandingPage.slug || ''}` : `/programs/${effectiveLandingPage.slug || ''}`}`,
+        }}
+      />
 
       {/* Luxury Hero Section */}
       {effectiveLandingPage.heroVideoUrl ? (

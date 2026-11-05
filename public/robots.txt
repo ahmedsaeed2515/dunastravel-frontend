@@ -1,3 +1,42 @@
+# ==============================================================================
+# DUNAS TRAVEL - ROBOTS.TXT
+# Luxury Travel Concierge & Tour Operator
+# https://dunas-travel.com
+# ==============================================================================
+
 User-agent: *
 Allow: /
+Allow: /destinations
+Allow: /destinations/*
+Allow: /tours
+Allow: /tours/*
+Allow: /programs/*
+Allow: /hotels
+Allow: /hotels/*
+Allow: /services
+Allow: /transportation
+Allow: /tailor-tour
+Allow: /blogs
+Allow: /blogs/*
+Allow: /about
+Allow: /contact
+Allow: /faq
+Allow: /gallery
+Allow: /imgs/
+Allow: /images/
+
+# Disallow Private & User-Specific Endpoints
+Disallow: /auth/
+Disallow: /user/
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /payment/
+Disallow: /booking/cancel
+Disallow: /booking/success
+Disallow: /invoice/
+Disallow: /*?*token=*
+Disallow: /*?*sessionId=*
+
+# Explicit Sitemaps
 Sitemap: https://dunas-travel.com/sitemap.xml
+Sitemap: https://api.dunas-travel.com/api/sitemap.xml

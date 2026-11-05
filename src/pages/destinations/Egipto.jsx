@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -84,20 +85,24 @@ export default function Egipto() {
 
   return (
     <div className="w-full min-h-screen bg-obsidian-50 dark:bg-[#0c0d19] pb-24 text-start">
-      <Helmet>
-        <title>{t('dest.egypt.seoTitle', 'Luxury Egypt Tours & Vacations | Dunas Travel')}</title>
-        <meta
-          name="description"
-          content={t(
-            'dest.egypt.seoDesc',
-            'Discover Egypt in grand style. From the majestic Pyramids of Giza to the temples of Luxor and the Red Sea coast, embark on an unforgettable luxury journey.'
-          )}
-        />
-        <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
-        <link rel="preconnect" href="https://sft-nationaltours.com" />
-        <link rel="preconnect" href="https://hl-tourism.com" />
-        <link rel="preload" as="image" href={dynamicHeroImage} fetchpriority="high" />
-      </Helmet>
+      <SEOHead
+        title={t('dest.egypt.seoTitle', 'Luxury Egypt Tours & Vacations | Private Nile Cruises & Bespoke Travel')}
+        description={t(
+          'dest.egypt.seoDesc',
+          'Discover Egypt in grand style. From the majestic Pyramids of Giza to the temples of Luxor and the Red Sea coast, embark on an unforgettable luxury journey with Dunas Travel.'
+        )}
+        keywords="luxury egypt tours, private nile cruise, cairo luxor aswan private tour, egypt bespoke holidays, dunas travel egypt"
+        canonical="https://dunas-travel.com/destinations/egypt"
+        ogImage={dynamicHeroImage}
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'TouristDestination',
+          name: 'Egypt',
+          description: 'Timeless luxury tours and private Nile cruises across Egypt by Dunas Travel.',
+          image: dynamicHeroImage,
+          url: 'https://dunas-travel.com/destinations/egypt',
+        }}
+      />
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection

@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useEffect, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "../seo/SEOHead";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
@@ -828,27 +828,19 @@ const HomeExperienceSection = () => {
 
   return (
     <div className="w-full">
-      <Helmet>
-        <title>
-          {t(
-            "home.metaTitle",
-            "Dunas Travel | Award-Winning Experiences in Egypt, Jordan, Turkey, Tunisia, Greece, Holy Land, Morocco & Dubai",
-          )}
-        </title>
-        <meta
-          name="description"
-          content={t(
-            "home.metaDesc",
-            "Experience true luxury with Dunas Travel — curated journeys through the timeless wonders of Egypt, Jordan, Turkey, Tunisia, Greece, the Holy Land, Morocco, and Dubai.",
-          )}
-        />
-        <meta property="og:title" content="Dunas Travel" />
-        <meta
-          property="og:description"
-          content="Premium luxury travel agency — Egypt, Jordan, Turkey, Tunisia, Greece, Holy Land, Morocco & Dubai"
-        />
-        <meta property="og:image" content="/dunas-travel-logo.webp" />
-      </Helmet>
+      <SEOHead
+        title={t(
+          "home.metaTitle",
+          "Award-Winning Experiences in Egypt, Jordan, Turkey, Tunisia, Greece, Holy Land, Morocco and Dubai"
+        )}
+        description={t(
+          "home.metaDesc",
+          "Experience true luxury with Dunas Travel — curated journeys through the timeless wonders of Egypt, Jordan, Turkey, Tunisia, Greece, the Holy Land, Morocco, and Dubai."
+        )}
+        keywords="luxury egypt tours, private middle east holidays, nile cruise private tour, bespoke luxury travel cairo luxor aswan, jordan petra luxury, turkey cappadocia tour"
+        canonical="https://dunas-travel.com/"
+        ogImage="https://dunas-travel.com/imgs/slider-abu-simbel.webp"
+      />
 
       {/* Yacht Dark Hero Section */}
       <HomeHeroSection />

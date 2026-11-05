@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/seo/SEOHead';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -107,10 +107,28 @@ const Contact = () => {
 
   return (
     <div className="w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-ivory-50 min-h-screen selection:bg-gold-500 selection:text-obsidian-950 transition-colors duration-300">
-      <Helmet>
-        <title>{t('contact.title', 'Contact Us | Dunas Travel Luxury Concierge')}</title>
-        <meta name="description" content={t('contact.seoDesc', 'Get in touch with our luxury travel concierges to start crafting your bespoke journey to Egypt, Jordan, and Turkey.')} />
-      </Helmet>
+      <SEOHead
+        title={t('contact.title', 'Contact Us | Dunas Travel Luxury Concierge')}
+        description={t('contact.seoDesc', 'Get in touch with our luxury travel concierges to start crafting your bespoke journey to Egypt, Jordan, and Turkey.')}
+        canonical="https://dunas-travel.com/contact"
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'ContactPage',
+          name: 'Contact Dunas Travel Concierge',
+          url: 'https://dunas-travel.com/contact',
+          mainEntity: {
+            '@type': 'TravelAgency',
+            name: 'Dunas Travel',
+            telephone: '+201000000000',
+            email: 'booking.online@dunas-travel.com',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Cairo',
+              addressCountry: 'EG',
+            },
+          },
+        }}
+      />
 
       {/* ========================================================================= */}
       {/* 1. HERO SECTION WITH DYNAMIC PARALLAX & HIGH-VISIBILITY WORLD CLOCKS */}

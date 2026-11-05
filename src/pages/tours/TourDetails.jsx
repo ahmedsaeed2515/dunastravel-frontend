@@ -158,7 +158,7 @@ const TourDetails = () => {
     provider: {
       '@type': 'TravelAgency',
       name: 'Dunas Travel',
-      url: 'https://dunastravel.com',
+      url: 'https://dunas-travel.com',
     },
   };
 
@@ -170,9 +170,9 @@ const TourDetails = () => {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://dunastravel.com/' },
-      { '@type': 'ListItem', position: 2, name: destinationName, item: `https://dunastravel.com${destinationUrl}` },
-      { '@type': 'ListItem', position: 3, name: title, item: `https://dunastravel.com/tours/${tour.slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://dunas-travel.com/' },
+      { '@type': 'ListItem', position: 2, name: destinationName, item: `https://dunas-travel.com${destinationUrl}` },
+      { '@type': 'ListItem', position: 3, name: title, item: `https://dunas-travel.com/tours/${tour.slug}` },
     ],
   };
 

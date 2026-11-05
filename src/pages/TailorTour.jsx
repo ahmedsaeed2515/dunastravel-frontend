@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/seo/SEOHead';
 import { useTranslation } from 'react-i18next';
 import { supportedLocale } from '../utils/locale';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -643,16 +643,12 @@ const TailorTour = () => {
 
   return (
     <div className="w-full bg-obsidian-50 pb-24 font-body">
-      <Helmet>
-        <title>{t('tailor.title', 'Tailor Your Bespoke Tour | Dunas Travel')}</title>
-        <meta
-          name="description"
-          content={t(
-            'tailor.seoDesc',
-            'Customize your luxury dream holiday with Dunas Travel. Choose your destinations, details, and let our experts design your perfect itinerary.'
-          )}
-        />
-      </Helmet>
+      <SEOHead
+        title={t('tailor.seoTitle', 'Tailor-Made Luxury Journey | Custom Itinerary Concierge')}
+        description={t('tailor.seoDesc', 'Design your dream itinerary to Egypt, Jordan, Turkey, or Morocco. Personalize your dates, private guides, luxury Nile cruise, and 5-star hotels with our travel experts.')}
+        keywords="tailor made egypt tour, custom luxury travel, bespoke private itinerary, custom nile cruise"
+        canonical="https://dunas-travel.com/tailor-tour"
+      />
 
       {/* Styled Embed block for component custom CSS and Keyframes */}
       <style dangerouslySetInnerHTML={{

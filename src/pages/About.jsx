@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/seo/SEOHead';
 import { FaCalendarAlt, FaSuitcase, FaUsers, FaMapMarkedAlt, FaGlobe, FaBuilding, FaNetworkWired, FaLanguage, FaGlobeAmericas, FaStoreAlt, FaComments, FaCertificate, FaHandshake, FaAward, FaClock, FaHeadset, FaUserTie, FaGlobeEurope, FaPlaneDeparture, FaPlaneArrival, FaBriefcase, FaUmbrellaBeach, FaQuoteRight, FaArrowRight, FaArrowLeft, FaCheckCircle, FaStar, FaRoute, FaCompass, FaShip, FaGem, FaTrophy, FaFutbol, FaNewspaper, FaUserMd, FaBullseye, FaLandmark, FaCrown, FaShieldAlt, FaChartLine } from 'react-icons/fa';
 import { useCmsBlock } from '../hooks/useCmsBlock';
 import AnimatedCounter from '../components/common/AnimatedCounter';
@@ -2188,7 +2188,8 @@ const tradeShowItems = [
 ];
 
 const About = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'en';
   const { data: cmsData } = useCmsBlock('about');
   const pageRef = useRef(null);
 
@@ -2241,13 +2242,18 @@ const About = () => {
 
   return (
     <div className="about-page" ref={pageRef}>
-      <Helmet>
-        <title>{t('about.seoTitle', 'About Us | Dunas Travel')}</title>
-        <meta name="description" content={t('about.seoDescNew', 'Discover our story. Dunas Travel Group — 17+ years designing and operating travel experiences for tour operators and agencies across Europe and Latin America.')} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </Helmet>
+      <SEOHead
+        title={t('about.seoTitle', 'About Us | Dunas Travel Group')}
+        description={t('about.seoDescNew', 'Discover our story. Dunas Travel Group — 17+ years designing and operating travel experiences for tour operators and agencies across Europe and Latin America.')}
+        canonical="https://dunas-travel.com/about"
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          name: 'About Dunas Travel Group',
+          url: 'https://dunas-travel.com/about',
+          description: 'Award-winning incoming tour operator with over 17 years of experience crafting bespoke journeys across Egypt and the Middle East.',
+        }}
+      />
 
       <style>{styles}</style>
 

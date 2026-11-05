@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -18,7 +18,8 @@ import DurationSortFilter from '../../components/common/DurationSortFilter';
 
 
 export default function ReligiousTours() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'en';
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const [displayTours, setDisplayTours] = React.useState([]);
@@ -45,16 +46,11 @@ export default function ReligiousTours() {
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
-      <Helmet>
-        <title>{`${t('nav.religious', 'Religious Programs')} | ${t('site.luxuryTravel', 'Dunas Travel')}`}</title>
-        <meta
-          name="description"
-          content={t(
-            'programs.religiousMetaDesc',
-            'Embark on a sacred journey through ancient Coptic monasteries in Egypt and the holy sites of Jordan. Deeply spiritual, meticulously organized pilgrimages with expert guides.'
-          )}
-        />
-      </Helmet>
+      <SEOHead
+        title={lang === 'ar' ? 'رحلات الحج والسياحة الدينية | مسار العائلة المقدسة والقدس' : 'Holy Land & Sacred Heritage Tours | Journey of the Holy Family'}
+        description={lang === 'ar' ? 'رحلات حج وسياحة دينية روحانية تتبع مسار العائلة المقدسة في مصر، دير سانت كاترين وجبل موسى، والقدس الشريف.' : 'Spiritual pilgrimages and sacred journeys tracing the Holy Family footsteps across Egypt, Mount Sinai, and the Holy Land.'}
+        canonical="https://dunas-travel.com/programs/religious"
+      />
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection

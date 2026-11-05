@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,8 @@ export const HONEYMOON_PACKAGES = [
 ];
 
 export default function Honeymooners() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'en';
   const [displayTours, setDisplayTours] = React.useState([]);
 
   const adaptedTours = React.useMemo(() => {
@@ -47,13 +48,11 @@ export default function Honeymooners() {
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
-      <Helmet>
-        <title>{t('honeymooners.title', 'Honeymooners Package | Dunas Travel')}</title>
-        <meta
-          name="description"
-          content={t('honeymooners.desc', 'Celebrate your love with an unforgettable honeymoon in Egypt. Romance, history, and luxury await you.')}
-        />
-      </Helmet>
+      <SEOHead
+        title={lang === 'ar' ? 'باقات شهر العسل الفاخرة | رحلات رومانسية في مصر ودبي' : 'Luxury Honeymoon Packages | Romantic Journeys in Egypt & Dubai'}
+        description={lang === 'ar' ? 'احتفل ببداية حياتك الزوجية برحلات شهر عسل أسطورية: كروزات نيلية خاصة، أجنحة مطلة على البحر الأحمر، وعشاء رومانسي في صحراء دبي.' : 'Celebrate love with unforgettable luxury honeymoons: private Nile cruises, Red Sea suites, and private desert dinners in Dubai.'}
+        canonical="https://dunas-travel.com/programs/honeymooners"
+      />
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection

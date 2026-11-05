@@ -1,3 +1,4 @@
+import SEOHead from '../components/seo/SEOHead';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -42,6 +43,12 @@ const FAQ = () => {
 
   return (
     <div className="w-full min-h-screen bg-ivory-50 pb-24 font-body">
+      <SEOHead
+        title={cmsData?.heading || t('faq.heading', 'Frequently Asked Questions')}
+        description={t('faq.metaDesc', 'Find clear answers about private reservations, pricing, cancellation policies, visa requirements, luxury Nile cruises, and packing tips with Dunas Travel.')}
+        canonical="https://dunas-travel.com/faq"
+        schema={{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I book a private luxury tour with Dunas Travel?","acceptedAnswer":{"@type":"Answer","text":"You can book directly through our website, request a bespoke itinerary via our Tailor-Made page, or contact our dedicated travel concierge team."}},{"@type":"Question","name":"What is included in Dunas Travel luxury packages?","acceptedAnswer":{"@type":"Answer","text":"Our packages typically include 5-star hotel accommodations, domestic flights, private air-conditioned transportation, certified private Egyptologist guides, VIP monument admissions, and 24/7 concierge support."}},{"@type":"Question","name":"Can itineraries be customized?","acceptedAnswer":{"@type":"Answer","text":"Yes, every Dunas Travel itinerary can be fully customized to match your travel dates, preferred pace, accommodation style, and special interests."}},{"@type":"Question","name":"Do you offer private Nile cruises?","acceptedAnswer":{"@type":"Answer","text":"We partner with the finest luxury dahabiyas and boutique Nile cruisers between Luxor and Aswan, offering private cabins, bespoke shore excursions, and fine dining."}}]}}
+      />
       {/* Header Banner */}
       <section className="relative min-h-[30vh] pt-32 pb-12 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-obsidian-900"></div>

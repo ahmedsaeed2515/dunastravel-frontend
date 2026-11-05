@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { useTranslation } from 'react-i18next';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useTours } from '../../hooks/useTours';
@@ -10,7 +10,8 @@ import DurationSortFilter from '../../components/common/DurationSortFilter';
 
 /** A catalog page backed exclusively by GET /api/tours with pagination support. */
 export default function BackendToursPage({ titleKey, titleDefault, filters = {}, limit = 12, bgImage }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'en';
   const [currentPage, setCurrentPage] = useState(1);
   const [displayTours, setDisplayTours] = useState([]);
   const [retainedTours, setRetainedTours] = useState([]);
@@ -43,9 +44,25 @@ export default function BackendToursPage({ titleKey, titleDefault, filters = {},
 
   return (
     <main className="min-h-screen bg-ivory-50 dark:bg-[#0c0d19] pb-24 text-start">
-      <Helmet>
-        <title>{`${title} | Dunas Travel`}</title>
-      </Helmet>
+      <SEOHead
+        title={title}
+        description={t('tours.catalogMetaDesc', 'Explore our hand-curated collection of luxury private tours, Nile cruises, and bespoke cultural expeditions across Egypt, Jordan, and the Middle East.')}
+        keywords="luxury tours egypt, private travel packages, middle east tours, nile cruise itineraries, bespoke guided tours"
+        canonical="https://dunas-travel.com/tours"
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: title,
+          description: 'Hand-crafted luxury travel itineraries by Dunas Travel',
+          numberOfItems: activeTours.length,
+          itemListElement: activeTours.slice(0, 10).map((item, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: item.title,
+            url: `https://dunas-travel.com/tours/${item.slug}`,
+          })),
+        }}
+      />
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection

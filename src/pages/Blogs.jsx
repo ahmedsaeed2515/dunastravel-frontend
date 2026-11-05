@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/seo/SEOHead';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeInUp, cardHover } from '../animations/variants';
@@ -56,10 +56,12 @@ const Blogs = () => {
 
   return (
     <div className="w-full bg-[#F8F9FF] dark:bg-[#0f0f1a] pb-24">
-      <Helmet>
-        <title>{t('blogs.seoTitle', 'Travel Journal & Blogs | Dunas Travel')}</title>
-        <meta name="description" content={t('blogs.seoDesc', 'Read our latest travel tips, stories, and guides for exploring the Middle East in pure luxury.')} />
-      </Helmet>
+      <SEOHead
+        title={t('blogs.seoTitle', 'Luxury Travel Journal & Insights | Dunas Travel')}
+        description={t('blogs.seoDesc', 'Expert travel guides, insider Egyptology tips, cultural insights, and luxury travel advice from Dunas Travel concierges.')}
+        keywords="egypt travel blog, nile cruise tips, luxury travel guides, visit luxor aswan, middle east travel advice"
+        canonical="https://dunas-travel.com/blogs"
+      />
 
       {/* Main Hero */}
       <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">

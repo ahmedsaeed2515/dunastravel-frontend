@@ -1,6 +1,7 @@
 
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/seo/SEOHead';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from '../animations/variants';
@@ -38,10 +39,11 @@ const Services = () => {
   if (error && filteredServices.length === 0) return <ErrorState message={error.message || 'Failed to load services'} />;
   return (
     <div className="w-full bg-obsidian-50 dark:bg-[#0f0f1a] pb-24 text-left rtl:text-right">
-      <Helmet>
-        <title>{service ? `${t(`nav.${service}`, service.charAt(0).toUpperCase() + service.slice(1))} | ${t('services.seoServices', 'Luxury Services')}` : t('services.seoTitle', 'Our Services | Luxury Travel')}</title>
-        <meta name="description" content={t('services.seoDesc', 'Discover our tailored luxury services including 5-star hotels, desert safaris, glamping, and private Nile cruises.')} />
-      </Helmet>
+      <SEOHead
+        title={service ? `${t(`nav.${service}`, service.charAt(0).toUpperCase() + service.slice(1))} | ${t('services.seoServices', 'Luxury Services')}` : t('services.seoTitle', 'Our Luxury Travel Services | Dunas Travel')}
+        description={t('services.seoDesc', 'Discover our tailored luxury services including 5-star hotels, desert safaris, glamping, and private Nile cruises.')}
+        canonical="https://dunas-travel.com/services"
+      />
       <section className="relative w-full h-[480px] md:h-[650px] lg:h-[720px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           {service === 'safari' ? (

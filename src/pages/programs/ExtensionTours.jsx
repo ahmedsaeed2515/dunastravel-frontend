@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -52,7 +52,8 @@ export const EXTENSION_PACKAGES = [
 ];
 
 export default function ExtensionTours() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'en';
   const [displayTours, setDisplayTours] = React.useState([]);
 
   const adaptedTours = React.useMemo(() => {
@@ -76,16 +77,11 @@ export default function ExtensionTours() {
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
-      <Helmet>
-        <title>{t('extensions.title', 'Egypt Extensions | Dunas Travel')}</title>
-        <meta
-          name="description"
-          content={t(
-            'extensions.desc',
-            'Extend your Egypt holiday with added beach resorts in Hurghada, Sharm El Sheikh, or desert adventures in Siwa Oasis.'
-          )}
-        />
-      </Helmet>
+      <SEOHead
+        title={lang === 'ar' ? 'تمديدات الرحلات الفاخرة | البحر الأحمر، الإسكندرية والواحات' : 'Luxury Tour Extensions | Red Sea, Alexandria & Desert Oases'}
+        description={lang === 'ar' ? 'مدد رحلتك بتجارب حصرية: منتجعات شرم الشيخ والغردقة، واحة سيوة، وجولات الإسكندرية الثقافية مع ديوناس ترافيل.' : 'Elevate your journey with luxury extensions: Sharm El Sheikh, Hurghada resorts, Siwa Oasis, and Alexandria cultural day trips.'}
+        canonical="https://dunas-travel.com/programs/extension"
+      />
 
       {/* Luxury Hero Section */}
       <LuxuryHeroSection

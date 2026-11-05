@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -196,16 +197,28 @@ const HotelDetails = () => {
 
   return (
     <div className="w-full bg-[#FAF9F5] dark:bg-obsidian-900 pb-24 text-slate-800 dark:text-slate-200 leading-relaxed font-body">
-      <Helmet>
-        <title>{t('hotel.seoTitle', 'Sol Pyramid Hotel | Giza Pyramids View | Dunas Travel')}</title>
-        <meta
-          name="description"
-          content={t(
-            'hotel.seoDesc',
-            'Stay steps away from the Pyramids of Giza at Sol Pyramid Hotel. Enjoy modern 3-star luxury, elegant rooms with Pyramids views, rooftop dining coming soon, and family-friendly hospitality.'
-          )}
-        />
-      </Helmet>
+      <SEOHead
+        title={`${hotelInfo.name || 'Sol Pyramid Hotel'} | Dunas Travel`}
+        description={hotelInfo.description || t(
+          'hotel.seoDesc',
+          'Stay steps away from the Pyramids of Giza at Sol Pyramid Hotel. Enjoy modern luxury, elegant rooms with Pyramids views, rooftop dining, and family-friendly hospitality.'
+        )}
+        canonical={`https://dunas-travel.com/hotels/${slug || 'sol-pyramid-hotel'}`}
+        ogImage={hotelHeroImage}
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'Hotel',
+          name: hotelInfo.name || 'Sol Pyramid Hotel',
+          description: hotelInfo.description,
+          image: hotelHeroImage,
+          url: `https://dunas-travel.com/hotels/${slug || 'sol-pyramid-hotel'}`,
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: hotelInfo.city || 'Giza',
+            addressCountry: 'EG',
+          },
+        }}
+      />
 
       {/* Hero Header */}
       <section className="relative min-h-[90svh] md:h-[85vh] md:min-h-[600px] flex items-center justify-center overflow-hidden">

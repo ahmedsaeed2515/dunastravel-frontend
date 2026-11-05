@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from '../../animations/variants';
@@ -97,10 +97,43 @@ const BlogDetails = () => {
 
   return (
     <div className="w-full bg-obsidian-50 pb-24">
-      <Helmet>
-        <title>{t(`blogs.${blog.title}`, blog.title)} | {t('blogs.seoJournal', 'Luxury Travel Journal')}</title>
-        <meta name="description" content={t(`blogs.${blog.excerpt}`, blog.excerpt)} />
-      </Helmet>
+      <SEOHead
+        title={t(`blogs.${blog.title}`, blog.title)}
+        description={t(`blogs.${blog.excerpt}`, blog.excerpt)}
+        ogImage={blog.img || 'https://dunas-travel.com/dunas-travel-logo.webp'}
+        ogType="article"
+        canonical={`https://dunas-travel.com/blogs/${blog.slug}`}
+        article={{
+          publishedTime: blog.date,
+          author: 'Dunas Travel Concierge',
+          section: blog.category || 'Travel Guide',
+        }}
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: t(`blogs.${blog.title}`, blog.title),
+          description: t(`blogs.${blog.excerpt}`, blog.excerpt),
+          image: blog.img || 'https://dunas-travel.com/dunas-travel-logo.webp',
+          datePublished: blog.date,
+          author: {
+            '@type': 'Organization',
+            name: 'Dunas Travel',
+            url: 'https://dunas-travel.com',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Dunas Travel',
+            logo: {
+              '@type': 'ImageObject',
+              url: 'https://dunas-travel.com/dunas-travel-logo.webp',
+            },
+          },
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': `https://dunas-travel.com/blogs/${blog.slug}`,
+          },
+        }}
+      />
 
       {/* 1. Breadcrumb & Title — Tours Style */}
       <section className="pt-32 pb-10 bg-obsidian-900 text-center px-6">

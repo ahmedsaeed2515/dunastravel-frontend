@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/seo/SEOHead';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -8,7 +8,8 @@ import TourCard from '../../components/tour/TourCard';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 
 const Destinations = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'en';
   const { destinations, loading: destsLoading, refreshing: destsRefreshing, error } = useDestinations();
   const destinationsList = Array.isArray(destinations) ? destinations : [];
 
@@ -27,10 +28,13 @@ const Destinations = () => {
     || "https://res.cloudinary.com/degbrq3ck/image/upload/e_upscale,e_enhance,e_sharpen:120,f_auto,q_auto:best/v1783026771/5_upvijm.jpg";
 
   return <main className="min-h-screen bg-obsidian-50 pb-24">
-    <Helmet>
-      <title>{t('destinations.title', 'All Destinations | Luxury Travel')}</title>
-      <meta name="description" content={t('destinations.metaDesc', 'Explore our handpicked luxury tours across our active destinations.')} />
-    </Helmet>
+    <SEOHead
+      title={t('destinations.title', 'Luxury Destinations | Egypt, Jordan, Turkey, Morocco & Dubai')}
+      description={t('destinations.metaDesc', 'Discover iconic luxury destinations across the Mediterranean and Middle East. Curated private journeys with 5-star concierge service.')}
+      keywords="egypt luxury travel, jordan luxury tours, turkey tours, morocco travel, dubai private guide"
+      canonical="https://dunas-travel.com/destinations"
+      ogImage={mainHeroBgImage}
+    />
 
     {/* Main Hero */}
     <LuxuryHeroSection
