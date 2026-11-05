@@ -283,6 +283,17 @@ export default function AdvancedBooking({
           notes: formData.notes || formData.message || undefined,
         };
 
+        const baseRate = Number(basePricePerPerson) || 0;
+        if (baseRate <= 0) {
+          setError(
+            i18n.language === 'ar'
+              ? 'خطأ في تسعير الرحلة: لا يمكن إتمام الحجز نظراً لأن سعر الرحلة ($0.00). يرجى مراجعة إدارة الموقع أو التواصل مع الدعم.'
+              : 'Pricing error: Tour price is invalid ($0.00). The booking cannot be processed. Please contact support.'
+          );
+          setStatus('idle');
+          return;
+        }
+
         const data = await api.post('/bookings', payload);
 
         const tokenToSave = data?.guestToken || data?.data?.guestToken;
@@ -324,9 +335,11 @@ export default function AdvancedBooking({
       } else if (err.status === 422) {
         const isAvailError = typeof err.message === 'string' && (err.message.toLowerCase().includes('availab') || err.message.toLowerCase().includes('slot'));
         setError(
-          isAvailError
-            ? t('booking.noAvailability', 'No bookable departure is available for this date. Please select another date or send a private inquiry.')
-            : t('booking.errorValidation', 'Please verify passenger and date information before proceeding.')
+          err?.response?.data?.message || (
+            isAvailError
+              ? t('booking.noAvailability', 'No bookable departure is available for this date. Please select another date or send a private inquiry.')
+              : t('booking.errorValidation', 'Please verify passenger and date information before proceeding.')
+          )
         );
       } else {
         setError(err.message || t('common.errorOccurred', 'Error processing request'));

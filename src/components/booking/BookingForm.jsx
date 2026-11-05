@@ -541,6 +541,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
         );
       } else if (err.status === 422) {
         setError(
+          err?.response?.data?.message ||
           t('booking.errorValidation', 'Please verify passenger and date information before proceeding.')
         );
       } else {

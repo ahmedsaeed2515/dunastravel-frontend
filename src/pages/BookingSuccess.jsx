@@ -57,16 +57,18 @@ const BookingSuccess = () => {
       }
 
       try {
-        const res = activePaymentId
-          ? await api.get(`/payments/${encodeURIComponent(activePaymentId)}/status`)
-          : await api.post('/payments/callback/getpayin', {
+        const res = hasSignedCallback
+          ? await api.post('/payments/callback/getpayin', {
               success: callbackSuccess,
               invoice_id: callbackInvoiceId,
               invoice_status: callbackStatus,
               message: callbackMessage,
               signature: callbackSignature,
               ...(callbackAuthCode ? { auth_code: callbackAuthCode } : {}),
-            });
+            })
+          : activePaymentId
+            ? await api.get(`/payments/${encodeURIComponent(activePaymentId)}/status`)
+            : null;
 
         if (res?.paymentId && isUUID(res.paymentId)) {
           activePaymentId = res.paymentId;

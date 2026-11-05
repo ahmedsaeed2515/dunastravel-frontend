@@ -103,6 +103,15 @@ const InvoiceModal = ({ booking: initialBooking = {}, invoiceNumber: propInvoice
   }, [booking?.totalAmount, booking?.total, booking?.tax, booking?.createdAt]);
 
   const handlePayNow = async () => {
+    const bTotal = Number(booking.totalAmount ?? booking.total ?? 0);
+    if (bTotal <= 0) {
+      setPaymentError(
+        isAr
+          ? 'خطأ في تسعير الرحلة ($0.00) — لا يمكن متابعة الدفع.'
+          : 'Pricing error ($0.00) — Cannot initiate payment.'
+      );
+      return;
+    }
     const bId = booking.id || booking.bookingId || initialBooking.id || initialBooking.bookingId;
     if (!bId) {
       setPaymentError(t('booking.noBookingId', 'Booking ID not available for checkout.'));
@@ -489,7 +498,18 @@ const InvoiceModal = ({ booking: initialBooking = {}, invoiceNumber: propInvoice
             </div>
 
             {/* Online Payment Button (if pending) */}
-            {!isConfirmed && (
+            {Number(booking.totalAmount ?? booking.total ?? 0) <= 0 ? (
+              <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 print:hidden flex flex-col items-center gap-2 text-center">
+                <p className="text-sm font-bold text-red-700">
+                  {isAr ? '⚠️ خطأ في تسعير الرحلة ($0.00)' : '⚠️ Pricing Error ($0.00)'}
+                </p>
+                <p className="text-xs text-red-600">
+                  {isAr
+                    ? 'لا يمكن إتمام الحجز أو سداد الفاتورة نظراً لعدم توفر تسعير صحيح للرحلة. يرجى مراجعة إدارة الموقع أو التواصل مع الدعم الفني.'
+                    : 'This booking cannot be paid or confirmed because the total price is invalid ($0.00). Please contact support.'}
+                </p>
+              </div>
+            ) : !isConfirmed && (
               <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 print:hidden flex flex-col gap-2">
                 <button
                   type="button"

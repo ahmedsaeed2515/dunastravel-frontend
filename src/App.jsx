@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Layout from "./components/layout/Layout";
+import Home from "./pages/Home";
 import Logo from "./components/ui/Logo";
 import { trackEvent } from "./utils/analytics";
 import { ConsentProvider } from "./privacy/consent";
@@ -136,7 +137,6 @@ class ErrorBoundary extends React.Component {
 }
 
 // Lazy loaded pages for performance with automatic deployment recovery
-const Home = lazyWithRetry(() => import("./pages/Home"));
 const About = lazyWithRetry(() => import("./pages/About"));
 const Blogs = lazyWithRetry(() => import("./pages/Blogs"));
 const Services = lazyWithRetry(() => import("./pages/Services"));
