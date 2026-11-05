@@ -753,7 +753,7 @@
     width: 86px;
     height: 86px;
     line-height: 86px;
-    bottom: calc(126px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(90px + env(safe-area-inset-bottom, 0px));
     right: 20px;
   }
 
@@ -829,7 +829,7 @@
     width: 84px;
     height: 84px;
     line-height: 84px;
-    bottom: calc(124px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
     right: 16px;
   }
 
@@ -883,7 +883,7 @@
     width: 80px;
     height: 80px;
     line-height: 80px;
-    bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
     right: 14px;
   }
 
@@ -998,6 +998,29 @@
 [dir="rtl"] .circle__video {
   right: auto !important;
   left: 50px !important;
+}
+
+/* On mobile, mirror the badge with the same edge inset as the LTR layout
+   so it sits bottom-right in English and bottom-left in Arabic. */
+@media only screen and (max-width: 768px) {
+  .rtl .circle__video,
+  [dir="rtl"] .circle__video {
+    left: 20px !important;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .rtl .circle__video,
+  [dir="rtl"] .circle__video {
+    left: 16px !important;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .rtl .circle__video,
+  [dir="rtl"] .circle__video {
+    left: 14px !important;
+  }
 }
 
 /* Arabic keeps the exact LTR type scale at every breakpoint. */
