@@ -7,7 +7,7 @@ import AuthFormField from './AuthFormField';
 
 const ForgotPasswordForm = ({ onSwitchToLogin, onSwitchToRegister }) => {
   const { t, i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const BackArrowIcon = isRtl ? FaArrowRight : FaArrowLeft;
 
   const [email, setEmail] = useState('');

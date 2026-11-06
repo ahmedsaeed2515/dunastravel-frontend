@@ -20,6 +20,8 @@ import {
   FaPercent
 } from 'react-icons/fa';
 import InvoiceModal from './InvoiceModal';
+import CountryPhoneInput from '../ui/CountryPhoneInput';
+import CountryNationalityInput from '../ui/CountryNationalityInput';
 import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { useAuth } from '../../context/AuthContext';
@@ -63,6 +65,11 @@ export default function AdvancedBooking({
   const [isResendingOtp, setIsResendingOtp] = useState(false);
   const [otpResentSuccess, setOtpResentSuccess] = useState('');
 
+  // Single traveler policy derived from booking rules
+  const effectiveMinTravelers = (bookingRules?.singleSupplementEnabled !== false ? 2 : 1);
+  const singleSupplementEnabled = bookingRules?.singleSupplementEnabled === true;
+  const singleSupplementPercent = Number(bookingRules?.singleSupplementPercent) || 70;
+
   const handleResendOtpFromBooking = async () => {
     if (!user?.email) return;
     setIsResendingOtp(true);
@@ -100,7 +107,7 @@ export default function AdvancedBooking({
     departureTime: '',
     language: 'en',
     activityType: '',
-    adults: 1,
+    adults: effectiveMinTravelers,
     children: 0,
     infants: 0,
     fullName: '',
@@ -639,7 +646,7 @@ export default function AdvancedBooking({
                 </span>
                 <div className="grid grid-cols-3 gap-2.5">
                   {[
-                    { key: 'adults', label: t('booking.adults', 'Adults'), min: 1, sub: '12+ yrs' },
+                    { key: 'adults', label: t('booking.adults', 'Adults'), min: effectiveMinTravelers, sub: '12+ yrs' },
                     { key: 'children', label: t('booking.children', 'Children'), min: 0, sub: '2-11 yrs' },
                     { key: 'infants', label: t('booking.infants', 'Infants'), min: 0, sub: '<2 yrs' },
                   ].map(({ key, label, min, sub }) => (
@@ -716,14 +723,14 @@ export default function AdvancedBooking({
                     <label htmlFor="modal-phone" className={labelStyle}>
                       {t('booking.phone', 'Phone Number')}
                     </label>
-                    <input
+                    <CountryPhoneInput
                       id="modal-phone"
-                      type="tel"
+                      name="phone"
                       required
                       value={formData.phone}
-                      onChange={(e) => updateField('phone', e.target.value)}
+                      onChange={(value) => updateField('phone', value)}
                       placeholder="+1 234 567 890"
-                      className={inputStyle}
+                      inputClassName={inputStyle}
                     />
                   </div>
                 </div>
@@ -732,14 +739,15 @@ export default function AdvancedBooking({
                   <label htmlFor="modal-nationality" className={labelStyle}>
                     {t('booking.nationality', 'Nationality')}
                   </label>
-                  <input
+                  <CountryNationalityInput
                     id="modal-nationality"
-                    type="text"
+                    name="nationality"
                     required
                     value={formData.nationality}
-                    onChange={(e) => updateField('nationality', e.target.value)}
+                    onChange={(value) => updateField('nationality', value)}
                     placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
-                    className={inputStyle}
+                    className="w-full"
+                    inputClassName={inputStyle}
                   />
                 </div>
               </div>
@@ -749,6 +757,28 @@ export default function AdvancedBooking({
                 const baseRate = Number(basePricePerPerson) || 0;
                 const clientTotal = (baseRate * formData.adults) + (baseRate * 0.5 * formData.children);
                 const formattedPrice = clientTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                // Single traveler supplement display
+                let supplementDisplay = null;
+                if (singleSupplementEnabled && formData.adults === 1 && formData.children === 0) {
+                  const supplementAmount = baseRate * singleSupplementPercent / 100;
+                  const supplementedTotal = clientTotal + supplementAmount;
+                  supplementDisplay = (
+                    <div className="flex items-center justify-between text-[10px] text-ivory-400/80 pt-2">
+                      <span className="uppercase tracking-wider">
+                        {t('booking.singleSupplementMessage', 'Single traveler supplement: 70%% added to per-person price')}
+                      </span>
+                      <span>
+                        <span className="text-[11px] font-semibold text-gold-400">
+                          {t('booking.singleSupplementBreakdown', 'Base price: $100 + 70%% supplement = $170 total.')}
+                        </span>
+                        <span className="text-[10px] text-ivory-400/80">
+                          ({supplementAmount.toFixed(2)} USD added)
+                        </span>
+                      </span>
+                    </div>
+                  );
+                }
 
                 return (
                   <div className="bg-gradient-to-br from-[rgba(201,162,39,0.08)] to-transparent border border-gold-500/30 rounded-xl p-4 space-y-2 mt-3">
@@ -769,6 +799,8 @@ export default function AdvancedBooking({
                         </span>
                       </div>
                     </div>
+
+                    {supplementDisplay}
 
                     <div className="flex items-center gap-1.5 text-[10px] text-ivory-400/80 pt-1">
                       <FaShieldAlt className="text-gold-400" size={10} />
@@ -889,14 +921,14 @@ export default function AdvancedBooking({
                   <label htmlFor="modal-inq-phone" className={labelStyle}>
                     {t('booking.phone', 'Phone Number')}
                   </label>
-                  <input
+                  <CountryPhoneInput
                     id="modal-inq-phone"
-                    type="tel"
+                    name="phone"
                     required
                     value={formData.phone}
-                    onChange={(e) => updateField('phone', e.target.value)}
+                    onChange={(value) => updateField('phone', value)}
                     placeholder="+1 234 567 890"
-                    className={inputStyle}
+                    inputClassName={inputStyle}
                   />
                 </div>
               </div>
@@ -905,13 +937,14 @@ export default function AdvancedBooking({
                 <label htmlFor="modal-inq-nationality" className={labelStyle}>
                   {t('booking.nationalityLabel', 'الجنسية')}
                 </label>
-                <input
+                <CountryNationalityInput
                   id="modal-inq-nationality"
-                  type="text"
+                  name="nationality"
                   value={formData.nationality}
-                  onChange={(e) => updateField('nationality', e.target.value)}
+                  onChange={(value) => updateField('nationality', value)}
                   placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
-                  className={inputStyle}
+                  className="w-full"
+                  inputClassName={inputStyle}
                 />
               </div>
 

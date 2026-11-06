@@ -11,7 +11,7 @@ export default function NotificationDetails() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(true);

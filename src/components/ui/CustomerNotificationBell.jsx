@@ -15,7 +15,7 @@ export default function CustomerNotificationBell() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   const isInitializedRef = useRef(false);
   const prevUnreadCountRef = useRef(0);

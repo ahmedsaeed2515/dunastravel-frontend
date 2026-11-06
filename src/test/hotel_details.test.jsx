@@ -88,6 +88,36 @@ describe('HotelDetails and RoomDetails components', () => {
     expect(screen.getByText('غرفة مفردة')).toBeInTheDocument();
   });
 
+  it('renders the What\'s Nearby list and the Sol Pyramid social links', () => {
+    mockLanguage = 'en';
+    render(
+      <HelmetProvider>
+        <MemoryRouter initialEntries={['/services/hotels/sol-pyramid-hotel']}>
+          <Routes>
+            <Route path="/services/hotels/:slug" element={<HotelDetails />} />
+          </Routes>
+        </MemoryRouter>
+      </HelmetProvider>
+    );
+
+    expect(screen.getByText("What's Nearby")).toBeInTheDocument();
+    expect(screen.getByText('Nearby Attractions')).toBeInTheDocument();
+    expect(screen.getByText('Restaurants & Cafes')).toBeInTheDocument();
+    expect(screen.getByText('Top Tourist Landmarks')).toBeInTheDocument();
+    expect(screen.getAllByText('Giza Pyramids').length).toBeGreaterThan(0);
+    expect(screen.getByText('Lobby Bar')).toBeInTheDocument();
+    expect(screen.getByText('19 km')).toBeInTheDocument();
+
+    expect(screen.getByLabelText('Facebook')).toHaveAttribute(
+      'href',
+      expect.stringContaining('facebook.com/people/Solpyramid-Hotel')
+    );
+    expect(screen.getByLabelText('Instagram')).toHaveAttribute(
+      'href',
+      expect.stringContaining('instagram.com/solpyramidhotel')
+    );
+  });
+
   it('renders RoomDetails in English without isAr ReferenceError and displays seasonal ratePerNight (BUG-05)', () => {
     mockLanguage = 'en';
     render(

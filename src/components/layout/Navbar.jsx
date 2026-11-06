@@ -36,7 +36,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { activeLanguages } = useActiveLocales();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   useClickOutside(profileDropdownRef, () => setProfileDropdownOpen(false), {
     enabled: profileDropdownOpen,

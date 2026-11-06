@@ -9,6 +9,8 @@ import { useAuth } from '../context/AuthContext';
 import { useDestinations } from '../hooks/useDestinations';
 import { useTours } from '../hooks/useTours';
 import { useToast } from '../context/ToastContext';
+import CountryPhoneInput from '../components/ui/CountryPhoneInput';
+import CountryNationalityInput from '../components/ui/CountryNationalityInput';
 
 const TailorTour = () => {
   const { t, i18n } = useTranslation();
@@ -16,7 +18,7 @@ const TailorTour = () => {
   const { user } = useAuth();
   const { destinations: publishedDestinations } = useDestinations();
   const { tours: allLiveTours } = useTours();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   const [step, setStep] = useState(1);
   const DRAFT_STORAGE_KEY = 'dunas_tailor_tour_draft_v1';
@@ -1298,41 +1300,23 @@ const TailorTour = () => {
                       <label htmlFor="tailor-nationality" className="block mb-2 font-semibold text-body-sm text-obsidian-700">
                         {t('tailor.nationality', 'Nationality *')}
                       </label>
-                      <select
+                      <CountryNationalityInput
                         id="tailor-nationality"
+                        name="nationality"
                         value={nationality}
-                        onChange={(e) => {
-                          setNationality(e.target.value);
+                        onChange={(value) => {
+                          setNationality(value);
                           clearFieldError('nationality');
                         }}
-                        aria-invalid={Boolean(fieldErrors.nationality)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 cursor-pointer ${fieldErrors.nationality
+                        ariaInvalid={Boolean(fieldErrors.nationality)}
+                        placeholder={t('tailor.selectNationality', 'Select nationality...')}
+                        className="w-full"
+                        inputClassName={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${fieldErrors.nationality
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
                           }`}
-                      >
-                        <option value="">{t('tailor.selectNationality', 'Select nationality...')}</option>
-                        <option value="مصرية">{t('tailor.nationalityEgypt', 'مصرية (Egyptian)')}</option>
-                        <option value="سعودية">{t('tailor.nationalitySaudi', 'سعودية (Saudi)')}</option>
-                        <option value="إماراتية">{t('tailor.nationalityEmirati', 'إماراتية (Emirati)')}</option>
-                        <option value="كويتية">{t('tailor.nationalityKuwaiti', 'كويتية (Kuwaiti)')}</option>
-                        <option value="قطرية">{t('tailor.nationalityQatari', 'قطرية (Qatari)')}</option>
-                        <option value="بحرينية">{t('tailor.nationalityBahraini', 'بحرينية (Bahraini)')}</option>
-                        <option value="عمانية">{t('tailor.nationalityOmani', 'عمانية (Omani)')}</option>
-                        <option value="أردنية">{t('tailor.nationalityJordanian', 'أردنية (Jordanian)')}</option>
-                        <option value="لبنانية">{t('tailor.nationalityLebanese', 'لبنانية (Lebanese)')}</option>
-                        <option value="أمريكية">{t('tailor.nationalityAmerican', 'أمريكية (American)')}</option>
-                        <option value="بريطانية">{t('tailor.nationalityBritish', 'بريطانية (British)')}</option>
-                        <option value="برازيلية">{t('tailor.nationalityBrazilian', 'برازيلية (Brazilian)')}</option>
-                        <option value="إسبانية">{t('tailor.nationalitySpanish', 'إسبانية (Spanish)')}</option>
-                        <option value="إيطالية">{t('tailor.nationalityItalian', 'إيطالية (Italian)')}</option>
-                        <option value="برتغالية">{t('tailor.nationalityPortuguese', 'برتغالية (Portuguese)')}</option>
-                        <option value="فرنسية">{t('tailor.nationalityFrench', 'فرنسية (French)')}</option>
-                        <option value="ألمانية">{t('tailor.nationalityGerman', 'ألمانية (German)')}</option>
-                        <option value="كندية">{t('tailor.nationalityCanadian', 'كندية (Canadian)')}</option>
-                        <option value="أسترالية">{t('tailor.nationalityAustralian', 'أسترالية (Australian)')}</option>
-                        <option value="أخرى">{t('tailor.nationalityOther', 'أخرى (Other)')}</option>
-                      </select>
+                        theme="light"
+                      />
                       {fieldErrors.nationality && (
                         <p className="mt-1.5 text-xs text-red-600 font-bold flex items-center gap-1">
                           <span>⚠️</span> {fieldErrors.nationality}
@@ -1343,20 +1327,20 @@ const TailorTour = () => {
                       <label htmlFor="tailor-phone" className="block mb-2 font-semibold text-body-sm text-obsidian-700">
                         {t('tailor.phone', 'Phone Number (WhatsApp preferred) *')}
                       </label>
-                      <input
+                      <CountryPhoneInput
                         id="tailor-phone"
-                        type="tel"
+                        name="phone"
                         value={phone}
-                        onChange={(e) => {
-                          setPhone(e.target.value);
+                        onChange={(value) => {
+                          setPhone(value);
                           clearFieldError('phone');
                         }}
                         placeholder={t('tailor.phonePlaceholder', 'Example: 00201xxxxxxxxx')}
-                        aria-invalid={Boolean(fieldErrors.phone)}
-                        className={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${fieldErrors.phone
+                        inputClassName={`w-full p-4 bg-white border rounded-xl outline-none transition-all text-obsidian-900 ${fieldErrors.phone
                             ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10'
                             : 'border-obsidian-900/10 focus:border-gold-500 focus:shadow-[0_0_12px_rgba(245,166,35,0.15)]'
                           }`}
+                        theme="light"
                       />
                       {fieldErrors.phone && (
                         <p className="mt-1.5 text-xs text-red-600 font-bold flex items-center gap-1">

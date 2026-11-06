@@ -11,7 +11,7 @@ import { FaChevronRight, FaChevronLeft, FaClock, FaCalendarAlt, FaPlane } from '
 
 const Blogs = () => {
   const { t, i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const { blogs, loading, error } = useBlogs();
 
   const categoryColors = {

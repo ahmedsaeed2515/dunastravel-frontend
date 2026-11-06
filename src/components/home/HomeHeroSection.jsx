@@ -201,7 +201,7 @@ export default function HomeHeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
-  const isRtl = i18n.language === 'ar' || (i18n.dir && i18n.dir() === 'rtl');
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   // Infinite non-stop loop across all 3 slides (0 ➔ 1 ➔ 2 ➔ 0 ➔ 1 ➔ 2...)
   // Paused while the video modal is open so nothing moves behind it.

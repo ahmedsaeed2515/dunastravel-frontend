@@ -27,7 +27,7 @@ import useInViewport from '../../hooks/useInViewport';
 
 const Transportation = () => {
   const { t, i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const { formatPrice } = useCurrency();
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedVehicleId, setSelectedVehicleId] = useState('');
@@ -243,7 +243,7 @@ const Transportation = () => {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                       <span className="!text-white font-semibold flex items-center gap-2" style={{ color: '#ffffff' }}>
-                        <span style={{ color: '#ffffff' }}>{t('transportation.reserveNow', 'Reserve Now')}</span>
+                        <span style={{ color: '#ffffff' }}>{t('transportation.reserveNow', 'Request Booking')}</span>
                         <span className={isRtl ? 'rotate-180 inline-block' : 'inline-block'} style={{ color: '#ffffff' }}>&rarr;</span>
                       </span>
                     </div>
@@ -315,7 +315,7 @@ const Transportation = () => {
                     className="px-5 py-2.5 bg-gold-500 hover:bg-gold-400 !text-white font-bold rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(201,162,39,0.3)] hover:shadow-[0_0_20px_rgba(201,162,39,0.5)] cursor-pointer text-sm flex items-center gap-1.5"
                     style={{ color: '#ffffff' }}
                   >
-                    <span className="!text-white" style={{ color: '#ffffff' }}>{t('transportation.reserveNow', 'Reserve Now')}</span>
+                    <span className="!text-white" style={{ color: '#ffffff' }}>{t('transportation.reserveNow', 'Request Booking')}</span>
                     <span className={`${isRtl ? 'rotate-180 inline-block' : ''} !text-white`} style={{ color: '#ffffff' }}>&rarr;</span>
                   </button>
                 </div>
@@ -393,7 +393,7 @@ const Transportation = () => {
                   style={{ color: '#ffffff' }}
                   onClick={() => handleReserveClick('')}
                 >
-                  {t('transportation.reserveNow', 'Reserve Now')}
+                  {t('transportation.reserveNow', 'Request Booking')}
                 </Button>
               </div>
             </div>
@@ -503,12 +503,12 @@ const Transportation = () => {
             className="text-display-lg text-obsidian-900 dark:text-white mb-4 font-display"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            {t('transportation.makeReservation', 'Make a Reservation')}
+            {t('transportation.makeReservation', 'Request a Vehicle Booking')}
           </h2>
           <p className="text-body-md text-obsidian-500 dark:text-ivory-300 max-w-2xl mx-auto">
             {t(
               'transportation.reservationDesc',
-              'Book your luxury transportation in advance. We provide professional chauffeurs and premium vehicles to ensure a comfortable and stylish journey.'
+              'Send a booking request for your luxury vehicle. We provide professional chauffeurs and premium vehicles — our team will contact you to confirm availability before your reservation is finalized.'
             )}
           </p>
         </div>

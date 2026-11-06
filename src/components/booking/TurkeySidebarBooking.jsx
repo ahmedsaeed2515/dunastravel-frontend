@@ -20,6 +20,8 @@ import {
   FaShieldAlt
 } from 'react-icons/fa';
 import InvoiceModal from './InvoiceModal';
+import CountryPhoneInput from '../ui/CountryPhoneInput';
+import CountryNationalityInput from '../ui/CountryNationalityInput';
 import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { useAuth } from '../../context/AuthContext';
@@ -64,6 +66,11 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
   const [isResendingOtp, setIsResendingOtp] = useState(false);
   const [otpResentSuccess, setOtpResentSuccess] = useState('');
 
+  // Single traveler policy derived from booking rules
+  const effectiveMinTravelers = (bookingRules?.singleSupplementEnabled !== false ? 2 : 1);
+  const singleSupplementEnabled = bookingRules?.singleSupplementEnabled === true;
+  const singleSupplementPercent = Number(bookingRules?.singleSupplementPercent) || 70;
+
   const handleResendOtpFromBooking = async () => {
     if (!user?.email) return;
     setIsResendingOtp(true);
@@ -104,7 +111,7 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
     departureTime: '',
     language: '',
     activityType: '',
-    adults: 1,
+    adults: effectiveMinTravelers,
     children: 0,
     infants: 0,
     fullName: user?.name || '',
@@ -660,7 +667,7 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                 </span>
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { key: 'adults', label: t('booking.adults', 'Adults'), min: 1 },
+                    { key: 'adults', label: t('booking.adults', 'Adults'), min: effectiveMinTravelers },
                     { key: 'children', label: t('booking.children', 'Children'), min: 0 },
                     { key: 'infants', label: t('booking.infants', 'Infants'), min: 0 }
                   ].map(({ key, label, min }) => (
@@ -695,6 +702,18 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                   ))}
                 </div>
               </div>
+
+              {/* Single Traveler Supplement Notice */}
+              {singleSupplementEnabled && (
+                <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-4 text-[11px] text-ivory-400">
+                  <span className="uppercase tracking-wider">
+                    {t('booking.singleSupplementMessage', 'Single traveler: 70%% supplement added to per-person price')}
+                  </span>
+                  <span className="ml-2">
+                    {t('booking.singleSupplementBreakdown', 'Base price: $100 + 70%% supplement = $170 total.')}
+                  </span>
+                </div>
+              )}
 
               {/* Selected Transport Choice Badge */}
               {transportChoice && (
@@ -768,24 +787,25 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                     required
                     className={inputStyle}
                   />
-                  <input
+                  <CountryPhoneInput
                     id="contact-phone"
-                    type="tel"
+                    name="phone"
                     placeholder={t('booking.phone', 'Phone')}
                     value={bookingForm.phone}
-                    onChange={(e) => updateBookingField('phone', e.target.value)}
+                    onChange={(value) => updateBookingField('phone', value)}
                     required
-                    className={inputStyle}
+                    inputClassName={inputStyle}
                   />
                 </div>
-                <input
+                <CountryNationalityInput
                   id="turkey-booking-nationality"
-                  type="text"
+                  name="nationality"
                   placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
                   value={bookingForm.nationality}
-                  onChange={(e) => updateBookingField('nationality', e.target.value)}
+                  onChange={(value) => updateBookingField('nationality', value)}
                   required
-                  className={inputStyle}
+                  className="w-full"
+                  inputClassName={inputStyle}
                 />
               </div>
 
@@ -1014,13 +1034,13 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                 <label htmlFor="inquiry-phone" className={labelStyle}>
                   {t('booking.phone', 'Phone')}
                 </label>
-                <input
+                <CountryPhoneInput
                   id="inquiry-phone"
-                  type="tel"
+                  name="phone"
                   value={inquiryForm.phone}
-                  onChange={(e) => setInquiryForm({ ...inquiryForm, phone: e.target.value })}
+                  onChange={(value) => setInquiryForm({ ...inquiryForm, phone: value })}
                   required
-                  className={inputStyle}
+                  inputClassName={inputStyle}
                 />
               </div>
 
@@ -1028,13 +1048,14 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
                 <label htmlFor="inquiry-nationality" className={labelStyle}>
                   {t('booking.nationalityLabel', 'الجنسية')}
                 </label>
-                <input
+                <CountryNationalityInput
                   id="inquiry-nationality"
-                  type="text"
+                  name="nationality"
                   value={inquiryForm.nationality}
-                  onChange={(e) => setInquiryForm({ ...inquiryForm, nationality: e.target.value })}
+                  onChange={(value) => setInquiryForm({ ...inquiryForm, nationality: value })}
                   placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
-                  className={inputStyle}
+                  className="w-full"
+                  inputClassName={inputStyle}
                 />
               </div>
 

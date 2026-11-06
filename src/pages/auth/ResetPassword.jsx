@@ -12,7 +12,7 @@ const ResetPassword = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const BackArrowIcon = isRtl ? FaArrowRight : FaArrowLeft;
 
   const tokenFromUrl = searchParams.get('token') || searchParams.get('code') || '';

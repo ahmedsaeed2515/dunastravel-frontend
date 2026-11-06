@@ -18,6 +18,7 @@ import { useServices } from '../../hooks/useServices';
 import { transportation as fallbackTransportation } from '../../data/transportation';
 import { useAuth } from '../../context/AuthContext';
 import InvoiceModal from './InvoiceModal';
+import CountryPhoneInput from '../ui/CountryPhoneInput';
 import api from '../../utils/api';
 
 const inputClass =
@@ -161,15 +162,15 @@ const TransportationForm = ({ preSelectedVehicleId = '' }) => {
                 <FaCheckCircle className="text-obsidian-900 text-2xl" />
               </div>
               <span className="text-[11px] font-mono text-gold-400 uppercase tracking-widest block mb-1">
-                Ref: #{bookingResult?.referenceCode || bookingResult?.id || 'CONFIRMED'}
+                {t('booking.requestRef', 'Request Ref')}: #{bookingResult?.referenceCode || bookingResult?.id || 'SUBMITTED'}
               </span>
               <h3 className="text-display-sm text-ivory-50 mb-2 font-display">
-                {t('booking.reservationConfirmed', 'Chauffeur Reserved')}
+                {t('booking.transportRequestReceived', 'Booking Request Received')}
               </h3>
               <p className="text-body-sm text-ivory-300 max-w-sm mx-auto leading-relaxed">
                 {t(
-                  'booking.reservationSuccessDesc',
-                  'Thank you for your booking. Our private concierge will reach out to confirm your pickup details and flight coordinates.'
+                  'booking.transportRequestSuccessDesc',
+                  'Thank you! Your vehicle booking request has been received. This is not a confirmed reservation yet — our concierge will contact you shortly to confirm availability and finalize the details.'
                 )}
               </p>
               {bookingResult?.invoiceNumber && (
@@ -208,6 +209,17 @@ const TransportationForm = ({ preSelectedVehicleId = '' }) => {
                   </p>
                 </div>
               )}
+
+              {/* Booking Request Notice */}
+              <div className="flex items-start gap-2 rounded-xl border border-gold-500/25 bg-gold-500/10 px-3.5 py-3">
+                <FaInfoCircle className="text-gold-400 mt-0.5 shrink-0" size={12} />
+                <p className="text-[11.5px] leading-relaxed text-ivory-300">
+                  {t(
+                    'booking.requestNotice',
+                    'This form sends a vehicle booking request only. Your reservation is not confirmed until our concierge contacts you and confirms availability.'
+                  )}
+                </p>
+              </div>
 
               {/* Vehicle Select */}
               <div>
@@ -348,15 +360,16 @@ const TransportationForm = ({ preSelectedVehicleId = '' }) => {
                     <FaPaperPlane className="text-gold-400" size={11} />
                     {t('booking.phone', 'Phone / WhatsApp')}
                   </label>
-                  <input
+                  <CountryPhoneInput
                     id="contact-phone"
-                    type="tel"
                     name="phone"
                     placeholder="+1 (555) 019-2834"
                     value={formData.phone}
-                    onChange={handleChange}
+                    onChange={(value) =>
+                      setFormData((prev) => ({ ...prev, phone: value }))
+                    }
                     required
-                    className={inputClass}
+                    inputClassName={inputClass}
                   />
                 </div>
               </div>
@@ -457,12 +470,12 @@ const TransportationForm = ({ preSelectedVehicleId = '' }) => {
                 {status === 'submitting' ? (
                   <span className="flex items-center gap-2 text-obsidian-900 dark:text-white">
                     <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                    {t('common.processing', 'Securing Chauffeur...')}
+                    {t('booking.sendingRequest', 'Sending Request...')}
                   </span>
                 ) : (
                   <>
                     <FaPaperPlane size={12} className="text-obsidian-900 dark:text-white" />
-                    <span className="text-obsidian-900 dark:text-white">{t('transportation.reserveNow', 'Reserve Private Transfer')}</span>
+                    <span className="text-obsidian-900 dark:text-white">{t('booking.requestBooking', 'Request Vehicle Booking')}</span>
                   </>
                 )}
               </button>

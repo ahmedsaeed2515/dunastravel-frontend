@@ -11,7 +11,7 @@ import { useConsent } from '../../privacy/consent';
 export function CookieConsentBanner() {
   const { t, i18n } = useTranslation();
   const { isBannerOpen, acceptAll, rejectAll, openPreferences } = useConsent();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   if (!isBannerOpen) {
     return null;

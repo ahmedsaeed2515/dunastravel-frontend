@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaFacebook, FaInstagram, FaPhone, FaEnvelope, FaWhatsapp, FaMapMarkerAlt, FaRobot } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaLinkedin, FaPhone, FaEnvelope, FaWhatsapp, FaMapMarkerAlt, FaRobot } from 'react-icons/fa';
 import Logo from '../ui/Logo';
 import TiT0Chat from '../ui/TiT0Chat';
 import { useJaiderChat } from '../../context/JaiderChatContext';
@@ -10,7 +10,7 @@ import './Footer.css';
 
 const Footer = () => {
   const { t, i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
   const { isOpen, setIsOpen } = useJaiderChat();
@@ -110,6 +110,16 @@ const Footer = () => {
               className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(220,39,67,0.6)] transition-all duration-300"
             >
               <FaInstagram size={18} />
+            </a>
+            {/* LinkedIn */}
+            <a
+              href="https://lnkd.in/p/eRYgC582"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our LinkedIn page"
+              className="w-10 h-10 rounded-full bg-[#0A66C2] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(10,102,194,0.6)] transition-all duration-300"
+            >
+              <FaLinkedin size={18} />
             </a>
             {/* WhatsApp */}
             <a

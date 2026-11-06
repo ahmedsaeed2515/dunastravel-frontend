@@ -25,11 +25,13 @@ import { useToast } from '../context/ToastContext';
 import FormFeedback from '../components/ui/FormFeedback';
 import ConsentGate from '../components/privacy/ConsentGate';
 import CountryFlag from '../components/ui/CountryFlag';
+import CountryPhoneInput from '../components/ui/CountryPhoneInput';
 
 const Contact = () => {
   const { t, i18n } = useTranslation();
   const toast = useToast();
   const [feedback, setFeedback] = useState(null);
+  const [phoneValue, setPhoneValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState('bespoke');
@@ -575,7 +577,6 @@ const Contact = () => {
                 const firstName = form.firstName.value;
                 const lastName = form.lastName.value;
                 const email = form.email.value;
-                const phone = form.phone.value;
                 const message = form.message.value;
                 const subjectText = subjects.find(s => s.id === selectedSubject)?.label || 'General Inquiry';
                 
@@ -585,7 +586,7 @@ const Contact = () => {
                     firstName,
                     lastName,
                     email,
-                    phone: phone || undefined,
+                    phone: phoneValue || undefined,
                     subject: `[${subjectText}] Contact Form Submission`,
                     message: message.length >= 10 ? message : `${message} (Inquiry)`,
                     locale: String(i18n.language || 'en').toLowerCase().split('-')[0],
@@ -595,6 +596,7 @@ const Contact = () => {
                   setFeedback({ type: 'success', message: successMsg });
                   toast?.success?.(successMsg, { title: t('contact.successTitle', 'تم استلام الرسالة') });
                   form.reset();
+                  setPhoneValue('');
                 } catch (err) {
                   console.error(err);
                   const errorMsg = t('contact.error', 'حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى أو التواصل عبر واتساب.');
@@ -640,11 +642,14 @@ const Contact = () => {
                   </div>
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-gold-300 font-bold mb-1.5">{t('contact.phoneFieldLabel', 'رقم الهاتف / الواتساب')}</label>
-                    <input 
-                      name="phone" 
-                      type="tel" 
-                      placeholder={t('contact.phonePlaceholder', '+20 1xx xxx xxxx')} 
-                      className="w-full p-4 bg-slate-950/90 border border-gold-500/35 rounded-xl text-ivory-50 placeholder-ivory-300/40 focus:border-gold-400 focus:ring-2 focus:ring-gold-500/30 outline-none transition-all text-sm font-mono" 
+                    <CountryPhoneInput
+                      id="contact-page-phone"
+                      name="phone"
+                      value={phoneValue}
+                      onChange={setPhoneValue}
+                      placeholder={t('contact.phonePlaceholder', '+20 1xx xxx xxxx')}
+                      inputClassName="w-full p-4 bg-slate-950/90 border border-gold-500/35 rounded-xl text-ivory-50 placeholder-ivory-300/40 focus:border-gold-400 focus:ring-2 focus:ring-gold-500/30 outline-none transition-all text-sm font-mono"
+                      triggerClassName="!bg-slate-950/90 !border-gold-500/35 !text-ivory-50"
                     />
                   </div>
                 </div>

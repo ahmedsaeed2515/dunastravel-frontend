@@ -347,7 +347,7 @@ const buildInfiniteMarqueeList = (items, prefix = 'tour', maxVisible = 8) => {
 const HomeExperienceSection = () => {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const lang = i18n.language || 'en';
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();

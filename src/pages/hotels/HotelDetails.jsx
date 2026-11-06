@@ -31,6 +31,23 @@ import {
   FaUserFriends,
   FaCheckCircle,
   FaTimes,
+  FaLandmark,
+  FaMonument,
+  FaHotel,
+  FaTree,
+  FaBuilding,
+  FaPalette,
+  FaArchway,
+  FaUniversity,
+  FaCocktail,
+  FaGlassCheers,
+  FaChurch,
+  FaMapMarkedAlt,
+  FaCrown,
+  FaFish,
+  FaMosque,
+  FaFlag,
+  FaMountain,
 } from 'react-icons/fa';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useHotel } from '../../hooks/useHotels';
@@ -38,6 +55,55 @@ import Button from '../../components/ui/Button';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
 import ConsentGate from '../../components/privacy/ConsentGate';
+
+const nearbyGroups = [
+  {
+    id: 'attractions',
+    titleKey: 'hotel.nearby.attractions',
+    titleDefault: 'Nearby Attractions',
+    icon: FaLandmark,
+    items: [
+      { key: 'gizaPyramids', defaultLabel: 'Giza Pyramids', icon: FaMountain, distance: '4.2', unit: 'km' },
+      { key: 'sphinx', defaultLabel: 'Sphinx', icon: FaMonument, distance: '4.8', unit: 'km' },
+      { key: 'cataractResort', defaultLabel: 'Cataract Pyramids Resort', icon: FaHotel, distance: '5', unit: 'km' },
+      { key: 'gem', defaultLabel: 'The Grand Egyptian Museum', icon: FaLandmark, distance: '5', unit: 'km' },
+      { key: 'andalusPark', defaultLabel: 'Andalus Park', icon: FaTree, distance: '9', unit: 'km' },
+      { key: 'cairoTower', defaultLabel: 'Cairo Tower', icon: FaBuilding, distance: '10', unit: 'km' },
+      { key: 'modernArtMuseum', defaultLabel: 'Museum of Modern Egyptian Art', icon: FaPalette, distance: '10', unit: 'km' },
+      { key: 'fustatPark', defaultLabel: 'Fustat Park', icon: FaTree, distance: '10', unit: 'km' },
+      { key: 'qasrElNilBridge', defaultLabel: 'Qasr El Nil Bridge', icon: FaArchway, distance: '10', unit: 'km' },
+      { key: 'aucTahrir', defaultLabel: 'American University in Cairo - Tahrir Square', icon: FaUniversity, distance: '10', unit: 'km' },
+    ],
+  },
+  {
+    id: 'dining',
+    titleKey: 'hotel.nearby.dining',
+    titleDefault: 'Restaurants & Cafes',
+    icon: FaCocktail,
+    items: [
+      { key: 'lobbyBar', defaultLabel: 'Lobby Bar', icon: FaCocktail, distance: '20', unit: 'm', typeKey: 'hotel.nearby.cafeBar', typeDefault: 'Cafe / Bar' },
+      { key: 'shouqCafe', defaultLabel: 'Shouq Cafe', icon: FaCoffee, distance: '20', unit: 'm', typeKey: 'hotel.nearby.cafeBar', typeDefault: 'Cafe / Bar' },
+      { key: 'loungeCafe', defaultLabel: 'Lounge Cafe', icon: FaGlassCheers, distance: '20', unit: 'm', typeKey: 'hotel.nearby.cafeBar', typeDefault: 'Cafe / Bar' },
+    ],
+  },
+  {
+    id: 'landmarks',
+    titleKey: 'hotel.nearby.landmarks',
+    titleDefault: 'Top Tourist Landmarks',
+    icon: FaMapMarkedAlt,
+    items: [
+      { key: 'copticMuseum', defaultLabel: 'Coptic Museum', icon: FaChurch, distance: '10', unit: 'km' },
+      { key: 'tahrirSquare', defaultLabel: 'Tahrir Square', icon: FaMapMarkedAlt, distance: '10', unit: 'km' },
+      { key: 'egyptianMuseum', defaultLabel: 'Egyptian Museum', icon: FaLandmark, distance: '10', unit: 'km' },
+      { key: 'abdeenPalace', defaultLabel: 'Abdeen Palace', icon: FaCrown, distance: '11', unit: 'km' },
+      { key: 'aquariumGrotto', defaultLabel: 'The Aquarium Grotto Garden', icon: FaFish, distance: '11', unit: 'km' },
+      { key: 'islamicArtMuseum', defaultLabel: 'Museum of Islamic Art', icon: FaMosque, distance: '12', unit: 'km' },
+      { key: 'saladinCitadel', defaultLabel: 'Saladin Citadel', icon: FaMonument, distance: '13', unit: 'km' },
+      { key: 'azharPark', defaultLabel: 'Al-Azhar Park', icon: FaTree, distance: '14', unit: 'km' },
+      { key: 'octoberPanorama', defaultLabel: 'The 6th of October War Panorama', icon: FaFlag, distance: '19', unit: 'km' },
+    ],
+  },
+];
 
 const HotelDetails = () => {
   const { t, i18n } = useTranslation();
@@ -118,8 +184,16 @@ const HotelDetails = () => {
     telephones: apiHotel?.phone ? [apiHotel.phone] : [],
     cell: apiHotel?.phone || '',
     email: apiHotel?.email || '',
-    facebook: '',
-    instagram: '',
+    facebook:
+      apiHotel?.facebook ||
+      (currentSlug === 'sol-pyramid-hotel'
+        ? 'https://www.facebook.com/people/Solpyramid-Hotel/61584597357251/?rdid=nHbjJUmnT0fCQTG3&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1aiB2ma5oi%2F#'
+        : ''),
+    instagram:
+      apiHotel?.instagram ||
+      (currentSlug === 'sol-pyramid-hotel'
+        ? 'https://www.instagram.com/solpyramidhotel?utm_source=qr&xtok=ZXg1YW90ejZiOGgw'
+        : ''),
     website: apiHotel?.website || '',
   };
 
@@ -233,9 +307,9 @@ const HotelDetails = () => {
           <div className="max-w-3xl">
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 mb-4">
               <div className="flex items-center gap-2">
-                <span className="flex items-center gap-0.5 text-gold-400 text-base md:text-lg">
+                <span className="flex items-center gap-0.5 text-gold-300 text-base md:text-lg drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]">
                   {Array.from({ length: Math.min(Math.max(Number(apiHotel?.stars) || 5, 1), 5) }).map((_, i) => (
-                    <FaStar key={i} />
+                    <FaStar key={i} className="text-gold-300" />
                   ))}
                 </span>
                 <span className="text-white text-[11px] md:text-xs font-semibold uppercase tracking-widest">
@@ -626,27 +700,12 @@ const HotelDetails = () => {
         <div className="bg-white dark:bg-obsidian-800 rounded-3xl shadow-sm border border-slate-200/60 dark:border-obsidian-700 p-4 md:p-8 flex flex-col lg:flex-row gap-8 items-stretch">
           <div className="lg:w-1/2 flex flex-col justify-between py-2">
             <div>
-              <p className="text-slate-700 dark:text-slate-200 text-[15px] leading-relaxed mb-6">
+              <p className="text-slate-700 dark:text-slate-200 text-[15px] leading-relaxed">
                 "{t(
                   'hotel.location.proximityDesc',
                   'Sol Pyramid Hotel enjoys a premium spot in Haram, Giza, located right behind Le Meridien Pyramids. It puts you in immediate walking or short-driving distance to the ancient pyramids, making it the perfect base camp for history buffs and global travelers.'
                 )}"
               </p>
-
-              <div className="space-y-3.5 text-sm text-slate-800 dark:text-slate-200 font-medium">
-                <div className="flex items-center gap-3">
-                  <FaCheckCircle className="text-green-600 text-lg shrink-0" />
-                  <span>{t('hotel.location.dist1', 'Giza Pyramids Entrance — 5 mins walk')}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <FaCheckCircle className="text-green-600 text-lg shrink-0" />
-                  <span>{t('hotel.location.dist2', 'Grand Egyptian Museum (GEM) — 10 mins drive')}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <FaCheckCircle className="text-green-600 text-lg shrink-0" />
-                  <span>{t('hotel.location.dist3', 'Cairo International Airport — 45 mins drive')}</span>
-                </div>
-              </div>
             </div>
 
             <div className="mt-8 p-5 rounded-2xl bg-slate-50 dark:bg-obsidian-700/50 border border-slate-200 dark:border-obsidian-600 text-slate-700 dark:text-slate-200 flex items-start gap-4">
@@ -673,6 +732,65 @@ const HotelDetails = () => {
                 title={t('hotel.location.title', 'Hotel Location')}
               />
             </ConsentGate>
+          </div>
+        </div>
+
+        {/* What's Nearby */}
+        <div className="mt-12">
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <span className="w-11 h-11 rounded-2xl bg-gold-500/15 text-gold-600 dark:text-gold-300 flex items-center justify-center shrink-0">
+              <FaMapMarkedAlt className="text-xl" />
+            </span>
+            <h3 className="text-2xl md:text-3xl font-display font-semibold text-slate-900 dark:text-white">
+              {t('hotel.nearby.title', "What's Nearby")}
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {nearbyGroups.map((group) => {
+              const GroupIcon = group.icon;
+              return (
+                <div
+                  key={group.id}
+                  className="rounded-2xl border border-slate-200/70 dark:border-obsidian-600 bg-slate-50/80 dark:bg-obsidian-700/40 p-5 md:p-6"
+                >
+                  <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-200 dark:border-obsidian-600">
+                    <span className="w-8 h-8 rounded-lg bg-gold-500/15 text-gold-600 dark:text-gold-300 flex items-center justify-center shrink-0">
+                      <GroupIcon className="text-sm" />
+                    </span>
+                    <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 dark:text-white">
+                      {t(group.titleKey, group.titleDefault)}
+                    </h4>
+                  </div>
+
+                  <ul className="space-y-3">
+                    {group.items.map((item) => {
+                      const ItemIcon = item.icon;
+                      return (
+                        <li key={item.key} className="flex items-center justify-between gap-3">
+                          <span className="flex items-center gap-2.5 min-w-0 text-sm font-medium text-slate-700 dark:text-slate-200">
+                            <ItemIcon className="text-gold-600 dark:text-gold-300 text-sm shrink-0" />
+                            <span className="min-w-0">
+                              <span className="block truncate" title={t(`hotel.nearby.${item.key}`, item.defaultLabel)}>
+                                {t(`hotel.nearby.${item.key}`, item.defaultLabel)}
+                              </span>
+                              {item.typeKey && (
+                                <span className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                                  {t(item.typeKey, item.typeDefault)}
+                                </span>
+                              )}
+                            </span>
+                          </span>
+                          <span className="shrink-0 rounded-full border border-slate-200 dark:border-obsidian-600 bg-white dark:bg-obsidian-800 px-2.5 py-0.5 text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                            {item.distance} {t(`hotel.nearby.${item.unit}`, item.unit)}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -314,9 +314,9 @@ const HotelsCatalog = () => {
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                      <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 flex items-center gap-1 bg-slate-950/85 backdrop-blur-sm text-gold-400 px-3 py-1 rounded-full text-xs font-bold border border-gold-500/30">
+                      <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 flex items-center gap-1 bg-slate-950/85 backdrop-blur-sm text-gold-300 px-3 py-1 rounded-full text-xs font-bold border border-gold-500/30">
                         {Array.from({ length: Math.min(Math.max(Number(hotel.stars) || 5, 1), 5) }).map((_, i) => (
-                          <FaStar key={i} className="text-[11px]" />
+                          <FaStar key={i} className="text-[11px] text-gold-300" />
                         ))}
                       </div>
                       {hotel.city && (

@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../../utils/api';
 import { useDestinations } from '../../hooks/useDestinations';
+import CountryPhoneInput from '../ui/CountryPhoneInput';
 
 const ContactForms = () => {
   const { t, i18n } = useTranslation();
@@ -890,14 +891,20 @@ const ContactForms = () => {
                       </div>
                       <div className="form-field-group">
                         <label className="form-label">{t('contactForms.phone', 'Phone Number *')}</label>
-                        <input
-                          type="tel"
+                        <CountryPhoneInput
+                          id="contact-form-phone"
                           name="phone"
                           value={b2cForm.phone}
-                          onChange={handleB2cChange}
-                          className={`form-input ${b2cErrors.phone ? 'error' : ''}`}
+                          onChange={(value) => {
+                            setB2cForm((prev) => ({ ...prev, phone: value }));
+                            setB2cErrors((prev) =>
+                              prev.phone ? { ...prev, phone: false } : prev
+                            );
+                          }}
+                          inputClassName={`form-input ${b2cErrors.phone ? 'error' : ''}`}
                           placeholder={t('contactForms.phonePlaceholder', 'Enter phone with country code (e.g. +1...)')}
                           required
+                          theme="light"
                         />
                       </div>
                     </div>
@@ -1181,14 +1188,20 @@ const ContactForms = () => {
                       </div>
                       <div className="form-field-group">
                         <label className="form-label">{t('contactForms.agentPhone', 'Agent Direct Phone *')}</label>
-                        <input
-                          type="tel"
+                        <CountryPhoneInput
+                          id="contact-agent-phone"
                           name="agentPhone"
                           value={b2bForm.agentPhone}
-                          onChange={handleB2bChange}
-                          className={`form-input ${b2bErrors.agentPhone ? 'error' : ''}`}
+                          onChange={(value) => {
+                            setB2bForm((prev) => ({ ...prev, agentPhone: value }));
+                            setB2bErrors((prev) =>
+                              prev.agentPhone ? { ...prev, agentPhone: false } : prev
+                            );
+                          }}
+                          inputClassName={`form-input ${b2bErrors.agentPhone ? 'error' : ''}`}
                           placeholder={t('contactForms.agentPhonePlaceholder', 'Direct phone line')}
                           required
+                          theme="light"
                         />
                       </div>
                     </div>

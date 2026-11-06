@@ -76,7 +76,7 @@ const SEOHead = ({
   );
 
   return (
-    <Helmet htmlAttributes={{ lang: currentLang, dir: i18n.dir() }}>
+    <Helmet htmlAttributes={{ lang: currentLang, dir: currentLang === 'ar' || currentLang?.startsWith('ar') ? 'rtl' : 'ltr' }}>
       {/* Standard Meta Tags */}
       <title>{pageTitle}</title>
       <meta name="description" content={pageDesc} />

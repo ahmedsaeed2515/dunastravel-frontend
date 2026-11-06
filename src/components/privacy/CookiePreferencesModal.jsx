@@ -11,7 +11,7 @@ import { CATEGORY_METADATA, CONSENT_CATEGORIES } from '../../privacy/consent/con
 export function CookiePreferencesModal() {
   const { t, i18n } = useTranslation();
   const { isPreferencesOpen, closePreferences, consent, savePreferences, acceptAll, rejectAll } = useConsent();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   // Local draft state for toggle switches
   const [draftPreferences, setDraftPreferences] = useState({

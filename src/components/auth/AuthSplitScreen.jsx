@@ -35,7 +35,7 @@ const AuthSplitScreen = ({ initialTab = 'login' }) => {
     setActiveTab(initialTab);
   }
 
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   // Sanitize returnUrl against open redirect vulnerabilities
   const getSanitizedReturnUrl = (url) => {

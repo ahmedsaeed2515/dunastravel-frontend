@@ -41,7 +41,7 @@ const FloatingGuideR = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const tooltip = t('guider.tooltip', 'Ask GuideR • AI Travel Concierge');
 
   const showWidget = !isOpen && (guiderAvailability?.loaded ? guiderAvailability?.enabled : true) && isScrolledPastHero;

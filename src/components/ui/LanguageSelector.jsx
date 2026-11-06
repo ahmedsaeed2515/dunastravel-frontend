@@ -33,7 +33,7 @@ const LanguageSelector = ({ light = false, className = '', showFullLabel = false
   const buttonRef = useRef(null);
   const listboxRef = useRef(null);
 
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const currentLang = activeLanguages.find((l) => l.code === i18n.language) ||
     activeLanguages.find((l) => l.code === (i18n.language || '').split('-')[0]) ||
     activeLanguages[0] ||

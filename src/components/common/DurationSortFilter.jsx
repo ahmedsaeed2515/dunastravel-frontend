@@ -35,7 +35,7 @@ export default function DurationSortFilter({ tours = [], onFilterChange, classNa
   const [rangeFilter, setRangeFilter] = useState('all'); // 'all' | 'short' (1-5) | 'medium' (6-9) | 'long' (10+)
   const lastEmittedSignatureRef = useRef(null);
 
-  const isRtl = i18n.dir() === 'rtl' || i18n.language === 'ar';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   const filteredAndSortedTours = useMemo(() => {
     if (!Array.isArray(tours)) return [];

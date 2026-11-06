@@ -36,6 +36,8 @@ import { useHotel } from '../../hooks/useHotels';
 import Button from '../../components/ui/Button';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import ErrorState from '../../components/ui/ErrorState';
+import CountryPhoneInput from '../../components/ui/CountryPhoneInput';
+import CountryNationalityInput from '../../components/ui/CountryNationalityInput';
 
 const RoomDetails = () => {
   const { t, i18n } = useTranslation();
@@ -824,30 +826,35 @@ const RoomDetails = () => {
                     <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                       {t('booking.phone', 'Phone Number')}
                     </label>
-                    <input
-                      type="tel"
+                    <CountryPhoneInput
+                      id="hotel-phone"
                       name="phone"
                       required
                       placeholder={t('hotel.room.phonePlaceholder', 'e.g. +1 555-0199')}
                       value={bookingForm.phone}
-                      onChange={handleInputChange}
-                      className="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors"
+                      onChange={(value) =>
+                        setBookingForm((prev) => ({ ...prev, phone: value }))
+                      }
+                      inputClassName="w-full p-3.5 rounded-xl bg-[#17233d] border border-blue-900/60 text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors"
+                      triggerClassName="!bg-[#17233d] !border-blue-900/60 !text-white"
                     />
                   </div>
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-gold-400 font-extrabold mb-1.5">
                       {t('hotel.room.nationality', 'Nationality')}
                     </label>
-                    <input
+                    <CountryNationalityInput
                       id="hotel-nationality"
-                      type="text"
                       name="nationality"
                       required
-                      aria-required="true"
+                      ariaInvalid={!bookingForm.nationality || !bookingForm.nationality.trim()}
                       placeholder={t('hotel.room.nationalityPlaceholder', 'e.g. Egyptian, Saudi, Italian...')}
                       value={bookingForm.nationality}
-                      onChange={handleInputChange}
-                      className={`w-full p-3.5 rounded-xl bg-[#17233d] border text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors ${
+                      onChange={(value) =>
+                        setBookingForm((prev) => ({ ...prev, nationality: value }))
+                      }
+                      className="w-full"
+                      inputClassName={`w-full p-3.5 rounded-xl bg-[#17233d] border text-white placeholder:text-slate-400 text-sm outline-none focus:border-gold-400 transition-colors ${
                         !bookingForm.nationality || !bookingForm.nationality.trim()
                           ? 'border-red-500/60'
                           : 'border-blue-900/60'

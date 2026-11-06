@@ -104,6 +104,16 @@ const pascalCasePostProcessor = {
 
 i18n.use(pascalCasePostProcessor).use(LanguageDetector).use(initReactI18next);
 
+// Polyfill for i18n.dir() — removed in i18next v26+.
+// Attached immediately (not only after async init) so components that render
+// before initI18n() resolves don't crash with "i18n.dir is not a function".
+if (typeof i18n.dir !== 'function') {
+  i18n.dir = () => {
+    const lng = (typeof i18n.language === 'string' && i18n.language) || i18n.languages?.[0] || getDefaultLng();
+    return lng === 'ar' || lng.startsWith('ar') ? 'rtl' : 'ltr';
+  };
+}
+
 let initPromise = null;
 
 export const initI18n = async () => {
@@ -125,6 +135,16 @@ export const initI18n = async () => {
         keySeparator: false,
         postProcess: ['pascalCaseProcessor'],
       });
+
+      // Polyfill for i18n.dir() — removed in i18next v26+.
+      // Many components still call i18n.dir() to detect RTL. Restore it here
+      // so all existing usages keep working without editing every file.
+      if (typeof i18n.dir !== 'function') {
+        i18n.dir = () => {
+          const lng = i18n.language || i18n.languages?.[0] || 'en';
+          return lng === 'ar' || lng.startsWith('ar') ? 'rtl' : 'ltr';
+        };
+      }
 
       syncDocumentDirection(lng);
 

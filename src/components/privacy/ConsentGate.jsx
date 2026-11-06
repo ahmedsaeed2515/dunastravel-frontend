@@ -18,7 +18,7 @@ export function ConsentGate({
 }) {
   const { t, i18n } = useTranslation();
   const { consent, hasConsent, savePreferences, openPreferences } = useConsent();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   if (hasConsent(category)) {
     return <>{children}</>;

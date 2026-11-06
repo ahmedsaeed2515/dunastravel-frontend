@@ -13,7 +13,7 @@ import { FaChevronRight, FaCalendarAlt, FaClock, FaTag, FaShareAlt, FaPlane, FaA
 
 const BlogDetails = () => {
   const { t, i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const { slug } = useParams();
   const navigate = useNavigate();
   const { blog, loading, error } = useBlog(slug);

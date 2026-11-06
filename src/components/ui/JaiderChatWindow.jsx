@@ -27,12 +27,13 @@ import {
 import { useJaiderChat } from '../../context/JaiderChatContext';
 import { useAuth } from '../../context/AuthContext';
 import FormattedChatMessage from './FormattedChatMessage';
+import CountryPhoneInput from './CountryPhoneInput';
 
 const JaiderChatWindow = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
   const {
     isOpen,
     setIsOpen,
@@ -666,12 +667,15 @@ const JaiderChatWindow = () => {
                                       <label className="text-[10px] text-slate-400 block mb-1">
                                         {isRtl ? 'رقم الهاتف / واتساب' : 'Phone / WhatsApp'}
                                       </label>
-                                      <input
-                                        type="tel"
+                                      <CountryPhoneInput
+                                        id="chat-custom-trip-phone"
+                                        name="phone"
                                         value={customTripPhone}
-                                        onChange={(e) => setCustomTripPhone(e.target.value)}
+                                        onChange={setCustomTripPhone}
                                         placeholder="+123456789"
-                                        className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs focus:border-gold-400 focus:outline-none"
+                                        className="w-full"
+                                        inputClassName="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs focus:border-gold-400 focus:outline-none"
+                                        triggerClassName="!px-2 !py-1.5 !rounded-lg !text-[11px] !bg-slate-900 !border-slate-700"
                                       />
                                     </div>
                                     <div className="flex gap-2">
@@ -997,12 +1001,15 @@ const JaiderChatWindow = () => {
                   onChange={(e) => setLeadEmail(e.target.value)}
                   className="bg-slate-950 border border-slate-700 text-xs rounded-xl px-3 py-2 text-slate-200 focus:border-gold-400 focus:outline-none"
                 />
-                <input
-                  type="tel"
+                <CountryPhoneInput
+                  id="chat-lead-phone"
+                  name="phone"
                   placeholder={isRtl ? 'رقم الهاتف / واتساب (اختياري)' : 'Phone / WhatsApp (Optional)'}
                   value={leadPhone}
-                  onChange={(e) => setLeadPhone(e.target.value)}
-                  className="bg-slate-950 border border-slate-700 text-xs rounded-xl px-3 py-2 text-slate-200 focus:border-gold-400 focus:outline-none"
+                  onChange={setLeadPhone}
+                  className="w-full"
+                  inputClassName="w-full bg-slate-950 border border-slate-700 text-xs rounded-xl px-3 py-2 text-slate-200 focus:border-gold-400 focus:outline-none"
+                  triggerClassName="!px-2 !py-2 !rounded-xl !text-[11px] !bg-slate-950 !border-slate-700 !text-slate-200"
                 />
                 <button
                   type="submit"

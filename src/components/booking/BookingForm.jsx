@@ -19,6 +19,8 @@ import {
   FaBuilding
 } from 'react-icons/fa';
 import InvoiceModal from './InvoiceModal';
+import CountryPhoneInput from '../ui/CountryPhoneInput';
+import CountryNationalityInput from '../ui/CountryNationalityInput';
 import api from '../../utils/api';
 import { redirectToPayLinkCheckout } from '../../utils/paylink';
 import { trackEvent } from '../../utils/analytics';
@@ -56,6 +58,12 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
   const { user, resendVerification } = useAuth();
   const { currency: selectedCurrency, convertPrice, ecbEurUsdRate, ecbUsdEurRate, eurRate } = useCurrency();
   const bookingTourKey = tourSlug || tourId;
+
+  // Derive single-traveler policy from booking rules
+  // Only enforce minimum 2 travelers when bookingRules explicitly has singleSupplementEnabled=true
+  const effectiveMinTravelers = bookingRules && bookingRules.singleSupplementEnabled === true ? 2 : 1;
+  const singleSupplementEnabled = bookingRules?.singleSupplementEnabled === true;
+  const singleSupplementPercent = Number(bookingRules?.singleSupplementPercent) || 70;
 
   // A tour is only bookable online when it has a real numeric price.
   // `undefined` means the caller deliberately doesn't manage pricing (e.g. services).
@@ -123,7 +131,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
     departureTime: '',
     language: user?.preferredLanguage || i18n.language || 'en',
     activityType: '',
-    adults: 1,
+    adults: effectiveMinTravelers,
     children: 0,
     infants: 0,
     fullName: user?.name || '',
@@ -913,7 +921,7 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                   </span>
                   <div className="grid grid-cols-3 gap-2.5">
                     {[
-                      { k: 'adults', lbl: t('booking.adults', 'Adults'), min: 1, sub: '12+ yrs' },
+                      { k: 'adults', lbl: t('booking.adults', 'Adults'), min: effectiveMinTravelers, sub: '12+ yrs' },
                       { k: 'children', lbl: t('booking.children', 'Children'), min: 0, sub: '2-11 yrs' },
                       { k: 'infants', lbl: t('booking.infants', 'Infants'), min: 0, sub: '<2 yrs' },
                     ].map(({ k, lbl, min, sub }) => (
@@ -1035,25 +1043,26 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                       required
                       className={inputClass}
                     />
-                    <input
+                    <CountryPhoneInput
                       id="contact-phone"
-                      type="tel"
+                      name="phone"
                       placeholder={t('booking.phone', 'Phone Number')}
                       value={b.phone}
-                      onChange={(e) => updateB('phone', e.target.value)}
+                      onChange={(value) => updateB('phone', value)}
                       required
-                      className={inputClass}
+                      inputClassName={inputClass}
                     />
                   </div>
-                  <input
+                  <CountryNationalityInput
                     id="booking-nationality"
-                    type="text"
+                    name="nationality"
                     placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
                     value={b.nationality}
-                    onChange={(e) => updateB('nationality', e.target.value)}
+                    onChange={(value) => updateB('nationality', value)}
                     required
-                    aria-required="true"
-                    className={`${inputClass} ${
+                    ariaInvalid={!b.nationality || !b.nationality.trim()}
+                    className="w-full"
+                    inputClassName={`${inputClass} ${
                       !b.nationality || !b.nationality.trim() ? 'border-red-500/60' : ''
                     }`}
                   />
@@ -1240,6 +1249,22 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                         </div>
                       )}
 
+                      {singleSupplementEnabled && pricePreview?.singleSupplementUsd && Number(pricePreview.singleSupplementUsd) > 0 && (
+                        <div className="flex items-center justify-between text-[10px] text-ivory-400/80 pt-2">
+                          <span className="uppercase tracking-wider">
+                            {t('booking.singleSupplementMessage', 'Single traveler supplement: 70%% added to per-person price')}
+                          </span>
+                          <div>
+                            <span className="text-[11px] font-semibold text-gold-400">
+                              {t('booking.singleSupplementBreakdown', 'Base price: $100 + 70%% supplement = $170 total.')}
+                            </span>
+                            <span className="text-[10px] text-ivory-400/80">
+                              ({pricePreview.singleSupplementUsd} USD supplement)
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="flex items-center gap-1.5 text-[10px] text-ivory-400/80 pt-1">
                         <FaShieldAlt className="text-gold-400" size={10} />
                         <span>{t('booking.gatePayInGuarantee', 'GatePayIn SSL Secured Checkout')}</span>
@@ -1393,13 +1418,13 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                   <label htmlFor="inquiry-phone" className={labelClass}>
                     {t('booking.phone', 'Phone Number')}
                   </label>
-                  <input
+                  <CountryPhoneInput
                     id="inquiry-phone"
-                    type="tel"
+                    name="phone"
                     value={inq.phone}
-                    onChange={(e) => setInq((p) => ({ ...p, phone: e.target.value }))}
+                    onChange={(value) => setInq((p) => ({ ...p, phone: value }))}
                     required
-                    className={inputClass}
+                    inputClassName={inputClass}
                   />
                 </div>
                 <div>
@@ -1407,13 +1432,14 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                     <FaGlobeAmericas className="text-gold-400" size={11} />
                     {t('booking.nationalityLabel', 'الجنسية')}
                   </label>
-                  <input
+                  <CountryNationalityInput
                     id="inquiry-nationality"
-                    type="text"
+                    name="nationality"
                     placeholder={t('booking.nationality', 'Nationality (e.g. Egyptian, Saudi...)')}
                     value={inq.nationality}
-                    onChange={(e) => setInq((p) => ({ ...p, nationality: e.target.value }))}
-                    className={inputClass}
+                    onChange={(value) => setInq((p) => ({ ...p, nationality: value }))}
+                    className="w-full"
+                    inputClassName={inputClass}
                   />
                 </div>
                 <div className="relative">

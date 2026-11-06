@@ -12,7 +12,7 @@ import { CATEGORY_METADATA, CONSENT_CATEGORIES, CONSENT_VERSION } from '../../pr
 export function CookiePolicy() {
   const { t, i18n } = useTranslation();
   const { openPreferences, consent } = useConsent();
-  const isRtl = i18n.dir() === 'rtl';
+  const isRtl = i18n.language === 'ar' || i18n.language?.startsWith('ar');
 
   return (
     <>

@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaExclamationCircle } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaExclamationCircle } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import AuthFormField from './AuthFormField';
+import CountryPhoneInput from '../ui/CountryPhoneInput';
 import PasswordStrengthMeter, { calculatePasswordStrength } from './PasswordStrengthMeter';
 
 const RegisterForm = ({ onSuccess, onSwitchToLogin, onTermsClick }) => {
@@ -160,19 +161,24 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, onTermsClick }) => {
       />
 
       {/* Phone Number */}
-      <AuthFormField
-        id="reg-phone"
-        name="phone"
-        label={t('auth.phoneNumber', 'Phone Number')}
-        type="tel"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        placeholder={t('auth.phonePlaceholder', '+1 234 567 8900')}
-        icon={FaPhone}
-        required
-        autoComplete="tel"
-        disabled={isLoading}
-      />
+      <div className="w-full text-start mb-3.5">
+        <label
+          htmlFor="reg-phone"
+          className="block text-[11px] font-semibold uppercase tracking-wider text-gold-400 mb-1.5"
+        >
+          {t('auth.phoneNumber', 'Phone Number')} <span className="text-red-400">*</span>
+        </label>
+        <CountryPhoneInput
+          id="reg-phone"
+          name="phone"
+          value={phone}
+          onChange={setPhone}
+          placeholder={t('auth.phonePlaceholder', '+1 234 567 8900')}
+          required
+          disabled={isLoading}
+          inputClassName="w-full text-sm font-medium py-3 rounded-xl transition-all duration-200 outline-none border border-white/15 dark:border-gold-500/25 text-white placeholder:text-ivory-400/50 hover:border-gold-500/40 focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25 disabled:opacity-60 disabled:cursor-not-allowed"
+        />
+      </div>
 
       {/* Password */}
       <AuthFormField

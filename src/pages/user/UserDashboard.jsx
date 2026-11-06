@@ -13,6 +13,8 @@ import { useWishlist } from '../../hooks/useWishlist';
 import InvoiceModal from '../../components/booking/InvoiceModal';
 import TourCard from '../../components/tour/TourCard';
 import Button from '../../components/ui/Button';
+import CountryPhoneInput from '../../components/ui/CountryPhoneInput';
+import CountryNationalityInput from '../../components/ui/CountryNationalityInput';
 import api from '../../utils/api';
 import { useToast } from '../../context/ToastContext';
 
@@ -499,21 +501,24 @@ const UserDashboard = ({ initialTab = 'overview' }) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className={labelClass}><FaPhone className="inline mr-1" size={11} />{t('auth.phoneNumber', 'Phone Number')}</label>
-                      <input
-                        type="tel"
+                      <CountryPhoneInput
+                        id="profile-phone"
+                        name="phone"
                         value={profileForm.phone}
-                        onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
-                        className={inputClass}
+                        onChange={(value) => setProfileForm({ ...profileForm, phone: value })}
+                        inputClassName={inputClass}
                       />
                     </div>
                     <div>
                       <label className={labelClass}><FaGlobeAmericas className="inline mr-1" size={11} />{t('user.nationality', 'Nationality')}</label>
-                      <input
-                        type="text"
+                      <CountryNationalityInput
+                        id="profile-nationality"
+                        name="nationality"
                         value={profileForm.nationality}
                         maxLength={100}
-                        onChange={(e) => setProfileForm({ ...profileForm, nationality: e.target.value })}
-                        className={inputClass}
+                        onChange={(value) => setProfileForm({ ...profileForm, nationality: value })}
+                        className="w-full"
+                        inputClassName={inputClass}
                       />
                     </div>
                   </div>
