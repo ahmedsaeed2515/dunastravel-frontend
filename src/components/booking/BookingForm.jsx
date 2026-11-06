@@ -60,10 +60,12 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
   const bookingTourKey = tourSlug || tourId;
 
   // Derive single-traveler policy from booking rules
-  // Only enforce minimum 2 travelers when bookingRules explicitly has singleSupplementEnabled=true
-  const effectiveMinTravelers = bookingRules && bookingRules.singleSupplementEnabled === true ? 2 : 1;
+  // When singleSupplementEnabled is explicitly false, single traveler is blocked (min 2 travelers).
+  // When singleSupplementEnabled is true, 1 adult booking is permitted with single supplement fee.
+  // When bookingRules is not configured, default minimum travelers is 1.
   const singleSupplementEnabled = bookingRules?.singleSupplementEnabled === true;
   const singleSupplementPercent = Number(bookingRules?.singleSupplementPercent) || 70;
+  const effectiveMinTravelers = (bookingRules && bookingRules.singleSupplementEnabled === false) ? 2 : 1;
 
   // A tour is only bookable online when it has a real numeric price.
   // `undefined` means the caller deliberately doesn't manage pricing (e.g. services).
@@ -1185,7 +1187,10 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                 {/* Pricing Summary Breakdown Card */}
                 {(() => {
                   const baseRate = Number(initialPrice) || Number(pricePreview?.basePriceUsd) || 0;
-                  const clientTotal = (baseRate * b.adults) + (baseRate * 0.5 * b.children);
+                  let clientTotal = (baseRate * b.adults) + (baseRate * 0.5 * b.children);
+                  if (singleSupplementEnabled && b.adults === 1 && b.children === 0) {
+                    clientTotal += (baseRate * singleSupplementPercent / 100);
+                  }
 
                   const safeConvert = typeof convertPrice === 'function'
                     ? convertPrice
@@ -1249,18 +1254,20 @@ const BookingForm = ({ tourId, tourSlug, tourTitle, durationDays, transportChoic
                         </div>
                       )}
 
-                      {singleSupplementEnabled && pricePreview?.singleSupplementUsd && Number(pricePreview.singleSupplementUsd) > 0 && (
-                        <div className="flex items-center justify-between text-[10px] text-ivory-400/80 pt-2">
+                      {singleSupplementEnabled && b.adults === 1 && b.children === 0 && (
+                        <div className="flex items-center justify-between text-[10px] text-ivory-400/80 pt-2 border-t border-gold-500/10 mt-2">
                           <span className="uppercase tracking-wider">
-                            {t('booking.singleSupplementMessage', 'Single traveler supplement: 70%% added to per-person price')}
+                            {t('booking.singleSupplementMessage', 'Single traveler booking: {{percent}}% supplement added to per-person price.', { percent: singleSupplementPercent })}
                           </span>
                           <div>
                             <span className="text-[11px] font-semibold text-gold-400">
-                              {t('booking.singleSupplementBreakdown', 'Base price: $100 + 70%% supplement = $170 total.')}
+                              +{singleSupplementPercent}%
                             </span>
-                            <span className="text-[10px] text-ivory-400/80">
-                              ({pricePreview.singleSupplementUsd} USD supplement)
-                            </span>
+                            {(pricePreview?.singleSupplementUsd || baseRate > 0) && (
+                              <span className="text-[10px] text-ivory-400/80 ml-1">
+                                (${Number(pricePreview?.singleSupplementUsd || (baseRate * singleSupplementPercent / 100)).toFixed(2)} USD)
+                              </span>
+                            )}
                           </div>
                         </div>
                       )}

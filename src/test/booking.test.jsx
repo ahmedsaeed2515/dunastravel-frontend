@@ -103,6 +103,45 @@ describe('Prompt 04: Booking Engine & Customer Inquiries Integration', () => {
     });
   });
 
+  it('applies single traveler policy supplement when singleSupplementEnabled is true and adults is 1', async () => {
+    vi.spyOn(api, 'post').mockResolvedValue({
+      totalAmountUsd: '170.00',
+      singleSupplementUsd: '70.00',
+      singleSupplementPercent: 70,
+      singleSupplementEnabled: true,
+    });
+
+    render(
+      <BookingForm
+        tourId="tour-single"
+        tourSlug="tour-single"
+        tourTitle="Single Tour"
+        initialPrice={100}
+        bookingRules={{ singleSupplementEnabled: true, singleSupplementPercent: 70 }}
+      />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('+70%')).toBeInTheDocument();
+    });
+  });
+
+  it('enforces minimum 2 travelers when singleSupplementEnabled is explicitly false', async () => {
+    const { container } = render(
+      <BookingForm
+        tourId="tour-no-single"
+        tourSlug="tour-no-single"
+        tourTitle="No Single Tour"
+        initialPrice={100}
+        bookingRules={{ singleSupplementEnabled: false }}
+      />
+    );
+
+    // The adults decrement button should be disabled when adults is 2 (min: 2)
+    const decreaseBtn = screen.getByLabelText('Decrease Adults');
+    expect(decreaseBtn).toBeDisabled();
+  });
+
   it('uses the backend slug as the canonical booking identifier for static programs', async () => {
     vi.spyOn(api, 'post').mockResolvedValue({ totalAmountUsd: '2400.00' });
 

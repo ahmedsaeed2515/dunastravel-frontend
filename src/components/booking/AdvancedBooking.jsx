@@ -66,9 +66,11 @@ export default function AdvancedBooking({
   const [otpResentSuccess, setOtpResentSuccess] = useState('');
 
   // Single traveler policy derived from booking rules
-  const effectiveMinTravelers = (bookingRules?.singleSupplementEnabled !== false ? 2 : 1);
+  // When singleSupplementEnabled is explicitly false, single traveler is blocked (min 2 travelers).
+  // When singleSupplementEnabled is true, 1 adult booking is permitted with single supplement fee.
   const singleSupplementEnabled = bookingRules?.singleSupplementEnabled === true;
   const singleSupplementPercent = Number(bookingRules?.singleSupplementPercent) || 70;
+  const effectiveMinTravelers = (bookingRules && bookingRules.singleSupplementEnabled === false) ? 2 : 1;
 
   const handleResendOtpFromBooking = async () => {
     if (!user?.email) return;
@@ -755,25 +757,28 @@ export default function AdvancedBooking({
               {/* Pricing Summary Breakdown Card */}
               {(() => {
                 const baseRate = Number(basePricePerPerson) || 0;
-                const clientTotal = (baseRate * formData.adults) + (baseRate * 0.5 * formData.children);
+                let clientTotal = (baseRate * formData.adults) + (baseRate * 0.5 * formData.children);
+                let supplementAmount = 0;
+                if (singleSupplementEnabled && formData.adults === 1 && formData.children === 0) {
+                  supplementAmount = baseRate * singleSupplementPercent / 100;
+                  clientTotal += supplementAmount;
+                }
                 const formattedPrice = clientTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 // Single traveler supplement display
                 let supplementDisplay = null;
                 if (singleSupplementEnabled && formData.adults === 1 && formData.children === 0) {
-                  const supplementAmount = baseRate * singleSupplementPercent / 100;
-                  const supplementedTotal = clientTotal + supplementAmount;
                   supplementDisplay = (
-                    <div className="flex items-center justify-between text-[10px] text-ivory-400/80 pt-2">
+                    <div className="flex items-center justify-between text-[10px] text-ivory-400/80 pt-2 border-t border-gold-500/10 mt-1">
                       <span className="uppercase tracking-wider">
-                        {t('booking.singleSupplementMessage', 'Single traveler supplement: 70%% added to per-person price')}
+                        {t('booking.singleSupplementMessage', 'Single traveler booking: {{percent}}% supplement added to per-person price.', { percent: singleSupplementPercent })}
                       </span>
                       <span>
                         <span className="text-[11px] font-semibold text-gold-400">
-                          {t('booking.singleSupplementBreakdown', 'Base price: $100 + 70%% supplement = $170 total.')}
+                          +{singleSupplementPercent}%
                         </span>
-                        <span className="text-[10px] text-ivory-400/80">
-                          ({supplementAmount.toFixed(2)} USD added)
+                        <span className="text-[10px] text-ivory-400/80 ml-1">
+                          (${supplementAmount.toFixed(2)} USD added)
                         </span>
                       </span>
                     </div>

@@ -239,6 +239,13 @@ const TourDetails = () => {
               <FaUsers className="text-amber-800 dark:text-gold-400 text-2xl mb-1 filter drop-shadow-[0_0_8px_rgba(245,166,35,0.4)]" />
               <span className="text-caption text-black dark:text-gold-300/90 font-black uppercase tracking-wider text-xs">{t('tour.minPax', 'Min Pax')}</span>
               <span className="text-body-md font-black text-black dark:text-white text-base md:text-lg">{resolveLocalizedText(tour.minPax, t, lang) || '2 Pax'}</span>
+              {bookingRules?.singleSupplementEnabled && (
+                <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 mt-0.5">
+                  {lang === 'ar'
+                    ? `متاح للمسافر الفردي (+${bookingRules.singleSupplementPercent || 70}%)`
+                    : `Single traveler (+${bookingRules.singleSupplementPercent || 70}%)`}
+                </span>
+              )}
             </div>
           </div>
         </div>

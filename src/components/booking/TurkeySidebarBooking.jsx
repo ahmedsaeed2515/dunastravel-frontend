@@ -67,9 +67,11 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
   const [otpResentSuccess, setOtpResentSuccess] = useState('');
 
   // Single traveler policy derived from booking rules
-  const effectiveMinTravelers = (bookingRules?.singleSupplementEnabled !== false ? 2 : 1);
+  // When singleSupplementEnabled is explicitly false, single traveler is blocked (min 2 travelers).
+  // When singleSupplementEnabled is true, 1 adult booking is permitted with single supplement fee.
   const singleSupplementEnabled = bookingRules?.singleSupplementEnabled === true;
   const singleSupplementPercent = Number(bookingRules?.singleSupplementPercent) || 70;
+  const effectiveMinTravelers = (bookingRules && bookingRules.singleSupplementEnabled === false) ? 2 : 1;
 
   const handleResendOtpFromBooking = async () => {
     if (!user?.email) return;
@@ -704,13 +706,13 @@ export default function TurkeySidebarBooking({ tourTitle, durationDays, transpor
               </div>
 
               {/* Single Traveler Supplement Notice */}
-              {singleSupplementEnabled && (
+              {singleSupplementEnabled && bookingForm.adults === 1 && bookingForm.children === 0 && (
                 <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-4 text-[11px] text-ivory-400">
-                  <span className="uppercase tracking-wider">
-                    {t('booking.singleSupplementMessage', 'Single traveler: 70%% supplement added to per-person price')}
+                  <span className="uppercase tracking-wider font-semibold text-gold-400">
+                    {t('booking.singleSupplementMessage', 'Single traveler booking: {{percent}}% supplement added to per-person price.', { percent: singleSupplementPercent })}
                   </span>
-                  <span className="ml-2">
-                    {t('booking.singleSupplementBreakdown', 'Base price: $100 + 70%% supplement = $170 total.')}
+                  <span className="ml-2 font-mono text-gold-300">
+                    (+{singleSupplementPercent}%)
                   </span>
                 </div>
               )}
