@@ -143,6 +143,7 @@ function mapTour(tour, lang = 'en') {
     highlights: resolveList(tour.highlights),
     included: resolveList(tour.included || tour.includes || tour.includedServices),
     excluded: resolveList(tour.excluded || tour.excludes || tour.excludedServices),
+    notes: resolveList(tour.notes || tour.notesJsonb || tour.importantNotes),
   };
 }
 

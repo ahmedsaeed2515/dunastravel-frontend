@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaChevronRight, FaChevronLeft, FaClock, FaTag,
   FaCheck, FaTimes, FaMapMarkerAlt, FaBed, FaCheckCircle, FaUsers,
-  FaCompass, FaStar, FaHotel, FaCalendarAlt, FaShieldAlt, FaImages, FaSearchPlus
+  FaCompass, FaStar, FaHotel, FaCalendarAlt, FaShieldAlt, FaImages, FaSearchPlus,
+  FaInfoCircle
 } from 'react-icons/fa';
 import { fadeInUp } from '../../animations/variants';
 import BookingForm from '../../components/booking/BookingForm';
@@ -439,7 +440,7 @@ const TourDetails = () => {
             )}
 
             {/* Inclusions & Exclusions Section */}
-            {((tour.included && tour.included.length > 0) || (tour.excluded && tour.excluded.length > 0)) && (
+            {((tour.included && tour.included.length > 0) || (tour.excluded && tour.excluded.length > 0) || (tour.notes && tour.notes.length > 0)) && (
               <motion.div
                 variants={fadeInUp}
                 initial="hidden"
@@ -518,6 +519,24 @@ const TourDetails = () => {
                     </div>
                   )}
                 </div>
+
+                {/* Tour Notes / Important Notes */}
+                {tour.notes && tour.notes.length > 0 && (
+                  <div className="mt-8 bg-gradient-to-br from-amber-50/95 via-orange-50/80 to-amber-100/70 dark:bg-gradient-to-br dark:from-[#2a1d04] dark:via-[#362505] dark:to-[#422e07] p-6 md:p-8 rounded-2xl border-2 border-amber-500/70 dark:border-gold-400/80 shadow-md">
+                    <h3 className="text-display-md text-xl font-black text-amber-950 dark:text-gold-300 mb-6 flex items-center gap-2.5 font-display" style={{ fontFamily: "'Playfair Display', 'Cairo', serif" }}>
+                      <FaInfoCircle className="text-amber-700 dark:text-gold-400 flex-shrink-0 text-2xl" />
+                      {tour.notesTitle ? resolveLocalizedText(tour.notesTitle, t, lang) : t('tourDetail.importantNotes', 'Important Notes')}
+                    </h3>
+                    <ul className="flex flex-col gap-3.5">
+                      {tour.notes.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-body-md text-slate-900 dark:text-amber-50 font-bold text-sm md:text-base">
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 dark:bg-gold-400 mt-2 flex-shrink-0 shadow-[0_0_8px_rgba(245,166,35,0.6)]" />
+                          <span className="leading-relaxed">{resolveLocalizedText(item, t, lang)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </motion.div>
             )}
 

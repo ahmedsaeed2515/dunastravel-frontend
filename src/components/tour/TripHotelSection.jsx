@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa';
 import { resolveLocalizedText } from '../../utils/titleHelper';
 import { filterMeaningfulAccommodations } from '../../utils/accommodationHelper';
+import TransportPricingDisplay from './TransportPricingDisplay';
 
 const FALLBACK_HOTEL_IMG = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200';
 
@@ -1011,6 +1012,14 @@ export default function TripHotelSection({
           </motion.div>
         )}
       </AnimatePresence>
+    {/* Transport Pricing Table */}
+      <TransportPricingDisplay
+        tour={tour}
+        t={t}
+        lang={lang}
+        formatPrice={formatPrice}
+      />
+
     </section>
   );
 }

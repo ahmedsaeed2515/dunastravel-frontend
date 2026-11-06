@@ -120,6 +120,16 @@ function normalizeTour(data, lang = 'en', fallback = null) {
       ? data.excluded
       : (fallback?.excluded || []);
 
+  const notes = (Array.isArray(data.notes) && data.notes.length > 0)
+    ? data.notes
+    : (Array.isArray(data.notesJsonb) && data.notesJsonb.length > 0)
+      ? data.notesJsonb
+      : (Array.isArray(data.importantNotes) && data.importantNotes.length > 0)
+        ? data.importantNotes
+        : (typeof data.notes === 'string' && data.notes.trim())
+          ? [data.notes.trim()]
+          : (fallback?.notes || []);
+
   const highlights = (Array.isArray(data.highlights) && data.highlights.length > 0)
     ? data.highlights
     : (fallback?.highlights || []);
@@ -130,6 +140,7 @@ function normalizeTour(data, lang = 'en', fallback = null) {
     heroImage,
     included,
     excluded,
+    notes,
     highlights,
     pricingTiers: Array.isArray(data.seasonPricing?.pricingTiers)
       ? data.seasonPricing.pricingTiers

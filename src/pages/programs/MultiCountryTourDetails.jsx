@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  FaClock, FaTag, FaUsers, FaChevronRight, FaCheck, FaTimes, FaMapMarkerAlt, FaBed, FaCheckCircle
+  FaClock, FaTag, FaUsers, FaChevronRight, FaCheck, FaTimes, FaMapMarkerAlt, FaBed, FaCheckCircle, FaInfoCircle
 } from 'react-icons/fa';
 import TourCard from '../../components/tour/TourCard';
 import AdvancedBooking from '../../components/booking/AdvancedBooking';
@@ -207,7 +207,7 @@ export default function MultiCountryTourDetails() {
             )}
 
             {/* Inclusions & Exclusions */}
-            {((tour.included && tour.included.length > 0) || (tour.excluded && tour.excluded.length > 0) || (tour.includes && tour.includes.length > 0) || (tour.excludes && tour.excludes.length > 0)) && (
+            {((tour.included && tour.included.length > 0) || (tour.excluded && tour.excluded.length > 0) || (tour.includes && tour.includes.length > 0) || (tour.excludes && tour.excludes.length > 0) || (tour.notes && tour.notes.length > 0)) && (
               <motion.div
                 variants={fadeInUp}
                 initial="hidden"
@@ -260,6 +260,24 @@ export default function MultiCountryTourDetails() {
                     </div>
                   )}
                 </div>
+
+                {/* Tour Notes */}
+                {tour.notes && tour.notes.length > 0 && (
+                  <div className="mt-8 bg-amber-50/80 p-6 md:p-8 rounded-2xl border border-amber-200/80 shadow-sm">
+                    <h3 className="text-display-md text-xl font-bold text-amber-950 mb-6 flex items-center gap-2.5 font-display" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      <FaInfoCircle className="text-amber-600 flex-shrink-0" />
+                      {t('tourDetail.importantNotes', 'Important Notes')}
+                    </h3>
+                    <ul className="flex flex-col gap-3.5">
+                      {tour.notes.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-body-md text-amber-900">
+                          <span className="w-2 h-2 rounded-full bg-amber-500 mt-2 flex-shrink-0" />
+                          <span className="leading-relaxed">{t(`data.${item}`, item)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </motion.div>
             )}
 
