@@ -24,6 +24,7 @@ import SEOHead from '../../components/seo/SEOHead';
 import SuggestedTours from '../../components/tour/SuggestedTours';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 import TripHotelSection from '../../components/tour/TripHotelSection';
+import TransportPricingDisplay from '../../components/tour/TransportPricingDisplay';
 import ImportantNotes from '../../components/tour/ImportantNotes';
 
 const ReviewsMap = lazy(() => import('../../components/tour/ReviewsMap'));
@@ -630,6 +631,19 @@ const TourDetails = () => {
             formatPrice={formatPrice}
             onOpenGlobalLightbox={openLightboxAt}
           />
+        )}
+
+        {/* Vehicle & Transport Pricing Section */}
+        {((Array.isArray(tour.vehicleGroups) && tour.vehicleGroups.length > 0) ||
+          (Array.isArray(tour.transportPricing) && tour.transportPricing.length > 0)) && (
+          <div className="mt-16 w-full">
+            <TransportPricingDisplay
+              tour={tour}
+              t={t}
+              lang={lang}
+              formatPrice={formatPrice}
+            />
+          </div>
         )}
 
       </section>

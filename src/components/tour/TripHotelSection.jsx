@@ -9,7 +9,6 @@ import {
 } from 'react-icons/fa';
 import { resolveLocalizedText } from '../../utils/titleHelper';
 import { filterMeaningfulAccommodations } from '../../utils/accommodationHelper';
-import TransportPricingDisplay from './TransportPricingDisplay';
 
 const FALLBACK_HOTEL_IMG = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200';
 
@@ -178,14 +177,7 @@ export default function TripHotelSection({
   // Nothing real to show (no dedicated hotel, no dashboards rate-sheet data, no
   // legacy hotels): hide the whole section instead of rendering an empty shell.
   if (!isTripDedicated && meaningfulAccommodations.length === 0 && !hasLegacyHotels) {
-    return (
-      <TransportPricingDisplay
-        tour={tour}
-        t={t}
-        lang={lang}
-        formatPrice={formatPrice}
-      />
-    );
+    return null;
   }
 
   return (
@@ -1019,13 +1011,6 @@ export default function TripHotelSection({
           </motion.div>
         )}
       </AnimatePresence>
-    {/* Transport Pricing Table */}
-      <TransportPricingDisplay
-        tour={tour}
-        t={t}
-        lang={lang}
-        formatPrice={formatPrice}
-      />
 
     </section>
   );
