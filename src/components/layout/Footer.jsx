@@ -133,7 +133,7 @@ const Footer = () => {
             </a>
             {/* Phone */}
             <a
-              href="tel:+3374664302"
+              href="tel:+20233746643"
               aria-label="Call us"
               className="w-10 h-10 rounded-full bg-[#007AFF] text-white flex items-center justify-center border border-white/20 shadow-md hover:scale-110 hover:shadow-[0_0_15px_rgba(0,122,255,0.6)] transition-all duration-300"
             >

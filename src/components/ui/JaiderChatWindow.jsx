@@ -1031,7 +1031,7 @@ const JaiderChatWindow = () => {
                   </span>
                 </div>
                 <a
-                  href="https://wa.me/201000000000"
+                  href="https://wa.me/201149401111"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1 shrink-0 cursor-pointer shadow-xs"
