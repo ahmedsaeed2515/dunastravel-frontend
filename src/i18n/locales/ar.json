@@ -6067,5 +6067,11 @@
   "honeymooners.day7Meals": "شامل كلياً (منتجع)",
   "honeymooners.day8Meals": "شامل كلياً (منتجع)",
   "honeymooners.day9Meals": "شامل كلياً (منتجع)",
-  "honeymooners.day10Meals": "إفطار"
+  "honeymooners.day10Meals": "إفطار",
+  "transportPricing.title": "أسعار النقل الإضافي الصافية بالدولار وللفرد:",
+  "transportPricing.traslados": "خط السير",
+  "transportPricing.base0204": "شريحة 02 – 04",
+  "transportPricing.base0507": "شريحة 05 – 07",
+  "transportPricing.base0814": "شريحة 08 – 14",
+  "transportPricing.orViceVersa": "أو العكس"
 }

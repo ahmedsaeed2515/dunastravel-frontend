@@ -6094,5 +6094,11 @@
   "honeymooners.day7Meals": "All Inclusive (Resort)",
   "honeymooners.day8Meals": "All Inclusive (Resort)",
   "honeymooners.day9Meals": "All Inclusive (Resort)",
-  "honeymooners.day10Meals": "Colazione"
+  "honeymooners.day10Meals": "Colazione",
+  "transportPricing.title": "PREZZI NETTI DEI TRASFERIMENTI EXTRA IN USD E A PERSONA:",
+  "transportPricing.traslados": "Trasferimenti",
+  "transportPricing.base0204": "Base 02 – 04",
+  "transportPricing.base0507": "Base 05 – 07",
+  "transportPricing.base0814": "Base 08 – 14",
+  "transportPricing.orViceVersa": "O Viceversa"
 }

@@ -217,7 +217,12 @@ function normalizeTour(data, lang = 'en', fallback = null) {
     transportOptions: data.transportation?.transportOptions || null,
     route: data.transportation?.route || null,
     vehicleGroups: Array.isArray(data.transportation?.vehicleGroups) ? data.transportation.vehicleGroups : [],
-    transportPricing: Array.isArray(data.transportation?.pricing) ? data.transportation.pricing : [],
+    transportPricing: Array.isArray(data.transportation?.pricing)
+      ? data.transportation.pricing
+      : (Array.isArray(data.transportPricing)
+        ? data.transportPricing
+        : (Array.isArray(data.transportation) ? data.transportation : [])),
+    transportation: data.transportation || (Array.isArray(data.transportPricing) ? { pricing: data.transportPricing } : null),
     itinerary,
     price,
     routeMap: data.routeMap || data.routeMapJsonb || fallback?.routeMap || null,

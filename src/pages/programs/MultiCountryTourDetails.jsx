@@ -10,6 +10,7 @@ import TourCard from '../../components/tour/TourCard';
 import AdvancedBooking from '../../components/booking/AdvancedBooking';
 import LuxuryHeroSection from '../../components/common/LuxuryHeroSection';
 import ImportantNotes from '../../components/tour/ImportantNotes';
+import TransportPricingDisplay from '../../components/tour/TransportPricingDisplay';
 import { useTour } from '../../hooks/useTour';
 import { useTours } from '../../hooks/useTours';
 
@@ -275,6 +276,19 @@ export default function MultiCountryTourDetails() {
 
             {/* Route Map */}
             {((tour.highlights && tour.highlights.length > 0) || tour.itinerary || tour.routeMapJsonb || tour.routeMap) && <RouteMap itinerary={tour.itinerary} highlights={tour.highlights} routeMap={tour.routeMapJsonb || tour.routeMap} />}
+
+            {/* Extra Transfers Transport Pricing Section */}
+            {((Array.isArray(tour.transportPricing) && tour.transportPricing.length > 0) ||
+              (Array.isArray(tour?.transportation?.pricing) && tour.transportation.pricing.length > 0) ||
+              (Array.isArray(tour?.transportation) && tour.transportation.length > 0)) && (
+              <div className="mt-12 w-full">
+                <TransportPricingDisplay
+                  tour={tour}
+                  t={t}
+                  lang={lang}
+                />
+              </div>
+            )}
           </div>
 
           {/* Sticky Sidebar Booking Column */}

@@ -633,15 +633,15 @@ const TourDetails = () => {
           />
         )}
 
-        {/* Vehicle & Transport Pricing Section */}
-        {((Array.isArray(tour.vehicleGroups) && tour.vehicleGroups.length > 0) ||
-          (Array.isArray(tour.transportPricing) && tour.transportPricing.length > 0)) && (
+        {/* Extra Transfers Transport Pricing Section */}
+        {((Array.isArray(tour.transportPricing) && tour.transportPricing.length > 0) ||
+          (Array.isArray(tour?.transportation?.pricing) && tour.transportation.pricing.length > 0) ||
+          (Array.isArray(tour?.transportation) && tour.transportation.length > 0)) && (
           <div className="mt-16 w-full">
             <TransportPricingDisplay
               tour={tour}
               t={t}
               lang={lang}
-              formatPrice={formatPrice}
             />
           </div>
         )}
