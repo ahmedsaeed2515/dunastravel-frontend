@@ -237,6 +237,39 @@ export function formatPascalCase(str, lang = 'en') {
   });
 }
 
+/**
+ * Resolve a free-text important note without title-casing the author's text.
+ * The global i18n post-processor intentionally title-cases UI copy, but notes
+ * are user-authored sentences and must keep their original casing.
+ */
+export function resolveNoteText(item, t = (key) => key, i18n = null, lang = 'en') {
+  if (item === null || item === undefined) return '';
+
+  if (Array.isArray(item)) {
+    return item.map((entry) => String(entry ?? '')).join(' ');
+  }
+
+  if (typeof item === 'object') {
+    const cleanLang = String(lang || 'en').substring(0, 2).toLowerCase();
+    const localized = item[cleanLang] || item[lang] || item.en || item.ar || item.es || item.pt || item.it
+      || Object.values(item).find((value) => typeof value === 'string' && value.trim()) || '';
+    return Array.isArray(localized) ? localized.join(' ') : String(localized);
+  }
+
+  const raw = String(item).trim();
+  if (!raw) return '';
+
+  // Only translate short, single-token keys; preserve normal sentences verbatim.
+  const clean = raw.replace(/^data\./i, '');
+  const safeT = typeof t === 'function' ? t : (key) => key;
+  if (!/\s/.test(clean) && i18n && typeof i18n.exists === 'function') {
+    if (i18n.exists(clean)) return safeT(clean);
+    if (i18n.exists(`data.${clean}`)) return safeT(`data.${clean}`);
+  }
+
+  return raw;
+}
+
 export function resolveLocalizedText(val, t = (key) => key, lang = 'en') {
   if (!val) return '';
 

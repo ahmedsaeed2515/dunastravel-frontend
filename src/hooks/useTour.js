@@ -26,6 +26,59 @@ export function getFallbackTour() {
   return null;
 }
 
+function normalizeNoteList(value) {
+  if (Array.isArray(value)) {
+    return value.flatMap((entry) => normalizeNoteList(entry));
+  }
+  if (typeof value === 'string' && value.trim()) {
+    return value
+      .split(/\r?\n+/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
+
+/**
+ * Notes can arrive as a plain string, an array of strings, or a localized
+ * object such as { ar: ['...'], en: [] }. The API already localizes the
+ * `notes` field, but if the requested language has no notes yet we still
+ * want to surface the available translation instead of hiding the section.
+ */
+function pickNotes(jsonb, lang) {
+  if (jsonb === null || jsonb === undefined) return [];
+
+  if (typeof jsonb === 'string') return normalizeNoteList(jsonb);
+
+  if (Array.isArray(jsonb)) {
+    const resolved = [];
+    for (const entry of jsonb) {
+      if (typeof entry === 'string') {
+        resolved.push(...normalizeNoteList(entry));
+      } else if (entry && typeof entry === 'object') {
+        const localized = entry[lang] ?? entry.en ?? entry.ar
+          ?? Object.values(entry).find((value) => normalizeNoteList(value).length > 0);
+        resolved.push(...normalizeNoteList(localized));
+      }
+    }
+    return resolved;
+  }
+
+  if (typeof jsonb === 'object') {
+    const primary = String(lang || 'en').split('-')[0].toLowerCase();
+    for (const key of [primary, 'en', 'ar', 'es', 'pt', 'it']) {
+      const resolved = normalizeNoteList(jsonb[key]);
+      if (resolved.length > 0) return resolved;
+    }
+    for (const value of Object.values(jsonb)) {
+      const resolved = normalizeNoteList(value);
+      if (resolved.length > 0) return resolved;
+    }
+  }
+
+  return [];
+}
+
 function normalizeTour(data, lang = 'en', fallback = null) {
   const id = data?.id || data?.slug;
   const slug = data?.slug || data?.id;
@@ -120,15 +173,15 @@ function normalizeTour(data, lang = 'en', fallback = null) {
       ? data.excluded
       : (fallback?.excluded || []);
 
-  const notes = (Array.isArray(data.notes) && data.notes.length > 0)
-    ? data.notes
-    : (Array.isArray(data.notesJsonb) && data.notesJsonb.length > 0)
-      ? data.notesJsonb
-      : (Array.isArray(data.importantNotes) && data.importantNotes.length > 0)
-        ? data.importantNotes
-        : (typeof data.notes === 'string' && data.notes.trim())
-          ? [data.notes.trim()]
-          : (fallback?.notes || []);
+  const directNotes = pickNotes(data.notes, lang);
+  const notes = directNotes.length > 0
+    ? directNotes
+    : (() => {
+        const localizedNotes = pickNotes(data.notesJsonb, lang);
+        if (localizedNotes.length > 0) return localizedNotes;
+        const importantNotes = pickNotes(data.importantNotes, lang);
+        return importantNotes.length > 0 ? importantNotes : (fallback?.notes || []);
+      })();
 
   const highlights = (Array.isArray(data.highlights) && data.highlights.length > 0)
     ? data.highlights
