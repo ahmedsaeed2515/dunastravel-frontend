@@ -178,7 +178,14 @@ export default function TripHotelSection({
   // Nothing real to show (no dedicated hotel, no dashboards rate-sheet data, no
   // legacy hotels): hide the whole section instead of rendering an empty shell.
   if (!isTripDedicated && meaningfulAccommodations.length === 0 && !hasLegacyHotels) {
-    return null;
+    return (
+      <TransportPricingDisplay
+        tour={tour}
+        t={t}
+        lang={lang}
+        formatPrice={formatPrice}
+      />
+    );
   }
 
   return (
