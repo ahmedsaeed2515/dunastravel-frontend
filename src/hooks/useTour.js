@@ -216,6 +216,8 @@ function normalizeTour(data, lang = 'en', fallback = null) {
     excursions: data.terms?.excursions || fallback?.excursions || [],
     transportOptions: data.transportation?.transportOptions || null,
     route: data.transportation?.route || null,
+    vehicleGroups: Array.isArray(data.transportation?.vehicleGroups) ? data.transportation.vehicleGroups : [],
+    transportPricing: Array.isArray(data.transportation?.pricing) ? data.transportation.pricing : [],
     itinerary,
     price,
     routeMap: data.routeMap || data.routeMapJsonb || fallback?.routeMap || null,
